@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- https://itstudy-mary.tistory.com/190 !-->
+    <item
+        android:id="@+id/bottom_1_home"
+        android:icon="@drawable/bottom_1_home"
+        android:title="홈" />
+
+    <item
+        android:id="@+id/bottom_2_rank"
+        android:icon="@drawable/bottom_2_rank"
+        android:title="랭킹" />
+
+    <item
+        android:id="@+id/bottom_3_chat"
+        android:icon="@drawable/bottom_3_chat"
+        android:title="채팅" />
+
+    <item
+        android:id="@+id/bottom_4_account"
+        android:icon="@drawable/bottom_4_account"
+        android:title="내 페이지" />
+
+</menu>

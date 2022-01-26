@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--depth를 4개 이상 만들지 말것-->
+<!--라벨이 보이지 않게 하는 속성
+<!-app:labelVisibilityMode="unlabeled"-->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/frame_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation">
+
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        app:itemIconSize="28dp"
+        app:itemIconTint="@drawable/bottom_menu_color"
+        app:itemTextColor="@drawable/bottom_menu_color"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_menu" />
+</RelativeLayout>
