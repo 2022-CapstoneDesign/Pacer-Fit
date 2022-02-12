@@ -11,10 +11,18 @@
         <entry key="..\:/Users/JW/Documents/AndroidProject/Project/app/src/main/res/layout/frag3.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/JW/Documents/AndroidProject/Project/app/src/main/res/layout/frag4.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/JW/Documents/AndroidProject/Project/app/src/main/res/menu/bottom_menu.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/white_btn_style.xml" value="0.1065" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/activity_intro.xml" value="0.22" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/activity_main.xml" value="0.11727456940222898" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/activity_splash.xml" value="0.18" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/frag1.xml" value="0.11727456940222898" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/frag2.xml" value="0.11727456940222898" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/frag3.xml" value="0.11727456940222898" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/frag4.xml" value="0.11727456940222898" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 스플래시 화면(툴바 없애기) -->
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <!-- 인트로 화면(툴바 없애기) -->
+    <style name="IntroTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+</resources>

@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Project</string>
+    <string name="app_name">Pacer Fit</string>
+    <string name="login">로그인</string>
+    <string name="join">회원가입</string>
 </resources>
