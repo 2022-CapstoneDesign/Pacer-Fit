@@ -10,10 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project">
         <activity
+            android:name=".JoinActivity"
+            android:exported="false"
+            android:theme="@style/JoinTheme"/>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:theme="@style/LoginTheme"/>
+        <activity
             android:name=".IntroActivity"
             android:exported="false"
-            android:theme="@style/IntroTheme">
-        </activity>
+            android:theme="@style/IntroTheme" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
