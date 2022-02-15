@@ -1,5 +1,19 @@
 <resources>
     <string name="app_name">Pacer Fit</string>
+    <string name="empty"> </string>
     <string name="login">로그인</string>
     <string name="join">회원가입</string>
+    <string name="join2">가입하기</string>
+    <string name="id">아이디</string>
+    <string name="pw">비밀번호</string>
+    <string name="name">이름</string>
+    <string name="gender">성별</string>
+    <string name="man">남</string>
+    <string name="woman">여</string>
+    <string name="age">나이</string>
+    <string name="old">세</string>
+    <string name="height">키</string>
+    <string name="cm">cm</string>
+    <string name="weight">몸무게</string>
+    <string name="kg">kg</string>
 </resources>

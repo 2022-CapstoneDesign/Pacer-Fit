@@ -8,4 +8,34 @@
     <style name="IntroTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 
+    <!-- 로그인 화면(툴바 없애기) -->
+    <style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <!-- 회원가입 화면(툴바 없애기) -->
+    <style name="JoinTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <!-- EditTextStyle 커스텀 -->
+    <style name="EditTextStyle" parent="Widget.Design.TextInputLayout">
+
+        <!-- unFocus 상태일 때 밑줄 색 -->
+        <item name="colorControlNormal">@color/white</item>
+        <!-- Focus 상태일 때 밑줄 색 -->
+        <item name="colorControlActivated">@color/skyblue_project</item>
+        <item name="boxStrokeColor">@color/white</item>
+        <!-- 커서 색 -->
+        <item name="android:textCursorDrawable">@color/white</item>
+        <!-- hint 색 -->
+        <item name="android:textColorHint">@color/white</item>
+        <!-- floating hint 색 -->
+        <item name="hintTextColor">@color/skyblue_project</item>
+
+        <!-- xml 에서 한 속성을 여기서도 할 수 있음 -->
+        <item name="helperTextTextColor">@color/skyblue_project</item>
+        <item name="errorTextColor">@color/teal_200</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+
+    </style>
+
 </resources>
