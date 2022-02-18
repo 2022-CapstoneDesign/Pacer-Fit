@@ -29,11 +29,9 @@ public class JoinActivity extends AppCompatActivity {
         idTxt.setFilters(new InputFilter[] {filter, new InputFilter.LengthFilter(20)});
 
         joinBtn = findViewById(R.id.joinJoinBtn);
-        joinBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(JoinActivity.this, LoginActivity.class)); // 로그인 액티비티로 전환
-            }
+        joinBtn.setOnClickListener(v -> {
+            startActivity(new Intent(JoinActivity.this, LoginActivity.class)); // 로그인 액티비티로 전환
+            finish();
         });
     }
 
