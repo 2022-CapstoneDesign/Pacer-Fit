@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private class SplashHandler implements Runnable {
         public void run() {
-            startActivity(new Intent(getApplication(), MainActivity.class)); // 전환될 액티비티 지정
+            startActivity(new Intent(getApplication(), IntroActivity.class)); // 전환될 액티비티 지정
             SplashActivity.this.finish();
         }
     }

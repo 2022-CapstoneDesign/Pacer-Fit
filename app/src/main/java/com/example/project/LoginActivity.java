@@ -29,11 +29,9 @@ public class LoginActivity extends AppCompatActivity {
         idTxt.setFilters(new InputFilter[] {filter, new InputFilter.LengthFilter(20)});
 
         loginBtn = findViewById(R.id.loginLoginBtn);
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class)); // 메인 액티비티로 전환
-            }
+        loginBtn.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class)); // 메인 액티비티로 전환
+            finish();
         });
     }
 
