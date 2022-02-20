@@ -5,18 +5,78 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_project">
+    android:background="@color/lightgray_project">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fragment1"
-        android:textColor="@color/white"
-        android:textSize="50sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/view_style"
+        android:padding="10dp"
+        android:text="testing"
+        android:textAlignment="center"
+        android:textColor="@color/blue_project"
+        android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/view_style"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+
+    </View>
+
+    <TextView
+        android:id="@+id/workTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/work"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="@color/blue_project"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@+id/view" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="70dp"
+        android:contentDescription="@string/pedometer"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintStart_toEndOf="@+id/workTxt"
+        app:layout_constraintTop_toTopOf="@+id/view"
+        app:srcCompat="@drawable/bottom_1_home" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:contentDescription="@string/km"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:layout_constraintTop_toTopOf="@+id/view"
+        app:srcCompat="@drawable/bottom_4_account" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,6 +16,10 @@
     <style name="JoinTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 
+    <!-- 메인 화면(툴바 없애기) -->
+    <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
     <!-- EditTextStyle 커스텀 -->
     <style name="EditTextStyle" parent="Widget.Design.TextInputLayout">
 
