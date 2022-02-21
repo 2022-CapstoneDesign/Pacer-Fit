@@ -8,6 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".MainActivity">
 
     <FrameLayout
@@ -23,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/white"
+        android:background="@color/lightgray_project"
         app:itemIconSize="28dp"
         app:itemIconTint="@drawable/bottom_menu_color"
         app:itemTextColor="@drawable/bottom_menu_color"

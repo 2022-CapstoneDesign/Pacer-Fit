@@ -305,7 +305,6 @@
             android:id="@+id/txtKg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_marginEnd="50dp"
             android:text="@string/kg"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -320,7 +319,7 @@
             android:layout_marginStart="50dp"
             android:layout_marginTop="50dp"
             android:layout_marginEnd="50dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="60dp"
             android:background="@drawable/btn_style"
             android:backgroundTint="@color/skyblue_project"
             android:text="@string/join2"

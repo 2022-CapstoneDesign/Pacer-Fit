@@ -10,4 +10,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue_project">#042D6F</color>
     <color name="skyblue_project">#ADC5E7</color>
+    <color name="lightgray_project">#f6f6f6</color>
 </resources>
