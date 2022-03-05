@@ -31,6 +31,8 @@ dependencies {
 
     //material design(BottomNavigationView) Bottom Menu
     implementation 'com.google.android.material:material:1.2.0'
+    //kakao map api
+    implementation files('libs/libDaumMapAndroid.jar')
 
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'

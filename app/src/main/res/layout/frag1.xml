@@ -69,7 +69,7 @@
         app:srcCompat="@drawable/bottom_1_home" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/Km_button"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:contentDescription="@string/km"
