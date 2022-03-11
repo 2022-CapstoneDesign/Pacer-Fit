@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -33,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
         //참고 : https://itstudy-mary.tistory.com/190
         //첫 화면 띄우기
         getSupportFragmentManager().beginTransaction().add(R.id.frame_container,new Frag1()).commit();
+
+        Intent intent = getIntent();
+        String userID = intent.getStringExtra("userID"); //UserID 가져옴
+        String userPass = intent.getStringExtra("userPass"); //UserPass 가져옴
 
         //case 함수를 통해 클릭 받을 때마다 화면 변경하기
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
