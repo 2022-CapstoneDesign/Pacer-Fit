@@ -73,6 +73,7 @@ public class JoinActivity extends AppCompatActivity {
             int userAge = Integer.parseInt(ageTxt.getText().toString());
             int userheight = Integer.parseInt(heightTxt.getText().toString());
             int userweight = Integer.parseInt(weightTxt.getText().toString());
+            /* DB 추가
                     Response.Listener<String> responseListener = response -> {
                         try {
                             System.out.println(response);
@@ -96,7 +97,11 @@ public class JoinActivity extends AppCompatActivity {
             RegisterRequest registerRequest = new RegisterRequest(userID,userPass,userName,userGender,userAge,userheight,userweight,responseListener);
             RequestQueue queue = Volley.newRequestQueue(JoinActivity.this);
             queue.add(registerRequest);
+            */
 
+            //DB추가 주석 없앨때 아래 2줄 지우기
+            startActivity(new Intent(JoinActivity.this, LoginActivity.class)); // 로그인 액티비티로 전환
+            finish();
         });
     }
 
