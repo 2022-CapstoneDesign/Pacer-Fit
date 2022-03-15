@@ -12,13 +12,6 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/map_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:text="MapType" />
-
-        <Button
             android:id="@+id/start_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,8 +30,39 @@
     <RelativeLayout
         android:id="@+id/map_view"
         android:layout_width="match_parent"
-        android:layout_height="591dp">
+        android:layout_height="281dp">
 
     </RelativeLayout>
+
+    <EditText
+        android:id="@+id/search_pos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="검색하려는 위치를 입력"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/search_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:text="검색" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/result"
+                android:layout_width="match_parent"
+                android:layout_height="309dp" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
