@@ -305,7 +305,7 @@ public class Map_add extends AppCompatActivity {
 
         buffer.append("파싱 끝\n");
         return buffer.toString();//StringBuffer 문자열 객체 반환
-
+        //
     }
 
 }
