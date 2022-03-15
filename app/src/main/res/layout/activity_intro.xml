@@ -5,19 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".IntroActivity"
-    android:background="@color/blue_project">
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="130dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginStart="40dp"
-        android:contentDescription="@string/app_name"
-        android:scaleType="fitCenter"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo2" />
+    android:background="@drawable/intro1">
 
     <Button
         android:id="@+id/introJoinBtn"

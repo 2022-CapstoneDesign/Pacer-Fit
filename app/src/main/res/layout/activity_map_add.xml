@@ -30,7 +30,7 @@
     <RelativeLayout
         android:id="@+id/map_view"
         android:layout_width="match_parent"
-        android:layout_height="281dp">
+        android:layout_height="482dp">
 
     </RelativeLayout>
 
@@ -40,7 +40,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="검색하려는 위치를 입력"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:minHeight="48dp" />
 
     <Button
         android:id="@+id/search_btn"
@@ -56,12 +57,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/result"
                 android:layout_width="match_parent"
-                android:layout_height="309dp" />
+                android:layout_height="match_parent" />
         </LinearLayout>
     </ScrollView>
 

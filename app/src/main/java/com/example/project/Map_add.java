@@ -6,11 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +25,7 @@ import androidx.core.content.ContextCompat;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapView;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -33,18 +35,23 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Map;
+import java.util.Vector;
 
-public class Map_add extends AppCompatActivity {
-    MapView mapView = null;
+public class Map_add extends AppCompatActivity implements MapView.CurrentLocationEventListener {
+    final static String TAG = "MapTAG";
     private final int ACCESS_FINE_LOCATION = 1000;
+    MapView mapView = null;
     String key = "gK02LAH%2FlvryeAYsHR08%2Byds3IuKYwmKnKEjPkvtot7WECTfDCyLeh9snhRqmJiWCWhHHwev8Sd3wvJTgXcVNA%3D%3D";
-    XmlPullParser xpp;
     EditText search_pos;
     TextView result;
     String data;
+    MapPolyline polyline = new MapPolyline();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        polyline.setLineColor(Color.argb(128, 255, 51, 0)); // Polyline 컬러 지정.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_add);
         Button searchBtn = findViewById(R.id.search_btn);
@@ -72,17 +79,17 @@ public class Map_add extends AppCompatActivity {
 
         //지도 표시 (activity_map_add.xml)
         mapView = new MapView(this); //실제 핸드폰으로 디코딩해야 지도가 나옵니다.
+        mapView.setCurrentLocationEventListener(this);
+        // 중심점 변경
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.6645928, 126.8862906), true);
+        // 줌 레벨 변경
+        mapView.setZoomLevel(1, true);
 
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
 
-        // 중심점 변경
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.54892296550104, 126.99089033876304), true);
-        // 줌 레벨 변경
-        mapView.setZoomLevel(4, true);
-
         //마커 찍기
-        MapPoint MARKER_POINT = MapPoint.mapPointWithGeoCoord(37.54892296550104, 126.99089033876304);
+        MapPoint MARKER_POINT = MapPoint.mapPointWithGeoCoord(37.6645928, 126.8962906);
         MapPOIItem marker = new MapPOIItem();
         marker.setItemName("Default Marker");
         marker.setTag(0);
@@ -173,11 +180,42 @@ public class Map_add extends AppCompatActivity {
         mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
     }
 
+
+    @Override
+    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
+        Log.i(TAG, "MapFragment:onCurrentLocationUpdate()");
+        MapPoint.GeoCoordinate mapPointGeo = mapPoint.getMapPointGeoCoord();
+        polyline.addPoint(MapPoint.mapPointWithGeoCoord(mapPointGeo.latitude, mapPointGeo.longitude));
+        mapView.addPolyline(polyline);
+        Log.i(TAG, String.format("(%f, %f) accuracy (%f)", mapPointGeo.latitude, mapPointGeo.longitude, v));
+
+    }
+
+
+    @Override
+    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateFailed(MapView mapView) {
+        Log.i(TAG, "onCurrentLocationUpdateFailed");
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+    }
+
+    @Override
+    public void onCurrentLocationUpdateCancelled(MapView mapView) {
+        Log.i(TAG, "onCurrentLocationUpdateCancelled");
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+    }
+
     private void stopTracking() {
         mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
 
     }
 
+
+    // xml 데이터를 가져오는 함수
     public String getXmlData() {
         StringBuffer buffer = new StringBuffer();
         String str = search_pos.getText().toString();//EditText에 작성된 Text얻어오기
@@ -189,7 +227,7 @@ public class Map_add extends AppCompatActivity {
                 "&MobileOS=ETC" +
                 "&MobileApp=AppTest" +
                 "&crsKorNm=" +
-                str +
+                location +
                 "&brdDiv=DNBW";
         //검색 URL부분
         try {
@@ -219,67 +257,67 @@ public class Map_add extends AppCompatActivity {
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("crsIdx")) { //address 만나면 내용을 받을수 있게 하자
+                        } else if (tag.equals("crsIdx")) {
                             buffer.append("코스 고유번호 : ");
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("crsKorNm")) { //mapx 만나면 내용을 받을수 있게 하자
+                        } else if (tag.equals("crsKorNm")) {
                             buffer.append("코스 명 : ");
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("crsDstnc")) { //mapy 만나면 내용을 받을수 있게 하자
+                        } else if (tag.equals("crsDstnc")) {
                             buffer.append("코스 길이 : ");
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("crsTotlRqrmHour")) { //mapy 만나면 내용을 받을수 있게 하자
+                        } else if (tag.equals("crsTotlRqrmHour")) {
                             buffer.append("총 소요시간: ");
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("crsLevel")) { //mapy 만나면 내용을 받을수 있게 하자
+                        } else if (tag.equals("crsLevel")) {
                             buffer.append("난이도 : ");
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("crsCycle")) { //mapy 만나면 내용을 받을수 있게 하자
+                        } else if (tag.equals("crsCycle")) {
                             buffer.append("순환형태 : ");
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("crsContents")) { //mapy 만나면 내용을 받을수 있게 하자
+                        } else if (tag.equals("crsContents")) {
                             buffer.append("코스 설명 : ");
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("crsSummary")) { //mapy 만나면 내용을 받을수 있게 하자
+                        } else if (tag.equals("crsSummary")) {
                             buffer.append("코스 개요 : ");
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("crsTourInfo")) { //mapy 만나면 내용을 받을수 있게 하자
+                        } else if (tag.equals("crsTourInfo")) {
                             buffer.append("관광 포인트 : ");
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("travelerinfo")) { //mapy 만나면 내용을 받을수 있게 하자
+                        } else if (tag.equals("travelerinfo")) {
                             buffer.append("여행자정보 : ");
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("sigun")) { //mapy 만나면 내용을 받을수 있게 하자
+                        } else if (tag.equals("sigun")) {
                             buffer.append("행정구역 : ");
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("brdDiv")) { //mapy 만나면 내용을 받을수 있게 하자
+                        } else if (tag.equals("brdDiv")) {
                             buffer.append("걷기/자전거 구분 : ");
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("gpxpath")) { //mapy 만나면 내용을 받을수 있게 하자
+                        } else if (tag.equals("gpxpath")) {
                             buffer.append("GPX 경로 : ");
                             xpp.next();
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
@@ -301,9 +339,6 @@ public class Map_add extends AppCompatActivity {
         } catch (Exception e) {
             result.setText("에러가..났습니다...");
         }
-
-
-        buffer.append("파싱 끝\n");
         return buffer.toString();//StringBuffer 문자열 객체 반환
         //
     }
