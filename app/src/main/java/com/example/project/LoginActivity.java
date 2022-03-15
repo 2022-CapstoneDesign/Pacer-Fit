@@ -37,11 +37,12 @@ public class LoginActivity extends AppCompatActivity {
         idTxt.setFilters(new InputFilter[] {filter, new InputFilter.LengthFilter(20)});
 
 
-/*
+
         loginBtn = findViewById(R.id.loginLoginBtn);
         loginBtn.setOnClickListener(v -> {
             String userID = idTxt.getText().toString();
             String userPass = passTxt.getText().toString();
+            /* DB추가
             Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -70,11 +71,12 @@ public class LoginActivity extends AppCompatActivity {
             LoginRequest loginRequest = new LoginRequest(userID, userPass, responseListener);
             RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
             queue.add(loginRequest);
-            *///DB추가 주석 없앨때 아래 3줄 지우기
+            */
+            //DB추가 주석 없앨때 아래 3줄 지우기
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);// 메인 액티비티로 전환
             startActivity(intent);
             finish();
-        //});
+        });
 
     }
 
