@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -16,11 +17,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:text="내 위치 추적" />
+            android:text="경로 추적" />
 
         <Button
             android:id="@+id/stop_btn"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="top"
             android:text="추적 중지" />
@@ -43,12 +44,11 @@
         android:inputType="textPersonName"
         android:minHeight="48dp" />
 
-    <Button
+    <ImageButton
         android:id="@+id/search_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:text="검색" />
+        app:srcCompat="?android:attr/actionModeWebSearchDrawable" />
 
     <ScrollView
         android:layout_width="match_parent"

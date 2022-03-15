@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,30 +36,35 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Map;
-import java.util.Vector;
 
 public class Map_add extends AppCompatActivity implements MapView.CurrentLocationEventListener {
-    final static String TAG = "MapTAG";
+    private final static String KEY = "gK02LAH%2FlvryeAYsHR08%2Byds3IuKYwmKnKEjPkvtot7WECTfDCyLeh9snhRqmJiWCWhHHwev8Sd3wvJTgXcVNA%3D%3D";
+    private final static String TAG = "MapTAG";
     private final int ACCESS_FINE_LOCATION = 1000;
-    MapView mapView = null;
-    String key = "gK02LAH%2FlvryeAYsHR08%2Byds3IuKYwmKnKEjPkvtot7WECTfDCyLeh9snhRqmJiWCWhHHwev8Sd3wvJTgXcVNA%3D%3D";
-    EditText search_pos;
-    TextView result;
-    String data;
-    MapPolyline polyline = new MapPolyline();
+    private MapView mapView = null;
+    private EditText search_pos = null;
+    private TextView result = null;
+    private String data = null;
+    private MapPolyline polyline = null;
+    private ImageButton searchBtn = null;
+    private Button startBtn = null;
+    private Button stopBtn = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        polyline.setLineColor(Color.argb(128, 255, 51, 0)); // Polyline 컬러 지정.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_add);
-        Button searchBtn = findViewById(R.id.search_btn);
-        Button startBtn = findViewById(R.id.start_btn);
-        Button stopBtn = findViewById(R.id.stop_btn);
+
         search_pos = findViewById(R.id.search_pos);
+        searchBtn = findViewById(R.id.search_btn);
+        startBtn = findViewById(R.id.start_btn);
+        stopBtn = findViewById(R.id.stop_btn);
         result = findViewById(R.id.result);
+
+        polyline = new MapPolyline();
+        polyline.setLineColor(Color.argb(128, 255, 51, 0)); // Polyline 컬러 지정.
+        mapView = new MapView(this); //실제 핸드폰으로 디코딩해야 지도가 나옵니다.
 
         searchBtn.setOnClickListener(v -> {
             new Thread(new Runnable() {
@@ -78,7 +84,7 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
         });
 
         //지도 표시 (activity_map_add.xml)
-        mapView = new MapView(this); //실제 핸드폰으로 디코딩해야 지도가 나옵니다.
+
         mapView.setCurrentLocationEventListener(this);
         // 중심점 변경
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.6645928, 126.8862906), true);
@@ -188,9 +194,7 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
         polyline.addPoint(MapPoint.mapPointWithGeoCoord(mapPointGeo.latitude, mapPointGeo.longitude));
         mapView.addPolyline(polyline);
         Log.i(TAG, String.format("(%f, %f) accuracy (%f)", mapPointGeo.latitude, mapPointGeo.longitude, v));
-
     }
-
 
     @Override
     public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
@@ -221,14 +225,14 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
         String str = search_pos.getText().toString();//EditText에 작성된 Text얻어오기
         String location = URLEncoder.encode(str);//한글의 경우 인식이 안되기에 utf-8 방식으로 encoding..
         String queryUrl = "http://api.visitkorea.or.kr/openapi/service/rest/Durunubi/courseList?serviceKey=" +
-                key +
+                KEY +
                 "&pageNo=1" +
                 "&numOfRows=10" +
                 "&MobileOS=ETC" +
                 "&MobileApp=AppTest" +
                 "&crsKorNm=" +
                 location +
-                "&brdDiv=DNBW";
+                "&brdDiv=DNWW";
         //검색 URL부분
         try {
             URL url = new URL(queryUrl); //검색 URL부분
@@ -340,7 +344,6 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
             result.setText("에러가..났습니다...");
         }
         return buffer.toString();//StringBuffer 문자열 객체 반환
-        //
     }
 
 }
