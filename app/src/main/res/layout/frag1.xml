@@ -103,11 +103,12 @@
 
     <TextView
         android:id="@+id/weather"
-        android:layout_width="141dp"
-        android:layout_height="79dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="129dp"
+        android:layout_height="65dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
         android:text="TextView"
+        android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="@+id/view3"
         app:layout_constraintEnd_toEndOf="@+id/view3" />
 
