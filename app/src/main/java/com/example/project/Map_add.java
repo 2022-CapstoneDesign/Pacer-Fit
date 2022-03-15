@@ -26,7 +26,9 @@ import net.daum.mf.map.api.MapView;
 public class Map_add extends AppCompatActivity {
     int mapOption = 0;
     MapView mapView = null;
+    GpsTracker gpsTracker;
     private final int ACCESS_FINE_LOCATION = 1000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,9 @@ public class Map_add extends AppCompatActivity {
         Button setMapType = findViewById(R.id.map_type);
         Button startBtn = findViewById(R.id.start_btn);
         Button stopBtn = findViewById(R.id.stop_btn);
+        gpsTracker = new GpsTracker(this);
+        double latitude = gpsTracker.getLatitude();
+        double longitude = gpsTracker.getLongitude();
         //지도 표시 (activity_map_add.xml)
         mapView = new MapView(this); //실제 핸드폰으로 디코딩해야 지도가 나옵니다.
 
@@ -42,12 +47,14 @@ public class Map_add extends AppCompatActivity {
         mapViewContainer.addView(mapView);
 
         // 중심점 변경
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.54892296550104, 126.99089033876304), true);
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude, longitude), true);
         // 줌 레벨 변경
         mapView.setZoomLevel(4, true);
 
+
+
         //마커 찍기
-        MapPoint MARKER_POINT = MapPoint.mapPointWithGeoCoord(37.54892296550104, 126.99089033876304);
+        MapPoint MARKER_POINT = MapPoint.mapPointWithGeoCoord(latitude, longitude);
         MapPOIItem marker = new MapPOIItem();
         marker.setItemName("Default Marker");
         marker.setTag(0);
