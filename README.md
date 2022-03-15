@@ -45,10 +45,11 @@ Pacer Fit은 운동량 경쟁 어플로, 유저들간 걷거나 뛴 km 수치로
 - 어떤 지도 API를 쓸 것인지 논의 -> Kakao 지도 API
 - OPEN API 사용법 공부 -> Tour API (한국관광공사 두루누비)
 - "거리"운동 버튼 누르면 지도 연동해서 사용자 현재 위치 반환해서 보여줌
-- 
 ***
 2주차(3/9~3/15)
-
+- 회원가입 DB 테스트
+- 기상 API 이용하여 현재 위치와 날씨를 홈 화면에 표시 (참고 : <https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15084084>)
+- UI 디자인 새로 설정
 ***
 3주차(3/16~3/22)
 
