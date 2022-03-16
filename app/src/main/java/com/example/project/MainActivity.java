@@ -1,19 +1,41 @@
 package com.example.project;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import net.daum.mf.map.api.MapView;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main_Activity";
     private long backKeyPressedTime = 0;
+    private final int ACCESS_FINE_LOCATION = 1000;
 
     private BottomNavigationView mBottomNavigationView;
 
@@ -21,11 +43,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mBottomNavigationView=findViewById(R.id.bottom_navigation);
+
         //참고 : https://itstudy-mary.tistory.com/190
         //첫 화면 띄우기
         getSupportFragmentManager().beginTransaction().add(R.id.frame_container,new Frag1()).commit();
+
+        Intent intent = getIntent();
+        String userID = intent.getStringExtra("userID"); //UserID 가져옴
+        String userPass = intent.getStringExtra("userPass"); //UserPass 가져옴
 
         //case 함수를 통해 클릭 받을 때마다 화면 변경하기
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -49,7 +75,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+
     } // onCreate
+
+
 
     // 뒤로가기 버튼을 두 번 누를 시 종료되도록 설정
     @Override
@@ -66,6 +97,26 @@ public class MainActivity extends AppCompatActivity {
         // 2초가 지나지 않았으면 종료
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
             finish();
+        }
+    }
+    private void getHashKey(){
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (packageInfo == null)
+            Log.e("KeyHash", "KeyHash:null");
+
+        for (Signature signature : packageInfo.signatures) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            } catch (NoSuchAlgorithmException e) {
+                Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
+            }
         }
     }
 }

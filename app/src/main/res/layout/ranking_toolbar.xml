@@ -8,16 +8,24 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/lightgray_project">
+        android:background="@color/gray_project">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="28dp"
+            android:contentDescription="@string/app_name"
+            android:paddingTop="1dp"
+            android:paddingStart="9dp"
+            android:src="@drawable/app_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="20dp"
             android:text="@string/ranking"
-            android:textColor="@color/blue_project"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textColor="@color/skyblue_project"
+            android:textSize="20sp"
+            android:fontFamily="@font/nanumsquareroundeb" />
 
     </androidx.appcompat.widget.Toolbar>
 
