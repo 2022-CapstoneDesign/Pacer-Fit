@@ -11,14 +11,16 @@
         <entry key="..\:/Users/JW/Documents/AndroidProject/Project/app/src/main/res/layout/frag3.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/JW/Documents/AndroidProject/Project/app/src/main/res/layout/frag4.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/JW/Documents/AndroidProject/Project/app/src/main/res/menu/bottom_menu.xml" value="0.24947916666666667" />
+
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/bottom_3_chat.xml" value="0.1" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/bottom_menu_color.xml" value="0.1215" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/btn_style.xml" value="0.191" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/more_navy.xml" value="0.357" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/plus_navy.xml" value="0.357" />
+
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/radiobtn_style.xml" value="0.1" />
-        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/view_style.xml" value="0.242" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/white_btn_style.xml" value="0.1065" />
+
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/font/font.xml" value="0.1" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/activity_intro.xml" value="0.33" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/activity_join.xml" value="0.25" />
@@ -35,6 +37,7 @@
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/ranking_toolbar.xml" value="0.33" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/toolbar.xml" value="0.33" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/menu/bottom_menu.xml" value="0.1875" />
+
       </map>
     </option>
   </component>
