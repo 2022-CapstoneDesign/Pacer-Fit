@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightgray_project">
+    android:background="@color/gray_project">
 
     <include
         android:id="@+id/include"
@@ -21,6 +20,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/view_style"
+        android:backgroundTint="@color/gray_project"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,34 +35,37 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/nanumsquareroundeb"
         android:text="@string/work"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:textColor="@color/blue_project"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/view"
         app:layout_constraintTop_toTopOf="@+id/view" />
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="70dp"
-        android:contentDescription="@string/pedometer"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintStart_toEndOf="@+id/workTxt"
-        app:layout_constraintTop_toTopOf="@+id/view"
-        app:srcCompat="@drawable/bottom_1_home" />
+    <Button
+        android:id="@+id/pedo_button"
+        android:layout_width="140dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_style"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:text="@string/pedometer"
+        android:textColor="@color/whitegray_project"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/workTxt" />
 
-    <ImageButton
+    <Button
         android:id="@+id/Km_button"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:contentDescription="@string/km"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
+        android:layout_width="140dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/btn_style"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:text="거리(km)"
+        android:textColor="@color/whitegray_project"
         app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
-        app:layout_constraintTop_toTopOf="@+id/view"
-        app:srcCompat="@drawable/bottom_4_account" />
+        app:layout_constraintTop_toTopOf="@+id/pedo_button" />
 
     <View
         android:id="@+id/view3"
@@ -77,29 +80,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/include" />
 
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="@+id/view3"
+        app:layout_constraintTop_toTopOf="@+id/view3"
+        app:srcCompat="@drawable/locationpin_white" />
+
     <TextClock
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/nanumsquareroundeb"
         android:format12Hour="hh:mm"
         android:format24Hour="hh:mm a"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/weather"
-        app:layout_constraintHorizontal_bias="0.182"
-        app:layout_constraintStart_toStartOf="@+id/view3"
-        app:layout_constraintTop_toBottomOf="@+id/location"
-        app:layout_constraintVertical_bias="0.028" />
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view3"
+        app:layout_constraintStart_toStartOf="@+id/imageView4" />
 
     <TextView
         android:id="@+id/location"
         android:layout_width="190dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
-        android:textSize="20sp"
-        android:hint="거주지"
-        app:layout_constraintStart_toStartOf="@+id/view3"
-        app:layout_constraintTop_toTopOf="@+id/view3" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:flow_verticalAlign="bottom"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintStart_toEndOf="@+id/imageView4" />
 
     <TextView
         android:id="@+id/weather"
@@ -107,9 +122,12 @@
         android:layout_height="65dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="12dp"
-        android:hint="날씨 정보"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:text="TextView"
+        android:textColor="@color/white"
         android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="@+id/view3"
         app:layout_constraintEnd_toEndOf="@+id/view3" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,4 +42,10 @@
 
     </style>
 
+    <!-- BottomNavigationView 폰트 커스텀 -->
+    <style name="Widget.BottomNavigationView"
+        parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/nanumsquareroundeb</item>
+    </style>
+
 </resources>

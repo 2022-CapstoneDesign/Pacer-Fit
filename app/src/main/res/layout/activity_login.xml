@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
-    android:background="@color/blue_project">
+    android:background="@color/gray_project">
 
     <ImageView
         android:id="@+id/imageView"
@@ -26,7 +26,7 @@
         style="@style/EditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="50dp"
         android:paddingStart="30dp"
         android:paddingEnd="30dp"
         android:paddingTop="20dp"
@@ -39,6 +39,7 @@
             android:id="@+id/loginIdTxt"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:fontFamily="@font/nanumsquareroundeb"
             android:hint="@string/id"
             android:inputType="text"
             android:maxLength="20"
@@ -68,6 +69,7 @@
             android:id="@+id/loginPwTxt"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:fontFamily="@font/nanumsquareroundeb"
             android:hint="@string/pw"
             android:inputType="textPassword"
             android:maxLength="20"
@@ -82,12 +84,15 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="68dp"
         android:layout_marginEnd="40dp"
         android:background="@drawable/btn_style"
-        android:backgroundTint="@color/skyblue_project"
+        android:fontFamily="@font/nanumsquareroundeb"
         android:text="@string/login"
+        android:textColor="@color/whitegray_project"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pwTextInputLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>
