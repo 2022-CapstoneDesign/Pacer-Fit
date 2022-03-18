@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,7 +66,7 @@ public class Frag1 extends Fragment {
         TextView location = v.findViewById(R.id.location);
         weatherInfo = v.findViewById(R.id.weather);
 
-        Button Km_button = (Button) v.findViewById(R.id.Km_button);
+        ImageButton Km_button = (ImageButton) v.findViewById(R.id.Km_button);
         Km_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View map) {
