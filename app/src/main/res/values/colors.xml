@@ -9,6 +9,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue_project">#042D6F</color>
-    <color name="skyblue_project">#ADC5E7</color>
-    <color name="lightgray_project">#f6f6f6</color>
+    <color name="skyblue_project">#278FC7</color>
+    <color name="lightgray_project">#353537</color>
+    <color name="red_project">#EB3314</color>
+    <color name="green_project">#00C87D</color>
+    <color name="gray_project">#211F22</color>
+    <color name="whitegray_project">#909090</color>
+    <color name="purple_project">#934BE4</color>
 </resources>
