@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -38,12 +39,13 @@ public class MainActivity extends AppCompatActivity {
     private final int ACCESS_FINE_LOCATION = 1000;
 
     private BottomNavigationView mBottomNavigationView;
-
+    private Menu menu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mBottomNavigationView=findViewById(R.id.bottom_navigation);
+        menu=mBottomNavigationView.getMenu();
 
         //참고 : https://itstudy-mary.tistory.com/190
         //첫 화면 띄우기
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String userID = intent.getStringExtra("userID"); //UserID 가져옴
         String userPass = intent.getStringExtra("userPass"); //UserPass 가져옴
+        mBottomNavigationView.setItemIconTintList(null);
 
         //case 함수를 통해 클릭 받을 때마다 화면 변경하기
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -59,15 +62,31 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.bottom_1_home: //bottom_menu의 id를 가져옴
+                        item.setIcon(R.drawable.bottom_1_home);
+                        menu.findItem(R.id.bottom_2_rank).setIcon(R.drawable.unselected_rank);
+                        menu.findItem(R.id.bottom_3_chat).setIcon(R.drawable.unselected_chat);
+                        menu.findItem(R.id.bottom_4_account).setIcon(R.drawable.unselected_account);
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new Frag1()).commit();
                         break;
                     case R.id.bottom_2_rank:
+                        item.setIcon(R.drawable.bottom_2_rank);
+                        menu.findItem(R.id.bottom_1_home).setIcon(R.drawable.unselected_home);
+                        menu.findItem(R.id.bottom_3_chat).setIcon(R.drawable.unselected_chat);
+                        menu.findItem(R.id.bottom_4_account).setIcon(R.drawable.unselected_account);
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new Frag2()).commit();
                         break;
                     case R.id.bottom_3_chat:
+                        item.setIcon(R.drawable.bottom_3_chat);
+                        menu.findItem(R.id.bottom_1_home).setIcon(R.drawable.unselected_home);
+                        menu.findItem(R.id.bottom_2_rank).setIcon(R.drawable.unselected_rank);
+                        menu.findItem(R.id.bottom_4_account).setIcon(R.drawable.unselected_account);
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new Frag3()).commit();
                         break;
                     case R.id.bottom_4_account:
+                        item.setIcon(R.drawable.bottom_4_account);
+                        menu.findItem(R.id.bottom_1_home).setIcon(R.drawable.unselected_home);
+                        menu.findItem(R.id.bottom_2_rank).setIcon(R.drawable.unselected_rank);
+                        menu.findItem(R.id.bottom_3_chat).setIcon(R.drawable.unselected_chat);
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new Frag4()).commit();
                         break;
                 }
