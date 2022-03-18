@@ -129,5 +129,4 @@
         app:layout_constraintBottom_toBottomOf="@+id/view3"
         app:layout_constraintEnd_toEndOf="@+id/view3" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
