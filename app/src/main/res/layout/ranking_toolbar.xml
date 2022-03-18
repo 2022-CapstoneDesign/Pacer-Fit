@@ -29,4 +29,9 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_above="@+id/toolbar"
+        android:background="@color/lightgray_project"></View>
 </LinearLayout>
