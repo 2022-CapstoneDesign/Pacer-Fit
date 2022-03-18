@@ -1,20 +1,32 @@
 package com.example.project;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import net.daum.mf.map.api.MapView;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,6 +35,7 @@ import java.security.NoSuchAlgorithmException;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main_Activity";
     private long backKeyPressedTime = 0;
+    private final int ACCESS_FINE_LOCATION = 1000;
 
     private BottomNavigationView mBottomNavigationView;
 
@@ -31,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mBottomNavigationView=findViewById(R.id.bottom_navigation);
+
+
         //참고 : https://itstudy-mary.tistory.com/190
         //첫 화면 띄우기
         getSupportFragmentManager().beginTransaction().add(R.id.frame_container,new Frag1()).commit();
@@ -61,7 +76,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+
     } // onCreate
+
+
 
     // 뒤로가기 버튼을 두 번 누를 시 종료되도록 설정
     @Override

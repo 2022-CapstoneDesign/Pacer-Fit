@@ -11,7 +11,7 @@ public class LoginRequest extends StringRequest {
 
     // 서버 URL 설정 ( PHP 파일 연동 )
     //localhost 바꾸기
-    final static private String URL = "http://110.14.12.165/pacerfitDB/login.php";
+    final static private String URL = "http://localhost/PacerFitDB/login.php";
     private Map<String, String> map;
 
 
