@@ -186,15 +186,19 @@ public class Frag1 extends Fragment {
             weatherInfo.setText(weather+tmperature);
             //doInBackground()로부터 리턴된 값이 onPostExecute()의 매개변수로 넘어오므로 s를 출력
             if(weather.equals("맑음\n")){
+                weatherInfo_Image.setImageResource(R.color.lightgray_project);
                 weatherInfo_Image.setImageResource(R.drawable.weather_sunny);
             }
             else if(weather.equals("비\n")){
+                weatherInfo_Image.setImageResource(R.color.lightgray_project);
                 weatherInfo_Image.setImageResource(R.drawable.weather_rainy);
             }
             else if(weather.equals("구름 많음\n")){
+                weatherInfo_Image.setImageResource(R.color.lightgray_project);
                 weatherInfo_Image.setImageResource(R.drawable.weather_heavy_cloudy);
             }
             else if(weather.equals("흐림\n")){
+                weatherInfo_Image.setImageResource(R.color.lightgray_project);
                 weatherInfo_Image.setImageResource(R.drawable.weather_cloudy);
             }
         }
