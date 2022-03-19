@@ -85,23 +85,23 @@
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="@+id/view3"
         app:layout_constraintTop_toTopOf="@+id/view3"
         app:srcCompat="@drawable/locationpin_white" />
 
     <TextClock
+        android:id="@+id/textClock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginStart="3dp"
         android:fontFamily="@font/nanumsquareroundeb"
         android:format12Hour="hh:mm"
         android:format24Hour="hh:mm a"
         android:textColor="@color/white"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"
-        app:layout_constraintStart_toStartOf="@+id/imageView4" />
+        android:textSize="38sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ampm"
+        app:layout_constraintStart_toEndOf="@+id/ampm" />
 
     <TextView
         android:id="@+id/location"
@@ -109,7 +109,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="3dp"
         android:fontFamily="@font/nanumsquareroundeb"
-        android:text="TextView"
+        android:text="로딩중.."
         android:textColor="@color/white"
         android:textSize="18sp"
         app:flow_verticalAlign="bottom"
@@ -118,16 +118,36 @@
 
     <TextView
         android:id="@+id/weather"
-        android:layout_width="129dp"
-        android:layout_height="65dp"
+        android:layout_width="67dp"
+        android:layout_height="53dp"
         android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="9dp"
         android:fontFamily="@font/nanumsquareroundeb"
-        android:text="TextView"
-        android:textColor="@color/white"
-        android:textSize="28sp"
+        android:text="로딩중.."
+        android:textColor="@color/lightlightgray_text_color"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/view3"
         app:layout_constraintEnd_toEndOf="@+id/view3" />
 
+    <ImageView
+        android:id="@+id/weather_image"
+        android:layout_width="77dp"
+        android:layout_height="67dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view3"
+        app:layout_constraintEnd_toStartOf="@+id/weather"
+        app:srcCompat="@color/lightgray_project" />
+
+    <TextView
+        android:id="@+id/ampm"
+        android:layout_width="33dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:text=""
+        android:textColor="@color/lightlightgray_text_color"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view3"
+        app:layout_constraintStart_toStartOf="@+id/imageView4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

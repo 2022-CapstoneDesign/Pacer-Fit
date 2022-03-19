@@ -16,4 +16,6 @@
     <color name="gray_project">#211F22</color>
     <color name="whitegray_project">#909090</color>
     <color name="purple_project">#934BE4</color>
+    <color name="bottom_menu_color">#1B191C</color>
+    <color name="lightlightgray_text_color">#828282</color>
 </resources>

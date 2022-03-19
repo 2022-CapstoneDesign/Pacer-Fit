@@ -12,9 +12,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,7 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -49,6 +53,7 @@ import java.util.concurrent.ExecutionException;
 public class Frag1 extends Fragment {
 
     private TextView weatherInfo;
+    private ImageView weatherInfo_Image;
     private TransLocalPoint transLocalPoint;
     private GpsTracker gpsTracker;
     private String address = ""; // x,y는 격자x,y좌표
@@ -64,8 +69,8 @@ public class Frag1 extends Fragment {
         Context ct = container.getContext();
         TextView location = v.findViewById(R.id.location);
         weatherInfo = v.findViewById(R.id.weather);
-
-        Button Km_button = (Button) v.findViewById(R.id.Km_button);
+        weatherInfo_Image = v.findViewById(R.id.weather_image);
+        Button Km_button = v.findViewById(R.id.Km_button);
         Km_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View map) {
@@ -94,6 +99,17 @@ public class Frag1 extends Fragment {
 
         NetworkTask networkTask = new NetworkTask(url, null);
         networkTask.execute();
+
+        Calendar now = Calendar.getInstance();
+        int isAMorPM = now.get(Calendar.AM_PM);
+        switch (isAMorPM) {
+            case Calendar.AM:
+                ((TextView)v.findViewById(R.id.ampm)).setText("오전");
+                break;
+            case Calendar.PM:
+                ((TextView)v.findViewById(R.id.ampm)).setText("오후");
+                break;
+        }
 
         return v;
 
@@ -169,8 +185,22 @@ public class Frag1 extends Fragment {
             super.onPostExecute(s);
             weatherInfo.setText(weather+tmperature);
             //doInBackground()로부터 리턴된 값이 onPostExecute()의 매개변수로 넘어오므로 s를 출력
-
-
+            if(weather.equals("맑음\n")){
+                weatherInfo_Image.setImageResource(R.color.lightgray_project);
+                weatherInfo_Image.setImageResource(R.drawable.weather_sunny);
+            }
+            else if(weather.equals("비\n")){
+                weatherInfo_Image.setImageResource(R.color.lightgray_project);
+                weatherInfo_Image.setImageResource(R.drawable.weather_rainy);
+            }
+            else if(weather.equals("구름 많음\n")){
+                weatherInfo_Image.setImageResource(R.color.lightgray_project);
+                weatherInfo_Image.setImageResource(R.drawable.weather_heavy_cloudy);
+            }
+            else if(weather.equals("흐림\n")){
+                weatherInfo_Image.setImageResource(R.color.lightgray_project);
+                weatherInfo_Image.setImageResource(R.drawable.weather_cloudy);
+            }
         }
     }
 
