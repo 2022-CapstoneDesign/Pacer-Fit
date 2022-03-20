@@ -70,7 +70,7 @@ public class Frag1 extends Fragment {
         TextView location = v.findViewById(R.id.location);
         weatherInfo = v.findViewById(R.id.weather);
         weatherInfo_Image = v.findViewById(R.id.weather_image);
-        Button Km_button = (Button) v.findViewById(R.id.Km_button);
+        Button Km_button = v.findViewById(R.id.Km_button);
         Km_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View map) {
