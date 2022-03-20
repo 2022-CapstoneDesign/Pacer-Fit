@@ -32,6 +32,7 @@ import net.daum.mf.map.api.MapView;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -44,11 +45,12 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
     private MapView mapView = null;
     private EditText search_pos = null;
     private TextView result = null;
-    private String data = null;
+    private String data = "";
     private MapPolyline polyline = null;
     private ImageButton searchBtn = null;
     private Button startBtn = null;
     private Button stopBtn = null;
+    private float curAccuracy = 0;
 
 
     @Override
@@ -111,12 +113,39 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
             } else {
                 Toast.makeText(this, "GPS를 켜주세요", Toast.LENGTH_SHORT).show();
             }
-        });
 
+            /* 정확도 체크 용
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (mapView.getCurrentLocationTrackingMode() != MapView.CurrentLocationTrackingMode.TrackingModeOff) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("UiThread", "is active" + curAccuracy);
+                                data = data.concat(String.valueOf(curAccuracy));
+                                data = data.concat("\n");
+                                result.setText(data);
+                            }
+                        });
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).start();
+
+        */
+        });
         // 중지 버튼을 누르면 추적 중지
         stopBtn.setOnClickListener(v -> {
             stopTracking();
         });
+
+
+
 
     }
 
@@ -191,13 +220,17 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
         Log.i(TAG, "MapFragment:onCurrentLocationUpdate()");
         MapPoint.GeoCoordinate mapPointGeo = mapPoint.getMapPointGeoCoord();
-        polyline.addPoint(MapPoint.mapPointWithGeoCoord(mapPointGeo.latitude, mapPointGeo.longitude));
-        mapView.addPolyline(polyline);
+        if(v < 20.0f){
+            polyline.addPoint(MapPoint.mapPointWithGeoCoord(mapPointGeo.latitude, mapPointGeo.longitude));
+            mapView.addPolyline(polyline);
+        }
+        curAccuracy = v;
         Log.i(TAG, String.format("(%f, %f) accuracy (%f)", mapPointGeo.latitude, mapPointGeo.longitude, v));
     }
 
     @Override
     public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
+
 
     }
 
