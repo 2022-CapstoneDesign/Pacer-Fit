@@ -67,12 +67,12 @@ public class Weather {
 
 
     public String getCurrentAddress(Context context, double latitude, double longitude) {
-        //지오코더... GPS를 주소로 변환
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-        List<Address> addresses;
-        try {
-            addresses = geocoder.getFromLocation(
-                    latitude,
+                //지오코더... GPS를 주소로 변환
+                Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                List<Address> addresses;
+                try {
+                    addresses = geocoder.getFromLocation(
+                            latitude,
                     longitude,
                     7);
         } catch (IOException ioException) {
