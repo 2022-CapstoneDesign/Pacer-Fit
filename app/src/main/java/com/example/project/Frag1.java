@@ -79,6 +79,15 @@ public class Frag1 extends Fragment {
             }
         });
 
+        Button pedo_button = v.findViewById(R.id.pedo_button);
+        pedo_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View map) {
+                Intent intent = new Intent(getActivity(),StepCounter.class); //Fragment -> Activity로 이동 (Map_add.java)
+                startActivity(intent);
+            }
+        });
+
         Weather weatherMethod = new Weather();
         gpsTracker = new GpsTracker(ct);
         double latitude = gpsTracker.getLatitude();

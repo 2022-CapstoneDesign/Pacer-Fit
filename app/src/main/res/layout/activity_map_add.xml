@@ -48,7 +48,8 @@
         android:id="@+id/search_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="?android:attr/actionModeWebSearchDrawable" />
+        app:srcCompat="?android:attr/actionModeWebSearchDrawable"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <ScrollView
         android:layout_width="match_parent"

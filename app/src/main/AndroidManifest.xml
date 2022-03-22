@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+
 
     <application
         android:allowBackup="true"
@@ -28,6 +30,9 @@
             android:name=".IntroActivity"
             android:exported="false"
             android:theme="@style/IntroTheme" />
+        <activity
+            android:name=".StepCounter"
+             />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
