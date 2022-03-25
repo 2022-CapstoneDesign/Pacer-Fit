@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,13 +52,12 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
     private Button startBtn = null;
     private Button stopBtn = null;
     private float curAccuracy = 0;
-
+    private double userLa,userLg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_add);
-
         search_pos = findViewById(R.id.search_pos);
         searchBtn = findViewById(R.id.search_btn);
         startBtn = findViewById(R.id.start_btn);
@@ -85,11 +85,30 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
 
         });
 
+
+        //경도(userLg), 위도(userLa) 설정
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location userNowLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        System.out.println("=============위도 : "+userNowLocation.getLatitude()+"===============경도 : "+
+                userNowLocation.getLongitude());
+        userLa = userNowLocation.getLatitude();
+        userLg = userNowLocation.getLongitude();
         //지도 표시 (activity_map_add.xml)
 
         mapView.setCurrentLocationEventListener(this);
         // 중심점 변경
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.6645928, 126.8862906), true);
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(userLa, userLg), true);
         // 줌 레벨 변경
         mapView.setZoomLevel(1, true);
 
@@ -97,7 +116,7 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
         mapViewContainer.addView(mapView);
 
         //마커 찍기
-        MapPoint MARKER_POINT = MapPoint.mapPointWithGeoCoord(37.6645928, 126.8962906);
+        MapPoint MARKER_POINT = MapPoint.mapPointWithGeoCoord(userLa, userLg);
         MapPOIItem marker = new MapPOIItem();
         marker.setItemName("Default Marker");
         marker.setTag(0);

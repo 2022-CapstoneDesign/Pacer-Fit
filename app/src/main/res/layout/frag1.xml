@@ -17,14 +17,12 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/view_style"
         android:backgroundTint="@color/gray_project"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/include"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/include"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view3">
 
@@ -54,19 +52,21 @@
         android:fontFamily="@font/nanumsquareroundeb"
         android:text="@string/pedometer"
         android:textColor="@color/whitegray_project"
-        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintStart_toStartOf="@+id/workTxt"
         app:layout_constraintTop_toBottomOf="@+id/workTxt" />
 
     <Button
         android:id="@+id/Km_button"
         android:layout_width="140dp"
         android:layout_height="48dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="30dp"
         android:background="@drawable/btn_style"
         android:fontFamily="@font/nanumsquareroundeb"
         android:text="거리(km)"
         android:textColor="@color/whitegray_project"
         app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintStart_toEndOf="@+id/pedo_button"
         app:layout_constraintTop_toTopOf="@+id/pedo_button" />
 
     <View
