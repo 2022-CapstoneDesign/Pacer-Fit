@@ -36,6 +36,7 @@ dependencies {
     implementation files('libs/libDaumMapAndroid.jar')
     //DataBase
     implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.github.pires:obd-java-api:1.0'
 
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
