@@ -27,6 +27,7 @@ android {
     }
 }
 
+
 dependencies {
 
     //material design(BottomNavigationView) Bottom Menu
@@ -35,6 +36,7 @@ dependencies {
     implementation files('libs/libDaumMapAndroid.jar')
     //DataBase
     implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.github.pires:obd-java-api:1.0'
 
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
@@ -45,4 +47,6 @@ dependencies {
 
     //circle image view
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    //chart library
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
