@@ -19,7 +19,6 @@ import android.location.LocationManager;
 import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -33,16 +32,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.project.Map.MapFragment;
-import com.example.project.Map.RecordMapActivity;
-
-import net.daum.mf.map.api.MapView;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,7 +55,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class Frag1 extends Fragment {
@@ -80,7 +79,6 @@ public class Frag1 extends Fragment {
         weatherInfo_Image = v.findViewById(R.id.weather_image);
         Button Km_button = v.findViewById(R.id.Km_button);
         Km_button.setOnClickListener(new View.OnClickListener(){
-            @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
             public void onClick(View map) {
                 Intent intent = new Intent(getActivity(), RecordMapActivity.class); //Fragment -> Activity로 이동 (Map_add.java)
@@ -93,7 +91,9 @@ public class Frag1 extends Fragment {
         pedo_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View map) {
-                Intent intent = new Intent(getActivity(),StepCounter.class); //Fragment -> Activity로 이동 (StepCounter.java)
+//                Intent intent = new Intent(getActivity(),StepCounter.class); //Fragment -> Activity로 이동 (StepCounter.java)
+//                startActivity(intent);
+                Intent intent = new Intent(getActivity(), PopupPedo.class); //Fragment -> Activity로 이동 (만보기팝업)
                 startActivity(intent);
             }
         });
@@ -130,8 +130,92 @@ public class Frag1 extends Fragment {
                 break;
         }
 
+        barChart = v.findViewById(R.id.barchart);
+        //barChart.setOnChartValueSelectedListener(this);
+
+        ArrayList<Float> barChartValues = new ArrayList<>();
+        // 최근 1달의 운동량 값 받아오기 -> DB 값으로 추후에 수정
+        for (int i = 0; i < 30; i++) {
+            float rand = (float)Math.round(new Random().nextFloat() * 15000);
+            //rand = rand / 1000;
+            Log.d("RAND", String.valueOf(rand));
+            barChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
+        }
+
+        configureChartAppearance();
+        BarData barChartData = createChartData(barChartValues);
+        barChart.setData(barChartData); // BarData 전달
+        barChart.invalidate(); // BarChart 갱신해 데이터 표시
+
         return v;
 
+    } // onCreateView
+
+    // 막대차트 각종 설정
+    private void configureChartAppearance() {
+        barChart.setTouchEnabled(false); // 터치 유무
+        barChart.setPinchZoom(false); // 두 손가락으로 줌인,줌아웃 설정
+        barChart.setDrawBarShadow(false); // 그래프의 그림자
+        barChart.setDrawGridBackground(false); // 격자무늬 유무
+        barChart.getLegend().setEnabled(false); // legend는 차트의 범례
+        barChart.getDescription().setEnabled(false); // 우측 하단의 DescriptionLabel 삭제
+        barChart.animateY(1500); // 밑에서부터 올라오는 애니메이션 적용
+        barChart.animateX(1500); // 왼쪽-오른쪽 방향의 애니메이션 적용
+        //barChart.setDescription();
+        //barChart.setExtraOffsets(10f, 0f, 40f, 0f);
+
+        // x축 설정(막대그래프 기준 아래쪽)
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setAxisMaximum(30f);
+        xAxis.setDrawAxisLine(false); // 축 그리기 설정
+        xAxis.setGranularity(5f); // 간격 설정(표시되는 값)
+        xAxis.setTextSize(13f);
+        xAxis.setTextColor(Color.parseColor("#909090"));
+        xAxis.setDrawGridLines(false); // 격자
+        //xAxis.setGridLineWidth(25f);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
+        xAxis.setValueFormatter(new MyXAxisValueFormatter());
+
+        // y축 설정(막대그래프 기준 왼쪽)
+        YAxis axisLeft = barChart.getAxisLeft();
+        axisLeft.setAxisMaximum(15001f); // y축 최대값 설정
+        axisLeft.setAxisMinimum(0f); // y축 최소값 설정
+        axisLeft.setDrawLabels(false); // 값 표기 설정
+        axisLeft.setDrawGridLines(false); // 격자
+        axisLeft.setDrawAxisLine(false); // 축 그리기 설정
+        //axisLeft.setAxisLineColor(Color.parseColor("#FFFFFFFF")); // 축 색깔 설정
+        //axisLeft.setLabelCo
+
+        // (막대그래프 기준 오른쪽)
+        YAxis axisRight = barChart.getAxisRight();
+        axisRight.setDrawLabels(false); // 값 표기 설정
+        axisRight.setDrawGridLines(false); // 격자
+        axisRight.setDrawAxisLine(false); // 축 그리기 설정
+        //axisRight.setEnabled(false); // 오른쪽 y축을 안 보이게 해줌
+    }
+
+    // 이 함수에서 생성된 BarData를 실제 BarData 객체에 전달하고 BarChart를 갱신해 데이터를 표시
+    private BarData createChartData(ArrayList<Float> chartValues) {
+        // 1. [BarEntry] BarChart에 표시될 데이터 값 생성
+        ArrayList<BarEntry> values = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            float x = i;
+            float y = chartValues.get(i);
+            values.add(new BarEntry(x, y));
+        }
+
+        // 2. [BarDataSet] 단순 데이터를 막대 모양으로 표시, BarChart의 막대 커스텀
+        BarDataSet set = new BarDataSet(values, "막대그래프");
+        set.setDrawIcons(false);
+        set.setDrawValues(false); // 막대 위에 값 표시 설정
+        set.setColor(Color.parseColor("#EB3314")); // 색상 설정(빨강)
+
+        // 3. [BarData] 보여질 데이터 구성
+        BarData data = new BarData(set);
+        data.setBarWidth(0.6f);
+        data.setValueTextSize(15);
+
+        return data;
     }
 
     public String weatherJsonParser(String jsonString) throws JSONException {

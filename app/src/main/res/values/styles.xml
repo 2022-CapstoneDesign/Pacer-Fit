@@ -31,7 +31,7 @@
         <!-- 커서 색 -->
         <item name="android:textCursorDrawable">@color/white</item>
         <!-- hint 색 -->
-        <item name="android:textColorHint">@color/white</item>
+        <item name="android:textColorHint">@color/whitegray_project</item>
         <!-- floating hint 색 -->
         <item name="hintTextColor">@color/skyblue_project</item>
 

@@ -19,6 +19,13 @@
         android:theme="@style/Theme.Project"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ThreeTwoOneGo"
+            android:exported="false" />
+        <activity
+            android:name=".PopupPedo"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+        <activity
             android:name=".JoinActivity"
             android:exported="false"
             android:theme="@style/JoinTheme" />

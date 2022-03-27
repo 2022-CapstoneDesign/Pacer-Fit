@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main_Activity";
     private long backKeyPressedTime = 0;
     private final int ACCESS_FINE_LOCATION = 1000;
-
     private BottomNavigationView mBottomNavigationView;
     private Menu menu;
     @Override
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mBottomNavigationView=findViewById(R.id.bottom_navigation);
         menu=mBottomNavigationView.getMenu();
-
         //참고 : https://itstudy-mary.tistory.com/190
         //첫 화면 띄우기
         getSupportFragmentManager().beginTransaction().add(R.id.frame_container,new Frag1()).commit();
@@ -54,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String userID = intent.getStringExtra("userID"); //UserID 가져옴
         String userPass = intent.getStringExtra("userPass"); //UserPass 가져옴
+        String userName = intent.getStringExtra("userName");
         mBottomNavigationView.setItemIconTintList(null);
-
+        System.out.println("================================"+userName);
         //case 함수를 통해 클릭 받을 때마다 화면 변경하기
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

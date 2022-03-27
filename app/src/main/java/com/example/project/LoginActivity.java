@@ -48,11 +48,13 @@ public class LoginActivity extends AppCompatActivity {
         // (참고 : 비밀번호는 영어(소,대), 숫자, 특수문자만 최대 20글자 입력 가능)
         idTxt.setFilters(new InputFilter[] {filter, new InputFilter.LengthFilter(20)});
 
+
+
         loginBtn = findViewById(R.id.loginLoginBtn);
         loginBtn.setOnClickListener(v -> {
-
             String userID = idTxt.getText().toString();
             String userPass = passTxt.getText().toString();
+            String userName;
              // DB추가
             Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
@@ -64,10 +66,12 @@ public class LoginActivity extends AppCompatActivity {
                         if (success) { // 로그인에 성공한 경우
                             String userID = jsonObject.getString("userID");
                             String userPass = jsonObject.getString("userPassword");
+                            String userName = jsonObject.getString("userName");
                             Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);// 메인 액티비티로 전환
                             intent.putExtra("userID", userID);
                             intent.putExtra("userPass", userPass);
+                            intent.putExtra("userName",userName);
                             startActivity(intent);
                             finish();
                         } else { // 로그인에 실패한 경우
@@ -84,8 +88,6 @@ public class LoginActivity extends AppCompatActivity {
             queue.add(loginRequest);
 
             //DB추가 주석 없앨때 아래 3줄 지우기
-
-
 
         });
     }

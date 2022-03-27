@@ -1,5 +1,6 @@
 package com.example.project;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class Frag4 extends Fragment {
+
+    private TextView myID;
 
     private ImageView walkBtn;
     private ImageView kmBtn;
@@ -45,6 +48,11 @@ public class Frag4 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.frag4,container,false);
+
+        Intent intent = getActivity().getIntent();
+        String userName = intent.getStringExtra("userName");
+        myID = v.findViewById(R.id.mypageId);
+        myID.setText(userName); // user이름 설정해주기
 
         walkBtn = v.findViewById(R.id.mypage_walkBtn);
         kmBtn = v.findViewById(R.id.mypage_kmBtn);

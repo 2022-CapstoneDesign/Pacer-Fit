@@ -25,4 +25,6 @@
     <color name="colorBackgroundDefault">#f2f2f2</color>
     <color name="colorGrey">#B6B2B2</color>
     <color name="colorMAIN">#042D6F</color>
+    <color name="lightgray_line">#5e5b5f</color>
+    <color name="btnstroke_gray">#353537</color>
 </resources>
