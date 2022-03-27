@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray_project">
+    <include layout="@layout/pedo_toolbar"/>
 
     <TextView
         android:id="@+id/textView"
@@ -11,6 +13,7 @@
         android:layout_height="40dp"
         android:layout_marginTop="256dp"
         android:text="만보기"
+        android:textColor="@color/white"
         android:textAlignment="center"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -26,6 +29,7 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="72dp"
         android:text="걸음 수 :"
+        android:textColor="@color/white"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,6 +42,7 @@
         android:layout_marginTop="72dp"
         android:layout_marginEnd="108dp"
         android:text="0"
+        android:textColor="@color/white"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
