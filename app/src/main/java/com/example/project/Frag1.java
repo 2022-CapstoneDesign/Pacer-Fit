@@ -19,6 +19,7 @@ import android.location.LocationManager;
 import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -32,10 +33,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.example.project.Map.MapFragment;
+import com.example.project.Map.RecordMapActivity;
+
+import net.daum.mf.map.api.MapView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +55,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class Frag1 extends Fragment {
@@ -72,9 +80,11 @@ public class Frag1 extends Fragment {
         weatherInfo_Image = v.findViewById(R.id.weather_image);
         Button Km_button = v.findViewById(R.id.Km_button);
         Km_button.setOnClickListener(new View.OnClickListener(){
+            @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
             public void onClick(View map) {
-                Intent intent = new Intent(getActivity(),Map_add.class); //Fragment -> Activity로 이동 (Map_add.java)
+                Intent intent = new Intent(getActivity(), RecordMapActivity.class); //Fragment -> Activity로 이동 (Map_add.java)
+                //Intent intent = new Intent(getActivity(), Map_add.class);
                 startActivity(intent);
             }
         });
@@ -83,7 +93,7 @@ public class Frag1 extends Fragment {
         pedo_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View map) {
-                Intent intent = new Intent(getActivity(),StepCounter.class); //Fragment -> Activity로 이동 (Map_add.java)
+                Intent intent = new Intent(getActivity(),StepCounter.class); //Fragment -> Activity로 이동 (StepCounter.java)
                 startActivity(intent);
             }
         });

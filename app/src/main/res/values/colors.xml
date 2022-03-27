@@ -18,4 +18,11 @@
     <color name="purple_project">#934BE4</color>
     <color name="bottom_menu_color">#1B191C</color>
     <color name="lightlightgray_text_color">#828282</color>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBackgroundDefault">#f2f2f2</color>
+    <color name="colorGrey">#B6B2B2</color>
+    <color name="colorMAIN">#042D6F</color>
 </resources>
