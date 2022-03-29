@@ -329,6 +329,10 @@ public class Frag1 extends Fragment {
                 weatherInfo_Image.setImageResource(R.color.lightgray_project);
                 weatherInfo_Image.setImageResource(R.drawable.weather_cloudy);
             }
+            else if(weather.equals("눈\n")){
+                weatherInfo_Image.setImageResource(R.color.lightgray_project);
+                weatherInfo_Image.setImageResource(R.drawable.weather_snow);
+            }
         }
     }
 
