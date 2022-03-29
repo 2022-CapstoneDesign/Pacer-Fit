@@ -70,6 +70,9 @@ public class Frag1 extends Fragment {
     String weather=""; // 날씨 결과
     String tmperature = ""; // 온도 결과
 
+
+
+
     private BarChart barChart; // 막대 그래프
 
     @Nullable
@@ -117,7 +120,6 @@ public class Frag1 extends Fragment {
         Log.e(">>","x = "+ tmp.x + ", y = "+ tmp.y);
 
         String url = weatherMethod.weather(tmp.x,tmp.y);
-
         NetworkTask networkTask = new NetworkTask(url, null);
         networkTask.execute();
 
@@ -221,6 +223,12 @@ public class Frag1 extends Fragment {
     }
 
     public String weatherJsonParser(String jsonString) throws JSONException {
+        long mNow = System.currentTimeMillis();
+        Date mReDate = new Date(mNow);
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH00");
+        String mCurrentTime =String.format("%04d",(Integer.parseInt(currentTime.format(mReDate))));
+        Log.i("currentTime", mCurrentTime);
+        String rain = "0";
 
         //response 키를 가지고 데이터를 파싱
         JSONObject jsonObject1 = new JSONObject(jsonString);
@@ -233,7 +241,7 @@ public class Frag1 extends Fragment {
         // body 로 부터 items 찾기
         JSONObject jsonObject3 = new JSONObject(body);
         String items = jsonObject3.getString("items");
-        Log.i("ITEMS", items);
+
 
         // itmes로 부터 itemlist 를 받기
         JSONObject jsonObject4 = new JSONObject(items);
@@ -241,22 +249,36 @@ public class Frag1 extends Fragment {
 
         for(int i = 0; i < jsonArray.length(); i++){
             jsonObject4 = jsonArray.getJSONObject(i);
+            String fcstTime = jsonObject4.getString("fcstTime");
             String fcstValue = jsonObject4.getString("fcstValue");
             String category = jsonObject4.getString("category");
 
-            if(category.equals("SKY")){
-                if(fcstValue.equals("1")) {
-                    weather = "맑음\n";
-                } else if(fcstValue.equals("2")){
-                    weather = "비\n";
-                } else if(fcstValue.equals("3")){
-                    weather = "구름 많음\n";
-                } else if(fcstValue.equals("4")){
-                    weather = "흐림\n";
+            if(fcstTime.equals(mCurrentTime)) {
+                Log.d("ITEM", jsonObject4.toString());
+                if(category.equals("PTY")){
+                    if(fcstValue.equals("1") || fcstValue.equals("2") || fcstValue.equals("5") || fcstValue.equals("6")){
+                        weather = "비\n";
+                        rain = "1";
+                    } else if (fcstValue.equals("3") || fcstValue.equals("7")) {
+                        weather = "눈\n";
+                        rain = "1";
+                    } else if (fcstValue.equals("0")){
+                        rain = "0";
+                    }
                 }
-            }
-            if(category.equals("TMP")){
-                tmperature = fcstValue + "℃";
+                if (category.equals("SKY") && rain.equals("0")) {
+                    if (fcstValue.equals("1")) {
+                        weather = "맑음\n";
+                    } else if (fcstValue.equals("3")) {
+                        weather = "구름 많음\n";
+                    } else if (fcstValue.equals("4")) {
+                        weather = "흐림\n";
+                    }
+                }
+
+                if (category.equals("T1H")) {
+                    tmperature = fcstValue + "℃";
+                }
             }
         }
         return weather+tmperature;
@@ -266,6 +288,7 @@ public class Frag1 extends Fragment {
 
         private String url;
         private ContentValues values;
+
         String result;
 
         public NetworkTask(String url, ContentValues values){
