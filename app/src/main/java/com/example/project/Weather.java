@@ -41,8 +41,8 @@ public class Weather {
         String num_of_rows = "100";
         String page_no = "1";
         String date_type = "JSON";
-        String base_date = formatYDM;
         String base_time = timeChange(formatTime);
+        String base_date = formatYDM;
         String nx = String.format("%.0f",x);
         String ny = String.format("%.0f",y);
 
@@ -102,6 +102,9 @@ public class Weather {
             20:XX 인경우 20시의 예보를 보기 위해선 1930 시간을 검색해야 한다.
          **/
         switch(time) {
+            case "0100":
+                time = "0030";
+                break;
             case "0200":
                 time = "0130";
                 break;
