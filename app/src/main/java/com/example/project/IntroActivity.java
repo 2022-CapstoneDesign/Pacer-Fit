@@ -38,7 +38,7 @@ public class IntroActivity extends AppCompatActivity {
         joinBtn = findViewById(R.id.introJoinBtn);
 
         loginBtn.setOnClickListener(v -> {
-            startActivity(new Intent(IntroActivity.this, LoginActivity.class));
+            startActivity(new Intent(IntroActivity.this, MainActivity.class));
             finish();
         });
 

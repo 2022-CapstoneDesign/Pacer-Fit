@@ -26,8 +26,7 @@ public class Weather {
     String formatYDM; //날짜 변화를 위한 변수
 
 
-
-    public String weather(double x, double y){
+    public String weather(double x, double y) {
         long mNow = System.currentTimeMillis();
         mReDate = new Date(mNow);
         mFormatYDM = new SimpleDateFormat("yyyyMMdd");
@@ -67,12 +66,12 @@ public class Weather {
 
 
     public String getCurrentAddress(Context context, double latitude, double longitude) {
-                //지오코더... GPS를 주소로 변환
-                Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-                List<Address> addresses;
-                try {
-                    addresses = geocoder.getFromLocation(
-                            latitude,
+        //지오코더... GPS를 주소로 변환
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocation(
+                    latitude,
                     longitude,
                     7);
         } catch (IOException ioException) {
@@ -89,7 +88,7 @@ public class Weather {
             return "주소 미발견";
         }
         Address address = addresses.get(0);
-        return address.getAddressLine(0).toString()+"\n";
+        return address.getAddressLine(0).toString() + "\n";
     }
 
 
