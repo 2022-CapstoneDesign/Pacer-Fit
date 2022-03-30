@@ -21,7 +21,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="100dp"
+        android:background="@color/bottom_menu_color">
         <!--레코드 시작 버튼-->
 
 

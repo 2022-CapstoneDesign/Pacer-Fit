@@ -16,21 +16,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,28 +33,21 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.example.project.MainActivity;
 import com.example.project.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import net.daum.android.map.coord.MapCoordLatLng;
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 @RequiresApi(api = Build.VERSION_CODES.P)
-public class RecordMapActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener,
+public class RecordMapActivity extends AppCompatActivity implements View.OnClickListener,
         MapView.CurrentLocationEventListener, MapFragment.OnConnectListener {
 
     static RecordMapActivity recordMapActivity;
@@ -96,17 +82,16 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     ArrayList<Pair<Double, Double>> latlngArray = new ArrayList<>();
     int latlngIndex = 0;
 
-    // 만보기
-    int pedometer = 0;
-    SensorManager sensorManager;
+    // 칼로리
+    double calories;
 
     // 위도 경도 거리 속도 변수 값
-    double curLat = 0.00;
-    double curLng = 0.00;
-    double befLat = 0.00;
-    double befLng = 0.00;
-    double distance = 0.00;
-    double avgSpeed = 0.00;
+    double curLat = 0.0;
+    double curLng = 0.0;
+    double befLat = 0.0;
+    double befLng = 0.0;
+    double distance = 0.0;
+    double avgSpeed = 0.0;
 
     // FloatingActionButton
     FloatingActionButton recordStartFab;
@@ -117,14 +102,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     FloatingActionButton toMapFab;
 
     // TextView
-    TextView secTextView;
-    TextView minTextView;
-    TextView hourTextView;
-    TextView recordPedometer;
-    TextView distanceKm;
-    TextView averageSpeed;
+    TextView time_tv;
+    TextView dist_tv;
+    TextView cal_tv;
 
-    MapPolyline mapPolyline;
 
     String test1 = "";
     String test2 = "";
@@ -144,9 +125,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         polyline.setLineColor(Color.argb(128, 255, 51, 0)); // Polyline 컬러 지정.
 
         serviceIntent = new Intent(RecordMapActivity.this, MapService.class);
-
-        // 만보기
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         // FloatingActionButton
         recordStartFab = findViewById(R.id.recordStartFab);
@@ -213,15 +191,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onStart() {
         super.onStart();
-        mapPolyline = new MapPolyline();
-        mapPolyline.setLineColor(Color.argb(128, 255, 51, 0));
-        mapPolyline.addPoint(MapPoint.mapPointWithGeoCoord(37.6645928, 126.8962906));
-        mapPolyline.addPoint(MapPoint.mapPointWithGeoCoord(37.65382463422385, 126.89663234494247));
-        mapPolyline.addPoint(MapPoint.mapPointWithGeoCoord(37.65382463422405, 126.89663234494267));
-        mapPolyline.addPoint(MapPoint.mapPointWithGeoCoord(37.65382463422425, 126.89663234494297));
-        mapPolyline.addPoint(MapPoint.mapPointWithGeoCoord(38.65382463422455, 126.89663234494327));
-        mMap.addPolyline(mapPolyline);
-        Log.d("onStart", "onStart is active");
     }
 
     // MapFragment와 RecordMapActivity를 연결
@@ -230,7 +199,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         mMap = mapView;
         mMap.setCurrentLocationEventListener(this);
         mMap.setZoomLevel(1, true);
-
     }
 
     @Override
@@ -262,13 +230,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     // 시작 기능
     public void StartFab() {
-        // 만보기
-        sensorManager.registerListener(
-                this,
-                sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR),
-                SensorManager.SENSOR_DELAY_NORMAL
-        );
-
         // gps 권한 체크
         if (checkLocationService()) {
             permissionCheck();
@@ -281,7 +242,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         recordStartFab.hide();
         recordPauseFab.show();
-        toRecordFab.show();
+        toMapFab.show();
         recordPressed = true;
 
         recordFrag = new RecordFragment();
@@ -291,12 +252,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         // 시작 지점 마커 생성
         makeMarker("출발 지점");
-
-
-        StartService(serviceIntent);
-        if (!checkPermission())
-            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-
+        MapToRecord();
 
         Log.d("StartFab", "exec");
     }
@@ -305,12 +261,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     public void PauseFab() {
         // 트래킹 중지
         stopTracking();
-        // 만보기 중지
-        sensorManager.unregisterListener(this);
         // 타이머 중지
         pauseTimer();
-        // 서비스 중지
-        stopService(serviceIntent);
 
         recordPressed = false;
         recordStart = false;
@@ -324,14 +276,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     // 재개 기능
     public void ResumeFab() {
-        // 만보기 시작
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
         // 타이머 시작
         startTimer();
         // 트래킹 시작
         startTracking();
-        // 서비스 시작
-        StartService(serviceIntent);
 
         recordPressed = true;
         recordResumeFab.hide();
@@ -343,8 +291,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 기록 -> 맵
     private void recordToMap() {
         // mapFragment를 보이게 하고 recordFragmet를 숨김
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.from_left, R.anim.from_right).show(mapFrag).commit();
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.from_right, R.anim.from_left).hide(recordFrag).commit();
+        getSupportFragmentManager().beginTransaction().show(mapFrag).commit();
+        getSupportFragmentManager().beginTransaction().hide(recordFrag).commit();
 
         toRecordFab.show();
         toMapFab.hide();
@@ -353,8 +301,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 맵 -> 기록
     private void MapToRecord() {
         // recordFragmet를 보이게 하고 mapFragment를 숨김
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.from_left, R.anim.to_right).hide(mapFrag).commit();
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.from_left, R.anim.to_right).show(recordFrag).commit();
+        getSupportFragmentManager().beginTransaction().hide(mapFrag).commit();
+        getSupportFragmentManager().beginTransaction().show(recordFrag).commit();
         toRecordFab.hide();
         toMapFab.show();
     }
@@ -389,20 +337,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         stopTracking();
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
-            Log.d("Sensor ", "Success");
-            if (event.values[0] == 1.0f) {
-                pedometer += 1;
-            }
-        }
-    }
 
     // 타이머 기능
     private void startTimer() {
@@ -421,26 +355,18 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void run() {
                         // textview의 값들이 계속 null로 나와서 여기에 뒀습니다.
-                        recordPedometer = findViewById(R.id.recordPedometer);
-                        secTextView = findViewById(R.id.secTextView);
-                        minTextView = findViewById(R.id.minTextView);
-                        hourTextView = findViewById(R.id.hourTextView);
-                        distanceKm = findViewById(R.id.distanceKm);
-                        averageSpeed = findViewById(R.id.averageSpeed);
+                        dist_tv = findViewById(R.id.distanceText);
+                        time_tv = findViewById(R.id.timeText);
+                        cal_tv = findViewById(R.id.calText);
                         test1v = findViewById(R.id.locTest);
                         test2v = findViewById(R.id.accTest);
-                        if (secTextView != null)
-                            secTextView.setText(Integer.toString(sec));
-                        if (minTextView != null)
-                            minTextView.setText(Integer.toString(min));
-                        if (hourTextView != null)
-                            hourTextView.setText(Integer.toString(hour));
-                        if (distanceKm != null)
-                            distanceKm.setText(Double.toString(Math.round(distance * 100) / 100.0));
-                        if (averageSpeed != null)
-                            averageSpeed.setText(Double.toString(Math.round(avgSpeed * 100) / 100.0));
-                        if (recordPedometer != null)
-                            recordPedometer.setText(Integer.toString(pedometer));
+                        if (time_tv != null)
+                            time_tv.setText(hour + "H " + min + "M " + sec + "S");
+                        if (dist_tv != null)
+                            dist_tv.setText(Double.toString(Math.round(distance * 100) / 100.0));
+                        if (cal_tv != null)
+                            cal_tv.setText(calories + "kcal");
+                        // 외부에서 테스트용
                         if (test1v != null)
                             test1v.setText(test1);
                         if (test2v != null)
@@ -553,6 +479,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         }
         insertLatLngList(curLat, curLng);
         mMap.addPolyline(polyline);
+
+        // 외부에서 테스트용도
         test1 = test1.concat(String.format("(%.6f, %.6f) (%.6f, %.6f) = %.2f\n", curLat, curLng, befLat, befLng, distance));
         test2 = test2.concat(String.format("accuracy (%.2f)\n", v));
         System.out.println(test1 + '\n' + test2 + '\n');
@@ -568,7 +496,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 befLat = latlngArray.get(latlngIndex).first;
                 befLng = latlngArray.get(latlngIndex).second;
                 distance += getDistance(curLat, curLng, befLat, befLng);
-                avgSpeed = distance / Math.round(total_sec / 3600);
                 latlngIndex++;
             }
         }
