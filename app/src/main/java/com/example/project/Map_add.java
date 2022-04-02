@@ -232,6 +232,7 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
 
     private void startTracking() {
         mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+        Log.d("startTracking", "tracking is start");
     }
 
 

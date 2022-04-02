@@ -48,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         // (참고 : 비밀번호는 영어(소,대), 숫자, 특수문자만 최대 20글자 입력 가능)
         idTxt.setFilters(new InputFilter[] {filter, new InputFilter.LengthFilter(20)});
 
+
+
         loginBtn = findViewById(R.id.loginLoginBtn);
         loginBtn.setOnClickListener(v -> {
             String userID = idTxt.getText().toString();
@@ -58,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(String response) {
                     try {
-                        System.out.println("========================" + response);
+                       // System.out.println("========================" + response);
                         JSONObject jsonObject = new JSONObject(response);
                         boolean success = jsonObject.getBoolean("success");
                         if (success) { // 로그인에 성공한 경우
