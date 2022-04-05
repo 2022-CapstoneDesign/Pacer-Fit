@@ -62,6 +62,9 @@ public class Frag1 extends Fragment {
     private BarChart barChart; // 막대 그래프
     private LineChart lineChart; // 꺾은선 그래프
 
+    private Button moreBarChartBtn;
+    private Button moreLineChartBtn;
+
 
     @Nullable
     @Override
@@ -157,7 +160,13 @@ public class Frag1 extends Fragment {
         lineChart.setData(lineChartData); // LineData 전달
         lineChart.invalidate(); // LineChart 갱신해 데이터 표시
 
-
+        moreBarChartBtn = v.findViewById(R.id.moreBarChartBtn);
+        moreBarChartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getChildFragmentManager().beginTransaction().replace(R.id.frame_container,new DetailPedoRecordFragment()).commit();
+            }
+        });
 
         return v;
 
