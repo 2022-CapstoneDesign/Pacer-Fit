@@ -67,25 +67,23 @@ public class JoinActivity extends AppCompatActivity {
             int userheight = Integer.parseInt(heightTxt.getText().toString());
             int userweight = Integer.parseInt(weightTxt.getText().toString());
             //DB 추가
-
-                    Response.Listener<String> responseListener = response -> {
-                        try {
-                            System.out.println(response);
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean success = jsonObject.getBoolean("success");
-
-                            if (success) { // 회원등록에 성공한 경우
-                                Toast.makeText(getApplicationContext(), "회원가입 성공", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(JoinActivity.this, LoginActivity.class)); // 로그인 액티비티로 전환
-                                finish();
-                            } else { // 회원등록에 실패한 경우
-                                Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    };
+            Response.Listener<String> responseListener = response -> {
+                try {
+                    System.out.println(response);
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+                    if (success) { // 회원등록에 성공한 경우
+                        Toast.makeText(getApplicationContext(), "회원가입 성공", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(JoinActivity.this, LoginActivity.class)); // 로그인 액티비티로 전환
+                        finish();
+                    } else { // 회원등록에 실패한 경우
+                        Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            };
             // 서버로 Volley를 이용해서 요청을 함.
             //RegisterRequest.java 이동
             RegisterRequest registerRequest = new RegisterRequest(userID,userPass,userName,userGender,userAge,userheight,userweight,responseListener);

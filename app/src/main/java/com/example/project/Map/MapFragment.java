@@ -32,14 +32,12 @@ import java.util.Map;
 import io.ticofab.androidgpxparser.parser.GPXParser;
 import io.ticofab.androidgpxparser.parser.domain.Gpx;
 import io.ticofab.androidgpxparser.parser.domain.Track;
-import me.himanshusoni.gpxparser.modal.GPX;
 
 public class MapFragment extends Fragment {
     public MapView mapView;
     private OnConnectListener onConnectListener;
     GPXParser parser = new GPXParser();
     Gpx parsedGpx = null;
-    GPX gpx = new GPX();
     MapPolyline polyline = new MapPolyline();
     double lat, lon;
     @Nullable

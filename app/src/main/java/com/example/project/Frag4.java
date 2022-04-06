@@ -44,13 +44,38 @@ public class Frag4 extends Fragment {
     private boolean onKcalBtn = false;
     private boolean onTimeBtn = false;
 
+    String userName;
+    String bestSteps;
+    String bestKm;
+    String bestTime_Km;
+    String bestCalorie_Km;
+    String bestTime_Steps;
+    String bestCalorie_Steps;
+    String BestCalorie;
+    String BestTime;
+    int hour, minutes;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.frag4,container,false);
 
         Intent intent = getActivity().getIntent();
-        String userName = intent.getStringExtra("userName");
+        userName = intent.getStringExtra("userName");
+        bestSteps = intent.getStringExtra("bestSteps");
+        bestKm = intent.getStringExtra("bestKm");
+        bestTime_Km = intent.getStringExtra("bestTime_Km");
+        bestCalorie_Km = intent.getStringExtra("bestCalorie_Km");
+        bestTime_Steps = intent.getStringExtra("bestTime_Steps");
+        bestCalorie_Steps = intent.getStringExtra("bestCalorie_Steps");
+
+        System.out.println("1==========="+bestSteps);
+        System.out.println("1==========="+bestKm);
+        System.out.println("2==========="+bestTime_Km);
+        System.out.println("3==========="+bestCalorie_Km);
+        System.out.println("4==========="+bestTime_Steps);
+        System.out.println("5==========="+bestCalorie_Steps);
+
         myID = v.findViewById(R.id.mypageId);
         myID.setText(userName); // user이름 설정해주기
 
@@ -117,7 +142,7 @@ public class Frag4 extends Fragment {
 
     private void turnOnWalk() {
         walkBtn.setImageResource(R.drawable.walk_over);
-        maxStep.setText("7,832"); // DB에서 불러온 값으로 바꾸기
+        maxStep.setText(bestSteps); // DB에서 불러온 값으로 바꾸기
         maxStep.setTextSize(23);
         stepTxt.setTextColor(Color.parseColor("#FFFFFFFF"));
         maxStepTxt.setText("최대 걸음");
@@ -134,7 +159,7 @@ public class Frag4 extends Fragment {
 
     private void turnOnKm() {
         kmBtn.setImageResource(R.drawable.km_over);
-        maxKm.setText("2.37" + "km"); // DB에서 불러온 값으로 바꾸기
+        maxKm.setText(bestKm + "km"); // DB에서 불러온 값으로 바꾸기
         maxKm.setTextSize(23);
         kmTxt.setTextColor(Color.parseColor("#FFFFFFFF"));
         maxKmTxt.setText("최대 거리");
@@ -150,8 +175,13 @@ public class Frag4 extends Fragment {
     }
 
     private void turnOnKcal() {
+        if(Integer.parseInt(bestCalorie_Km) > Integer.parseInt(bestCalorie_Steps))
+            BestCalorie = bestCalorie_Km;
+        else
+            BestCalorie = bestCalorie_Steps;
+
         kcalBtn.setImageResource(R.drawable.kcal_over);
-        maxKcal.setText("328" + "kcal"); // DB에서 불러온 값으로 바꾸기
+        maxKcal.setText(BestCalorie + "kcal"); // DB에서 불러온 값으로 바꾸기
         maxKcal.setTextSize(23);
         kcalTxt.setTextColor(Color.parseColor("#FFFFFFFF"));
         maxKcalTxt.setText("최대 칼로리");
@@ -167,8 +197,15 @@ public class Frag4 extends Fragment {
     }
 
     private void turnOnTime() {
+        if(Integer.parseInt(bestTime_Km) > Integer.parseInt(bestTime_Steps))
+            BestTime = bestTime_Km;
+        else
+            BestTime = bestTime_Steps;
+        minutes=Integer.parseInt(BestTime)/60;
+        hour = minutes/60;
+        minutes %= 60;
         timeBtn.setImageResource(R.drawable.time_over);
-        maxTime.setText("1" + "시간 " + "13" + "분"); // DB에서 불러온 값으로 바꾸기
+        maxTime.setText(hour + "시간 " + minutes + "분"); // DB에서 불러온 값으로 바꾸기
         maxTime.setTextSize(23);
         timeTxt.setTextColor(Color.parseColor("#FFFFFFFF"));
         maxTimeTxt.setText("최대 시간");
