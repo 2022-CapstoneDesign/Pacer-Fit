@@ -16,12 +16,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="80dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="70dp"
-        android:background="@color/darkred_project"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/tablayout_red_style"
+        android:backgroundTint="@color/darkred_project"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabRippleColor = "@null"
+        app:tabTextColor="@color/white"
+        app:tabTextAppearance="@style/tab_text"
+        app:tabBackground="@drawable/tablayout_red_selector"
+        app:tabIndicatorHeight="0dp" >
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
@@ -52,11 +59,14 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/barchart_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/include3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_pedo_tablayout" />
+        app:layout_constraintTop_toBottomOf="@+id/detail_pedo_tablayout"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
