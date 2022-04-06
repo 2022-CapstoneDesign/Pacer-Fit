@@ -54,8 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(v -> {
             String userID = idTxt.getText().toString();
             String userPass = passTxt.getText().toString();
-            String userName;
-             // DB추가
+            // DB추가
             Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -67,11 +66,23 @@ public class LoginActivity extends AppCompatActivity {
                             String userID = jsonObject.getString("userID");
                             String userPass = jsonObject.getString("userPassword");
                             String userName = jsonObject.getString("userName");
+                            String bestSteps = jsonObject.getString("bestSteps");
+                            String bestKm = jsonObject.getString("bestKm");
+                            String bestTime_Km = jsonObject.getString("bestTime(km)");
+                            String bestCalorie_Km = jsonObject.getString("bestCalorie(km)");
+                            String bestTime_Steps = jsonObject.getString("bestTime(steps)");
+                            String bestCalorie_Steps = jsonObject.getString("bestCalorie(steps)");
                             Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);// 메인 액티비티로 전환
                             intent.putExtra("userID", userID);
                             intent.putExtra("userPass", userPass);
                             intent.putExtra("userName",userName);
+                            intent.putExtra("bestSteps", bestSteps);
+                            intent.putExtra("bestKm", bestKm);
+                            intent.putExtra("bestTime_Km", bestTime_Km);
+                            intent.putExtra("bestCalorie_Km", bestCalorie_Km);
+                            intent.putExtra("bestTime_Steps", bestTime_Steps);
+                            intent.putExtra("bestCalorie_Steps", bestCalorie_Steps);
                             startActivity(intent);
                             finish();
                         } else { // 로그인에 실패한 경우
