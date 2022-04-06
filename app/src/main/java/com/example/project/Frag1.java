@@ -22,6 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.project.Map.RecordMapActivity;
 import com.github.mikephil.charting.charts.BarChart;
@@ -164,7 +166,11 @@ public class Frag1 extends Fragment {
         moreBarChartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getChildFragmentManager().beginTransaction().replace(R.id.frame_container,new DetailPedoRecordFragment()).commit();
+                // 더보기 탭으로 이동. 이전 프래그먼트로 돌아갈 수 있도록 설정
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.beginTransaction()
+                        .replace(R.id.frame_container, new DetailPedoRecordFragment())
+                        .addToBackStack(null).commit();
             }
         });
 
