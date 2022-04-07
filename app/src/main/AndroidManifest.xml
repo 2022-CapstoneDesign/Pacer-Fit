@@ -38,6 +38,7 @@
             android:name=".LoginActivity"
             android:exported="false"
             android:theme="@style/LoginTheme" />
+
         <activity
             android:name=".IntroActivity"
             android:exported="false"

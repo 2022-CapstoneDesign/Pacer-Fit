@@ -7,7 +7,7 @@
     android:background="@color/bottom_menu_color">
 
     <include
-        layout="@layout/toolbar"
+        layout="@layout/exer_dist_toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -52,12 +52,13 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
+                android:layout_marginEnd="92dp"
                 android:layout_marginBottom="44dp"
                 android:text="km"
                 android:textColor="#00EAAA"
                 android:textSize="30dp"
                 app:layout_constraintBottom_toTopOf="@+id/timeText"
-                app:layout_constraintEnd_toEndOf="@+id/timeText"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
 
@@ -98,11 +99,11 @@
                 android:layout_height="97dp"
                 android:layout_marginStart="28dp"
                 android:layout_marginEnd="28dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="40dp"
                 android:background="@drawable/view_style"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
@@ -112,14 +113,15 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
-                android:layout_marginBottom="132dp"
+                android:layout_marginBottom="116dp"
                 android:text="칼로리소모"
                 android:textColor="#ACACAC"
                 android:textSize="25dp"
                 app:layout_constraintBottom_toTopOf="@+id/view3"
                 app:layout_constraintEnd_toStartOf="@+id/calText"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/hours" />
+                app:layout_constraintHorizontal_bias="0.705"
+                app:layout_constraintStart_toStartOf="parent" />
+
 
             <TextView
                 android:id="@+id/calText"
@@ -128,11 +130,12 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
+                android:layout_marginEnd="112dp"
                 android:text="500kcal"
                 android:textColor="#00A2F9"
                 android:textSize="25dp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/cal"
-                app:layout_constraintEnd_toEndOf="@+id/timeText" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageView
                 android:id="@+id/ImageView"

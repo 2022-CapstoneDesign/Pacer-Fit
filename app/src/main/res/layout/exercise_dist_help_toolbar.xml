@@ -22,8 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:fontFamily="@font/nanumsquareroundeb"
-            android:text="@string/ranking"
-            android:textColor="@color/skyblue_project"
+            android:text="기록 - 거리"
+            android:textColor="@color/green_project"
             android:textSize="20sp" />
 
     </androidx.appcompat.widget.Toolbar>

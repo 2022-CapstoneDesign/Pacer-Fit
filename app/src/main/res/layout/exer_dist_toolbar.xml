@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/detail_pedo_toolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/gray_project">
@@ -21,10 +21,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="기록 - 만보기"
-            android:textColor="@color/red_project"
-            android:textSize="20sp"
-            android:fontFamily="@font/nanumsquareroundeb" />
+            android:fontFamily="@font/nanumsquareroundeb"
+            android:text="운동하기 - 거리"
+            android:textColor="@color/green_project"
+            android:textSize="20sp" />
 
     </androidx.appcompat.widget.Toolbar>
 
