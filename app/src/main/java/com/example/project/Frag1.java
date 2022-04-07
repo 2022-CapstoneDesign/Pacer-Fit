@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,7 +24,6 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.project.Map.RecordMapActivity;
 import com.github.mikephil.charting.charts.BarChart;
@@ -36,7 +36,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -201,7 +200,10 @@ public class Frag1 extends Fragment {
         xAxis.setDrawGridLines(false); // 격자
         //xAxis.setGridLineWidth(25f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
-        xAxis.setValueFormatter(new MyXAxisValueFormatter());
+        xAxis.setValueFormatter(new OneMonthXAxisValueFormatter());
+        // X축 폰트 설정
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/nanumsquareroundeb.ttf");
+        xAxis.setTypeface(tf);
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
@@ -241,7 +243,7 @@ public class Frag1 extends Fragment {
         xAxis.setTextColor(Color.parseColor("#909090"));
         xAxis.setDrawGridLines(false); // 격자
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
-        xAxis.setValueFormatter(new MyXAxisValueFormatter());
+        xAxis.setValueFormatter(new OneMonthXAxisValueFormatter());
 
         YAxis yAxisLeft = lineChart.getAxisLeft();
         yAxisLeft.setAxisMaximum(15001f); // y축 최대값 설정
