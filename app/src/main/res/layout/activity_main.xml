@@ -11,19 +11,20 @@
 
     tools:context=".MainActivity">
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation">
+        android:layout_above="@id/bottom_navigation"
+        android:layout_marginBottom="0dp">
 
-    </FrameLayout>
+    </androidx.fragment.app.FragmentContainerView>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="2dp"
         android:layout_above="@+id/bottom_navigation"
-        android:background="@color/lightgray_project"></View>
+        android:background="@color/lightgray_line"></View>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

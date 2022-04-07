@@ -12,10 +12,22 @@
     <color name="skyblue_project">#278FC7</color>
     <color name="lightgray_project">#353537</color>
     <color name="red_project">#EB3314</color>
+    <color name="darkred_project">#841C0B</color>
+    <color name="darkred2_project">#B2321C</color>
+    <color name="graph_num_red">#E6ADA3</color>
     <color name="green_project">#00C87D</color>
     <color name="gray_project">#211F22</color>
     <color name="whitegray_project">#909090</color>
     <color name="purple_project">#934BE4</color>
     <color name="bottom_menu_color">#1B191C</color>
     <color name="lightlightgray_text_color">#828282</color>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBackgroundDefault">#f2f2f2</color>
+    <color name="colorGrey">#B6B2B2</color>
+    <color name="colorMAIN">#042D6F</color>
+    <color name="lightgray_line">#5e5b5f</color>
+    <color name="btnstroke_gray">#353537</color>
 </resources>

@@ -14,9 +14,8 @@
             android:layout_width="30dp"
             android:layout_height="28dp"
             android:contentDescription="@string/app_name"
-            android:paddingTop="1dp"
-            android:paddingStart="9dp"
-            android:src="@drawable/app_icon" />
+            android:paddingStart="6dp"
+            android:src="@drawable/toolbar_icon" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -31,7 +30,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="2dp"
         android:layout_above="@+id/toolbar"
-        android:background="@color/lightgray_project"></View>
+        android:background="@color/lightgray_line"></View>
 </LinearLayout>

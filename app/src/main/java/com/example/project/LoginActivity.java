@@ -54,21 +54,35 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(v -> {
             String userID = idTxt.getText().toString();
             String userPass = passTxt.getText().toString();
-            /* DB추가
+            // DB추가
             Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
-                        System.out.println("========================" + response);
+                       // System.out.println("========================" + response);
                         JSONObject jsonObject = new JSONObject(response);
                         boolean success = jsonObject.getBoolean("success");
                         if (success) { // 로그인에 성공한 경우
                             String userID = jsonObject.getString("userID");
                             String userPass = jsonObject.getString("userPassword");
+                            String userName = jsonObject.getString("userName");
+                            String bestSteps = jsonObject.getString("bestSteps");
+                            String bestKm = jsonObject.getString("bestKm");
+                            String bestTime_Km = jsonObject.getString("bestTime(km)");
+                            String bestCalorie_Km = jsonObject.getString("bestCalorie(km)");
+                            String bestTime_Steps = jsonObject.getString("bestTime(steps)");
+                            String bestCalorie_Steps = jsonObject.getString("bestCalorie(steps)");
                             Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);// 메인 액티비티로 전환
                             intent.putExtra("userID", userID);
                             intent.putExtra("userPass", userPass);
+                            intent.putExtra("userName",userName);
+                            intent.putExtra("bestSteps", bestSteps);
+                            intent.putExtra("bestKm", bestKm);
+                            intent.putExtra("bestTime_Km", bestTime_Km);
+                            intent.putExtra("bestCalorie_Km", bestCalorie_Km);
+                            intent.putExtra("bestTime_Steps", bestTime_Steps);
+                            intent.putExtra("bestCalorie_Steps", bestCalorie_Steps);
                             startActivity(intent);
                             finish();
                         } else { // 로그인에 실패한 경우
@@ -83,80 +97,10 @@ public class LoginActivity extends AppCompatActivity {
             LoginRequest loginRequest = new LoginRequest(userID, userPass, responseListener);
             RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
             queue.add(loginRequest);
-            */
+
             //DB추가 주석 없앨때 아래 3줄 지우기
 
-            if (checkLocationService()) {
-                permissionCheck();
-            } else {
-                Toast.makeText(this, "GPS를 켜주세요", Toast.LENGTH_SHORT).show();
-            }
-
         });
-    }
-
-    // GPS 허용 여부 권환 확인
-
-    private void permissionCheck() {
-        String[] permissions = {
-                Manifest.permission.ACCESS_FINE_LOCATION
-        };
-
-        SharedPreferences preference = getPreferences(MODE_PRIVATE);
-        boolean isFirstCheck = preference.getBoolean("isFirstPermissionCheck", true);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // 권한이 없는 상태
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // 권한 거절시 다시 한번 물어봄
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("현재 위치를 확인하시려면 위치 권한을 허용해주세요");
-                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ActivityCompat.requestPermissions(LoginActivity.this, permissions, ACCESS_FINE_LOCATION);
-                    }
-                });
-                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-                builder.show();
-            } else {
-                if (isFirstCheck) {
-                    // 최초 권한 요청
-                    preference.edit().putBoolean("isFirstPermissionCheck", false).apply();
-                    ActivityCompat.requestPermissions(this, permissions, ACCESS_FINE_LOCATION);
-                } else {
-                    // 다시 묻지 않음 클릭 (앱 정보 화면으로 이동)
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setMessage("현재 위치를 확인하시려면 설정에서 위치 권한을 허용해주세요");
-                    builder.setPositiveButton("설정으로 이동", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"));
-                            startActivity(intent);
-                        }
-                    });
-                    builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    });
-                    builder.show();
-                }
-            }
-        } else {
-            // 권한이 있는 상태
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);// 메인 액티비티로 전환
-            startActivity(intent);
-            finish();
-        }
-    }
-
-    private boolean checkLocationService() {
-        LocationManager locationManger = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        return locationManger.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     // 영어(소문자), 숫자만 입력을 위한 필터
