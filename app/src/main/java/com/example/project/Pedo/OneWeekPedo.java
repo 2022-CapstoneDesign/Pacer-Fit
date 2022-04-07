@@ -5,13 +5,18 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.project.Map.RecordAdapter;
 import com.example.project.OneWeekXAxisValueFormatter;
 import com.example.project.R;
+import com.example.project.RecordModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -20,11 +25,21 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class OneWeekPedo extends Fragment {
 
     private BarChart barChart; // 만보기 7일 막대그래프
+    RecyclerView recycler_view;
+    RecordAdapter adapter;
+
+    private TextView day_today_oneweekPedo;
+    private TextView startEndTime_today_oneweekPedo;
+    private TextView totalTime_today_oneweekPedo;
+    private TextView step_today_oneweekPedo;
+
+    private TextView pedo_avg_time;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,6 +47,21 @@ public class OneWeekPedo extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_one_week_pedo, container, false);
 
+        recycler_view = v.findViewById(R.id.recycler_view);
+        setRecyclerView();
+
+        day_today_oneweekPedo = v.findViewById(R.id.day_today_oneweekPedo);
+        startEndTime_today_oneweekPedo = v.findViewById(R.id.startEndTime_today_oneweekPedo);
+        totalTime_today_oneweekPedo = v.findViewById(R.id.totalTime_today_oneweekPedo);
+        step_today_oneweekPedo = v.findViewById(R.id.step_today_oneweekPedo);
+
+        // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
+        setTodayRecord("오늘(금)", "오후 8:05 - 오후 10:11", "2시간 6분", "2,351걸음");
+
+        pedo_avg_time = v.findViewById(R.id.pedo_avg_time);
+        setAvgTime();
+
+        // <--- 막대 그래프 --->
         barChart = v.findViewById(R.id.pedo_oneweek_barchart);
 
         ArrayList<Float> barChartValues = new ArrayList<>();
@@ -49,6 +79,41 @@ public class OneWeekPedo extends Fragment {
 
         return v;
     } // onCreateView
+
+    private void setAvgTime() {
+        // 이곳에 DB에서 불러온 운동시간들의 평균 구하는 알고리즘 작성... 추후에 추가
+        Integer hours = 1;
+        Integer minuates = 52;
+        pedo_avg_time.setText(hours + "시간 " + minuates + "분");
+    }
+
+    private void setTodayRecord(String day, String startEndTime, String totalTime, String step) {
+        day_today_oneweekPedo.setText(day);
+        startEndTime_today_oneweekPedo.setText(startEndTime);
+        totalTime_today_oneweekPedo.setText(totalTime);
+        step_today_oneweekPedo.setText(step);
+    }
+
+    private void setRecyclerView() {
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new RecordAdapter(getContext(), getList());
+        recycler_view.setAdapter(adapter);
+    }
+
+    private List<RecordModel> getList() {
+        List<RecordModel> record_list = new ArrayList<>();
+
+        // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
+        record_list.add(new RecordModel("목", "오후 6:21 - 오후 7:02", "40분", "1,218걸음"));
+        record_list.add(new RecordModel("수", "오전 7:04 - 오후 9:37", "2시간 33분", "2,752걸음"));
+        record_list.add(new RecordModel("화", "오후 6:22 - 오후 10:29", "4시간 7분", "4,188걸음"));
+        record_list.add(new RecordModel("월", "오전 10:14 - 오후 11:36", "1시간 22분", "1,530걸음"));
+        record_list.add(new RecordModel("일", "오후 9:33 - 오후 10:14", "41분", "1,087걸음"));
+        record_list.add(new RecordModel("토", "오후 3:47 - 오후 5:55", "2시간 8분", "2,455걸음"));
+
+        return record_list;
+    }
 
     // 막대그래프 각종 설정
     private void barchartConfigureAppearance() {
