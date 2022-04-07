@@ -48,4 +48,10 @@
         <item name="fontFamily">@font/nanumsquareroundeb</item>
     </style>
 
+    <!-- TabLayout 폰트 커스텀 -->
+    <style name="tab_text" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:fontFamily">@font/nanumsquareroundeb</item>
+        <item name="android:textSize">17dp</item>
+    </style>
+
 </resources>

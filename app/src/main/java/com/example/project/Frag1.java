@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.project.Map.RecordMapActivity;
 import com.github.mikephil.charting.charts.BarChart;
@@ -34,7 +36,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +62,9 @@ public class Frag1 extends Fragment {
 
     private BarChart barChart; // 막대 그래프
     private LineChart lineChart; // 꺾은선 그래프
+
+    private Button moreBarChartBtn;
+    private Button moreLineChartBtn;
 
 
     @Nullable
@@ -157,7 +161,17 @@ public class Frag1 extends Fragment {
         lineChart.setData(lineChartData); // LineData 전달
         lineChart.invalidate(); // LineChart 갱신해 데이터 표시
 
-
+        moreBarChartBtn = v.findViewById(R.id.moreBarChartBtn);
+        moreBarChartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 더보기 탭으로 이동. 이전 프래그먼트로 돌아갈 수 있도록 설정
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.beginTransaction()
+                        .replace(R.id.frame_container, new DetailPedoRecordFragment())
+                        .addToBackStack(null).commit();
+            }
+        });
 
         return v;
 
@@ -186,7 +200,10 @@ public class Frag1 extends Fragment {
         xAxis.setDrawGridLines(false); // 격자
         //xAxis.setGridLineWidth(25f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
-        xAxis.setValueFormatter(new MyXAxisValueFormatter());
+        xAxis.setValueFormatter(new OneMonthXAxisValueFormatter());
+        // X축 폰트 설정
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/nanumsquareroundeb.ttf");
+        xAxis.setTypeface(tf);
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
@@ -226,7 +243,7 @@ public class Frag1 extends Fragment {
         xAxis.setTextColor(Color.parseColor("#909090"));
         xAxis.setDrawGridLines(false); // 격자
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
-        xAxis.setValueFormatter(new MyXAxisValueFormatter());
+        xAxis.setValueFormatter(new OneMonthXAxisValueFormatter());
 
         YAxis yAxisLeft = lineChart.getAxisLeft();
         yAxisLeft.setAxisMaximum(15001f); // y축 최대값 설정
