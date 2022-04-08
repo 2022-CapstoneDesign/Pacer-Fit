@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class MyXAxisValueFormatter extends IndexAxisValueFormatter {
+public class OneMonthXAxisValueFormatter extends IndexAxisValueFormatter {
 
     @Override
     public String getFormattedValue(float value) {
