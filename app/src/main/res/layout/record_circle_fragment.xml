@@ -32,7 +32,6 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
-                android:layout_marginTop="-350dp"
                 android:layout_marginBottom="23dp"
                 android:gravity="center"
                 android:text="18.2"
@@ -43,8 +42,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/km"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/ImageView"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/km"
@@ -53,13 +52,12 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
-                android:layout_marginEnd="76dp"
                 android:layout_marginBottom="44dp"
                 android:text="km"
                 android:textColor="#00EAAA"
                 android:textSize="30dp"
                 app:layout_constraintBottom_toTopOf="@+id/timeText"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/timeText"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
 
@@ -98,14 +96,14 @@
                 android:id="@+id/view3"
                 android:layout_width="355dp"
                 android:layout_height="97dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="12dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginEnd="28dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/view_style"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/distanceText" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/cal"
@@ -114,7 +112,7 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
-                android:layout_marginBottom="112dp"
+                android:layout_marginBottom="132dp"
                 android:text="칼로리소모"
                 android:textColor="#ACACAC"
                 android:textSize="25dp"
@@ -130,14 +128,11 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
-                android:layout_marginEnd="64dp"
                 android:text="500kcal"
                 android:textColor="#00A2F9"
                 android:textSize="25dp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/cal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/timeText" />
+                app:layout_constraintEnd_toEndOf="@+id/timeText" />
 
             <ImageView
                 android:id="@+id/ImageView"
