@@ -20,7 +20,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.Pair;
@@ -43,7 +42,6 @@ import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -165,6 +163,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             Log.d("Location", userNowLocation.toString());
         }
          */
+
 
     }
 
