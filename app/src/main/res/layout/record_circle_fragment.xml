@@ -120,7 +120,7 @@
 
             <View
                 android:id="@+id/view3"
-                android:layout_width="355dp"
+                android:layout_width="match_parent"
                 android:layout_height="97dp"
                 android:layout_marginStart="28dp"
                 android:layout_marginEnd="28dp"
@@ -188,7 +188,7 @@
                 tools:ignore="MissingConstraints" />
 
             <ImageButton
-                android:id="@+id/helpBtn"
+                android:id="@+id/kmHelpBtn"
                 android:layout_width="111dp"
                 android:layout_height="22dp"
                 android:layout_marginTop="6dp"
@@ -202,8 +202,10 @@
 
             <TextView
                 android:id="@+id/helpText"
-                android:layout_width="313dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:lineSpacingExtra="2sp"
                 android:text="운동 내역을 보여줍니다.\n운동을 시작하려면 '운동 시작' 버튼을 눌러주세요."

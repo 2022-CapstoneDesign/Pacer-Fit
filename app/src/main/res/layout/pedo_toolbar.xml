@@ -18,23 +18,13 @@
             android:src="@drawable/toolbar_icon" />
 
         <TextView
-            android:layout_width="65dp"
+            android:layout_width="wrap_content"
             android:layout_height="28dp"
             android:layout_marginStart="20dp"
-            android:fontFamily="@font/jalnan"
-            android:text="@string/pedometer"
-            android:textColor="@color/skyblue_project"
-            android:textSize="20sp"
-            android:textStyle="italic" />
-
-        <TextView
-            android:layout_width="45dp"
-            android:layout_height="28dp"
-            android:fontFamily="@font/jalnan"
-            android:text="운동"
-            android:textColor="@color/purple_project"
-            android:textSize="20sp"
-            android:textStyle="italic" />
+            android:fontFamily="@font/nanumsquareroundeb"
+            android:text="운동하기 - 만보기"
+            android:textColor="@color/red_project"
+            android:textSize="20sp" />
 
     </androidx.appcompat.widget.Toolbar>
 
