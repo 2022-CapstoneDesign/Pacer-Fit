@@ -71,7 +71,6 @@
             android:layout_height="48dp"
             android:fontFamily="@font/nanumsquareroundeb"
             android:hint="@string/pw"
-            android:text="1"
             android:inputType="textPassword"
             android:maxLength="20"
             android:text="1"
