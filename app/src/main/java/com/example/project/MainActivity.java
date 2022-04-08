@@ -104,17 +104,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+
+        // 중첩된 프래그먼트가 없을 때(메인 화면일 때)에만 메세지가 뜨도록 함
         // 마지막으로 뒤로가기 버튼을 눌렀던 시간에 2초를 더해 현재시간과 비교 후
         // 2초가 지났으면 Toast Show
-        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
-            backKeyPressedTime = System.currentTimeMillis();
-            Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+                backKeyPressedTime = System.currentTimeMillis();
+                Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        // 2초가 지나지 않았으면 종료
-        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-            finish();
+            // 2초가 지나지 않았으면 종료
+            if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+                finish();
+            }
+        }
+        // 중첩된 프래그먼트가 있을 경우엔 그냥 뒤로 가기(이전 페이지 보여줌)
+        else {
+            super.onBackPressed();
         }
     }
     private void getHashKey(){
