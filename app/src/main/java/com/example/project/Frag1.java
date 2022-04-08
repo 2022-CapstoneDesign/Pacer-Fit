@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.example.project.Map.RecordMapActivity;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -51,33 +54,29 @@ public class Frag1 extends Fragment {
     private TransLocalPoint transLocalPoint;
     private GpsTracker gpsTracker;
     private String address = ""; // x,y는 격자x,y좌표
-    String weather = ""; // 날씨 결과
+    String weather=""; // 날씨 결과
     String tmperature = ""; // 온도 결과
+
+
 
 
     private BarChart barChart; // 막대 그래프
     private LineChart lineChart; // 꺾은선 그래프
 
+    private Button moreBarChartBtn;
+    private Button moreLineChartBtn;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.frag1, container, false);
+        View v=inflater.inflate(R.layout.frag1,container,false);
         Context ct = container.getContext();
         TextView location = v.findViewById(R.id.location);
         weatherInfo = v.findViewById(R.id.weather);
         weatherInfo_Image = v.findViewById(R.id.weather_image);
         Button Km_button = v.findViewById(R.id.Km_button);
-        Button moreLineChartBtn = v.findViewById(R.id.moreLineChartBtn);
-
-        moreLineChartBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new ExRecordDistFrag()).commit();
-            }
-        });
-
-        Km_button.setOnClickListener(new View.OnClickListener() {
+        Km_button.setOnClickListener(new View.OnClickListener(){
             @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
             public void onClick(View map) {
@@ -88,7 +87,7 @@ public class Frag1 extends Fragment {
         });
 
         Button pedo_button = v.findViewById(R.id.pedo_button);
-        pedo_button.setOnClickListener(new View.OnClickListener() {
+        pedo_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View map) {
 //                Intent intent = new Intent(getActivity(),StepCounter.class); //Fragment -> Activity로 이동 (StepCounter.java)
@@ -108,13 +107,13 @@ public class Frag1 extends Fragment {
         // String localName = local[2]; //xx구 이름
 
 
-        location.setText(local[1] + " " + local[2]);
+        location.setText(local[1]+ " " + local[2]);
 
         transLocalPoint = new TransLocalPoint();
         TransLocalPoint.LatXLngY tmp = transLocalPoint.convertGRID_GPS(TO_GRID, latitude, longitude);
-        Log.e(">>", "x = " + tmp.x + ", y = " + tmp.y);
+        Log.e(">>","x = "+ tmp.x + ", y = "+ tmp.y);
 
-        String url = weatherMethod.weather(tmp.x, tmp.y);
+        String url = weatherMethod.weather(tmp.x,tmp.y);
         NetworkTask networkTask = new NetworkTask(url, null);
         networkTask.execute();
 
@@ -122,10 +121,10 @@ public class Frag1 extends Fragment {
         int isAMorPM = now.get(Calendar.AM_PM);
         switch (isAMorPM) {
             case Calendar.AM:
-                ((TextView) v.findViewById(R.id.ampm)).setText("오전");
+                ((TextView)v.findViewById(R.id.ampm)).setText("오전");
                 break;
             case Calendar.PM:
-                ((TextView) v.findViewById(R.id.ampm)).setText("오후");
+                ((TextView)v.findViewById(R.id.ampm)).setText("오후");
                 break;
         }
 
@@ -136,7 +135,7 @@ public class Frag1 extends Fragment {
         ArrayList<Float> barChartValues = new ArrayList<>();
         // 최근 1달의 운동량 값 받아오기 -> DB 값으로 추후에 수정
         for (int i = 0; i < 30; i++) {
-            float rand = (float) Math.round(new Random().nextFloat() * 15000);
+            float rand = (float)Math.round(new Random().nextFloat() * 15000);
             //Log.d("RAND", String.valueOf(rand));
             barChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
         }
@@ -148,10 +147,42 @@ public class Frag1 extends Fragment {
 
         // <----------- 꺾은선 그래프 ----------->
         lineChart = v.findViewById(R.id.linechart);
-        LineChartManager lineChartManager = new LineChartManager(getContext(),lineChart);
-        lineChart = lineChartManager.getLineChart();
-        lineChart.invalidate();
 
+        ArrayList<Float> lineChartValues = new ArrayList<>();
+        // 최근 1달의 운동량 값 받아오기 -> DB 값으로 추후에 수정
+        for (int i = 0; i < 30; i++) {
+            float rand = (float)Math.round(new Random().nextFloat() * 15000);
+            //Log.d("RAND", String.valueOf(rand));
+            lineChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
+        }
+
+        linechartConfigureAppearance();
+        LineData lineChartData = createLinechartData(lineChartValues);
+        lineChart.setData(lineChartData); // LineData 전달
+        lineChart.invalidate(); // LineChart 갱신해 데이터 표시
+
+        moreBarChartBtn = v.findViewById(R.id.moreBarChartBtn);
+        moreBarChartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 더보기 탭으로 이동. 이전 프래그먼트로 돌아갈 수 있도록 설정
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.beginTransaction()
+                        .replace(R.id.frame_container, new DetailPedoRecordFragment())
+                        .addToBackStack(null).commit();
+            }
+        });
+        moreLineChartBtn = v.findViewById(R.id.moreLineChartBtn);
+        moreLineChartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 더보기 탭으로 이동. 이전 프래그먼트로 돌아갈 수 있도록 설정
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.beginTransaction()
+                        .replace(R.id.frame_container, new DetailDistRecordFragment())
+                        .addToBackStack(null).commit();
+            }
+        });
 
         return v;
 
@@ -180,7 +211,10 @@ public class Frag1 extends Fragment {
         xAxis.setDrawGridLines(false); // 격자
         //xAxis.setGridLineWidth(25f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
-        xAxis.setValueFormatter(new MyXAxisValueFormatter());
+        xAxis.setValueFormatter(new OneMonthXAxisValueFormatter());
+        // X축 폰트 설정
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/nanumsquareroundeb.ttf");
+        xAxis.setTypeface(tf);
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
@@ -220,7 +254,7 @@ public class Frag1 extends Fragment {
         xAxis.setTextColor(Color.parseColor("#909090"));
         xAxis.setDrawGridLines(false); // 격자
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
-        xAxis.setValueFormatter(new MyXAxisValueFormatter());
+        xAxis.setValueFormatter(new OneMonthXAxisValueFormatter());
 
         YAxis yAxisLeft = lineChart.getAxisLeft();
         yAxisLeft.setAxisMaximum(15001f); // y축 최대값 설정
@@ -298,7 +332,7 @@ public class Frag1 extends Fragment {
         long mNow = System.currentTimeMillis();
         Date mReDate = new Date(mNow);
         SimpleDateFormat currentTime = new SimpleDateFormat("HH00");
-        String mCurrentTime = String.format("%04d", (Integer.parseInt(currentTime.format(mReDate))));
+        String mCurrentTime =String.format("%04d",(Integer.parseInt(currentTime.format(mReDate))));
         Log.i("currentTime", mCurrentTime);
         String rain = "0";
 
@@ -314,27 +348,26 @@ public class Frag1 extends Fragment {
         JSONObject jsonObject3 = new JSONObject(body);
         String items = jsonObject3.getString("items");
 
-
         // itmes로 부터 itemlist 를 받기
         JSONObject jsonObject4 = new JSONObject(items);
         JSONArray jsonArray = jsonObject4.getJSONArray("item");
 
-        for (int i = 0; i < jsonArray.length(); i++) {
+        for(int i = 0; i < jsonArray.length(); i++){
             jsonObject4 = jsonArray.getJSONObject(i);
             String fcstTime = jsonObject4.getString("fcstTime");
             String fcstValue = jsonObject4.getString("fcstValue");
             String category = jsonObject4.getString("category");
 
-            if (fcstTime.equals(mCurrentTime)) {
+            if(fcstTime.equals(mCurrentTime)) {
                 Log.d("ITEM", jsonObject4.toString());
-                if (category.equals("PTY")) {
-                    if (fcstValue.equals("1") || fcstValue.equals("2") || fcstValue.equals("5") || fcstValue.equals("6")) {
+                if(category.equals("PTY")){
+                    if(fcstValue.equals("1") || fcstValue.equals("2") || fcstValue.equals("5") || fcstValue.equals("6")){
                         weather = "비\n";
                         rain = "1";
                     } else if (fcstValue.equals("3") || fcstValue.equals("7")) {
                         weather = "눈\n";
                         rain = "1";
-                    } else if (fcstValue.equals("0")) {
+                    } else if (fcstValue.equals("0")){
                         rain = "0";
                     }
                 }
@@ -353,7 +386,7 @@ public class Frag1 extends Fragment {
                 }
             }
         }
-        return weather + tmperature;
+        return weather+tmperature;
     }
 
     public class NetworkTask extends AsyncTask<Void, Void, String> {
@@ -363,7 +396,7 @@ public class Frag1 extends Fragment {
 
         String result;
 
-        public NetworkTask(String url, ContentValues values) {
+        public NetworkTask(String url, ContentValues values){
             this.url = url;
             this.values = values;
         }
@@ -381,23 +414,27 @@ public class Frag1 extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(String s){
             super.onPostExecute(s);
-            weatherInfo.setText(weather + tmperature);
+            weatherInfo.setText(weather+tmperature);
             //doInBackground()로부터 리턴된 값이 onPostExecute()의 매개변수로 넘어오므로 s를 출력
-            if (weather.equals("맑음\n")) {
+            if(weather.equals("맑음\n")){
                 weatherInfo_Image.setImageResource(R.color.lightgray_project);
                 weatherInfo_Image.setImageResource(R.drawable.weather_sunny);
-            } else if (weather.equals("비\n")) {
+            }
+            else if(weather.equals("비\n")){
                 weatherInfo_Image.setImageResource(R.color.lightgray_project);
                 weatherInfo_Image.setImageResource(R.drawable.weather_rainy);
-            } else if (weather.equals("구름 많음\n")) {
+            }
+            else if(weather.equals("구름 많음\n")){
                 weatherInfo_Image.setImageResource(R.color.lightgray_project);
                 weatherInfo_Image.setImageResource(R.drawable.weather_heavy_cloudy);
-            } else if (weather.equals("흐림\n")) {
+            }
+            else if(weather.equals("흐림\n")){
                 weatherInfo_Image.setImageResource(R.color.lightgray_project);
                 weatherInfo_Image.setImageResource(R.drawable.weather_cloudy);
-            } else if (weather.equals("눈\n")) {
+            }
+            else if(weather.equals("눈\n")){
                 weatherInfo_Image.setImageResource(R.color.lightgray_project);
                 weatherInfo_Image.setImageResource(R.drawable.weather_snow);
             }
