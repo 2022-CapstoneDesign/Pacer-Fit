@@ -1,16 +1,16 @@
-package com.example.project;
+package com.example.project.Dist;
 
-public class RecordModel {
+public class DistRecordModel {
     String day;
     String startEndTime;
     String totalTime;
-    String step;
+    String km;
 
-    public RecordModel(String day, String startEndTime, String totalTime, String step) {
+    public DistRecordModel(String day, String startEndTime, String totalTime, String km) {
         this.day = day;
         this.startEndTime = startEndTime;
         this.totalTime = totalTime;
-        this.step = step;
+        this.km = km;
     }
 
     public String getDay() {
@@ -26,6 +26,6 @@ public class RecordModel {
     }
 
     public String getStep() {
-        return step;
+        return km;
     }
 }

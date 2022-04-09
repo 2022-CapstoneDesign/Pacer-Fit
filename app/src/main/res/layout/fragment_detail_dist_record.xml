@@ -5,30 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_project"
-    tools:context=".Pedo.DetailPedoRecordFragment">
+    tools:context=".Dist.DetailDistRecordFragment">
 
     <include
         android:id="@+id/include3"
-        layout="@layout/detail_pedo_toolbar" />
+        layout="@layout/exercise_dist_help_toolbar" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/detail_pedo_tablayout"
+        android:id="@+id/detail_dist_tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="10dp"
         android:animateLayoutChanges="true"
-        android:background="@drawable/tablayout_red_style"
-        android:backgroundTint="@color/darkred_project"
+        android:background="@drawable/tablayout_green_style"
+        android:backgroundTint="@color/darkgreen_project"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabRippleColor = "@null"
-        app:tabTextColor="@color/white"
+        app:tabBackground="@drawable/tablayout_green_selector"
+        app:tabIndicatorHeight="0dp"
+        app:tabRippleColor="@null"
         app:tabTextAppearance="@style/tab_text"
-        app:tabBackground="@drawable/tablayout_red_selector"
-        app:tabIndicatorHeight="0dp" >
+        app:tabTextColor="@color/white">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
@@ -43,6 +43,11 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="3개월" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="6개월" />
 
         <com.google.android.material.tabs.TabItem
@@ -52,14 +57,14 @@
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/barchart_viewpager"
+        android:id="@+id/linechart_viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/include3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_pedo_tablayout"
+        app:layout_constraintTop_toBottomOf="@+id/detail_dist_tablayout"
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="SpeakableTextPresentCheck" />
 

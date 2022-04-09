@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.project.Map.RecordMapActivity;
+import com.example.project.Pedo.DetailPedoRecordFragment;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -433,4 +434,4 @@ public class Frag1 extends Fragment {
 
 
 }
-
+s

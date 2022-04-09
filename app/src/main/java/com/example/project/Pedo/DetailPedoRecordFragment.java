@@ -1,21 +1,15 @@
-package com.example.project;
+package com.example.project.Pedo;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.example.project.Pedo.OneMonthPedo;
-import com.example.project.Pedo.OneWeekPedo;
-import com.example.project.Pedo.OneYearPedo;
-import com.example.project.Pedo.PedoVPAdapter;
-import com.example.project.Pedo.SixMonthsPedo;
-import com.example.project.Pedo.ThreeMonthsPedo;
+import com.example.project.R;
 import com.google.android.material.tabs.TabLayout;
 
 public class DetailPedoRecordFragment extends Fragment {
