@@ -7,44 +7,58 @@
     android:background="@color/bottom_menu_color">
 
     <include
-        layout="@layout/toolbar"
+        layout="@layout/exer_km_toolbar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/exer_dist_background02" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize">
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toTopOf="@+id/stopKmBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/exer_dist_background02" />
 
             <TextView
                 android:id="@+id/distanceText"
-                android:layout_width="220dp"
+                android:layout_width="wrap_content"
                 android:layout_height="130dp"
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
-                android:layout_marginBottom="23dp"
+                android:layout_marginBottom="70dp"
+                android:fontFamily="@font/nanumsquareroundeb"
                 android:gravity="center"
                 android:text="0.0"
-                android:fontFamily="@font/nanumsquareroundeb"
                 android:textColor="#00EAAA"
                 android:textSize="115dp"
                 app:autoSizeTextType="uniform"
-                app:layout_constraintBottom_toTopOf="@+id/hours"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView6"
                 app:layout_constraintEnd_toStartOf="@+id/km"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toTopOf="@+id/imageView6"
+                app:layout_constraintVertical_bias="0.527" />
 
             <TextView
                 android:id="@+id/km"
@@ -53,15 +67,23 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
-                android:layout_marginBottom="44dp"
-                android:text="km"
+                android:layout_marginTop="40dp"
                 android:fontFamily="@font/nanumsquareroundeb"
+                android:text="km"
                 android:textColor="#00EAAA"
                 android:textSize="30dp"
-                app:layout_constraintBottom_toTopOf="@+id/timeText"
-                app:layout_constraintEnd_toEndOf="@+id/timeText"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintBottom_toBottomOf="@+id/distanceText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/distanceText"
+                app:layout_constraintTop_toTopOf="@+id/distanceText" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.46" />
 
             <TextView
                 android:id="@+id/hours"
@@ -70,36 +92,35 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
-                android:layout_marginBottom="12dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:text="운동시간"
                 android:textColor="#ACACAC"
                 android:textSize="23dp"
-                app:layout_constraintBottom_toTopOf="@+id/cal"
-                app:layout_constraintEnd_toStartOf="@+id/timeText"
-                app:layout_constraintHorizontal_bias="0.754"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintEnd_toStartOf="@+id/guideline5"
+                app:layout_constraintTop_toBottomOf="@+id/distanceText" />
 
             <TextView
                 android:id="@+id/timeText"
-                android:layout_width="141dp"
+                android:layout_width="wrap_content"
                 android:layout_height="29dp"
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
-                android:layout_marginEnd="64dp"
+                android:layout_marginStart="30dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:gravity="right"
-                android:text="0H 0M 0S"
+                android:text="0h 0m 0s"
                 android:textColor="#00A2F9"
                 android:textSize="23dp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/hours"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintStart_toStartOf="@+id/guideline5" />
 
 
             <View
                 android:id="@+id/view3"
-                android:layout_width="355dp"
+                android:layout_width="match_parent"
                 android:layout_height="97dp"
                 android:layout_marginStart="28dp"
                 android:layout_marginEnd="28dp"
@@ -117,35 +138,37 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
-                android:text="칼로리소모"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:fontFamily="@font/nanumsquareroundeb"
+                android:text="칼로리소모"
                 android:textColor="#ACACAC"
-                android:textSize="23dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/hours"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.641" />
+                android:textSize="18dp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline5"
+                app:layout_constraintTop_toBottomOf="@+id/hours" />
 
             <TextView
                 android:id="@+id/calText"
-                android:layout_width="140dp"
+                android:layout_width="wrap_content"
                 android:layout_height="26dp"
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
+                android:layout_marginStart="30dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:gravity="right"
                 android:text="0kcal"
                 android:textColor="#00A2F9"
                 android:textSize="23dp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/cal"
-                app:layout_constraintEnd_toEndOf="@+id/timeText" />
+                app:layout_constraintStart_toStartOf="@+id/guideline5" />
 
             <ImageView
                 android:id="@+id/ImageView"
-                android:layout_width="27dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="4dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="@+id/view3"
                 app:layout_constraintTop_toTopOf="@+id/view3"
                 app:srcCompat="@drawable/icon_tooltip"
@@ -153,37 +176,60 @@
 
             <TextView
                 android:id="@+id/help"
-                android:layout_width="60dp"
-                android:layout_height="24dp"
-                android:text="도움말"
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/nanumsquareroundeb"
-                android:textColor="@android:color/holo_orange_light"
+                android:gravity="center"
+                android:text="도움말"
+                android:textColor="#FFCF0D"
                 app:layout_constraintStart_toEndOf="@+id/ImageView"
                 app:layout_constraintTop_toTopOf="@+id/view3"
                 tools:ignore="MissingConstraints" />
 
             <ImageButton
-                android:id="@+id/helpBtn"
+                android:id="@+id/kmHelpBtn"
                 android:layout_width="111dp"
-                android:layout_height="35dp"
+                android:layout_height="22dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="6dp"
                 android:background="@drawable/view_style"
                 android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="@+id/view3"
                 app:layout_constraintTop_toTopOf="@+id/view3"
-                app:srcCompat="@drawable/help" />
+                app:srcCompat="@drawable/help"
+                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/helpText"
-                android:layout_width="313dp"
-                android:layout_height="38dp"
-                android:layout_marginTop="12dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/nanumsquareroundeb"
+                android:lineSpacingExtra="2sp"
                 android:text="운동 내역을 보여줍니다.\n운동을 시작하려면 '운동 시작' 버튼을 눌러주세요."
                 android:textColor="@color/whitegray_project"
                 android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="@+id/view3"
                 app:layout_constraintEnd_toEndOf="@+id/view3"
                 app:layout_constraintStart_toStartOf="@+id/view3"
                 app:layout_constraintTop_toBottomOf="@+id/help" />
+
+            <Button
+                android:id="@+id/stopKmBtn"
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/btn_style4"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="그만하기"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toTopOf="@+id/view3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
