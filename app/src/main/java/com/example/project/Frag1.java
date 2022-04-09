@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.project.Dist.DetailDistRecordFragment;
 import com.example.project.Map.RecordMapActivity;
 import com.example.project.Pedo.DetailPedoRecordFragment;
 import com.github.mikephil.charting.charts.BarChart;
@@ -170,6 +171,17 @@ public class Frag1 extends Fragment {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 fm.beginTransaction()
                         .replace(R.id.frame_container, new DetailPedoRecordFragment())
+                        .addToBackStack(null).commit();
+            }
+        });
+        moreLineChartBtn = v.findViewById(R.id.moreLineChartBtn);
+        moreLineChartBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // 더보기 탭으로 이동. 이전 프래그먼트로 돌아갈 수 있도록 설정
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.beginTransaction()
+                        .replace(R.id.frame_container, new DetailDistRecordFragment())
                         .addToBackStack(null).commit();
             }
         });
