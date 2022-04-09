@@ -30,7 +30,6 @@ public class DetailDistRecordFragment extends Fragment {
         DistVPAdapter distVPAdapter = new DistVPAdapter(getActivity().getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         distVPAdapter.addFragment(new OneWeekDist(), "7일");
         distVPAdapter.addFragment(new OneMonthDist(), "30일");
-        distVPAdapter.addFragment(new ThreeMonthDist(), "3개월");
         distVPAdapter.addFragment(new SixMonthDist(), "6개월");
         distVPAdapter.addFragment(new OneYearDist(), "1년");
         viewPager.setAdapter(distVPAdapter);
