@@ -30,7 +30,6 @@ public class DetailPedoRecordFragment extends Fragment {
         PedoVPAdapter pedoVPAdapter = new PedoVPAdapter(getActivity().getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         pedoVPAdapter.addFragment(new OneWeekPedo(), "7일");
         pedoVPAdapter.addFragment(new OneMonthPedo(), "30일");
-        pedoVPAdapter.addFragment(new ThreeMonthsPedo(), "3개월");
         pedoVPAdapter.addFragment(new SixMonthsPedo(), "6개월");
         pedoVPAdapter.addFragment(new OneYearPedo(), "1년");
         viewPager.setAdapter(pedoVPAdapter);
