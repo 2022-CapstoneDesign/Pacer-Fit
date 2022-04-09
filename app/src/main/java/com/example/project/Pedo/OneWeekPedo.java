@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project.Map.RecordAdapter;
 import com.example.project.OneWeekXAxisValueFormatter;
 import com.example.project.R;
 import com.github.mikephil.charting.charts.BarChart;

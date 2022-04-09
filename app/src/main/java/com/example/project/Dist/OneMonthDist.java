@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project.Map.DistRecordAdapter;
 import com.example.project.OneMonthXAxisValueFormatter;
 import com.example.project.R;
 import com.github.mikephil.charting.charts.LineChart;

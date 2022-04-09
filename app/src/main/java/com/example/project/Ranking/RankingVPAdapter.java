@@ -1,4 +1,4 @@
-package com.example.project.Dist;
+package com.example.project.Ranking;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,12 +8,12 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 
-public class DistVPAdapter extends FragmentStatePagerAdapter {
+public class RankingVPAdapter extends FragmentStatePagerAdapter {
 
     private final ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
     private final ArrayList<String> fragmentTitle = new ArrayList<>();
 
-    public DistVPAdapter(@NonNull FragmentManager fm, int behavior) {
+    public RankingVPAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
     }
 

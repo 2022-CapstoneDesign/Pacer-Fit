@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project.Map.DistRecordAdapter;
 import com.example.project.OneWeekXAxisValueFormatter;
 import com.example.project.R;
 import com.github.mikephil.charting.charts.LineChart;
@@ -123,7 +122,7 @@ public class OneWeekDist extends Fragment {
         lineChart.getLegend().setEnabled(false); // legend는 차트의 범례
         lineChart.getDescription().setEnabled(false); // 우측 하단의 DescriptionLabel 삭제
         //lineChart.animateY(1500); // 밑에서부터 올라오는 애니메이션 적용
-        lineChart.animateX(1000); // 왼쪽-오른쪽 방향의 애니메이션 적용
+        lineChart.animateX(500); // 왼쪽-오른쪽 방향의 애니메이션 적용
 
         // x축 설정(꺾은선그래프 기준 아래쪽)
         XAxis xAxis = lineChart.getXAxis();
