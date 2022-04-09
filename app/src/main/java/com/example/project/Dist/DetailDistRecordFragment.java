@@ -1,4 +1,4 @@
-package com.example.project;
+package com.example.project.Dist;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,12 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.project.Dist.DistVPAdapter;
-import com.example.project.Dist.OneMonthDist;
-import com.example.project.Dist.OneWeekDist;
-import com.example.project.Dist.OneYearDist;
-import com.example.project.Dist.SixMonthDist;
-import com.example.project.Dist.ThreeMonthDist;
+import com.example.project.R;
 import com.google.android.material.tabs.TabLayout;
 
 public class DetailDistRecordFragment extends Fragment {

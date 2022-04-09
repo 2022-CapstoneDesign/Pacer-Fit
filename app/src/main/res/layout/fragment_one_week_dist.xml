@@ -51,6 +51,7 @@
                 app:layout_constraintTop_toTopOf="@+id/view6" />
 
             <TextView
+                android:id="@+id/week_tab"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginStart="4dp"

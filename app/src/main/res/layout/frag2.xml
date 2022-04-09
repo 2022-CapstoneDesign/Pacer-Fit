@@ -1,9 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_project">
-    <include layout="@layout/ranking_toolbar"/>
+
+    <include
+        android:id="@+id/include5"
+        layout="@layout/ranking_toolbar" />
+
+    <Button
+        android:id="@+id/ranking_dist_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/btn_style"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:text="거리(km)"
+        android:textAllCaps="false"
+        android:textColor="@color/whitegray_project"
+        app:layout_constraintBaseline_toBaselineOf="@+id/ranking_pedo_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ranking_pedo_btn" />
+
+    <Button
+        android:id="@+id/ranking_pedo_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/btn_style3"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:text="만보기"
+        android:textAllCaps="false"
+        android:textColor="@color/whitegray_project"
+        app:layout_constraintEnd_toStartOf="@+id/ranking_dist_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/ranking_fragment_container"
+        android:name="com.example.project.Ranking.PedoRankingFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="150dp"
+        app:layout_constraintEnd_toEndOf="@+id/include5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/include5" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

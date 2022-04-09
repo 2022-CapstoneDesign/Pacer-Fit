@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_project"
-    tools:context=".DetailPedoRecordFragment">
+    tools:context=".Pedo.DetailPedoRecordFragment">
 
     <include
         android:id="@+id/include3"
@@ -39,11 +39,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="30일" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3개월" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"

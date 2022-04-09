@@ -7,7 +7,7 @@
     android:background="@color/bottom_menu_color">
 
     <include
-        layout="@layout/toolbar"
+        layout="@layout/exer_dist_toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -33,10 +33,11 @@
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
                 android:layout_marginBottom="23dp"
+                android:fontFamily="@font/nanumsquareroundeb"
                 android:gravity="center"
-                android:text="18.2"
+                android:text="0.0"
                 android:textColor="#00EAAA"
-                android:textSize="120dp"
+                android:textSize="115dp"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toTopOf="@+id/hours"
                 app:layout_constraintEnd_toStartOf="@+id/km"
@@ -53,6 +54,7 @@
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
                 android:layout_marginBottom="44dp"
+                android:fontFamily="@font/nanumsquareroundeb"
                 android:text="km"
                 android:textColor="#00EAAA"
                 android:textSize="30dp"
@@ -69,25 +71,28 @@
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
                 android:layout_marginBottom="12dp"
+                android:fontFamily="@font/nanumsquareroundeb"
                 android:text="운동시간"
                 android:textColor="#ACACAC"
-                android:textSize="25dp"
+                android:textSize="23dp"
                 app:layout_constraintBottom_toTopOf="@+id/cal"
                 app:layout_constraintEnd_toStartOf="@+id/timeText"
-                app:layout_constraintHorizontal_bias="0.57"
+                app:layout_constraintHorizontal_bias="0.754"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/timeText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="141dp"
+                android:layout_height="29dp"
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
                 android:layout_marginEnd="64dp"
-                android:text="1H 10M 50S"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:gravity="right"
+                android:text="0H 0M 0S"
                 android:textColor="#00A2F9"
-                android:textSize="25dp"
+                android:textSize="23dp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/hours"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -112,25 +117,27 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
-                android:layout_marginBottom="132dp"
+                android:fontFamily="@font/nanumsquareroundeb"
                 android:text="칼로리소모"
                 android:textColor="#ACACAC"
-                android:textSize="25dp"
-                app:layout_constraintBottom_toTopOf="@+id/view3"
-                app:layout_constraintEnd_toStartOf="@+id/calText"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/hours" />
+                android:textSize="23dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/hours"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.641" />
 
             <TextView
                 android:id="@+id/calText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="140dp"
+                android:layout_height="26dp"
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="false"
-                android:text="500kcal"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:gravity="right"
+                android:text="0kcal"
                 android:textColor="#00A2F9"
-                android:textSize="25dp"
+                android:textSize="23dp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/cal"
                 app:layout_constraintEnd_toEndOf="@+id/timeText" />
 
@@ -148,6 +155,7 @@
                 android:id="@+id/help"
                 android:layout_width="60dp"
                 android:layout_height="24dp"
+                android:fontFamily="@font/nanumsquareroundeb"
                 android:text="도움말"
                 android:textColor="@android:color/holo_orange_light"
                 app:layout_constraintStart_toEndOf="@+id/ImageView"
