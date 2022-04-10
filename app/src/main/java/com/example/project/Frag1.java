@@ -90,10 +90,10 @@ public class Frag1 extends Fragment {
         pedo_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View map) {
-//                Intent intent = new Intent(getActivity(),StepCounter.class); //Fragment -> Activity로 이동 (StepCounter.java)
-//                startActivity(intent);
-                Intent intent = new Intent(getActivity(), PopupPedo.class); //Fragment -> Activity로 이동 (만보기팝업)
+                Intent intent = new Intent(getActivity(),StepCounter.class); //Fragment -> Activity로 이동 (StepCounter.java)
                 startActivity(intent);
+//                Intent intent = new Intent(getActivity(), PopupPedo.class); //Fragment -> Activity로 이동 (만보기팝업)
+//                startActivity(intent);
             }
         });
 

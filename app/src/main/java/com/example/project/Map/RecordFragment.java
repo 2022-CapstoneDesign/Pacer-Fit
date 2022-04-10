@@ -1,10 +1,7 @@
 package com.example.project.Map;
 
-import android.app.Dialog;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +13,6 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.project.R;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-import java.util.logging.Logger;
 
 public class RecordFragment extends Fragment {
 
@@ -28,7 +22,7 @@ public class RecordFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.record_circle_fragment, container, false);
-        helpBtn = view.findViewById(R.id.helpBtn);
+        helpBtn = view.findViewById(R.id.kmHelpBtn);
         helpBtn.setOnClickListener(new View.OnClickListener(){
             @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
