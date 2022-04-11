@@ -3,6 +3,7 @@ package com.example.project.Map;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.se.omapi.SEService;
@@ -28,6 +29,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,7 +41,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.ticofab.androidgpxparser.parser.GPXParser;
 import io.ticofab.androidgpxparser.parser.domain.Gpx;
@@ -136,7 +143,9 @@ public class MapFragment extends Fragment {
         HttpURLConnection http = null;
         InputStreamReader isr = null;
         BufferedReader br = null;
-        try{ url = new URL("https://www.durunubi.kr/editImgUp.do?filePath=/data/koreamobility/file/manual/2018gpx/305_02_PartGPX_GPX_01.gpx");
+
+        try{
+            url = new URL("https://www.durunubi.kr/editImgUp.do?filePath=/data/koreamobility/file/manual/2018gpx/042_15_PartGPX_GPX_01.gpx");
             http = (HttpURLConnection) url.openConnection();
             http.setConnectTimeout(3*1000);
             http.setReadTimeout(3*1000);
@@ -145,7 +154,16 @@ public class MapFragment extends Fragment {
             String str = null;
             while ((str = br.readLine()) != null)
             {
-                gpxpt += str + "\n";
+                if(str.contains("trkpt")){
+                    Pattern pattern = Pattern.compile("[\"](.*?)[\"]");
+                    Matcher matcher = pattern.matcher(str);
+                    while (matcher.find()) {  // 일치하는 게 있다면
+                        gpxpt += matcher.group(1)+" ";
+                        if(matcher.group(1) ==  null)
+                            break;
+
+                    }
+                }
             }
         }catch(Exception e){
             Log.e("Exception", e.toString());
@@ -166,12 +184,13 @@ public class MapFragment extends Fragment {
 
     Handler handler = new Handler(){
         public void handleMessage(Message msg){
-
             Bundle bun = msg.getData();
             String gpxpt = bun.getString("gpxpt");
-            Log.d("gpxpt","gpxpt");
-
-
+            String[] latLon = gpxpt.split(" ");
+            for(int i=0;i<latLon.length;i+=2){
+                polyline.addPoint(MapPoint.mapPointWithGeoCoord(Double.valueOf(latLon[i]), Double.valueOf(latLon[i+1])));
+            }
+            mapView.addPolyline(polyline);
 
         }
     };
