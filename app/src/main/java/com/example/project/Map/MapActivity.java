@@ -1,4 +1,4 @@
-package com.example.project;
+package com.example.project.Map;
 
 import android.Manifest;
 import android.content.Context;
@@ -25,6 +25,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.project.R;
+
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapPolyline;
@@ -33,13 +35,12 @@ import net.daum.mf.map.api.MapView;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class Map_add extends AppCompatActivity implements MapView.CurrentLocationEventListener {
+public class MapActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener {
     private final static String KEY = "gK02LAH%2FlvryeAYsHR08%2Byds3IuKYwmKnKEjPkvtot7WECTfDCyLeh9snhRqmJiWCWhHHwev8Sd3wvJTgXcVNA%3D%3D";
     private final static String TAG = "MapTAG";
     private final int ACCESS_FINE_LOCATION = 1000;
@@ -57,7 +58,7 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_add);
+        setContentView(R.layout.map_activity);
         search_pos = findViewById(R.id.search_pos);
         searchBtn = findViewById(R.id.search_btn);
         startBtn = findViewById(R.id.start_btn);
@@ -186,7 +187,7 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        ActivityCompat.requestPermissions(Map_add.this, permissions, ACCESS_FINE_LOCATION);
+                        ActivityCompat.requestPermissions(MapActivity.this, permissions, ACCESS_FINE_LOCATION);
                     }
                 });
                 builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -199,7 +200,7 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
                 if (isFirstCheck) {
                     // 최초 권한 요청
                     preference.edit().putBoolean("isFirstPermissionCheck", false).apply();
-                    ActivityCompat.requestPermissions(Map_add.this, permissions, ACCESS_FINE_LOCATION);
+                    ActivityCompat.requestPermissions(MapActivity.this, permissions, ACCESS_FINE_LOCATION);
                 } else {
                     // 다시 묻지 않음 클릭 (앱 정보 화면으로 이동)
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
