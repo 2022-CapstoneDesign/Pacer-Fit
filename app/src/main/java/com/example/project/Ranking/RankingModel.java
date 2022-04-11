@@ -13,6 +13,8 @@ public class RankingModel {
         this.rankStep = rankStep;
     }
 
+
+
     public String getRankIndex() {
         return rankIndex;
     }
@@ -28,4 +30,5 @@ public class RankingModel {
     public String getRankStep() {
         return rankStep;
     }
+
 }

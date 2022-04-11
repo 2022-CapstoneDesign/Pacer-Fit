@@ -103,22 +103,8 @@ public class OneMonthDist extends Fragment {
         List<DistRecordModel> record_list = new ArrayList<>();
 
         // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-        record_list.add(new DistRecordModel("4/1" , "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
+        for (int i = 2; i < 30; i++)
+            record_list.add(new DistRecordModel("4/"+i, "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
 
 
         return record_list;

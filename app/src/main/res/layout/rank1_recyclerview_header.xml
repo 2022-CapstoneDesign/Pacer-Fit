@@ -26,28 +26,24 @@
                     android:orientation="horizontal">
 
                     <!--순위-->
-                    <TextView
-                        android:id="@+id/rank_index"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/nanumsquareroundeb"
-                        android:layout_marginTop="5dp"
-                        android:padding="5dp"
-                        android:text="1"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
+                    <ImageView
+                        android:id="@+id/rank1_index"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="7dp"
+                        android:src="@drawable/crown_icon" />
 
                     <!--프로필 사진-->
                     <ImageView
-                        android:id="@+id/rank_profile"
+                        android:id="@+id/rank1_profile"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="15dp"
                         android:src="@drawable/profile_default" />
 
                     <!--UserID-->
                     <TextView
-                        android:id="@+id/rank_id"
+                        android:id="@+id/rank1_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
@@ -64,7 +60,7 @@
                     android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="0dp"
                     android:stretchColumns="*">
 
 
@@ -73,14 +69,14 @@
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/rank_step"
+                            android:id="@+id/rank1_step"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_column="1"
                             android:fontFamily="@font/nanumsquareroundeb"
                             android:gravity="right"
                             android:maxLines="1"
-                            android:text="123,456"
+                            android:text="1,123,456,78"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
 
@@ -91,7 +87,7 @@
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/textview14"
+                            android:id="@+id/textview15"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_column="1"
