@@ -3,7 +3,10 @@ package com.example.project.Map;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.se.omapi.SEService;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +26,18 @@ import net.daum.mf.map.api.MapView;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
 
 import io.ticofab.androidgpxparser.parser.GPXParser;
@@ -50,7 +61,20 @@ public class MapFragment extends Fragment {
         onConnectListener.onConnect(mapView);
         polyline.setTag(1000);
         polyline.setLineColor(Color.argb(240, 255, 0, 255)); // Polyline 컬러 지정.
-        try {
+
+        new Thread(){
+            public void run(){
+                String gpxpt = getData();
+                Bundle bun = new Bundle();
+                bun.putString("gpxpt", gpxpt);
+                Message msg = handler.obtainMessage();
+                msg.setData(bun);
+                handler.sendMessage(msg);
+            }
+        }.start();
+
+
+        /*try {
             Track str;
             InputStream in = getContext().getResources().openRawResource(R.raw.examplefile);
             //InputStream in = getContext().getAssets().open("examplefile.gpx");
@@ -76,7 +100,7 @@ public class MapFragment extends Fragment {
                     lon = parsedGpx.getTracks().get(j).getTrackSegments().get(0).getTrackPoints().get(i).getLongitude();
                     System.out.print(lat + ", ");
                     System.out.println(lon + " " + i + "번째 위치값");
-                    /* 끊어진 좌표 처리... 잘안됨
+                    *//* 끊어진 좌표 처리... 잘안됨
                     if( (j>0) && (i==0) ) {
                         if((lat - parsedGpx.getTracks().get(j-1).getTrackSegments().get(0).getTrackPoints().get(parsedGpx.getTracks().get(j-1).getTrackSegments().get(0).getTrackPoints().size()-1).getLatitude() < 0.00002 &&
                                 lat - parsedGpx.getTracks().get(j-1).getTrackSegments().get(0).getTrackPoints().get(parsedGpx.getTracks().get(j-1).getTrackSegments().get(0).getTrackPoints().size()-1).getLatitude() > -0.00002)
@@ -86,7 +110,7 @@ public class MapFragment extends Fragment {
                             continue;
                         }
                     }
-                    */
+                    *//*
                     polyline.addPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                 }
             }
@@ -94,7 +118,7 @@ public class MapFragment extends Fragment {
         } catch (IOException | XmlPullParserException e) {
             // do something with this exception
             e.printStackTrace();
-        }
+        }*/
         if (parsedGpx == null) {
             // error parsing track
         } else {
@@ -102,7 +126,55 @@ public class MapFragment extends Fragment {
             // see included example app and tests
         }
         return rootView;
+
+
     }
+
+    private String getData(){
+        String gpxpt = "";
+        URL url =null;
+        HttpURLConnection http = null;
+        InputStreamReader isr = null;
+        BufferedReader br = null;
+        try{ url = new URL("https://www.durunubi.kr/editImgUp.do?filePath=/data/koreamobility/file/manual/2018gpx/305_02_PartGPX_GPX_01.gpx");
+            http = (HttpURLConnection) url.openConnection();
+            http.setConnectTimeout(3*1000);
+            http.setReadTimeout(3*1000);
+            isr = new InputStreamReader(http.getInputStream());
+            br = new BufferedReader(isr);
+            String str = null;
+            while ((str = br.readLine()) != null)
+            {
+                gpxpt += str + "\n";
+            }
+        }catch(Exception e){
+            Log.e("Exception", e.toString());
+        }finally
+        {
+            if(http != null){
+                try{http.disconnect();
+                }catch(Exception e){}
+            } if(isr != null){
+            try{isr.close();
+            }catch(Exception e){}
+        } if(br != null){
+            try{br.close();
+            }catch(Exception e){}
+        }
+        } return gpxpt;
+    }
+
+    Handler handler = new Handler(){
+        public void handleMessage(Message msg){
+
+            Bundle bun = msg.getData();
+            String gpxpt = bun.getString("gpxpt");
+            Log.d("gpxpt","gpxpt");
+
+
+
+        }
+    };
 
     @Override
     public void onAttach(@NonNull Context context) {
