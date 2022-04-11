@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class RankingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     ArrayList<RankingModel> rankList;
-    ArrayList<Rank1Model> rank1;
+    ArrayList<RankOneModel> rank1;
     private final int TYPE_HEADER = 0;
     private final int TYPE_ITEM = 1;
 
@@ -26,7 +26,7 @@ public class RankingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         RecyclerView.ViewHolder holder;
         View view;
         if (viewType == TYPE_HEADER) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rank1_recyclerview_header, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_rankone_header, parent, false);
             holder = new HeaderViewHolder(view);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_item_recylerview, parent, false);
@@ -52,7 +52,7 @@ public class RankingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.rankList = list;
         notifyDataSetChanged();
     }
-    public void setRank1List(ArrayList<Rank1Model> list){
+    public void setRank1List(ArrayList<RankOneModel> list){
         this.rank1 = list;
         notifyDataSetChanged();
     }
@@ -78,7 +78,7 @@ public class RankingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             rank1Step = (TextView) headerView.findViewById(R.id.rank1_step);
         }
 
-        void onBind(Rank1Model rank1Model){
+        void onBind(RankOneModel rank1Model){
             rank1Profile.setImageResource(rank1Model.getRank1Profile());
             rank1ID.setText(rank1Model.getRank1Id());
             rank1Step.setText(rank1Model.getRank1Step());
@@ -88,6 +88,7 @@ public class RankingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
+        // header가 추가되므로 + 1
         return rankList.size() + 1;
     }
 

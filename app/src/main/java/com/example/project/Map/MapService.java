@@ -20,7 +20,6 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.example.project.BuildConfig;
-import com.example.project.MainActivity;
 import com.example.project.R;
 
 public class MapService extends Service {

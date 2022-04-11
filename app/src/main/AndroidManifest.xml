@@ -22,30 +22,29 @@
             android:name=".Map.MapService"
             android:enabled="true"
             android:exported="true" />
-
         <activity
-            android:name=".ThreeTwoOneGo"
+            android:name=".Pedo.CountDownActivity"
             android:exported="false" />
         <activity
-            android:name=".PopupPedo"
+            android:name=".Pedo.PopupActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
         <activity
-            android:name=".JoinActivity"
+            android:name=".Login.RegisterActivity"
             android:exported="false"
             android:theme="@style/JoinTheme" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".Login.LoginActivity"
             android:exported="false"
             android:theme="@style/LoginTheme" />
         <activity
-            android:name=".IntroActivity"
+            android:name=".Login.IntroActivity"
             android:exported="false"
             android:theme="@style/IntroTheme" />
         <activity android:name=".Map.RecordMapActivity" />
-        <activity android:name=".StepCounter" />
+        <activity android:name=".Pedo.StepCounterActivity" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".Main.SplashActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -54,9 +53,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Map_add" />
+        <activity android:name=".Map.MapActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Main.BottomNavigation"
             android:exported="true"
             android:theme="@style/MainTheme" />
 

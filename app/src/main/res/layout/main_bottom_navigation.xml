@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--depth를 4개 이상 만들지 말것-->
+<!--라벨이 보이지 않게 하는 속성
+<!-app:labelVisibilityMode="unlabeled"-->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".Main.BottomNavigation">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/frame_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation"
+        android:layout_marginBottom="0dp">
+
+    </androidx.fragment.app.FragmentContainerView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_above="@+id/bottom_navigation"
+        android:background="@color/lightgray_line"></View>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        android:background="@color/bottom_menu_color"
+        android:backgroundTint="@color/bottom_menu_color"
+        android:theme="@style/Widget.BottomNavigationView"
+        app:backgroundTint="@color/bottom_menu_color"
+        app:itemBackground="@color/bottom_menu_color"
+        app:itemIconSize="85dp"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/bottom_menu_color"
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/bottom_menu" />
+
+</RelativeLayout>

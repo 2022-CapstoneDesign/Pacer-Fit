@@ -21,13 +21,13 @@ public class RecordFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.record_circle_fragment, container, false);
+        View view = inflater.inflate(R.layout.map_record_fragment, container, false);
         helpBtn = view.findViewById(R.id.kmHelpBtn);
         helpBtn.setOnClickListener(new View.OnClickListener(){
             @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
             public void onClick(View map) {
-                HelpFragment helpFragment = new HelpFragment(getActivity().getApplicationContext());
+                DetailBottomFragment helpFragment = new DetailBottomFragment(getActivity().getApplicationContext());
                 helpFragment.show(getActivity().getSupportFragmentManager(), helpFragment.getTag());
             }
         });

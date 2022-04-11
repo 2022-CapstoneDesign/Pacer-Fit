@@ -22,7 +22,7 @@ public class DistRankingFragment extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_dist_ranking, container, false);
+        View v = inflater.inflate(R.layout.ranking_dist_fragment, container, false);
 
         tabLayout = v.findViewById(R.id.dist_tabLayout);
         viewPager = v.findViewById(R.id.dist_ranking_vp);

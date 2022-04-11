@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_project">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar_main"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/view_style"
+                android:backgroundTint="@color/gray_project"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view3">
+
+
+            </View>
+
+            <TextView
+                android:id="@+id/workTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="@string/work"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/view"
+                app:layout_constraintTop_toTopOf="@+id/view" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <Button
+                android:id="@+id/pedo_button"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/btn_style"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="@string/pedometer"
+                android:textColor="@color/whitegray_project"
+                app:layout_constraintBottom_toBottomOf="@+id/view"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="@+id/view"
+                app:layout_constraintTop_toBottomOf="@+id/workTxt" />
+
+            <Button
+                android:id="@+id/Km_button"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/btn_style"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="거리(km)"
+                android:textAllCaps="false"
+                android:textColor="@color/whitegray_project"
+                app:layout_constraintBottom_toBottomOf="@+id/view"
+                app:layout_constraintEnd_toEndOf="@+id/view"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/workTxt" />
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="0dp"
+                android:layout_height="105dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/view_style"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="@+id/view3"
+                app:layout_constraintTop_toTopOf="@+id/view3"
+                app:srcCompat="@drawable/locationpin_white" />
+
+            <TextClock
+                android:id="@+id/textClock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:format12Hour="hh:mm"
+                android:format24Hour="hh:mm a"
+                android:textColor="@color/white"
+                android:textSize="38sp"
+                app:layout_constraintBottom_toBottomOf="@+id/ampm"
+                app:layout_constraintStart_toEndOf="@+id/ampm" />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="190dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:maxLines="1"
+                android:text="로딩중.."
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:flow_verticalAlign="bottom"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+                app:layout_constraintStart_toEndOf="@+id/imageView4" />
+
+            <TextView
+                android:id="@+id/weather"
+                android:layout_width="67dp"
+                android:layout_height="53dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="9dp"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="로딩중.."
+                android:textColor="@color/lightlightgray_text_color"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/view3"
+                app:layout_constraintEnd_toEndOf="@+id/view3" />
+
+            <ImageView
+                android:id="@+id/weather_image"
+                android:layout_width="77dp"
+                android:layout_height="67dp"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/view3"
+                app:layout_constraintEnd_toStartOf="@+id/weather"
+                app:srcCompat="@color/lightgray_project" />
+
+            <TextView
+                android:id="@+id/ampm"
+                android:layout_width="33dp"
+                android:layout_height="24dp"
+                android:layout_marginBottom="12dp"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text=""
+                android:textColor="@color/lightlightgray_text_color"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/view3"
+                app:layout_constraintStart_toStartOf="@+id/imageView4" />
+
+            <View
+                android:id="@+id/barchartView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="15dp"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="기록 - 만보기"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/barchartView"
+                app:layout_constraintTop_toTopOf="@+id/barchartView" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="(최근 1달)"
+                android:textColor="@color/whitegray_project"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView4"
+                app:layout_constraintStart_toEndOf="@+id/textView4" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barchart"
+                android:layout_width="0dp"
+                android:layout_height="130dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/barchartView"
+                app:layout_constraintEnd_toEndOf="@+id/barchartView"
+                app:layout_constraintStart_toStartOf="@+id/barchartView" />
+
+            <Button
+                android:id="@+id/moreBarChartBtn"
+                android:layout_width="70dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/btn_style"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="더보기"
+                android:textColor="@color/whitegray_project"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/barchartView"
+                app:layout_constraintTop_toTopOf="@+id/textView5"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <View
+                android:id="@+id/linechartView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barchartView" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="기록 - 거리"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/linechartView"
+                app:layout_constraintTop_toTopOf="@+id/linechartView" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="(최근 1달)"
+                android:textColor="@color/whitegray_project"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView6"
+                app:layout_constraintStart_toEndOf="@+id/textView6" />
+
+            <Button
+                android:id="@+id/moreLineChartBtn"
+                android:layout_width="70dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/btn_style"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="더보기"
+                android:textColor="@color/whitegray_project"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/linechartView"
+                app:layout_constraintTop_toTopOf="@+id/textView7"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/linechart"
+                android:layout_width="0dp"
+                android:layout_height="130dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/linechartView"
+                app:layout_constraintEnd_toEndOf="@+id/linechartView"
+                app:layout_constraintStart_toStartOf="@+id/linechartView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

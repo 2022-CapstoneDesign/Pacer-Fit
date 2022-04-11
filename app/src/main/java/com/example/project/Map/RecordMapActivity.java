@@ -48,7 +48,7 @@ import java.util.TimerTask;
 
 @RequiresApi(api = Build.VERSION_CODES.P)
 public class RecordMapActivity extends AppCompatActivity implements View.OnClickListener,
-        MapView.CurrentLocationEventListener, MapFragment.OnConnectListener {
+        MapView.CurrentLocationEventListener, MapViewFragment.OnConnectListener {
 
     static RecordMapActivity recordMapActivity;
 
@@ -69,7 +69,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     int total_sec = 0;
 
     // Fragment
-    MapFragment mapFrag;
+    MapViewFragment mapFrag;
     RecordFragment recordFrag;
     Intent serviceIntent;
 
@@ -115,9 +115,9 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record_map);
+        setContentView(R.layout.map_record_activity);
 
-        mapFrag = new MapFragment();
+        mapFrag = new MapViewFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.mainFrame, mapFrag).commit();
 
         // polyline
@@ -358,8 +358,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                         dist_tv = findViewById(R.id.distanceText);
                         time_tv = findViewById(R.id.timeText);
                         cal_tv = findViewById(R.id.calText);
-                        test1v = findViewById(R.id.locTest);
-                        test2v = findViewById(R.id.accTest);
                         if (time_tv != null)
                             time_tv.setText(hour + "H " + min + "M " + sec + "S");
                         if (dist_tv != null)

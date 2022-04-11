@@ -98,7 +98,7 @@
                             android:fontFamily="@font/nanumsquareroundeb"
                             android:gravity="right"
                             android:text="걸음"
-                            android:textColor="@color/white"
+                            android:textColor="@color/lightlightgray_text_color"
                             android:textSize="11sp" />
                     </TableRow>
                 </TableLayout>
