@@ -29,10 +29,11 @@ import io.ticofab.androidgpxparser.parser.domain.Track;
 public class MapViewFragment extends Fragment {
     public MapView mapView;
     private OnConnectListener onConnectListener;
+    MapPolyline polyline = new MapPolyline();
     GPXParser parser = new GPXParser();
     Gpx parsedGpx = null;
-    MapPolyline polyline = new MapPolyline();
     double lat, lon;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,27 +44,28 @@ public class MapViewFragment extends Fragment {
         onConnectListener.onConnect(mapView);
         polyline.setTag(1000);
         polyline.setLineColor(Color.argb(240, 255, 0, 255)); // Polyline 컬러 지정.
+
         try {
             Track str;
             InputStream in = getContext().getResources().openRawResource(R.raw.examplefile);
             //InputStream in = getContext().getAssets().open("examplefile.gpx");
             parsedGpx = parser.parse(in); // consider using a background thread
-            System.out.println(parsedGpx.getCreator()+"========================1");
-            System.out.println(parsedGpx.getMetadata()+"========================2");
-            System.out.println(parsedGpx.getRoutes()+"========================3");
-            System.out.println(parsedGpx.getTracks().get(0).getTrackName()+"========================4");
-            System.out.println(parsedGpx.getTracks().get(0).getTrackLink()+"========================7");
-            System.out.println(parsedGpx.getTracks().get(0).getTrackSrc()+"========================9");
-            System.out.println(parsedGpx.getTracks().get(0).getTrackType()+"========================10");
-            System.out.println(parsedGpx.getTracks().get(0).getTrackSegments().get(0).getTrackPoints().get(0).getLatitude()+"========================11");
-            System.out.println(parsedGpx.getTracks().get(0).getTrackSegments().get(0).getTrackPoints().get(0).getLongitude()+"========================11");
+            System.out.println(parsedGpx.getCreator() + "========================1");
+            System.out.println(parsedGpx.getMetadata() + "========================2");
+            System.out.println(parsedGpx.getRoutes() + "========================3");
+            System.out.println(parsedGpx.getTracks().get(0).getTrackName() + "========================4");
+            System.out.println(parsedGpx.getTracks().get(0).getTrackLink() + "========================7");
+            System.out.println(parsedGpx.getTracks().get(0).getTrackSrc() + "========================9");
+            System.out.println(parsedGpx.getTracks().get(0).getTrackType() + "========================10");
+            System.out.println(parsedGpx.getTracks().get(0).getTrackSegments().get(0).getTrackPoints().get(0).getLatitude() + "========================11");
+            System.out.println(parsedGpx.getTracks().get(0).getTrackSegments().get(0).getTrackPoints().get(0).getLongitude() + "========================11");
             // getTracks()해서 track(이 track정보는 1개 이상일것)을 가져오고 첫번째 SegmentsTrack(거의 이 track정보는 1개일것)의 첫번째 track의 코스 정보
             // 가져와서 해당 트랙의 n번째 위도, 경도 정보를 뽑음.
-            System.out.println(parsedGpx.getTracks().get(0).getTrackSegments().size()+"==================segment사이즈?");
-            System.out.println(parsedGpx.getTracks().size()+"==================track사이즈?");
-            System.out.println(parsedGpx.getTracks().get(0).getTrackSegments().get(0).getTrackPoints().size()+"==================trackpoint사이즈?");
-            for(int j=0; j<parsedGpx.getTracks().size(); j++) {
-                System.out.println(j+"번째 코스=======================");
+            System.out.println(parsedGpx.getTracks().get(0).getTrackSegments().size() + "==================segment사이즈?");
+            System.out.println(parsedGpx.getTracks().size() + "==================track사이즈?");
+            System.out.println(parsedGpx.getTracks().get(0).getTrackSegments().get(0).getTrackPoints().size() + "==================trackpoint사이즈?");
+            for (int j = 0; j < parsedGpx.getTracks().size(); j++) {
+                System.out.println(j + "번째 코스=======================");
                 for (int i = 0; i < parsedGpx.getTracks().get(j).getTrackSegments().get(0).getTrackPoints().size(); i++) {
                     lat = parsedGpx.getTracks().get(j).getTrackSegments().get(0).getTrackPoints().get(i).getLatitude();
                     lon = parsedGpx.getTracks().get(j).getTrackSegments().get(0).getTrackPoints().get(i).getLongitude();
@@ -121,6 +123,4 @@ public class MapViewFragment extends Fragment {
     public interface OnConnectListener {
         void onConnect(MapView mapView);
     }
-
-
 }

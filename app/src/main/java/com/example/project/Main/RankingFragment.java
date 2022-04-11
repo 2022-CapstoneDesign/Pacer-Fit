@@ -15,7 +15,6 @@ import com.example.project.Ranking.DistRankingFragment;
 import com.example.project.Ranking.PedoFragment;
 
 public class RankingFragment extends Fragment {
-
     Button distBtn;
     Button pedoBtn;
     DistRankingFragment distRankingFragment;
@@ -28,7 +27,6 @@ public class RankingFragment extends Fragment {
 
         distBtn = v.findViewById(R.id.ranking_dist_btn);
         pedoBtn = v.findViewById(R.id.ranking_pedo_btn);
-
 
         distBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +52,6 @@ public class RankingFragment extends Fragment {
                 //fm.replace(R.id.ranking_fragment_container,new PedoRankingFragment()).commit();
             }
         });
-
         return v;
     }
 }

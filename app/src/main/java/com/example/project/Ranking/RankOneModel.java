@@ -11,9 +11,6 @@ public class RankOneModel {
         this.rank1Step = rank1Step;
     }
 
-
-
-
     public int getRank1Profile() {
         return rank1Profile;
     }

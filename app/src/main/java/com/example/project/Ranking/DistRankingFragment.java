@@ -14,14 +14,12 @@ import com.example.project.R;
 import com.google.android.material.tabs.TabLayout;
 
 public class DistRankingFragment extends Fragment{
-
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.ranking_dist_fragment, container, false);
 
         tabLayout = v.findViewById(R.id.dist_tabLayout);

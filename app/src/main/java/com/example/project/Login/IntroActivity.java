@@ -30,14 +30,14 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_intro_activity);
 
+        loginBtn = findViewById(R.id.introLoginBtn);
+        joinBtn = findViewById(R.id.introJoinBtn);
+
         if (checkLocationService()) {
             permissionCheck();
         } else {
             Toast.makeText(this, "GPS를 켜주세요", Toast.LENGTH_SHORT).show();
         }
-
-        loginBtn = findViewById(R.id.introLoginBtn);
-        joinBtn = findViewById(R.id.introJoinBtn);
 
         loginBtn.setOnClickListener(v -> {
             startActivity(new Intent(IntroActivity.this, LoginActivity.class));
@@ -48,7 +48,6 @@ public class IntroActivity extends AppCompatActivity {
             startActivity(new Intent(IntroActivity.this, RegisterActivity.class));
             finish();
         });
-
     }
 
     // GPS 허용 여부 권환 확인

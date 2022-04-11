@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -31,8 +30,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingStart="30dp"
-            android:paddingEnd="30dp"
             android:paddingTop="20dp"
+            android:paddingEnd="30dp"
             android:theme="@style/EditTextStyle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,14 +58,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingStart="30dp"
-            android:paddingEnd="30dp"
             android:paddingTop="20dp"
+            android:paddingEnd="30dp"
             android:theme="@style/EditTextStyle"
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/joinIdTextInputLayout">
+            app:layout_constraintTop_toBottomOf="@+id/joinIdTextInputLayout"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/joinPwTxt"
@@ -157,8 +156,6 @@
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="@+id/radioGroup"
             app:layout_constraintTop_toBottomOf="@+id/joinNameTextInputLayout" />
-
-
 
         <RadioGroup
             android:id="@+id/radioGroup"

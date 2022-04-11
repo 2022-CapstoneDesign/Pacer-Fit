@@ -29,15 +29,14 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:layout_marginTop="4dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/view_style"
                 android:backgroundTint="@color/gray_project"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view3">
-
 
             </View>
 
@@ -97,8 +96,8 @@
                 android:layout_width="0dp"
                 android:layout_height="105dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
                 android:background="@drawable/view_style"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -244,8 +243,8 @@
                 android:layout_height="200dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -302,5 +301,4 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

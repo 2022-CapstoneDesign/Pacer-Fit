@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Dist.OneMonthFragment"
-    android:background="@color/gray_project">
+    android:background="@color/gray_project"
+    tools:context=".Dist.OneMonthFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -92,7 +92,6 @@
                 app:layout_constraintEnd_toEndOf="@+id/view6"
                 app:layout_constraintTop_toTopOf="@+id/view6" />
 
-
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -155,8 +154,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </TableLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

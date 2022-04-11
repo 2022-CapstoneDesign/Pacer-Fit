@@ -16,19 +16,16 @@ import com.google.android.material.tabs.TabLayout;
 
 public class PedoFragment extends Fragment {
 
-
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.ranking_pedo_fragment, container, false);
 
         tabLayout = v.findViewById(R.id.pedo_tabLayout);
         viewPager = v.findViewById(R.id.pedo_ranking_vp);
-
         tabLayout.setupWithViewPager(viewPager);
 
         RankingVPAdapter rankingVPAdapter = new RankingVPAdapter(getActivity().getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);

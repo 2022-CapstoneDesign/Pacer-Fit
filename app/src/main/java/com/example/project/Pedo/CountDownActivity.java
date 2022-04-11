@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.project.R;
 
 public class CountDownActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,5 +25,4 @@ public class CountDownActivity extends AppCompatActivity {
             finish();
         }
     }
-
 }

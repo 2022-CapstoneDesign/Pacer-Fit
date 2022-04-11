@@ -32,15 +32,13 @@ public class LoginActivity extends AppCompatActivity {
 
         idTxt = findViewById(R.id.loginIdTxt);
         passTxt = findViewById(R.id.loginPwTxt);
+        loginBtn = findViewById(R.id.loginLoginBtn);
         // 입력 시 처음 뜨는 키보드 언어 강제 설정(이라는데 효과가 없는 것 같습니다)
         idTxt.setPrivateImeOptions("defaultInputmode=english;");
         // 아이디는 한글, 특수문자, 이모지 등은 제한하고 영어 소문자, 숫자만 최대 20글자 입력 허용
         // (참고 : 비밀번호는 영어(소,대), 숫자, 특수문자만 최대 20글자 입력 가능)
         idTxt.setFilters(new InputFilter[] {filter, new InputFilter.LengthFilter(20)});
 
-
-
-        loginBtn = findViewById(R.id.loginLoginBtn);
         loginBtn.setOnClickListener(v -> {
             String userID = idTxt.getText().toString();
             String userPass = passTxt.getText().toString();
@@ -87,9 +85,7 @@ public class LoginActivity extends AppCompatActivity {
             LoginRequest loginRequest = new LoginRequest(userID, userPass, responseListener);
             RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
             queue.add(loginRequest);
-
             //DB추가 주석 없앨때 아래 3줄 지우기
-
         });
     }
 

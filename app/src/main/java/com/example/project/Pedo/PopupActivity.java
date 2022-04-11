@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.project.R;
 
 public class PopupActivity extends AppCompatActivity {
-
     private ImageView backBtn1;
     private Button startBtn;
     private Button backBtn2;
@@ -34,6 +33,7 @@ public class PopupActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         backBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

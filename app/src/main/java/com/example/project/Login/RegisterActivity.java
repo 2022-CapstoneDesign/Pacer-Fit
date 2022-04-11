@@ -22,8 +22,8 @@ import org.json.JSONObject;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
-    private TextInputEditText idTxt,pwTxt,nameTxt,genderTxt;
-    private EditText ageTxt,heightTxt,weightTxt;
+    private TextInputEditText idTxt, pwTxt, nameTxt, genderTxt;
+    private EditText ageTxt, heightTxt, weightTxt;
     private RadioGroup Man_or_Woman;
     private Button joinBtn;
     private String gender = "man";
@@ -45,12 +45,12 @@ public class RegisterActivity extends AppCompatActivity {
         idTxt.setPrivateImeOptions("defaultInputmode=english;");
         // 아이디는 한글, 특수문자, 이모지 등은 제한하고 영어 소문자, 숫자만 최대 20글자 입력 허용
         // (참고 : 비밀번호는 영어(소,대), 숫자, 특수문자만 최대 20글자 입력 가능)
-        idTxt.setFilters(new InputFilter[] {filter, new InputFilter.LengthFilter(20)});
+        idTxt.setFilters(new InputFilter[]{filter, new InputFilter.LengthFilter(20)});
 
-        Man_or_Woman.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){ //라디오 버튼 남자 or 여자 선택
+        Man_or_Woman.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() { //라디오 버튼 남자 or 여자 선택
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId){
-                switch (checkedId){
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
                     case R.id.manRadioBtn:
                         gender = "man";
                         break;
@@ -70,6 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
             int userAge = Integer.parseInt(ageTxt.getText().toString());
             int userheight = Integer.parseInt(heightTxt.getText().toString());
             int userweight = Integer.parseInt(weightTxt.getText().toString());
+
             //DB 추가
             Response.Listener<String> responseListener = response -> {
                 try {
@@ -90,10 +91,9 @@ public class RegisterActivity extends AppCompatActivity {
             };
             // 서버로 Volley를 이용해서 요청을 함.
             //RegisterRequest.java 이동
-            RegisterRequest registerRequest = new RegisterRequest(userID,userPass,userName,userGender,userAge,userheight,userweight,responseListener);
+            RegisterRequest registerRequest = new RegisterRequest(userID, userPass, userName, userGender, userAge, userheight, userweight, responseListener);
             RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
             queue.add(registerRequest);
-
 
             //DB추가 주석 없앨때 아래 2줄 지우기
             /*

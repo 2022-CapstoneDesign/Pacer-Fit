@@ -31,5 +31,4 @@ public class DetailBottomFragment extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.help_bottom_fragment, container, false);
         return view;
     }
-
 }

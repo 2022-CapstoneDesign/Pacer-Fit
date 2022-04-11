@@ -29,15 +29,16 @@ public class GpsTrackerService extends Service implements LocationListener {
         this.mContext = context;
         getLocation();
     }
+
     private Location getLocation() {
-        try{
+        try {
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
             boolean isGPSEnabled =
                     locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             boolean isNetworkEnabled =
                     locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-            if (!isGPSEnabled && !isNetworkEnabled) { }
-            else {
+            if (!isGPSEnabled && !isNetworkEnabled) {
+            } else {
                 int hasFineLocationPermission = ContextCompat.checkSelfPermission(mContext,
                         Manifest.permission.ACCESS_FINE_LOCATION);
                 int hasCoarseLocationPermission = ContextCompat.checkSelfPermission(mContext,
@@ -71,44 +72,49 @@ public class GpsTrackerService extends Service implements LocationListener {
                     }
                 }
             }
-        } catch (Exception e) { Log.d("@@@", ""+e.toString()); }
+        } catch (Exception e) {
+            Log.d("@@@", "" + e.toString());
+        }
         return location;
     }
 
-    public double getLatitude()
-    {
-        if(location != null)
-        { latitude = location.getLatitude(); }
+    public double getLatitude() {
+        if (location != null) {
+            latitude = location.getLatitude();
+        }
         return latitude;
     }
 
-    public double getLongitude()
-    {
-        if(location != null)
-        { longitude = location.getLongitude();}
+    public double getLongitude() {
+        if (location != null)
+            longitude = location.getLongitude();
+
         return longitude;
     }
 
     @Override
-    public void onLocationChanged(Location location) { }
+    public void onLocationChanged(Location location) {
+    }
 
     @Override
-    public void onProviderDisabled(String provider) { }
+    public void onProviderDisabled(String provider) {
+    }
 
     @Override
-    public void onProviderEnabled(String provider) { }
+    public void onProviderEnabled(String provider) {
+    }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) { }
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-    public void stopUsingGPS()
-    {
-        if(locationManager != null)
-        {
+
+    public void stopUsingGPS() {
+        if (locationManager != null) {
             locationManager.removeUpdates(GpsTrackerService.this);
         }
     }

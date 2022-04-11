@@ -56,7 +56,6 @@ import java.util.Date;
 import java.util.Random;
 
 public class HomeFragment extends Fragment {
-
     private TextView weatherInfo;
     private ImageView weatherInfo_Image;
     private TransLocalPoint transLocalPoint;
@@ -65,13 +64,11 @@ public class HomeFragment extends Fragment {
     String weather = ""; // 날씨 결과
     String tmperature = ""; // 온도 결과
 
-
     private BarChart barChart; // 막대 그래프
     private LineChart lineChart; // 꺾은선 그래프
 
     private Button moreBarChartBtn;
     private Button moreLineChartBtn;
-
 
     @Nullable
     @Override
@@ -111,7 +108,6 @@ public class HomeFragment extends Fragment {
         address = weatherMethod.getCurrentAddress(ct, latitude, longitude);
         String[] local = address.split(" ");  //주소를 대한민국, 서울특별시, xx구 ... 로 나눔
         // String localName = local[2]; //xx구 이름
-
 
         location.setText(local[1] + " " + local[2]);
 
@@ -274,7 +270,6 @@ public class HomeFragment extends Fragment {
         axisRight.setDrawLabels(false); // 값 표기 설정
         axisRight.setDrawGridLines(false); // 격자
         axisRight.setDrawAxisLine(false); // 축 그리기 설정
-
     }
 
     // 이 함수에서 생성된 BarData를 실제 BarData 객체에 전달하고 BarChart를 갱신해 데이터를 표시
@@ -397,10 +392,8 @@ public class HomeFragment extends Fragment {
     }
 
     public class NetworkTask extends AsyncTask<Void, Void, String> {
-
         private String url;
         private ContentValues values;
-
         String result;
 
         public NetworkTask(String url, ContentValues values) {
@@ -443,5 +436,4 @@ public class HomeFragment extends Fragment {
             }
         }
     }
-
 }

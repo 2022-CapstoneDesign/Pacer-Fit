@@ -14,50 +14,43 @@ import java.util.List;
 import java.util.Locale;
 
 public class Weather {
-
-    Date mReDate;
     SimpleDateFormat mFormatYDM;
     String formatYDM; //날짜 변화를 위한 변수
-
+    Date mReDate;
 
     public String weather(double x, double y) {
         long mNow = System.currentTimeMillis();
-        mReDate = new Date(mNow);
         mFormatYDM = new SimpleDateFormat("yyyyMMdd");
+        mReDate = new Date(mNow);
         formatYDM = mFormatYDM.format(mReDate);
         SimpleDateFormat mFormatTime = new SimpleDateFormat("HH00");
-        String formatTime =String.format("%04d",(Integer.parseInt(mFormatTime.format(mReDate))));
+        String formatTime = String.format("%04d", (Integer.parseInt(mFormatTime.format(mReDate))));
 
         // URL 설정.
-
         String service_key = "%2BueDsfUzs4BpeCUpo7OeKkoAHisGHzMO%2BMk6%2FlpamxNi1A47Of%2FoxIgPqC49WXQN5nCbRGVSCv6t9u3R6X1EaA%3D%3D";
         String num_of_rows = "100";
         String page_no = "1";
         String date_type = "JSON";
         String base_time = timeChange(formatTime);
         String base_date = formatYDM;
-        String nx = String.format("%.0f",x);
-        String ny = String.format("%.0f",y);
+        String nx = String.format("%.0f", x);
+        String ny = String.format("%.0f", y);
 
-        String url ="http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst?"+
-                "serviceKey="+service_key+
-                "&numOfRows="+num_of_rows+
-                "&pageNo="+page_no+
-                "&dataType="+date_type+
-                "&base_date="+base_date+
-                "&base_time="+base_time+
-                "&nx="+nx+
-                "&ny="+ny;
+        String url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst?" +
+                "serviceKey=" + service_key +
+                "&numOfRows=" + num_of_rows +
+                "&pageNo=" + page_no +
+                "&dataType=" + date_type +
+                "&base_date=" + base_date +
+                "&base_time=" + base_time +
+                "&nx=" + nx +
+                "&ny=" + ny;
 
         Log.d("url", url);
 
-
         // AsyncTask를 통해 HttpURLConnection 수행.
-
-
         return url;
     }
-
 
     public String getCurrentAddress(Context context, double latitude, double longitude) {
         //지오코더... GPS를 주소로 변환
@@ -74,27 +67,26 @@ public class Weather {
             return "지오코더 서비스 사용불가";
         } catch (IllegalArgumentException illegalArgumentException) {
             Toast.makeText(context, "잘못된 GPS 좌표", Toast.LENGTH_LONG).show();
-            return "잘못된 GPS 좌표";
 
+            return "잘못된 GPS 좌표";
         }
         if (addresses == null || addresses.size() == 0) {
             Toast.makeText(context, "주소 미발견", Toast.LENGTH_LONG).show();
             return "주소 미발견";
         }
         Address address = addresses.get(0);
+
         return address.getAddressLine(0).toString() + "\n";
     }
 
-
-    public String timeChange(String time)
-    {
+    public String timeChange(String time) {
         // 현재 시간에 따라 데이터 시간 설정(1시간 마다 업데이트) //
         /**
-            매시간 30분에 T+1...T+5 예보데이터가 생성되고 45분에 조회가 가능하다.
-            1930에 20시,21시,22시,23시,00시 예보데이터가 생성되고 45분에 조회가 가능하다.
-            20:XX 인경우 20시의 예보를 보기 위해선 1930 시간을 검색해야 한다.
+         매시간 30분에 T+1...T+5 예보데이터가 생성되고 45분에 조회가 가능하다.
+         1930에 20시,21시,22시,23시,00시 예보데이터가 생성되고 45분에 조회가 가능하다.
+         20:XX 인경우 20시의 예보를 보기 위해선 1930 시간을 검색해야 한다.
          **/
-        switch(time) {
+        switch (time) {
             case "0100":
                 time = "0030";
                 break;
@@ -165,11 +157,10 @@ public class Weather {
                 time = "2230";
                 break;
             default:
-                formatYDM =String.valueOf(Integer.parseInt(mFormatYDM.format(mReDate))-1);
+                formatYDM = String.valueOf(Integer.parseInt(mFormatYDM.format(mReDate)) - 1);
                 time = "2330";
         }
+
         return time;
     }
-
-
 }

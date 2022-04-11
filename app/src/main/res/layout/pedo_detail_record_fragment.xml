@@ -24,11 +24,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabRippleColor = "@null"
-        app:tabTextColor="@color/white"
-        app:tabTextAppearance="@style/tab_text"
         app:tabBackground="@drawable/tablayout_red_selector"
-        app:tabIndicatorHeight="0dp" >
+        app:tabIndicatorHeight="0dp"
+        app:tabRippleColor="@null"
+        app:tabTextAppearance="@style/tab_text"
+        app:tabTextColor="@color/white">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"

@@ -43,9 +43,9 @@
         android:background="@color/lightgray_project"
         app:layout_constraintTop_toTopOf="parent"
         app:tabIndicator="@color/colorWhite"
+        app:tabIndicatorColor="@color/colorWhite"
         app:tabIndicatorGravity="bottom"
         app:tabIndicatorHeight="3dp"
-        app:tabIndicatorColor="@color/colorWhite"
         app:tabTextAppearance="@style/tab_text"
         tools:layout_editor_absoluteX="0dp">
 

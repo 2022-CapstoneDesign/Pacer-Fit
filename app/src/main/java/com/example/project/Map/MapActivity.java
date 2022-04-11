@@ -53,7 +53,7 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
     private Button startBtn = null;
     private Button stopBtn = null;
     private float curAccuracy = 0;
-    private double userLa,userLg;
+    private double userLa, userLg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +83,7 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
                     });
                 }
             }).start();
-
         });
-
 
         //경도(userLg), 위도(userLa) 설정
         mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
@@ -100,8 +98,9 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
         Location userNowLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        System.out.println("=============위도 : "+userNowLocation.getLatitude()+"===============경도 : "+
+        System.out.println("=============위도 : " + userNowLocation.getLatitude() + "===============경도 : " +
                 userNowLocation.getLongitude());
         userLa = userNowLocation.getLatitude();
         userLg = userNowLocation.getLongitude();
@@ -163,10 +162,6 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
         stopBtn.setOnClickListener(v -> {
             stopTracking();
         });
-
-
-
-
     }
 
 
@@ -241,7 +236,7 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
         Log.i(TAG, "MapFragment:onCurrentLocationUpdate()");
         MapPoint.GeoCoordinate mapPointGeo = mapPoint.getMapPointGeoCoord();
-        if(v < 20.0f){
+        if (v < 20.0f) {
             polyline.addPoint(MapPoint.mapPointWithGeoCoord(mapPointGeo.latitude, mapPointGeo.longitude));
             mapView.addPolyline(polyline);
         }
@@ -295,18 +290,15 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser xpp = factory.newPullParser();
             xpp.setInput(new InputStreamReader(is, "UTF-8")); //inputstream 으로부터 xml 입력받기
+            xpp.next();
 
             String tag;
-
-            xpp.next();
             int eventType = xpp.getEventType();
-
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 switch (eventType) {
                     case XmlPullParser.START_DOCUMENT:
                         buffer.append("파싱 시작...\n\n");
                         break;
-
                     case XmlPullParser.START_TAG:
                         tag = xpp.getName();//테그 이름 얻어오기
                         if (tag.equals("item")) ;
@@ -399,5 +391,4 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
         }
         return buffer.toString();//StringBuffer 문자열 객체 반환
     }
-
 }

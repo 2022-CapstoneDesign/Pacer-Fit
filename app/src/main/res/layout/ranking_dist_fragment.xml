@@ -43,9 +43,9 @@
         android:background="@color/lightgray_project"
         app:layout_constraintTop_toTopOf="parent"
         app:tabIndicator="@color/colorWhite"
+        app:tabIndicatorColor="@color/colorWhite"
         app:tabIndicatorGravity="bottom"
         app:tabIndicatorHeight="3dp"
-        app:tabIndicatorColor="@color/colorWhite"
         app:tabTextAppearance="@style/tab_text"
         tools:layout_editor_absoluteX="0dp">
 
@@ -64,6 +64,7 @@
             android:layout_height="wrap_content"
             android:text="역대랭킹" />
     </com.google.android.material.tabs.TabLayout>
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/dist_ranking_vp"
         android:layout_width="0dp"

@@ -19,10 +19,9 @@ public class RequestHttpConnection {
         //URL 뒤에 붙여서 보낼 파라미터.
         StringBuffer sbParams = new StringBuffer();
 
-
         // 1. StringBuffer에 파라미터 연결
         // 보낼 데이터가 없으면 파라미터를 비운다.
-        if(_params == null)
+        if (_params == null)
             sbParams.append("");
             // 보낼 데이터가 있으면 파라미터를 채운다.
         else {
@@ -32,19 +31,19 @@ public class RequestHttpConnection {
             String key;
             String value;
 
-            for(Map.Entry<String, Object> parameter : _params.valueSet()){
+            for (Map.Entry<String, Object> parameter : _params.valueSet()) {
                 key = parameter.getKey();
                 value = parameter.getValue().toString();
 
                 // 파라미터가 두개 이상일때, 파라미터 사이에 &를 붙인다.
-                if(isAnd)
+                if (isAnd)
                     sbParams.append("&");
 
                 sbParams.append(key).append("=").append(value);
 
                 // 파라미터가 두개 이상이면 isAnd를 true로 바꾸고 다음 루프부터 &를 붙인다.
-                if(!isAnd)
-                    if(_params.size() >= 2)
+                if (!isAnd)
+                    if (_params.size() >= 2)
                         isAnd = true;
             }
         }
@@ -61,7 +60,7 @@ public class RequestHttpConnection {
 
             // [2-2]. 연결 요청 확인.
             // 실패시 null을 리턴하고 메서드 종료.
-            if(urlConn.getResponseCode() != HttpURLConnection.HTTP_OK){
+            if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 Log.d("HTTP_OK", "연결 요청 실패");
                 return null;
             }
@@ -75,7 +74,7 @@ public class RequestHttpConnection {
             String page = "";
 
             // 라인을 받아와 합친다.
-            while((line = reader.readLine()) != null){
+            while ((line = reader.readLine()) != null) {
                 page += line;
             }
 
@@ -88,7 +87,7 @@ public class RequestHttpConnection {
             Log.d("IOException", String.valueOf(e));
             e.printStackTrace();
         } finally {
-            if(urlConn != null)
+            if (urlConn != null)
                 urlConn.disconnect();
         }
 

@@ -23,7 +23,6 @@ public class SplashActivity extends AppCompatActivity {
 
         Handler hd = new Handler();
         hd.postDelayed(new SplashHandler(), 2000); // 2초 대기 후 메인 액티비티로 전환
-
     }
 
     private class SplashHandler implements Runnable {

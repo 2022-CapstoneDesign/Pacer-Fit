@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Random;
 
 public class OneWeekFragment extends Fragment {
-
     private BarChart barChart; // 만보기 7일 막대그래프
     RecyclerView recycler_view;
     RecordAdapter adapter;
@@ -35,7 +34,6 @@ public class OneWeekFragment extends Fragment {
     private TextView startEndTime_today_oneweekPedo;
     private TextView totalTime_today_oneweekPedo;
     private TextView step_today_oneweekPedo;
-
     private TextView pedo_avg_time;
 
     @Override
@@ -45,30 +43,28 @@ public class OneWeekFragment extends Fragment {
         View v = inflater.inflate(R.layout.pedo_one_week_fragment, container, false);
 
         recycler_view = v.findViewById(R.id.recycler_view);
-        setRecyclerView();
 
         day_today_oneweekPedo = v.findViewById(R.id.day_today_oneweekPedo);
         startEndTime_today_oneweekPedo = v.findViewById(R.id.startEndTime_today_oneweekPedo);
         totalTime_today_oneweekPedo = v.findViewById(R.id.totalTime_today_oneweekPedo);
         step_today_oneweekPedo = v.findViewById(R.id.step_today_oneweekPedo);
+        pedo_avg_time = v.findViewById(R.id.pedo_avg_time);
+        // <--- 막대 그래프 --->
+        barChart = v.findViewById(R.id.pedo_oneweek_barchart);
+        ArrayList<Float> barChartValues = new ArrayList<>();
 
         // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
         setTodayRecord("오늘(금)", "오후 8:05 - 오후 10:11", "2시간 6분", "2,351걸음");
-
-        pedo_avg_time = v.findViewById(R.id.pedo_avg_time);
         setAvgTime();
+        setRecyclerView();
 
-        // <--- 막대 그래프 --->
-        barChart = v.findViewById(R.id.pedo_oneweek_barchart);
-
-        ArrayList<Float> barChartValues = new ArrayList<>();
         // 최근 7일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
         for (int i = 0; i < 7; i++) {
             float rand = (float) Math.round(new Random().nextFloat() * 15000);
             //Log.d("RAND", String.valueOf(rand));
             barChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
-
         }
+
         barchartConfigureAppearance();
         BarData barChartData = createBarchartData(barChartValues);
         barChart.setData(barChartData); // BarData 전달
@@ -100,7 +96,6 @@ public class OneWeekFragment extends Fragment {
 
     private List<RecordModel> getList() {
         List<RecordModel> record_list = new ArrayList<>();
-
         // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
         record_list.add(new RecordModel("목", "오후 6:21 - 오후 7:02", "40분", "1,218걸음"));
         record_list.add(new RecordModel("수", "오전 7:04 - 오후 9:37", "2시간 33분", "2,752걸음"));

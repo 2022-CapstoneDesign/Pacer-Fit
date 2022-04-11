@@ -8,13 +8,11 @@
     android:orientation="vertical"
     tools:context=".Map.RecordMapActivity">
 
-
     <FrameLayout
         android:id="@+id/mainFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
-
 
     </FrameLayout>
 
@@ -25,12 +23,10 @@
         android:background="@color/bottom_menu_color">
         <!--레코드 시작 버튼-->
 
-
         <View
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:background="@color/colorMAIN" />
-
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/recordStartFab"
@@ -41,10 +37,8 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/colorMAIN"
             android:clickable="true"
-
             android:tint="#FFFFFF"
             app:fabSize="normal"
-
             app:srcCompat="@drawable/walk_over" />
 
         <!--레코드 중지 버튼-->
@@ -57,10 +51,8 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/colorMAIN"
             android:clickable="true"
-
             android:tint="#FFFFFF"
             android:visibility="invisible"
-
             app:fabSize="normal"
             app:srcCompat="@android:drawable/ic_media_pause" />
 
@@ -74,13 +66,10 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/colorMAIN"
             android:clickable="true"
-
             android:tint="#F9A602"
-
             android:visibility="invisible"
             app:fabSize="normal"
             app:srcCompat="@drawable/locationpin_white" />
-
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/toMapFab"
@@ -92,10 +81,8 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/colorMAIN"
             android:clickable="true"
-
             android:tint="#FFFFFF"
             android:visibility="invisible"
-
             app:fabSize="normal"
             app:srcCompat="@drawable/locationpin_white" />
 
@@ -132,6 +119,4 @@
             app:srcCompat="@android:drawable/ic_menu_upload" />
 
     </RelativeLayout>
-
-
 </LinearLayout>

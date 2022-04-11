@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Random;
 
 public class OneMonthFragment extends Fragment {
-
     private LineChart lineChart; // 만보기 30일 라인그래프
     RecyclerView recycler_view;
     RecordAdapter adapter;
@@ -45,22 +44,19 @@ public class OneMonthFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.dist_one_month_fragment, container, false);
 
-        recycler_view = v.findViewById(R.id.recycler_view);
-        setRecyclerView();
-
         day_today_onemonthDist = v.findViewById(R.id.day_today_onemonthDist);
         startEndTime_today_onemonthDist = v.findViewById(R.id.startEndTime_today_onemonthDist);
         totalTime_today_onemonthDist = v.findViewById(R.id.totalTime_today_onemonthDist);
         km_today_onemonthDist = v.findViewById(R.id.km_today_onemonthDist);
-
-        // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
-        setTodayRecord("4/1", "오후 8:05 - 오후 10:11", "2시간 6분", "24km");
-
+        recycler_view = v.findViewById(R.id.recycler_view);
         dist_avg_time = v.findViewById(R.id.dist_avg_time);
-        setAvgTime();
-
         // <--- 라인 그래프 --->
         lineChart = v.findViewById(R.id.dist_onemonth_linechart);
+
+        setRecyclerView();
+        // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
+        setTodayRecord("4/1", "오후 8:05 - 오후 10:11", "2시간 6분", "24km");
+        setAvgTime();
 
         ArrayList<Float> lineChartValues = new ArrayList<>();
         // 최근 7일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
@@ -68,8 +64,8 @@ public class OneMonthFragment extends Fragment {
             float rand = (float) Math.round(new Random().nextFloat() * 100);
             //Log.d("RAND", String.valueOf(rand));
             lineChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
-
         }
+
         linechartConfigureAppearance();
         LineData lineChartData = createLinechartData(lineChartValues);
         lineChart.setData(lineChartData); // BarData 전달
@@ -101,11 +97,9 @@ public class OneMonthFragment extends Fragment {
 
     private List<RecordModel> getList() {
         List<RecordModel> record_list = new ArrayList<>();
-
         // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
         for (int i = 2; i < 30; i++)
-            record_list.add(new RecordModel("4/"+i, "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
-
+            record_list.add(new RecordModel("4/" + i, "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
 
         return record_list;
     }
@@ -145,7 +139,6 @@ public class OneMonthFragment extends Fragment {
         axisRight.setDrawLabels(false); // 값 표기 설정
         axisRight.setDrawGridLines(false); // 격자
         axisRight.setDrawAxisLine(false); // 축 그리기 설정
-
     }
 
     // 이 함수에서 생성된 LineData를 실제 LineData 객체에 전달하고 LineChart를 갱신해 데이터를 표시

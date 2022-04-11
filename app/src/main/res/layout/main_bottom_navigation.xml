@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--depth를 4개 이상 만들지 말것-->
+<?xml version="1.0" encoding="utf-8"?><!--depth를 4개 이상 만들지 말것-->
 <!--라벨이 보이지 않게 하는 속성
 <!-app:labelVisibilityMode="unlabeled"-->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"

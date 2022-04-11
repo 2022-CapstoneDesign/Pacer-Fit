@@ -23,7 +23,6 @@ import com.example.project.BuildConfig;
 import com.example.project.R;
 
 public class MapService extends Service {
-
     CheckPackageNameThread checkPackageNameThread;
     NotificationCompat.Builder notification;
     NotificationManager mNotificationManager;
@@ -37,7 +36,6 @@ public class MapService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         // PendingIntent를 이용하면 포그라운드 서비스 상태에서 알림을 누르면 앱의 MainActivity를 다시 열게 된다.
         Intent testIntent = new Intent(getApplicationContext(), RecordMapActivity.class);
         PendingIntent pendingIntent
@@ -75,7 +73,6 @@ public class MapService extends Service {
 
 
     private class CheckPackageNameThread extends Thread {
-
         @RequiresApi(api = Build.VERSION_CODES.P)
         public void run() {
             while (true) {
@@ -100,7 +97,6 @@ public class MapService extends Service {
     }
 
     private boolean checkPermission() {
-
         boolean granted = false;
 
         AppOpsManager appOps = (AppOpsManager) getApplicationContext()
@@ -115,13 +111,11 @@ public class MapService extends Service {
         } else {
             granted = (mode == AppOpsManager.MODE_ALLOWED);
         }
-
         return granted;
     }
 
 
     public static String getPackageName(@NonNull Context context) {
-
         // UsageStatsManager 선언
         UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
 
@@ -133,7 +127,6 @@ public class MapService extends Service {
         // 1 minute ago
         final long begin = end - INTERVAL;
 
-        //
         LongSparseArray packageNameMap = new LongSparseArray<>();
 
         // 수집한 이벤트들을 담기 위한 UsageEvents
@@ -169,6 +162,4 @@ public class MapService extends Service {
 
         return event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND;
     }
-
-
 }

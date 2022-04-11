@@ -57,6 +57,7 @@ public class BottomNavigation extends AppCompatActivity {
                         getSupportFragmentManager().popBackStack();
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new HomeFragment()).commit();
                         break;
+
                     case R.id.bottom_2_rank:
                         item.setIcon(R.drawable.bottom_rank);
                         menu.findItem(R.id.bottom_1_home).setIcon(R.drawable.unselected_home);
@@ -65,6 +66,7 @@ public class BottomNavigation extends AppCompatActivity {
                         getSupportFragmentManager().popBackStack();
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new RankingFragment()).commit();
                         break;
+
                     case R.id.bottom_3_chat:
                         item.setIcon(R.drawable.bottom_chat);
                         menu.findItem(R.id.bottom_1_home).setIcon(R.drawable.unselected_home);
@@ -73,6 +75,7 @@ public class BottomNavigation extends AppCompatActivity {
                         getSupportFragmentManager().popBackStack();
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ChattingFragment()).commit();
                         break;
+
                     case R.id.bottom_4_account:
                         item.setIcon(R.drawable.bottom_account);
                         menu.findItem(R.id.bottom_1_home).setIcon(R.drawable.unselected_home);
@@ -85,8 +88,6 @@ public class BottomNavigation extends AppCompatActivity {
                 return true;
             }
         });
-
-
     } // onCreate
 
 

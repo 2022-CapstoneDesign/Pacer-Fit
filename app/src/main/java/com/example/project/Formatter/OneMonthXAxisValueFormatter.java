@@ -8,12 +8,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class OneMonthXAxisValueFormatter extends IndexAxisValueFormatter {
-
     @Override
     public String getFormattedValue(float value) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        cal.add(Calendar.DATE, -30+(int)value);
+        cal.add(Calendar.DATE, -30 + (int) value);
         DateFormat df = new SimpleDateFormat("M.d");
         return df.format(cal.getTime());
 

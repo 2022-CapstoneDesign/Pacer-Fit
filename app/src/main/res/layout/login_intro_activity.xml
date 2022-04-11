@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login.IntroActivity"
-    android:background="@color/gray_project">
+    android:background="@color/gray_project"
+    tools:context=".Login.IntroActivity">
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="200dp"
         app:layout_constraintBottom_toTopOf="@+id/introLoginBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="200dp"
         app:srcCompat="@drawable/logo" />
 
     <Button

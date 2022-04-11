@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:stretchColumns="2,3,4">
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -17,38 +17,41 @@
             android:id="@+id/day_record"
             android:layout_width="60dp"
             android:layout_height="33dp"
+            android:layout_column="1"
             android:fontFamily="@font/nanumsquareroundeb"
-            android:textSize="14sp"
-            android:textColor="@color/white"
             android:gravity="center"
             android:padding="5dp"
-            android:layout_column="1"/>
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/startEndTime_record"
             android:layout_height="33dp"
+            android:layout_column="1"
             android:fontFamily="@font/nanumsquareroundeb"
-            android:textSize="14sp"
-            android:textColor="@color/whitegray_project"
             android:gravity="center"
             android:padding="5dp"
-            android:layout_column="1"/>
+            android:textColor="@color/whitegray_project"
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/totalTime_record"
             android:layout_height="33dp"
+            android:layout_column="1"
             android:fontFamily="@font/nanumsquareroundeb"
-            android:textSize="14sp"
-            android:textColor="@color/whitegray_project"
             android:gravity="center"
             android:padding="5dp"
-            android:layout_column="1"/>
+            android:textColor="@color/whitegray_project"
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/km_record"
             android:layout_height="33dp"
+            android:layout_column="1"
             android:fontFamily="@font/nanumsquareroundeb"
-            android:textSize="14sp"
-            android:textColor="@color/whitegray_project"
             android:gravity="center"
             android:padding="5dp"
-            android:layout_column="1"/>
+            android:textColor="@color/whitegray_project"
+            android:textSize="14sp" />
     </TableRow>
 </TableLayout>
