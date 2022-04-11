@@ -9,7 +9,6 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.project.Ranking.DistRankingFragment;
 import com.example.project.Ranking.PedoRankingFragment;
@@ -29,14 +28,17 @@ public class Frag2 extends Fragment {
         distBtn = v.findViewById(R.id.ranking_dist_btn);
         pedoBtn = v.findViewById(R.id.ranking_pedo_btn);
 
+
         distBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 distBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style3));
                 pedoBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style));
 
-                FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
-                fm.replace(R.id.ranking_fragment_container,new DistRankingFragment()).commit();
+                // fragment 위에 그린 fragment를 교체하기 위해서 childFragment를 사용
+                getChildFragmentManager().beginTransaction().replace(R.id.ranking_fragment_container, new DistRankingFragment()).commit();
+                //FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
+                //fm.replace(R.id.ranking_fragment_container,new DistRankingFragment()).commit();
             }
         });
         pedoBtn.setOnClickListener(new View.OnClickListener() {
@@ -45,8 +47,10 @@ public class Frag2 extends Fragment {
                 distBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style));
                 pedoBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style3));
 
-                FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
-                fm.replace(R.id.ranking_fragment_container,new PedoRankingFragment()).commit();
+                // fragment 위에 그린 fragment를 교체하기 위해서 childFragment를 사용
+                getChildFragmentManager().beginTransaction().replace(R.id.ranking_fragment_container, new PedoRankingFragment()).commit();
+                //FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
+                //fm.replace(R.id.ranking_fragment_container,new PedoRankingFragment()).commit();
             }
         });
 

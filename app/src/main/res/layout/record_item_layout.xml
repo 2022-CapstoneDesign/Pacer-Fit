@@ -41,14 +41,15 @@
             android:gravity="center"
             android:padding="5dp"
             android:layout_column="1"/>
+
         <TextView
             android:id="@+id/step_record"
             android:layout_height="33dp"
+            android:layout_column="1"
             android:fontFamily="@font/nanumsquareroundeb"
-            android:textSize="14sp"
-            android:textColor="@color/whitegray_project"
             android:gravity="center"
             android:padding="5dp"
-            android:layout_column="1"/>
+            android:textColor="@color/whitegray_project"
+            android:textSize="14sp" />
     </TableRow>
 </TableLayout>
