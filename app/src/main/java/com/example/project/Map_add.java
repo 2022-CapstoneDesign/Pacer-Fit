@@ -286,6 +286,7 @@ public class Map_add extends AppCompatActivity implements MapView.CurrentLocatio
                 "&crsKorNm=" +
                 location +
                 "&brdDiv=DNWW";
+
         //검색 URL부분
         try {
             URL url = new URL(queryUrl); //검색 URL부분
