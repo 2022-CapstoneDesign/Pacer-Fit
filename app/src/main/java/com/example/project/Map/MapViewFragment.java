@@ -66,7 +66,7 @@ public class MapViewFragment extends Fragment {
         }.start();
 
 
-        try {
+        /*try {
             Track str;
             InputStream in = getContext().getResources().openRawResource(R.raw.examplefile);
             //InputStream in = getContext().getAssets().open("examplefile.gpx");
@@ -92,7 +92,7 @@ public class MapViewFragment extends Fragment {
                     lon = parsedGpx.getTracks().get(j).getTrackSegments().get(0).getTrackPoints().get(i).getLongitude();
                     System.out.print(lat + ", ");
                     System.out.println(lon + " " + i + "번째 위치값");
-                    /* 끊어진 좌표 처리... 잘안됨
+                    *//* 끊어진 좌표 처리... 잘안됨
                     if( (j>0) && (i==0) ) {
                         if((lat - parsedGpx.getTracks().get(j-1).getTrackSegments().get(0).getTrackPoints().get(parsedGpx.getTracks().get(j-1).getTrackSegments().get(0).getTrackPoints().size()-1).getLatitude() < 0.00002 &&
                                 lat - parsedGpx.getTracks().get(j-1).getTrackSegments().get(0).getTrackPoints().get(parsedGpx.getTracks().get(j-1).getTrackSegments().get(0).getTrackPoints().size()-1).getLatitude() > -0.00002)
@@ -102,7 +102,7 @@ public class MapViewFragment extends Fragment {
                             continue;
                         }
                     }
-                    */
+                    *//*
                     polyline.addPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                 }
             }
@@ -110,7 +110,7 @@ public class MapViewFragment extends Fragment {
         } catch (IOException | XmlPullParserException e) {
             // do something with this exception
             e.printStackTrace();
-        }
+        }*/
         if (parsedGpx == null) {
             // error parsing track
         } else {
@@ -118,6 +118,8 @@ public class MapViewFragment extends Fragment {
             // see included example app and tests
         }
         return rootView;
+
+
     }
     private String getData(){
         String gpxpt = "";
@@ -176,6 +178,7 @@ public class MapViewFragment extends Fragment {
 
         }
     };
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
