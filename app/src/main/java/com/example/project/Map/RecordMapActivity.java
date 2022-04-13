@@ -48,8 +48,7 @@ import java.util.TimerTask;
 
 @RequiresApi(api = Build.VERSION_CODES.P)
 public class RecordMapActivity extends AppCompatActivity implements View.OnClickListener,
-        MapView.CurrentLocationEventListener, MapFragment.OnConnectListener {
-
+        MapView.CurrentLocationEventListener, MapViewFragment.OnConnectListener {
     static RecordMapActivity recordMapActivity;
 
     private final String recordTag = "RecordTAG";
@@ -69,9 +68,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     int total_sec = 0;
 
     // Fragment
-    MapFragment mapFrag;
+    MapViewFragment mapViewFrag;
     RecordFragment recordFrag;
-    Intent serviceIntent;
 
     // 기록 시작 버튼 체크 여부
     boolean recordPressed = false;
@@ -106,7 +104,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     TextView dist_tv;
     TextView cal_tv;
 
-
     String test1 = "";
     String test2 = "";
     TextView test1v;
@@ -115,16 +112,14 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record_map);
+        setContentView(R.layout.map_record_activity);
 
-        mapFrag = new MapFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.mainFrame, mapFrag).commit();
+        mapViewFrag = new MapViewFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.mainFrame, mapViewFrag).commit();
 
         // polyline
         polyline = new MapPolyline();
         polyline.setLineColor(Color.argb(128, 255, 51, 0)); // Polyline 컬러 지정.
-
-        serviceIntent = new Intent(RecordMapActivity.this, MapService.class);
 
         // FloatingActionButton
         recordStartFab = findViewById(R.id.recordStartFab);
@@ -163,13 +158,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             Log.d("Location", userNowLocation.toString());
         }
          */
-
-
     }
 
-    // 이전 포스트 내용과 같은 내용. 권한 가져오기.
+    //권한 가져오기.
     private boolean checkPermission() {
-
         boolean granted = false;
 
         AppOpsManager appOps = (AppOpsManager) getApplicationContext()
@@ -253,7 +245,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         // 시작 지점 마커 생성
         makeMarker("출발 지점");
         MapToRecord();
-
         Log.d("StartFab", "exec");
     }
 
@@ -270,7 +261,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         recordResumeFab.show();
         recordSaveFab.show();
 
-
         Log.d("PauseFab", "exec");
     }
 
@@ -285,13 +275,12 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         recordResumeFab.hide();
         recordSaveFab.hide();
         recordPauseFab.show();
-
     }
 
     // 기록 -> 맵
     private void recordToMap() {
         // mapFragment를 보이게 하고 recordFragmet를 숨김
-        getSupportFragmentManager().beginTransaction().show(mapFrag).commit();
+        getSupportFragmentManager().beginTransaction().show(mapViewFrag).commit();
         getSupportFragmentManager().beginTransaction().hide(recordFrag).commit();
 
         toRecordFab.show();
@@ -301,7 +290,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 맵 -> 기록
     private void MapToRecord() {
         // recordFragmet를 보이게 하고 mapFragment를 숨김
-        getSupportFragmentManager().beginTransaction().hide(mapFrag).commit();
+        getSupportFragmentManager().beginTransaction().hide(mapViewFrag).commit();
         getSupportFragmentManager().beginTransaction().show(recordFrag).commit();
         toRecordFab.hide();
         toMapFab.show();
@@ -346,10 +335,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             public void run() {
                 time++;
                 total_sec = time;
-
                 int sec = time % 60;
                 int min = time / 60 % 60;
                 int hour = time / 3600;
+
                 runOnUiThread(new Runnable() {
                     @SuppressLint("SetTextI18n")
                     @Override
@@ -358,8 +347,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                         dist_tv = findViewById(R.id.distanceText);
                         time_tv = findViewById(R.id.timeText);
                         cal_tv = findViewById(R.id.calText);
-                        test1v = findViewById(R.id.locTest);
-                        test2v = findViewById(R.id.accTest);
                         if (time_tv != null)
                             time_tv.setText(hour + "H " + min + "M " + sec + "S");
                         if (dist_tv != null)
@@ -377,7 +364,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             }
         };
         timer.schedule(timerTask, 0, 1000);
-
     }
 
     // 타이머 정지
@@ -499,7 +485,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 latlngIndex++;
             }
         }
-
     }
 
     // 두 위치의 거리 계산 함수
@@ -523,7 +508,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin); // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
         mMap.addPOIItem(marker);
         Log.i("Marker ", String.format("위치 (%f, %f)에 %s 마커를 생성 ", curLat, curLng, tag));
-
     }
 
     @Override

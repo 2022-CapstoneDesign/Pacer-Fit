@@ -3,7 +3,7 @@
     <!-- https://itstudy-mary.tistory.com/190 !-->
     <item
         android:id="@+id/bottom_1_home"
-        android:icon="@drawable/bottom_1_home"
+        android:icon="@drawable/bottom_home"
         android:title="" />
 
     <item

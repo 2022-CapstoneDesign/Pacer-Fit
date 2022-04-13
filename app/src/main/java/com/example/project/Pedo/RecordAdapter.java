@@ -13,8 +13,7 @@ import com.example.project.R;
 
 import java.util.List;
 
-public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder>{
-
+public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder> {
     Context context;
     List<RecordModel> record_list;
 
@@ -26,7 +25,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.record_item_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.pedo_record_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -38,8 +37,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             holder.startEndTime_record.setText(model.getStartEndTime());
             holder.totalTime_record.setText(model.getTotalTime());
             holder.step_record.setText(model.getStep());
-        }else {
-
+        } else {
         }
     }
 
@@ -49,11 +47,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         TextView day_record, startEndTime_record, totalTime_record, step_record;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             day_record = itemView.findViewById(R.id.day_record);
             startEndTime_record = itemView.findViewById(R.id.startEndTime_record);
             totalTime_record = itemView.findViewById(R.id.totalTime_record);
