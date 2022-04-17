@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -37,11 +38,12 @@ public class BottomNavigation extends AppCompatActivity {
         //참고 : https://itstudy-mary.tistory.com/190
         //첫 화면 띄우기
         getSupportFragmentManager().beginTransaction().add(R.id.frame_container, new HomeFragment()).commit();
-
         Intent intent = getIntent();
         String userID = intent.getStringExtra("userID"); //UserID 가져옴
         String userPass = intent.getStringExtra("userPass"); //UserPass 가져옴
         String userName = intent.getStringExtra("userName");
+        String userWeight = intent.getStringExtra("userWeight");
+        System.out.println("userKg??????????????"+userWeight);
         mBottomNavigationView.setItemIconTintList(null);
         System.out.println("================================" + userName);
         //case 함수를 통해 클릭 받을 때마다 화면 변경하기

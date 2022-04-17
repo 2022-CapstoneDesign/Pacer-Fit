@@ -12,6 +12,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.project.Main.BottomNavigation;
+import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -54,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                             String userID = jsonObject.getString("userID");
                             String userPass = jsonObject.getString("userPassword");
                             String userName = jsonObject.getString("userName");
+                            String userWeight = jsonObject.getString("userWeight");
                             String bestSteps = jsonObject.getString("bestSteps");
                             String bestKm = jsonObject.getString("bestKm");
                             String bestTime_Km = jsonObject.getString("bestTime(km)");
@@ -65,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("userID", userID);
                             intent.putExtra("userPass", userPass);
                             intent.putExtra("userName",userName);
+                            intent.putExtra("userWeight", userWeight);
                             intent.putExtra("bestSteps", bestSteps);
                             intent.putExtra("bestKm", bestKm);
                             intent.putExtra("bestTime_Km", bestTime_Km);

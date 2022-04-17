@@ -129,7 +129,9 @@ public class MapViewFragment extends Fragment {
         BufferedReader br = null;
 
         try{
-            url = new URL("https://www.durunubi.kr/editImgUp.do?filePath=/data/koreamobility/file/manual/2018gpx/042_15_PartGPX_GPX_01.gpx");
+            url = new URL("https://www.durunubi.kr/editImgUp.do?filePath=/data/koreamobility/file/manual/2018gpx/034_04_PartGPX_GPX_01.gpx");
+            //https://www.durunubi.kr/editImgUp.do?filePath=/data/koreamobility/file/manual/2018gpx/034_04_PartGPX_GPX_01.gpx
+            //https://www.durunubi.kr/editImgUp.do?filePath=/data/koreamobility/file/manual/2018gpx/201_07_PartGPX_GPX_01.gpx
             http = (HttpURLConnection) url.openConnection();
             http.setConnectTimeout(3*1000);
             http.setReadTimeout(3*1000);

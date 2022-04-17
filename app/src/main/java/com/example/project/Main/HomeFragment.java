@@ -70,6 +70,7 @@ public class HomeFragment extends Fragment {
     private Button moreBarChartBtn;
     private Button moreLineChartBtn;
 
+    String userWeight;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -79,6 +80,9 @@ public class HomeFragment extends Fragment {
         weatherInfo = v.findViewById(R.id.weather);
         weatherInfo_Image = v.findViewById(R.id.weather_image);
         Button Km_button = v.findViewById(R.id.Km_button);
+        Intent receiveIntent = getActivity().getIntent();
+        userWeight = receiveIntent.getStringExtra("userWeight");
+
         Km_button.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
@@ -94,6 +98,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View map) {
                 Intent intent = new Intent(getActivity(), StepCounterActivity.class); //Fragment -> Activity로 이동 (StepCounter.java)
+                intent.putExtra("userWeight",userWeight);
+                System.out.println("userKg??????????????at HomeFrag"+userWeight);
+                //BottomNavigation액티비티에서 StepCounterActivity에 userWeight값을 보냄
                 startActivity(intent);
 //                Intent intent = new Intent(getActivity(), PopupPedo.class); //Fragment -> Activity로 이동 (만보기팝업)
 //                startActivity(intent);
