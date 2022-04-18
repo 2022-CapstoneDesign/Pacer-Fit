@@ -30,6 +30,6 @@
     <color name="colorMAIN">#042D6F</color>
     <color name="lightgray_line">#5e5b5f</color>
     <color name="btnstroke_gray">#353537</color>
-    <color name="darkgreen_project">#08A268</color>
-    <color name="darkgreen2_project">#07724A</color>
+    <color name="darkgreen_project">#07724A</color>
+    <color name="darkgreen2_project">#08A268</color>
 </resources>

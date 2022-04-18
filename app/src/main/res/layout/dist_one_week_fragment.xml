@@ -105,12 +105,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/view6">
 
                 <!-- 오늘 기록만 여기서 따로 표시합니다 -->
-                <TableRow>
+                <TableRow
+                    android:weightSum="4">
 
                     <TextView
                         android:id="@+id/day_today_oneweekDist"
-                        android:layout_width="60dp"
+                        android:layout_width="0dp"
                         android:layout_height="33dp"
+                        android:layout_weight="0.7"
                         android:fontFamily="@font/nanumsquareroundeb"
                         android:gravity="center"
                         android:padding="5dp"
@@ -119,8 +121,10 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/startEndTime_today_oneweekDist"
+                        android:id="@+id/date_today_oneweekDist"
+                        android:layout_width="0dp"
                         android:layout_height="33dp"
+                        android:layout_weight="1.3"
                         android:fontFamily="@font/nanumsquareroundeb"
                         android:gravity="center"
                         android:padding="5dp"
@@ -130,7 +134,9 @@
 
                     <TextView
                         android:id="@+id/totalTime_today_oneweekDist"
+                        android:layout_width="0dp"
                         android:layout_height="33dp"
+                        android:layout_weight="1"
                         android:fontFamily="@font/nanumsquareroundeb"
                         android:gravity="center"
                         android:padding="5dp"
@@ -140,7 +146,9 @@
 
                     <TextView
                         android:id="@+id/km_today_oneweekDist"
+                        android:layout_width="0dp"
                         android:layout_height="33dp"
+                        android:layout_weight="1"
                         android:fontFamily="@font/nanumsquareroundeb"
                         android:gravity="center"
                         android:padding="5dp"
