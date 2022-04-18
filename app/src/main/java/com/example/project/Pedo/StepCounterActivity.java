@@ -81,12 +81,10 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
 
         recordStartPedo = findViewById(R.id.stopPedoBtn);
         detailBack = findViewById(R.id.pedo_detail_img);
-        
-        // 초기 투명도 설정
+
+
         setTextAlpha(0.3f);
-        // 어두운 배경
         detailBack.setImageResource(R.drawable.exer_pedo_background01);
-        
         // 활동 퍼미션 체크
         if(ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED){
@@ -135,7 +133,6 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
         });
     }
     
-    // 원 내부에 textview들 투명도 설정
     public void setTextAlpha(float values){
         pedoStep.setAlpha(values);
         pedoStepText.setAlpha(values);
