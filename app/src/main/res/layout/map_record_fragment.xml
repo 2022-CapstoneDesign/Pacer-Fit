@@ -102,7 +102,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/distanceText" />
 
             <TextView
-                android:id="@+id/timeText"
+                android:id="@+id/pedo_time"
                 android:layout_width="wrap_content"
                 android:layout_height="29dp"
                 android:layout_alignParentStart="false"
@@ -132,7 +132,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/cal"
+                android:id="@+id/pedo_cal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="false"
@@ -160,7 +160,7 @@
                 android:text="0kcal"
                 android:textColor="#00A2F9"
                 android:textSize="23dp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/cal"
+                app:layout_constraintBaseline_toBaselineOf="@+id/pedo_cal_text"
                 app:layout_constraintStart_toStartOf="@+id/guideline5" />
 
             <ImageView
