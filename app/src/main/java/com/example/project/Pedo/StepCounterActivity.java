@@ -30,6 +30,8 @@ import com.example.project.R;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class StepCounterActivity extends AppCompatActivity implements SensorEventListener {
     SensorManager sensorManager;
     Sensor stepCountSensor;
@@ -52,7 +54,7 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
 
     Button recordStartPedo;
     ImageButton helpBtn;
-    ImageView detailBack;
+    CircleImageView detailBack;
 
     // 현재 걸음 수
     int currentSteps = 0;
