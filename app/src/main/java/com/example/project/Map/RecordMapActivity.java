@@ -345,7 +345,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                     public void run() {
                         // textview의 값들이 계속 null로 나와서 여기에 뒀습니다.
                         dist_tv = findViewById(R.id.distanceText);
-                        time_tv = findViewById(R.id.timeText);
+                        time_tv = findViewById(R.id.pedo_time);
                         cal_tv = findViewById(R.id.calText);
                         if (time_tv != null)
                             time_tv.setText(hour + "H " + min + "M " + sec + "S");
