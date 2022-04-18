@@ -1,20 +1,14 @@
 package com.example.project.Dist;
 
-public class OneWeekRecordModel {
-    String day;
+public class OneMonthRecordModel {
     String date;
     String totalTime;
     String km;
 
-    public OneWeekRecordModel(String day, String date, String totalTime, String km) {
-        this.day = day;
+    public OneMonthRecordModel(String date, String totalTime, String km) {
         this.date = date;
         this.totalTime = totalTime;
         this.km = km;
-    }
-
-    public String getDay() {
-        return day;
     }
 
     public String getDate() {

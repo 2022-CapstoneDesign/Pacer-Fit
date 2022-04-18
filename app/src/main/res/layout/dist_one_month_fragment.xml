@@ -98,29 +98,21 @@
                 android:layout_marginStart="6dp"
                 android:layout_marginEnd="3dp"
                 android:layout_marginBottom="15dp"
-                android:stretchColumns="2,3,4"
+                android:stretchColumns="2,3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view6">
 
                 <!-- 오늘 기록만 여기서 따로 표시합니다 -->
-                <TableRow>
+                <TableRow
+                    android:weightSum="3">
 
                     <TextView
-                        android:id="@+id/day_today_onemonthDist"
-                        android:layout_width="60dp"
+                        android:id="@+id/date_today_onemonthDist"
+                        android:layout_width="0dp"
                         android:layout_height="33dp"
-                        android:fontFamily="@font/nanumsquareroundeb"
-                        android:gravity="center"
-                        android:padding="5dp"
-                        android:text=""
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/startEndTime_today_onemonthDist"
-                        android:layout_height="33dp"
+                        android:layout_weight="1"
                         android:fontFamily="@font/nanumsquareroundeb"
                         android:gravity="center"
                         android:padding="5dp"
@@ -130,7 +122,9 @@
 
                     <TextView
                         android:id="@+id/totalTime_today_onemonthDist"
+                        android:layout_width="0dp"
                         android:layout_height="33dp"
+                        android:layout_weight="1"
                         android:fontFamily="@font/nanumsquareroundeb"
                         android:gravity="center"
                         android:padding="5dp"
@@ -140,7 +134,9 @@
 
                     <TextView
                         android:id="@+id/km_today_onemonthDist"
+                        android:layout_width="0dp"
                         android:layout_height="33dp"
+                        android:layout_weight="1"
                         android:fontFamily="@font/nanumsquareroundeb"
                         android:gravity="center"
                         android:padding="5dp"
