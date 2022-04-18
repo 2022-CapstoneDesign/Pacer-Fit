@@ -118,6 +118,7 @@ public class OneWeekFragment extends Fragment {
         lineChart.getDescription().setEnabled(false); // 우측 하단의 DescriptionLabel 삭제
         //lineChart.animateY(1500); // 밑에서부터 올라오는 애니메이션 적용
         lineChart.animateX(500); // 왼쪽-오른쪽 방향의 애니메이션 적용
+        lineChart.setExtraBottomOffset(5f); // X축 글자 깨짐 방지
 
         // x축 설정(꺾은선그래프 기준 아래쪽)
         XAxis xAxis = lineChart.getXAxis();
@@ -130,6 +131,9 @@ public class OneWeekFragment extends Fragment {
         xAxis.setDrawGridLines(false); // 격자
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
         xAxis.setValueFormatter(new OneWeekXAxisValueFormatter());
+        // X축 폰트 설정
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/nanumsquareroundeb.ttf");
+        xAxis.setTypeface(tf);
 
         YAxis yAxisLeft = lineChart.getAxisLeft();
         yAxisLeft.setAxisMaximum(100f); // y축 최대값 설정

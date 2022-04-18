@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,17 +25,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.project.Map.DetailBottomFragment;
-import com.example.project.Map.RecordFragment;
 import com.example.project.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class StepCounterActivity extends AppCompatActivity implements SensorEventListener {
     SensorManager sensorManager;
     Sensor stepCountSensor;
-    TextView stepCountView;
-    TextView timeText;
+    TextView pedoStep;
+    TextView pedoTime;
+    TextView pedoCal;
+    TextView pedoStepText;
+    TextView pedoTimeText;
+    TextView pedoCalText;
+
     Timer timer;
     //사용자 DB 값
     String userKg;
@@ -44,11 +51,11 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
     TimerTask timerTask;
     int total_sec = 0;
     double calories;
-    TextView step_tv;
-    TextView time_tv;
-    TextView cal_tv;
+
     Button recordStartPedo;
     ImageButton helpBtn;
+    CircleImageView detailBack;
+
     // 현재 걸음 수
     int currentSteps = 0;
 
@@ -67,9 +74,21 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
         userKg = intent.getStringExtra("userWeight");
         System.out.println("userWeight============="+userKg);
 
-        stepCountView = findViewById(R.id.StepCountView);
-        timeText = findViewById(R.id.timeText);
+        pedoStep = findViewById(R.id.pedo_step);
+        pedoStepText = findViewById(R.id.pedo_step_text);
+        pedoTime = findViewById(R.id.pedo_time);
+        pedoTimeText = findViewById(R.id.pedo_time_text);
+        pedoCal = findViewById(R.id.pedo_cal);
+        pedoCalText = findViewById(R.id.pedo_cal_text);
+
         recordStartPedo = findViewById(R.id.stopPedoBtn);
+        detailBack = findViewById(R.id.pedo_detail_img);
+        
+        // 초기 투명도 설정
+        setTextAlpha(0.3f);
+        // 어두운 배경
+        detailBack.setImageResource(R.drawable.exer_pedo_background01);
+        
         // 활동 퍼미션 체크
         if(ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED){
@@ -92,11 +111,15 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
                 if(recordStartPedo.getText().equals("운동 시작")) {
                     recordStartPedo.setText("그만하기");
                     recordStartPedo.setBackgroundResource(R.drawable.btn_style4);
+                    detailBack.setImageResource(R.drawable.exer_pedo_background02);
+                    setTextAlpha(1f);
                     startPedo();
                 }
                 else{
                     recordStartPedo.setText("운동 시작");
+                    detailBack.setImageResource(R.drawable.exer_pedo_background01);
                     recordStartPedo.setBackgroundResource(R.drawable.btn_style4_pedo_ready);
+                    setTextAlpha(0.3f);
                     stopPedo();
                 }
             }
@@ -113,6 +136,17 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
             }
         });
     }
+    
+    // 원 내부에 textview들 투명도 설정
+    public void setTextAlpha(float values){
+        pedoStep.setAlpha(values);
+        pedoStepText.setAlpha(values);
+        pedoTime.setAlpha(values);
+        pedoTimeText.setAlpha(values);
+        pedoCal.setAlpha(values);
+        pedoCalText.setAlpha(values);
+    }
+
 
     public void startPedo(){
         startTimer();
@@ -149,7 +183,7 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
                     // 센서 이벤트가 발생할때 마다 걸음수 증가
                     currentSteps += sensorEvent.values[0];
                     Log.d("만보기", String.valueOf(currentSteps));
-                    stepCountView.setText(String.valueOf(currentSteps));
+                    pedoStep.setText(String.valueOf(currentSteps));
                     //1kg당 1보 계산식 (5.0km/h기준)
                     calories = (currentSteps*((0.00007*Integer.parseInt(userKg))+0.04));
                 }
@@ -191,16 +225,16 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
                     @Override
                     public void run() {
                         // textview의 값들이 계속 null로 나와서 여기에 뒀습니다.
-                        step_tv = findViewById(R.id.StepCountView);
-                        time_tv = findViewById(R.id.timeText);
-                        cal_tv = findViewById(R.id.pedo_calText);
-                        if (time_tv != null)
-                            time_tv.setText(hour + "H " + min + "M " + sec + "S");
-                        if (step_tv != null)
-                            step_tv.setText(String.valueOf(currentSteps));
-                        if (cal_tv != null) {
+                        pedoStep = findViewById(R.id.pedo_step);
+                        pedoTime = findViewById(R.id.pedo_time);
+                        pedoCal = findViewById(R.id.pedo_cal);
+                        if (pedoTime != null)
+                            pedoTime.setText(hour + "H " + min + "M " + sec + "S");
+                        if (pedoStep != null)
+                            pedoStep.setText(String.valueOf(currentSteps));
+                        if (pedoCal != null) {
                             //calories = (currentSteps*((0.0007*Integer.parseInt(userKg))+0.04));
-                            cal_tv.setText(String.format("%.2f",calories) + "kcal");
+                            pedoCal.setText(String.format("%.2f",calories) + "kcal");
                         }
                     }
                 });
