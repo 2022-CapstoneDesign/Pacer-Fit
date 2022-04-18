@@ -19,20 +19,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/pedo_detail_img"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             android:src="@drawable/exer_pedo_background02"
             app:layout_constraintBottom_toTopOf="@+id/stopPedoBtn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/pedo_step_text"
@@ -43,7 +44,7 @@
             android:text="걸음"
             android:textAlignment="center"
             android:textColor="@color/red_project"
-            android:textSize="23dp"
+            android:textSize="23sp"
             app:layout_constraintBottom_toBottomOf="@+id/pedo_step"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -60,7 +61,7 @@
             android:text="0"
             android:textAlignment="center"
             android:textColor="@color/red_project"
-            android:textSize="80dp"
+            android:textSize="80sp"
             app:layout_constraintBottom_toBottomOf="@+id/pedo_detail_img"
             app:layout_constraintEnd_toStartOf="@+id/pedo_step_text"
             app:layout_constraintHorizontal_bias="0.5"
@@ -88,7 +89,7 @@
             android:fontFamily="@font/nanumsquareroundeb"
             android:text="운동시간"
             android:textColor="#ACACAC"
-            android:textSize="23dp"
+            android:textSize="23sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline6"
             app:layout_constraintTop_toBottomOf="@+id/pedo_step" />
 
@@ -104,7 +105,7 @@
             android:gravity="right"
             android:text="0h 0m 0s"
             android:textColor="@color/purple_project"
-            android:textSize="23dp"
+            android:textSize="23sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/pedo_time_text"
             app:layout_constraintStart_toStartOf="@+id/guideline6" />
 
@@ -120,7 +121,7 @@
             android:fontFamily="@font/nanumsquareroundeb"
             android:text="칼로리소모"
             android:textColor="#ACACAC"
-            android:textSize="18dp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline6"
             app:layout_constraintTop_toBottomOf="@+id/pedo_time_text" />
 
@@ -136,7 +137,7 @@
             android:gravity="right"
             android:text="0kcal"
             android:textColor="@color/purple_project"
-            android:textSize="23dp"
+            android:textSize="23sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/pedo_cal_text"
             app:layout_constraintStart_toStartOf="@+id/guideline6" />
 
@@ -204,7 +205,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/view7"
             app:layout_constraintEnd_toEndOf="@+id/view7"
             app:layout_constraintStart_toStartOf="@+id/view7"
-            app:layout_constraintTop_toBottomOf="@+id/help" />
+            app:layout_constraintTop_toBottomOf="@+id/help"
+            tools:ignore="TextContrastCheck" />
 
         <Button
             android:id="@+id/stopPedoBtn"

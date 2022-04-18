@@ -126,6 +126,9 @@ public class OneMonthFragment extends Fragment {
         xAxis.setDrawGridLines(false); // 격자
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
         xAxis.setValueFormatter(new OneMonthXAxisValueFormatter());
+        // X축 폰트 설정
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/nanumsquareroundeb.ttf");
+        xAxis.setTypeface(tf);
 
         YAxis yAxisLeft = lineChart.getAxisLeft();
         yAxisLeft.setAxisMaximum(100f); // y축 최대값 설정
