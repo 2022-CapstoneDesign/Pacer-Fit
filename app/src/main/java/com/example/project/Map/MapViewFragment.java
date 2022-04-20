@@ -223,9 +223,10 @@ public class MapViewFragment extends Fragment {
         BufferedReader br = null;
         HashMap<String,String> hashMap1 = pathArrayList.get(0);
         HashMap<String,String> hashMap2 = pathArrayList.get(1);
+        HashMap<String,String> hashMap3 = pathArrayList.get(3);
 
         try {
-            url = new URL(hashMap2.get(TAG_PATH));
+            url = new URL(hashMap3.get(TAG_PATH));
             http = (HttpURLConnection) url.openConnection();
             http.setConnectTimeout(3 * 1000);
             http.setReadTimeout(3 * 1000);

@@ -20,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 
 
 public class BottomNavigation extends AppCompatActivity {
@@ -43,9 +44,11 @@ public class BottomNavigation extends AppCompatActivity {
         String userPass = intent.getStringExtra("userPass"); //UserPass 가져옴
         String userName = intent.getStringExtra("userName");
         String userWeight = intent.getStringExtra("userWeight");
+        String userStepsRecord = intent.getStringExtra("today_stepsRecord");
         System.out.println("userKg??????????????"+userWeight);
         mBottomNavigationView.setItemIconTintList(null);
         System.out.println("================================" + userName);
+        System.out.println("userStepsRecord======================:"+userStepsRecord);
         //case 함수를 통해 클릭 받을 때마다 화면 변경하기
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
