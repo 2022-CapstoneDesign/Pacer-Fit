@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
 
 public class MapViewFragment extends Fragment {
     private static String TAG = "MapViewFragment_getPath";
-    private static final String TAG_JSON = "pacerfit";
+    private static final String TAG_JSON="pacerfit";
     private static final String TAG_PATH = "gpxPath";
     private static final String TAG_SIGUN = "sigun";
 
@@ -87,26 +87,6 @@ public class MapViewFragment extends Fragment {
         task.execute("http://pacerfit.dothome.co.kr/getPathWithArea.php");
 
 
-
-
-
-        new Thread() {
-            public void run() {
-                try{
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                String gpxpt = getData();
-                Bundle bun = new Bundle();
-                bun.putString("gpxpt", gpxpt);
-                Message msg = handler.obtainMessage();
-                msg.setData(bun);
-                handler.sendMessage(msg);
-            }
-        }.start();
-
-
         return rootView;
 
     }
@@ -114,24 +94,28 @@ public class MapViewFragment extends Fragment {
         ProgressDialog progressDialog;
         String errorString = null;
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //progressDialog = ProgressDialog.show(getActivity(),                    "Please Wait", null, true, true);
-        }
 
         @Override
         protected void onPostExecute(String result) { //doInBackground에서 return한 값을 받음
             super.onPostExecute(result);
-           // progressDialog.dismiss();
+            //progressDialog.dismiss();
             Log.d(TAG, "response  - " + result);
             if (result == null){
                 Log.d(TAG, errorString);
             }
             else {
                 pathJsonString = result;
-                System.out.println(pathJsonString);
                 showResult();
+                new Thread() {
+                    public void run() {
+                        String gpxpt = getData();
+                        Bundle bun = new Bundle();
+                        bun.putString("gpxpt", gpxpt);
+                        Message msg = handler.obtainMessage();
+                        msg.setData(bun);
+                        handler.sendMessage(msg);
+                    }
+                }.start();
             }
         }
         @Override
@@ -330,3 +314,4 @@ public class MapViewFragment extends Fragment {
         return areaChanged;
     }
 }
+
