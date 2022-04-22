@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +26,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+import com.example.project.Login.LoginActivity;
+import com.example.project.Login.LoginRequest;
+import com.example.project.Pedo.PedoRecordRequest;
 import com.example.project.Weather.GpsTrackerService;
 import com.example.project.Map.RecordMapActivity;
 import com.example.project.Formatter.OneMonthXAxisValueFormatter;
@@ -50,6 +57,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -70,7 +78,12 @@ public class HomeFragment extends Fragment {
     private Button moreBarChartBtn;
     private Button moreLineChartBtn;
 
+    String userID;
     String userWeight;
+    String today_userPedoRecord;
+    String today_userPedoTimeRecord;
+    String today_userPedoCalorieRecord;
+    String date_concat;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,8 +93,20 @@ public class HomeFragment extends Fragment {
         weatherInfo = v.findViewById(R.id.weather);
         weatherInfo_Image = v.findViewById(R.id.weather_image);
         Button Km_button = v.findViewById(R.id.Km_button);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDate now = null;
+            now = LocalDate.now();
+
+            int monthValue = now.getMonthValue();
+            int dayOfMonth = now.getDayOfMonth();
+            date_concat = monthValue+"m"+dayOfMonth+"d";
+        }
         Intent receiveIntent = getActivity().getIntent();
+        userID = receiveIntent.getStringExtra("userID");
         userWeight = receiveIntent.getStringExtra("userWeight");
+        today_userPedoRecord = receiveIntent.getStringExtra("today_stepsRecord");
+        today_userPedoTimeRecord = receiveIntent.getStringExtra("today_stepsTimeRecord");
+        today_userPedoCalorieRecord = receiveIntent.getStringExtra("today_stepsCalorieRecord");
 
         Km_button.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.P)
@@ -94,17 +119,52 @@ public class HomeFragment extends Fragment {
         });
 
         Button pedo_button = v.findViewById(R.id.pedo_button);
-        pedo_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View map) {
-                Intent intent = new Intent(getActivity(), StepCounterActivity.class); //Fragment -> Activity로 이동 (StepCounter.java)
-                intent.putExtra("userWeight",userWeight);
-                System.out.println("userKg??????????????at HomeFrag"+userWeight);
-                //BottomNavigation액티비티에서 StepCounterActivity에 userWeight값을 보냄
-                startActivity(intent);
+        pedo_button.setOnClickListener(map -> {
+            // DB추가
+            Response.Listener<String> responseListener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        System.out.println("========================" + response);
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean success = jsonObject.getBoolean("success");
+                        if (success) { // 만보기 클릭시
+                            String today_PedoStepsRecord = jsonObject.getString(date_concat+".step");
+                            String today_PedoTimeRecord = jsonObject.getString(date_concat+".time");
+                            String today_PedoCalorieRecord = jsonObject.getString(date_concat+".cal");
+                            Intent intent = new Intent(getActivity(), StepCounterActivity.class); //Fragment -> Activity로 이동 (StepCounterActivity.java)
+                            intent.putExtra("userID",userID);
+                            intent.putExtra("userWeight",userWeight);
+                            intent.putExtra("today_stepsRecord",today_PedoStepsRecord);
+                            intent.putExtra("today_stepsTimeRecord",today_PedoTimeRecord);
+                            intent.putExtra("today_stepsCalorieRecord",today_PedoCalorieRecord);
+                            startActivity(intent);
+                        } else { // 로그인에 실패한 경우
+                            return;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            PedoRecordRequest pedoRecordRequest = new PedoRecordRequest(userID, responseListener);
+            RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+            queue.add(pedoRecordRequest);
+            //DB추가 주석 없앨때 아래 3줄 지우기
+
+
+//            intent.putExtra("userWeight",userWeight);
+//            intent.putExtra("userStepsRecord",today_userPedoRecord);
+//            intent.putExtra("userStepsTimeRecord",today_userPedoTimeRecord);
+//            intent.putExtra("userStepsCalorieRecord",today_userPedoCalorieRecord);
+//            System.out.println("userKg??????????????at HomeFrag"+userWeight);
+//            System.out.println("userStepsRecord??????????????at HomeFrag"+today_userPedoRecord);
+//            System.out.println("userStepsRecord??????????????at HomeFrag"+today_userPedoTimeRecord);
+//            System.out.println("userStepsRecord??????????????at HomeFrag"+today_userPedoCalorieRecord);
+//            //BottomNavigation액티비티에서 StepCounterActivity에 userWeight값을 보냄
+//            startActivity(intent);
 //                Intent intent = new Intent(getActivity(), PopupPedo.class); //Fragment -> Activity로 이동 (만보기팝업)
 //                startActivity(intent);
-            }
         });
 
         Weather weatherMethod = new Weather();
