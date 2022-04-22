@@ -9,13 +9,17 @@ import static java.lang.Math.toRadians;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AppOpsManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
@@ -32,6 +36,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.project.R;
@@ -43,12 +49,27 @@ import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 @RequiresApi(api = Build.VERSION_CODES.P)
 public class RecordMapActivity extends AppCompatActivity implements View.OnClickListener,
         MapView.CurrentLocationEventListener, MapViewFragment.OnConnectListener {
+
+    private LocationManager mLocationManager;
+    private LocationListener mLocationListener;
+    private static double currentLat = 0;
+    private static double currentLon = 0;
+
+    // notification
+    public final String CHANNEL_ID = "notification_channel";
+    private CharSequence name = "map channel";
+    private String description = "map";
+    public final int NOTIFICATION_ID = 101;
+    private NotificationCompat.Builder builder;
+    private NotificationManagerCompat notificationManagerCompat;
+
     static RecordMapActivity recordMapActivity;
 
     private final String recordTag = "RecordTAG";
@@ -60,6 +81,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private MapPolyline polyline = null;
     private int markerCount = 0;
     private boolean startMarker = false;
+    int polylineIndex = 0;
 
     // 타이머 변수
     private int time = -1;
@@ -114,11 +136,13 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_record_activity);
 
+        recordMapActivity = this;
         mapViewFrag = new MapViewFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.mainFrame, mapViewFrag).commit();
 
         // polyline
         polyline = new MapPolyline();
+        polyline.setTag(0);
         polyline.setLineColor(Color.argb(128, 255, 51, 0)); // Polyline 컬러 지정.
 
         // FloatingActionButton
@@ -137,49 +161,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         toRecordFab.setOnClickListener(this);
         toMapFab.setOnClickListener(this);
 
-        // 현재 위치
-        /*
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        Location userNowLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if(userNowLocation!=null){
-            curLat = userNowLocation.getLatitude();
-            curLng = userNowLocation.getLongitude();
-
-            Log.d("Location", userNowLocation.toString());
-        }
-         */
     }
-
-    //권한 가져오기.
-    private boolean checkPermission() {
-        boolean granted = false;
-
-        AppOpsManager appOps = (AppOpsManager) getApplicationContext()
-                .getSystemService(Context.APP_OPS_SERVICE);
-
-        int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
-                android.os.Process.myUid(), getApplicationContext().getPackageName());
-
-        if (mode == AppOpsManager.MODE_DEFAULT) {
-            granted = (getApplicationContext().checkCallingOrSelfPermission(
-                    android.Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED);
-        } else {
-            granted = (mode == AppOpsManager.MODE_ALLOWED);
-        }
-
-        return granted;
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -190,7 +172,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     public void onConnect(MapView mapView) {
         mMap = mapView;
         mMap.setCurrentLocationEventListener(this);
-        mMap.setZoomLevel(1, true);
+
     }
 
     @Override
@@ -246,6 +228,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         makeMarker("출발 지점");
         MapToRecord();
         Log.d("StartFab", "exec");
+        displayNotification();
+        onStartService();
     }
 
     // 정지 기능
@@ -300,23 +284,20 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private void RecordSave() {
         recordResumeFab.hide();
         makeMarker("도착 지점");
-    }
-
-    // 서비스 시작 기능
-    private void StartService(Intent serviceName) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            startForegroundService(serviceName);
-        else startService(serviceName);
+        Toast.makeText(this.getApplicationContext(), "서비스 종료", Toast.LENGTH_SHORT).show();
+        notificationManagerCompat.cancel(NOTIFICATION_ID);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("onResume", "...");
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        Log.d("onPause", "...");
     }
 
     @Override
@@ -324,6 +305,12 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         super.onDestroy();
         pauseTimer();
         stopTracking();
+
+        Toast.makeText(this.getApplicationContext(), "서비스 종료", Toast.LENGTH_SHORT).show();
+        if(notificationManagerCompat != null) {
+            notificationManagerCompat.cancel(NOTIFICATION_ID);
+            mLocationManager.removeUpdates(mLocationListener);
+        }
     }
 
 
@@ -358,7 +345,13 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                             test1v.setText(test1);
                         if (test2v != null)
                             test2v.setText(test2);
-                        System.out.println(avgSpeed);
+                        //System.out.println(avgSpeed);
+                        // notification 수정
+
+
+                        builder.setContentText(String.format(Locale.KOREA, "%02d:%02d:%02d / %.2f km", hour, min, sec, distance));
+                        notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
+
                     }
                 });
             }
@@ -450,8 +443,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 현재 위치 업데이트 함수
     @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
-        if (v > 10.0) {
-            Log.i(TAG, "v is over 10");
+        if (v > 0) {
             return;
         }
         Log.i(TAG, "MapFragment:onCurrentLocationUpdate()");
@@ -467,9 +459,9 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         mMap.addPolyline(polyline);
 
         // 외부에서 테스트용도
-        test1 = test1.concat(String.format("(%.6f, %.6f) (%.6f, %.6f) = %.2f\n", curLat, curLng, befLat, befLng, distance));
-        test2 = test2.concat(String.format("accuracy (%.2f)\n", v));
-        System.out.println(test1 + '\n' + test2 + '\n');
+//        test1 = test1.concat(String.format("(%.6f, %.6f) (%.6f, %.6f) = %.2f\n", curLat, curLng, befLat, befLng, distance));
+//        test2 = test2.concat(String.format("accuracy (%.2f)\n", v));
+//        System.out.println(test1 + '\n' + test2 + '\n');
     }
 
     public void insertLatLngList(double lat, double lng) {
@@ -523,6 +515,100 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
         Log.i(TAG, "onCurrentLocationUpdateCancelled");
+    }
+
+    // notification 설정
+    public void displayNotification() {
+        createNotificationChannel();
+        Intent intent = new Intent(this, NotificationBroadcast.class)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .addCategory(Intent.CATEGORY_LAUNCHER)
+                .setAction(Intent.ACTION_MAIN);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.walk_over)
+                .setContentTitle("걷기")
+                .setContentText("00:00:00 / 0.0 km")
+                .setPriority(NotificationManagerCompat.IMPORTANCE_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setOngoing(true);
+        notificationManagerCompat = NotificationManagerCompat.from(this);
+        notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
+
+
+    }
+
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_LOW;
+
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            notificationChannel.setDescription(description);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+    public void onStartService() {
+
+        Toast.makeText(this.getApplicationContext(), "서비스 시작", Toast.LENGTH_SHORT).show();
+        startService(new Intent(this, LocationService.class));
+        addListenerLocation();
+    }
+
+    private void addListenerLocation() {
+        mLocationManager = (LocationManager)
+                getSystemService(Context.LOCATION_SERVICE);
+        mLocationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                currentLat = location.getLatitude();
+                currentLon = location.getLongitude();
+                // polyline의 포인트 개수가 0 이상이면
+                if(polyline.getPointCount() > 0){
+                    MapPoint m = polyline.getPoint(polyline.getPointCount()-1);
+                    double lastLat = m.getMapPointGeoCoord().latitude;
+                    double lastLng = m.getMapPointGeoCoord().longitude;
+                    distance += getDistance(currentLat,currentLon,lastLat,lastLng);
+                }
+                polyline.addPoint(MapPoint.mapPointWithGeoCoord(currentLat, currentLon));
+                mMap.addPolyline(polyline);
+
+                Toast.makeText(getApplicationContext(), String.format("%.5f %.5f",currentLat,currentLon), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                Location lastKnownLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if (lastKnownLocation != null) {
+                    currentLat = lastKnownLocation.getLatitude();
+                    currentLon = lastKnownLocation.getLongitude();
+                }
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+        };
+        mLocationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER, 1000, 1, mLocationListener);
     }
 
 }

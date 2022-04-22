@@ -11,16 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Response;
-import com.android.volley.toolbox.StringRequest;
 import com.example.project.R;
 import com.example.project.Weather.GpsTrackerService;
 import com.example.project.Weather.Weather;
@@ -41,13 +36,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MapViewFragment extends Fragment {
     private static String TAG = "MapViewFragment_getPath";
-    private static final String TAG_JSON="pacerfit";
+    private static final String TAG_JSON = "pacerfit";
     private static final String TAG_PATH = "gpxPath";
     private static final String TAG_SIGUN = "sigun";
 
@@ -77,6 +71,11 @@ public class MapViewFragment extends Fragment {
         double latitude = gpsTracker.getLatitude();
         double longitude = gpsTracker.getLongitude();
 
+        //mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude),1,true);
+        mapView.setZoomLevel(1,true);
+        mapView.fitMapViewAreaToShowAllPolylines();
+
+
         address = weatherMethod.getCurrentAddress(ct, latitude, longitude);
         String[] local = address.split(" ");  //주소를 대한민국, 서울특별시, xx구 ... 로 나눔
         local[1] = AreaChange(local[1]);  //서울특별시, 경기도등의 이름을 db에 맞게 수정
@@ -91,11 +90,10 @@ public class MapViewFragment extends Fragment {
 
 
 
-
         new Thread() {
             public void run() {
                 try{
-                    Thread.sleep(1000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -119,14 +117,13 @@ public class MapViewFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = ProgressDialog.show(getActivity(),
-                    "Please Wait", null, true, true);
+            //progressDialog = ProgressDialog.show(getActivity(),                    "Please Wait", null, true, true);
         }
 
         @Override
         protected void onPostExecute(String result) { //doInBackground에서 return한 값을 받음
             super.onPostExecute(result);
-            progressDialog.dismiss();
+           // progressDialog.dismiss();
             Log.d(TAG, "response  - " + result);
             if (result == null){
                 Log.d(TAG, errorString);
@@ -221,11 +218,13 @@ public class MapViewFragment extends Fragment {
         HttpURLConnection http = null;
         InputStreamReader isr = null;
         BufferedReader br = null;
+
         HashMap<String,String> hashMap1 = pathArrayList.get(0);
         HashMap<String,String> hashMap2 = pathArrayList.get(1);
+        HashMap<String,String> hashMap3 = pathArrayList.get(3);
 
         try {
-            url = new URL(hashMap2.get(TAG_PATH));
+            url = new URL(hashMap3.get(TAG_PATH));
             http = (HttpURLConnection) url.openConnection();
             http.setConnectTimeout(3 * 1000);
             http.setReadTimeout(3 * 1000);
@@ -331,4 +330,3 @@ public class MapViewFragment extends Fragment {
         return areaChanged;
     }
 }
-
