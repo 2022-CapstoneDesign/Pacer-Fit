@@ -25,6 +25,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -84,6 +85,10 @@ public class HomeFragment extends Fragment {
     String today_userPedoTimeRecord;
     String today_userPedoCalorieRecord;
     String date_concat;
+    String[] PedoRecord31 = new String[31];
+    String[] beforeMonth31 = new String[31];
+    String pedo_max;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -101,12 +106,24 @@ public class HomeFragment extends Fragment {
             int dayOfMonth = now.getDayOfMonth();
             date_concat = monthValue+"m"+dayOfMonth+"d";
         }
+        //한달 전 데이터 배열
+        for(int i=30,j=0; i>=0; i--,j++) {
+            Calendar month = Calendar.getInstance();
+            month.add(Calendar.DATE, -i);
+            beforeMonth31[j] = new java.text.SimpleDateFormat("M'm'dd'd'").format(month.getTime());
+            if (beforeMonth31[j].substring(2,3).equals("0")) {
+                beforeMonth31[j] = beforeMonth31[j].replaceFirst("0","");
+            }
+//            System.out.println(beforeMonth31[j]);
+        }
+        
         Intent receiveIntent = getActivity().getIntent();
         userID = receiveIntent.getStringExtra("userID");
         userWeight = receiveIntent.getStringExtra("userWeight");
         today_userPedoRecord = receiveIntent.getStringExtra("today_stepsRecord");
         today_userPedoTimeRecord = receiveIntent.getStringExtra("today_stepsTimeRecord");
         today_userPedoCalorieRecord = receiveIntent.getStringExtra("today_stepsCalorieRecord");
+        pedo_max = receiveIntent.getStringExtra("pedo_max");
 
         Km_button.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.P)
@@ -197,29 +214,59 @@ public class HomeFragment extends Fragment {
                 break;
         }
 
+
         // <----------- 막대 그래프 ----------->
         barChart = v.findViewById(R.id.barchart);
-        //barChart.setOnChartValueSelectedListener(this);
-
-        ArrayList<Float> barChartValues = new ArrayList<>();
-        // 최근 1달의 운동량 값 받아오기 -> DB 값으로 추후에 수정
-        for (int i = 0; i < 30; i++) {
-            float rand = (float) Math.round(new Random().nextFloat() * 15000);
-            //Log.d("RAND", String.valueOf(rand));
-            barChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
+        ArrayList<Float> barChartValues2 = new ArrayList<>();//초기화
+        for (int i = 0; i < 31; i++) {
+            barChartValues2.add(0f); //초기화
         }
+        barchartConfigureAppearance();//초기화
+        BarData barChartData2 = createBarchartData(barChartValues2);//초기화
+        barChart.setData(barChartData2); //초기화
+        barChart.invalidate(); //초기화
 
-        barchartConfigureAppearance();
-        BarData barChartData = createBarchartData(barChartValues);
-        barChart.setData(barChartData); // BarData 전달
-        barChart.invalidate(); // BarChart 갱신해 데이터 표시
+        //barChart.setOnChartValueSelectedListener(this);
+        Response.Listener<String> responseListener = response -> {
+            try {
+                System.out.println("========================" + response);
+                JSONObject jsonObject = new JSONObject(response);
+                boolean success = jsonObject.getBoolean("success");
+                if (success) {
+                    System.out.println("30일치 데이터 가져오기 성공");
+                    for(int i = 0; i < 31; i++) {
+                        PedoRecord31[i] = jsonObject.getString(beforeMonth31[i]);
+                    }
+                    ArrayList<Float> barChartValues = new ArrayList<>();
+                    // 최근 1달의 운동량 값 받아오기 -> DB 값으로 추후에 수정
+                    for (int i = 0; i < 31; i++) {
+                        float rand2 = Float.parseFloat(PedoRecord31[i]);
+                        barChartValues.add(rand2); // DB값
+                    }
+                    barchartConfigureAppearance();
+                    BarData barChartData = createBarchartData(barChartValues);
+                    barChart.setData(barChartData); // BarData 전달
+                    barChart.invalidate(); // BarChart 갱신해 데이터 표시
+                } else { //실패한 경우
+                    return;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        };
+        MainPedoRecentRecordRequest mainPedoRecentRecordRequest = new MainPedoRecentRecordRequest(userID, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        queue.add(mainPedoRecentRecordRequest);
+
 
         // <----------- 꺾은선 그래프 ----------->
         lineChart = v.findViewById(R.id.linechart);
+        //DB 연결 (Response)
+
 
         ArrayList<Float> lineChartValues = new ArrayList<>();
         // 최근 1달의 운동량 값 받아오기 -> DB 값으로 추후에 수정
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 31; i++) {
             float rand = (float) Math.round(new Random().nextFloat() * 15000);
             //Log.d("RAND", String.valueOf(rand));
             lineChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
@@ -269,7 +316,6 @@ public class HomeFragment extends Fragment {
         barChart.animateX(1500); // 왼쪽-오른쪽 방향의 애니메이션 적용
         //barChart.setDescription();
         //barChart.setExtraOffsets(10f, 0f, 40f, 0f);
-
         // x축 설정(막대그래프 기준 아래쪽)
         XAxis xAxis = barChart.getXAxis();
         xAxis.setAxisMaximum(30f);
@@ -287,7 +333,8 @@ public class HomeFragment extends Fragment {
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
-        axisLeft.setAxisMaximum(15001f); // y축 최대값 설정
+        float pedo_max_float = Float.parseFloat(pedo_max);
+        axisLeft.setAxisMaximum(pedo_max_float); // y축 최대값 설정
         axisLeft.setAxisMinimum(0f); // y축 최소값 설정
         axisLeft.setDrawLabels(false); // 값 표기 설정
         axisLeft.setDrawGridLines(false); // 격자
