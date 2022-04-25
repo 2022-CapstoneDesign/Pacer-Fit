@@ -243,7 +243,6 @@ public class HomeFragment extends Fragment {
                         float rand2 = Float.parseFloat(PedoRecord31[i]);
                         barChartValues.add(rand2); // DB값
                     }
-                    barchartConfigureAppearance();
                     BarData barChartData = createBarchartData(barChartValues);
                     barChart.setData(barChartData); // BarData 전달
                     barChart.invalidate(); // BarChart 갱신해 데이터 표시
