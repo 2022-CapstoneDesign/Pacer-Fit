@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,7 +25,14 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+import com.example.project.Login.LoginActivity;
+import com.example.project.Login.LoginRequest;
+import com.example.project.Pedo.PedoRecordRequest;
 import com.example.project.Weather.GpsTrackerService;
 import com.example.project.Map.RecordMapActivity;
 import com.example.project.Formatter.OneMonthXAxisValueFormatter;
@@ -50,6 +58,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -70,7 +79,16 @@ public class HomeFragment extends Fragment {
     private Button moreBarChartBtn;
     private Button moreLineChartBtn;
 
+    String userID;
     String userWeight;
+    String today_userPedoRecord;
+    String today_userPedoTimeRecord;
+    String today_userPedoCalorieRecord;
+    String date_concat;
+    String[] PedoRecord31 = new String[31];
+    String[] beforeMonth31 = new String[31];
+    String pedo_max;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,8 +98,32 @@ public class HomeFragment extends Fragment {
         weatherInfo = v.findViewById(R.id.weather);
         weatherInfo_Image = v.findViewById(R.id.weather_image);
         Button Km_button = v.findViewById(R.id.Km_button);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDate now = null;
+            now = LocalDate.now();
+
+            int monthValue = now.getMonthValue();
+            int dayOfMonth = now.getDayOfMonth();
+            date_concat = monthValue+"m"+dayOfMonth+"d";
+        }
+        //한달 전 데이터 배열
+        for(int i=30,j=0; i>=0; i--,j++) {
+            Calendar month = Calendar.getInstance();
+            month.add(Calendar.DATE, -i);
+            beforeMonth31[j] = new java.text.SimpleDateFormat("M'm'dd'd'").format(month.getTime());
+            if (beforeMonth31[j].substring(2,3).equals("0")) {
+                beforeMonth31[j] = beforeMonth31[j].replaceFirst("0","");
+            }
+//            System.out.println(beforeMonth31[j]);
+        }
+        
         Intent receiveIntent = getActivity().getIntent();
+        userID = receiveIntent.getStringExtra("userID");
         userWeight = receiveIntent.getStringExtra("userWeight");
+        today_userPedoRecord = receiveIntent.getStringExtra("today_stepsRecord");
+        today_userPedoTimeRecord = receiveIntent.getStringExtra("today_stepsTimeRecord");
+        today_userPedoCalorieRecord = receiveIntent.getStringExtra("today_stepsCalorieRecord");
+        pedo_max = receiveIntent.getStringExtra("pedo_max");
 
         Km_button.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.P)
@@ -94,17 +136,52 @@ public class HomeFragment extends Fragment {
         });
 
         Button pedo_button = v.findViewById(R.id.pedo_button);
-        pedo_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View map) {
-                Intent intent = new Intent(getActivity(), StepCounterActivity.class); //Fragment -> Activity로 이동 (StepCounter.java)
-                intent.putExtra("userWeight",userWeight);
-                System.out.println("userKg??????????????at HomeFrag"+userWeight);
-                //BottomNavigation액티비티에서 StepCounterActivity에 userWeight값을 보냄
-                startActivity(intent);
+        pedo_button.setOnClickListener(map -> {
+            // DB추가
+            Response.Listener<String> responseListener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        System.out.println("========================" + response);
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean success = jsonObject.getBoolean("success");
+                        if (success) { // 만보기 클릭시
+                            String today_PedoStepsRecord = jsonObject.getString(date_concat+".step");
+                            String today_PedoTimeRecord = jsonObject.getString(date_concat+".time");
+                            String today_PedoCalorieRecord = jsonObject.getString(date_concat+".cal");
+                            Intent intent = new Intent(getActivity(), StepCounterActivity.class); //Fragment -> Activity로 이동 (StepCounterActivity.java)
+                            intent.putExtra("userID",userID);
+                            intent.putExtra("userWeight",userWeight);
+                            intent.putExtra("today_stepsRecord",today_PedoStepsRecord);
+                            intent.putExtra("today_stepsTimeRecord",today_PedoTimeRecord);
+                            intent.putExtra("today_stepsCalorieRecord",today_PedoCalorieRecord);
+                            startActivity(intent);
+                        } else { // 로그인에 실패한 경우
+                            return;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            PedoRecordRequest pedoRecordRequest = new PedoRecordRequest(userID, responseListener);
+            RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+            queue.add(pedoRecordRequest);
+            //DB추가 주석 없앨때 아래 3줄 지우기
+
+
+//            intent.putExtra("userWeight",userWeight);
+//            intent.putExtra("userStepsRecord",today_userPedoRecord);
+//            intent.putExtra("userStepsTimeRecord",today_userPedoTimeRecord);
+//            intent.putExtra("userStepsCalorieRecord",today_userPedoCalorieRecord);
+//            System.out.println("userKg??????????????at HomeFrag"+userWeight);
+//            System.out.println("userStepsRecord??????????????at HomeFrag"+today_userPedoRecord);
+//            System.out.println("userStepsRecord??????????????at HomeFrag"+today_userPedoTimeRecord);
+//            System.out.println("userStepsRecord??????????????at HomeFrag"+today_userPedoCalorieRecord);
+//            //BottomNavigation액티비티에서 StepCounterActivity에 userWeight값을 보냄
+//            startActivity(intent);
 //                Intent intent = new Intent(getActivity(), PopupPedo.class); //Fragment -> Activity로 이동 (만보기팝업)
 //                startActivity(intent);
-            }
         });
 
         Weather weatherMethod = new Weather();
@@ -137,29 +214,58 @@ public class HomeFragment extends Fragment {
                 break;
         }
 
+
         // <----------- 막대 그래프 ----------->
         barChart = v.findViewById(R.id.barchart);
-        //barChart.setOnChartValueSelectedListener(this);
-
-        ArrayList<Float> barChartValues = new ArrayList<>();
-        // 최근 1달의 운동량 값 받아오기 -> DB 값으로 추후에 수정
-        for (int i = 0; i < 30; i++) {
-            float rand = (float) Math.round(new Random().nextFloat() * 15000);
-            //Log.d("RAND", String.valueOf(rand));
-            barChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
+        ArrayList<Float> barChartValues2 = new ArrayList<>();//초기화
+        for (int i = 0; i < 31; i++) {
+            barChartValues2.add(0f); //초기화
         }
+        barchartConfigureAppearance();//초기화
+        BarData barChartData2 = createBarchartData(barChartValues2);//초기화
+        barChart.setData(barChartData2); //초기화
+        barChart.invalidate(); //초기화
 
-        barchartConfigureAppearance();
-        BarData barChartData = createBarchartData(barChartValues);
-        barChart.setData(barChartData); // BarData 전달
-        barChart.invalidate(); // BarChart 갱신해 데이터 표시
+        //barChart.setOnChartValueSelectedListener(this);
+        Response.Listener<String> responseListener = response -> {
+            try {
+                System.out.println("========================" + response);
+                JSONObject jsonObject = new JSONObject(response);
+                boolean success = jsonObject.getBoolean("success");
+                if (success) {
+                    System.out.println("30일치 데이터 가져오기 성공");
+                    for(int i = 0; i < 31; i++) {
+                        PedoRecord31[i] = jsonObject.getString(beforeMonth31[i]);
+                    }
+                    ArrayList<Float> barChartValues = new ArrayList<>();
+                    // 최근 1달의 운동량 값 받아오기 -> DB 값으로 추후에 수정
+                    for (int i = 0; i < 31; i++) {
+                        float rand2 = Float.parseFloat(PedoRecord31[i]);
+                        barChartValues.add(rand2); // DB값
+                    }
+                    BarData barChartData = createBarchartData(barChartValues);
+                    barChart.setData(barChartData); // BarData 전달
+                    barChart.invalidate(); // BarChart 갱신해 데이터 표시
+                } else { //실패한 경우
+                    return;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        };
+        MainPedoRecentRecordRequest mainPedoRecentRecordRequest = new MainPedoRecentRecordRequest(userID, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        queue.add(mainPedoRecentRecordRequest);
+
 
         // <----------- 꺾은선 그래프 ----------->
         lineChart = v.findViewById(R.id.linechart);
+        //DB 연결 (Response)
+
 
         ArrayList<Float> lineChartValues = new ArrayList<>();
         // 최근 1달의 운동량 값 받아오기 -> DB 값으로 추후에 수정
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 31; i++) {
             float rand = (float) Math.round(new Random().nextFloat() * 15000);
             //Log.d("RAND", String.valueOf(rand));
             lineChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
@@ -209,7 +315,6 @@ public class HomeFragment extends Fragment {
         barChart.animateX(1500); // 왼쪽-오른쪽 방향의 애니메이션 적용
         //barChart.setDescription();
         //barChart.setExtraOffsets(10f, 0f, 40f, 0f);
-
         // x축 설정(막대그래프 기준 아래쪽)
         XAxis xAxis = barChart.getXAxis();
         xAxis.setAxisMaximum(30f);
@@ -227,7 +332,8 @@ public class HomeFragment extends Fragment {
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
-        axisLeft.setAxisMaximum(15001f); // y축 최대값 설정
+        float pedo_max_float = Float.parseFloat(pedo_max);
+        axisLeft.setAxisMaximum(pedo_max_float); // y축 최대값 설정
         axisLeft.setAxisMinimum(0f); // y축 최소값 설정
         axisLeft.setDrawLabels(false); // 값 표기 설정
         axisLeft.setDrawGridLines(false); // 격자

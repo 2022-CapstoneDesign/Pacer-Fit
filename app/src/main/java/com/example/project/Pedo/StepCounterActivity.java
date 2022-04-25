@@ -2,6 +2,7 @@ package com.example.project.Pedo;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,9 +25,17 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+import com.example.project.Main.HomeFragment;
 import com.example.project.Map.DetailBottomFragment;
 import com.example.project.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.time.LocalDate;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,20 +53,25 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
 
     Timer timer;
     //사용자 DB 값
+    String userID;
     String userKg;
+    String date_concat;
+    String today_userPedoRecord;
+    String today_userPedoTimeRecord;
+    String today_userPedoCalorieRecord;
 
     // 타이머 변수
     private int time = -1;
     TimerTask timerTask;
     int total_sec = 0;
-    double calories;
+    double calories = 0;
 
     Button recordStartPedo;
     ImageButton helpBtn;
     CircleImageView detailBack;
 
     // 현재 걸음 수
-    int currentSteps = 0;
+    int currentSteps;
 
     // n초동안 클릭 방지
     Handler h = new Handler();
@@ -72,7 +86,18 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
         //currentSteps를 DB값으로 뽑아온후에 시작할때 당일 운동 데이터값 보여주기
         //DB 사용자 몸무게 가져와서 cal계산. 거리는 8.0km/h로 계산.
         userKg = intent.getStringExtra("userWeight");
+        userID = intent.getStringExtra("userID");
+//        today_userPedoRecord = intent.getStringExtra("userStepsRecord");
+//        today_userPedoTimeRecord = intent.getStringExtra("userStepsTimeRecord");
+//        today_userPedoCalorieRecord = intent.getStringExtra("userStepsCalorieRecord");
+        today_userPedoRecord = intent.getStringExtra("today_stepsRecord");
+        today_userPedoTimeRecord = intent.getStringExtra("today_stepsTimeRecord");
+        today_userPedoCalorieRecord = intent.getStringExtra("today_stepsCalorieRecord");
+        System.out.println("userID============="+userID);
         System.out.println("userWeight============="+userKg);
+        System.out.println("today_userPedoRecord============="+today_userPedoRecord);
+        System.out.println("today_userPedoTimeRecord============="+today_userPedoTimeRecord);
+        System.out.println("today_userPedoCalorieRecord============="+today_userPedoCalorieRecord);
 
         pedoStep = findViewById(R.id.pedo_step);
         pedoStepText = findViewById(R.id.pedo_step_text);
@@ -83,7 +108,33 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
 
         recordStartPedo = findViewById(R.id.stopPedoBtn);
         detailBack = findViewById(R.id.pedo_detail_img);
-        
+
+
+        if(Integer.parseInt(today_userPedoRecord)!=0) {
+            //db값들 testview에 보여주기
+            currentSteps = Integer.parseInt(today_userPedoRecord);
+            pedoStep.setText(String.valueOf(currentSteps));
+            //calories = Double.parseDouble(today_userPedoCalorieRecord);
+            calories = (currentSteps*((0.00007*Integer.parseInt(userKg))+0.04));
+            pedoCal.setText(String.format("%.2f",calories) + "kcal");
+            //DB값 시간설정
+            time = Integer.parseInt(today_userPedoTimeRecord);
+            int sec = time % 60;
+            int min = time / 60 % 60;
+            int hour = time / 3600;
+            pedoTime.setText(hour + "H " + min + "M " + sec + "S");
+        }
+        else {
+            currentSteps = 0;
+            pedoStep.setText(String.valueOf(currentSteps));
+            //DB값 시간설정
+            time = Integer.parseInt(today_userPedoTimeRecord);
+            int sec = time % 60;
+            int min = time / 60 % 60;
+            int hour = time / 3600;
+            pedoTime.setText(hour + "H " + min + "M " + sec + "S");
+        }
+
         // 초기 투명도 설정
         setTextAlpha(0.3f);
         // 어두운 배경
@@ -105,23 +156,20 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
         if (stepCountSensor == null) {
             Toast.makeText(this, "No Step Sensor", Toast.LENGTH_SHORT).show();
         }
-        recordStartPedo.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(recordStartPedo.getText().equals("운동 시작")) {
-                    recordStartPedo.setText("그만하기");
-                    recordStartPedo.setBackgroundResource(R.drawable.btn_style4);
-                    detailBack.setImageResource(R.drawable.exer_pedo_background02);
-                    setTextAlpha(1f);
-                    startPedo();
-                }
-                else{
-                    recordStartPedo.setText("운동 시작");
-                    detailBack.setImageResource(R.drawable.exer_pedo_background01);
-                    recordStartPedo.setBackgroundResource(R.drawable.btn_style4_pedo_ready);
-                    setTextAlpha(0.3f);
-                    stopPedo();
-                }
+        recordStartPedo.setOnClickListener(view -> {
+            if(recordStartPedo.getText().equals("운동 시작")) {
+                recordStartPedo.setText("그만하기");
+                recordStartPedo.setBackgroundResource(R.drawable.btn_style4);
+                detailBack.setImageResource(R.drawable.exer_pedo_background02);
+                setTextAlpha(1f);
+                startPedo();
+            }
+            else{
+                recordStartPedo.setText("운동 시작");
+                detailBack.setImageResource(R.drawable.exer_pedo_background01);
+                recordStartPedo.setBackgroundResource(R.drawable.btn_style4_pedo_ready);
+                setTextAlpha(0.3f);
+                stopPedo();
             }
         });
 
@@ -158,8 +206,36 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
         pauseTimer();
         recordStartPedo.setEnabled(false); // 클릭 무효화
         h.postDelayed(new splashhandler(), 1500);//1.5초 지연
-        //DB에 사용자 운동데이터 값 넣기
+        //DB에 사용자 운동데이터 값 저장
+        // DB추가
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDate now = null;
+            now = LocalDate.now();
 
+            int monthValue = now.getMonthValue();
+            int dayOfMonth = now.getDayOfMonth();
+            date_concat = monthValue + "m" + dayOfMonth + "d";
+        }
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    System.out.println("========================" + response);
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+                    if (success) { // 만보기 클릭시
+                        System.out.println("성공");
+                    } else { // 로그인에 실패한 경우
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        PedoRecordSaveRequest pedoRecordSaveRequest = new PedoRecordSaveRequest(userID, currentSteps+"",time+"", String.format("%.2f",calories), responseListener);
+        RequestQueue queue = Volley.newRequestQueue(StepCounterActivity.this);
+        queue.add(pedoRecordSaveRequest);
     }
 
     @Override
