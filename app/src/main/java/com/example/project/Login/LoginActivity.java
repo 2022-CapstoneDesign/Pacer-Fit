@@ -75,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                             String today_PedoStepsRecord = jsonObject.getString(date_concat+".step");
                             String today_PedoTimeRecord = jsonObject.getString(date_concat+".time");
                             String today_PedoCalorieRecord = jsonObject.getString(date_concat+".cal");
+                            String pedo_max = jsonObject.getString("pedo_max");
                             Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, BottomNavigation.class);// 메인 액티비티로 전환
                             intent.putExtra("userID", userID);
@@ -90,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("today_stepsRecord",today_PedoStepsRecord);
                             intent.putExtra("today_stepsTimeRecord",today_PedoTimeRecord);
                             intent.putExtra("today_stepsCalorieRecord",today_PedoCalorieRecord);
+                            intent.putExtra("pedo_max",pedo_max);
                             startActivity(intent);
                             finish();
                         } else { // 로그인에 실패한 경우

@@ -2,6 +2,7 @@ package com.example.project.Pedo;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,6 +28,7 @@ import androidx.core.content.ContextCompat;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.project.Main.HomeFragment;
 import com.example.project.Map.DetailBottomFragment;
 import com.example.project.R;
 
