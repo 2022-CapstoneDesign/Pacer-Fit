@@ -71,8 +71,7 @@ public class MapViewFragment extends Fragment {
         double latitude = gpsTracker.getLatitude();
         double longitude = gpsTracker.getLongitude();
 
-        //mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude),1,true);
-        mapView.setZoomLevel(1,true);
+        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude),1,true);
         mapView.fitMapViewAreaToShowAllPolylines();
 
 
