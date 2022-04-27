@@ -14,7 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
