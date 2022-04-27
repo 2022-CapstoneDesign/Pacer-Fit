@@ -10,16 +10,17 @@ import java.util.Date;
 public class SixMonthXAxisValueFormatter extends IndexAxisValueFormatter {
     @Override
     public String getFormattedValue(float value) {
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(new Date());
+//        cal.add(Calendar.DATE, -23 + (int) value);
+//        DateFormat df = new SimpleDateFormat("M.d");
+//        return df.format(cal.getTime());
+
         Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(Calendar.DATE, -168 + (int) value);
-        DateFormat df = new SimpleDateFormat("M.d");
+        cal.add(Calendar.DATE, (-24 + (int)value)*7);
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        SimpleDateFormat df = new SimpleDateFormat("M.d");
         return df.format(cal.getTime());
-
-
-//        float dateNum = 29 - value;
-//        long now = System.currentTimeMillis();
-//        Date date = new Date(now);
 
     }
 }

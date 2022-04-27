@@ -123,7 +123,7 @@ public class SixMonthFragment extends Fragment {
         xAxis.setDrawAxisLine(true); // 축 그리기 설정
         xAxis.setAxisLineWidth(1.5f);
         xAxis.setAxisLineColor(Color.parseColor("#5e5b5f")); // X축 색 설정
-        xAxis.setGranularity(1f); // 간격 설정(표시되는 값)
+        xAxis.setGranularity(4f); // 간격 설정(표시되는 값)
         xAxis.setTextSize(13f);
         xAxis.setTextColor(Color.parseColor("#909090"));
         xAxis.setDrawGridLines(false); // 격자
