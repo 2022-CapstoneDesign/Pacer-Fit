@@ -14,13 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
+import com.example.project.Ranking.UserInfo;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.time.LocalDate;
 
 
 public class BottomNavigation extends AppCompatActivity {
@@ -47,6 +46,8 @@ public class BottomNavigation extends AppCompatActivity {
         String userStepsRecord = intent.getStringExtra("today_stepsRecord");
         System.out.println("userKg??????????????"+userWeight);
         mBottomNavigationView.setItemIconTintList(null);
+        UserInfo.getInstance().setUserID(userID);
+        UserInfo.getInstance().setUserName(userName);
         System.out.println("================================" + userName);
         System.out.println("userStepsRecord======================:"+userStepsRecord);
         //case 함수를 통해 클릭 받을 때마다 화면 변경하기

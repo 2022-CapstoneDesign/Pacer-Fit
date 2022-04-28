@@ -12,7 +12,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.project.Main.BottomNavigation;
-import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -92,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("today_stepsTimeRecord",today_PedoTimeRecord);
                             intent.putExtra("today_stepsCalorieRecord",today_PedoCalorieRecord);
                             intent.putExtra("pedo_max",pedo_max);
+
                             startActivity(intent);
                             finish();
                         } else { // 로그인에 실패한 경우

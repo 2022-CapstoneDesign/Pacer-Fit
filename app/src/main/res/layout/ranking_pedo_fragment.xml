@@ -39,15 +39,16 @@
         android:id="@+id/pedo_tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="24dp"
         android:background="@color/lightgray_project"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tabIndicator="@color/colorWhite"
         app:tabIndicatorColor="@color/colorWhite"
         app:tabIndicatorGravity="bottom"
         app:tabIndicatorHeight="3dp"
-        app:tabTextAppearance="@style/tab_text"
-        tools:layout_editor_absoluteX="0dp">
+        app:tabTextAppearance="@style/tab_text">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"

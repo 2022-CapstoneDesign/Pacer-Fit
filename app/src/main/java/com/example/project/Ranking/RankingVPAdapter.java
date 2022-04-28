@@ -13,8 +13,8 @@ public class RankingVPAdapter extends FragmentStatePagerAdapter {
     private final ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
     private final ArrayList<String> fragmentTitle = new ArrayList<>();
 
-    public RankingVPAdapter(@NonNull FragmentManager fm, int behavior) {
-        super(fm, behavior);
+    public RankingVPAdapter(@NonNull FragmentManager fm) {
+        super(fm);
     }
 
     @NonNull
