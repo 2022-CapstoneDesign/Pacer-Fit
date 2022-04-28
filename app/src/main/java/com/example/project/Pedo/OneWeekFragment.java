@@ -28,10 +28,10 @@ import java.util.Random;
 public class OneWeekFragment extends Fragment {
     private BarChart barChart; // 만보기 7일 막대그래프
     RecyclerView recycler_view;
-    RecordAdapter adapter;
+    OneWeekRecordAdapter adapter;
 
     private TextView day_today_oneweekPedo;
-    private TextView startEndTime_today_oneweekPedo;
+    private TextView date_today_oneweekPedo;
     private TextView totalTime_today_oneweekPedo;
     private TextView step_today_oneweekPedo;
     private TextView pedo_avg_time;
@@ -45,7 +45,7 @@ public class OneWeekFragment extends Fragment {
         recycler_view = v.findViewById(R.id.recycler_view);
 
         day_today_oneweekPedo = v.findViewById(R.id.day_today_oneweekPedo);
-        startEndTime_today_oneweekPedo = v.findViewById(R.id.startEndTime_today_oneweekPedo);
+        date_today_oneweekPedo = v.findViewById(R.id.date_today_oneweekPedo);
         totalTime_today_oneweekPedo = v.findViewById(R.id.totalTime_today_oneweekPedo);
         step_today_oneweekPedo = v.findViewById(R.id.step_today_oneweekPedo);
         pedo_avg_time = v.findViewById(R.id.pedo_avg_time);
@@ -54,7 +54,7 @@ public class OneWeekFragment extends Fragment {
         ArrayList<Float> barChartValues = new ArrayList<>();
 
         // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
-        setTodayRecord("오늘(금)", "오후 8:05 - 오후 10:11", "2시간 6분", "2,351걸음");
+        setTodayRecord("오늘(금)", "2022/4/18", "2시간 6분", "2,351걸음");
         setAvgTime();
         setRecyclerView();
 
@@ -75,14 +75,14 @@ public class OneWeekFragment extends Fragment {
 
     private void setAvgTime() {
         // 이곳에 DB에서 불러온 운동시간들의 평균 구하는 알고리즘 작성... 추후에 추가
-        Integer hours = 1;
-        Integer minuates = 52;
-        pedo_avg_time.setText(hours + "시간 " + minuates + "분");
+        int hours = 1;
+        int minutes = 52;
+        pedo_avg_time.setText(hours + "시간 " + minutes + "분");
     }
 
-    private void setTodayRecord(String day, String startEndTime, String totalTime, String step) {
+    private void setTodayRecord(String day, String date, String totalTime, String step) {
         day_today_oneweekPedo.setText(day);
-        startEndTime_today_oneweekPedo.setText(startEndTime);
+        date_today_oneweekPedo.setText(date);
         totalTime_today_oneweekPedo.setText(totalTime);
         step_today_oneweekPedo.setText(step);
     }
@@ -90,19 +90,19 @@ public class OneWeekFragment extends Fragment {
     private void setRecyclerView() {
         recycler_view.setHasFixedSize(true);
         recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new RecordAdapter(getContext(), getList());
+        adapter = new OneWeekRecordAdapter(getContext(), getList());
         recycler_view.setAdapter(adapter);
     }
 
-    private List<RecordModel> getList() {
-        List<RecordModel> record_list = new ArrayList<>();
+    private List<OneWeekRecordModel> getList() {
+        List<OneWeekRecordModel> record_list = new ArrayList<>();
         // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
-        record_list.add(new RecordModel("목", "오후 6:21 - 오후 7:02", "40분", "1,218걸음"));
-        record_list.add(new RecordModel("수", "오전 7:04 - 오후 9:37", "2시간 33분", "2,752걸음"));
-        record_list.add(new RecordModel("화", "오후 6:22 - 오후 10:29", "4시간 7분", "4,188걸음"));
-        record_list.add(new RecordModel("월", "오전 10:14 - 오후 11:36", "1시간 22분", "1,530걸음"));
-        record_list.add(new RecordModel("일", "오후 9:33 - 오후 10:14", "41분", "1,087걸음"));
-        record_list.add(new RecordModel("토", "오후 3:47 - 오후 5:55", "2시간 8분", "2,455걸음"));
+        record_list.add(new OneWeekRecordModel("목", "2022/4/17", "40분", "1,218걸음"));
+        record_list.add(new OneWeekRecordModel("수", "2022/4/16", "2시간 33분", "2,752걸음"));
+        record_list.add(new OneWeekRecordModel("화", "2022/4/15", "4시간 7분", "4,188걸음"));
+        record_list.add(new OneWeekRecordModel("월", "2022/4/14", "1시간 22분", "1,530걸음"));
+        record_list.add(new OneWeekRecordModel("일", "2022/4/13", "41분", "1,087걸음"));
+        record_list.add(new OneWeekRecordModel("토", "2022/4/12", "2시간 8분", "2,455걸음"));
 
         return record_list;
     }

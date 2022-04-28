@@ -1,14 +1,14 @@
 package com.example.project.Dist;
 
-public class RecordModel {
+public class OneWeekRecordModel {
     String day;
-    String startEndTime;
+    String date;
     String totalTime;
     String km;
 
-    public RecordModel(String day, String startEndTime, String totalTime, String km) {
+    public OneWeekRecordModel(String day, String date, String totalTime, String km) {
         this.day = day;
-        this.startEndTime = startEndTime;
+        this.date = date;
         this.totalTime = totalTime;
         this.km = km;
     }
@@ -17,15 +17,15 @@ public class RecordModel {
         return day;
     }
 
-    public String getStartEndTime() {
-        return startEndTime;
+    public String getDate() {
+        return date;
     }
 
     public String getTotalTime() {
         return totalTime;
     }
 
-    public String getStep() {
+    public String getKm() {
         return km;
     }
 }
