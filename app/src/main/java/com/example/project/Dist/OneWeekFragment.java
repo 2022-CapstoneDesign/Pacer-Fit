@@ -27,12 +27,12 @@ import java.util.List;
 import java.util.Random;
 
 public class OneWeekFragment extends Fragment {
-    private LineChart lineChart; // 만보기 7일 라인그래프
+    private LineChart lineChart; // 거리 7일 라인그래프
     RecyclerView recycler_view;
-    RecordAdapter adapter;
+    OneWeekRecordAdapter adapter;
 
     private TextView day_today_oneweekDist;
-    private TextView startEndTime_today_oneweekDist;
+    private TextView date_today_oneweekDist;
     private TextView totalTime_today_oneweekDist;
     private TextView km_today_oneweekDist;
 
@@ -45,7 +45,7 @@ public class OneWeekFragment extends Fragment {
         View v = inflater.inflate(R.layout.dist_one_week_fragment, container, false);
 
         day_today_oneweekDist = v.findViewById(R.id.day_today_oneweekDist);
-        startEndTime_today_oneweekDist = v.findViewById(R.id.startEndTime_today_oneweekDist);
+        date_today_oneweekDist = v.findViewById(R.id.date_today_oneweekDist);
         totalTime_today_oneweekDist = v.findViewById(R.id.totalTime_today_oneweekDist);
         km_today_oneweekDist = v.findViewById(R.id.km_today_oneweekDist);
         dist_avg_time = v.findViewById(R.id.dist_avg_time);
@@ -55,7 +55,7 @@ public class OneWeekFragment extends Fragment {
 
         setRecyclerView();
         // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
-        setTodayRecord("오늘(금)", "오후 8:05 - 오후 10:11", "2시간 6분", "24km");
+        setTodayRecord("오늘(금)", "2022/4/18", "2시간 6분", "24km");
         setAvgTime();
 
         ArrayList<Float> lineChartValues = new ArrayList<>();
@@ -76,14 +76,14 @@ public class OneWeekFragment extends Fragment {
 
     private void setAvgTime() {
         // 이곳에 DB에서 불러온 운동시간들의 평균 구하는 알고리즘 작성... 추후에 추가
-        Integer hours = 1;
-        Integer minuates = 52;
-        dist_avg_time.setText(hours + "시간 " + minuates + "분");
+        int hours = 1;
+        int minutes = 52;
+        dist_avg_time.setText(hours + "시간 " + minutes + "분");
     }
 
-    private void setTodayRecord(String day, String startEndTime, String totalTime, String km) {
+    private void setTodayRecord(String day, String date, String totalTime, String km) {
         day_today_oneweekDist.setText(day);
-        startEndTime_today_oneweekDist.setText(startEndTime);
+        date_today_oneweekDist.setText(date);
         totalTime_today_oneweekDist.setText(totalTime);
         km_today_oneweekDist.setText(km);
     }
@@ -91,19 +91,19 @@ public class OneWeekFragment extends Fragment {
     private void setRecyclerView() {
         recycler_view.setHasFixedSize(true);
         recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new RecordAdapter(getContext(), getList());
+        adapter = new OneWeekRecordAdapter(getContext(), getList());
         recycler_view.setAdapter(adapter);
     }
 
-    private List<RecordModel> getList() {
-        List<RecordModel> record_list = new ArrayList<>();
+    private List<OneWeekRecordModel> getList() {
+        List<OneWeekRecordModel> record_list = new ArrayList<>();
         // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
-        record_list.add(new RecordModel("목", "오후 6:21 - 오후 7:02", "40분", "8km"));
-        record_list.add(new RecordModel("수", "오전 7:04 - 오후 9:37", "2시간 33분", "31km"));
-        record_list.add(new RecordModel("화", "오후 6:22 - 오후 10:29", "4시간 7분", "58km"));
-        record_list.add(new RecordModel("월", "오전 10:14 - 오후 11:36", "1시간 22분", "13km"));
-        record_list.add(new RecordModel("일", "오후 9:33 - 오후 10:14", "41분", "8.5km"));
-        record_list.add(new RecordModel("토", "오후 3:47 - 오후 5:55", "2시간 8분", "12.8km"));
+        record_list.add(new OneWeekRecordModel("목", "2022/4/17", "40분", "8km"));
+        record_list.add(new OneWeekRecordModel("수", "2022/4/16", "2시간 33분", "31km"));
+        record_list.add(new OneWeekRecordModel("화", "2022/4/15", "4시간 7분", "58km"));
+        record_list.add(new OneWeekRecordModel("월", "2022/4/14", "1시간 22분", "13km"));
+        record_list.add(new OneWeekRecordModel("일", "2022/4/13", "41분", "8.5km"));
+        record_list.add(new OneWeekRecordModel("토", "2022/4/12", "2시간 8분", "12.8km"));
 
         return record_list;
     }

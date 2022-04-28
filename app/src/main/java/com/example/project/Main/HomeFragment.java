@@ -33,6 +33,9 @@ import com.android.volley.toolbox.Volley;
 import com.example.project.Login.LoginActivity;
 import com.example.project.Login.LoginRequest;
 import com.example.project.Pedo.PedoRecordRequest;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.example.project.Weather.GpsTrackerService;
 import com.example.project.Map.RecordMapActivity;
 import com.example.project.Formatter.OneMonthXAxisValueFormatter;
@@ -116,7 +119,7 @@ public class HomeFragment extends Fragment {
             }
 //            System.out.println(beforeMonth31[j]);
         }
-        
+
         Intent receiveIntent = getActivity().getIntent();
         userID = receiveIntent.getStringExtra("userID");
         userWeight = receiveIntent.getStringExtra("userWeight");
