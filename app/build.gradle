@@ -8,9 +8,10 @@ android {
     defaultConfig {
         applicationId "com.example.project"
         minSdk 23
-        targetSdk 29
+        targetSdk 30
         versionCode 1
         versionName "1.0"
+        ndkVersion "24.0.8215888"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

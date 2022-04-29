@@ -8,6 +8,7 @@ import static java.lang.Math.sqrt;
 import static java.lang.Math.toRadians;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -22,6 +23,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -53,8 +55,8 @@ public class LocationService extends Service {
 
     // notification
     public final String CHANNEL_ID = "notification_channel";
-    public final int NOTIFICATION_ID = 101;
-    private CharSequence name = "map channel";
+    public final int NOTIFICATION_ID = 1;
+    private final CharSequence name = "map channel";
     private String description = "map";
     private NotificationCompat.Builder builder;
     private NotificationManagerCompat notificationManagerCompat;
@@ -69,30 +71,24 @@ public class LocationService extends Service {
     private TimerTask timerTask;
     int total_sec = 0;
 
-    // 기록 시작 버튼 체크 여부
-    boolean recordPressed = false;
-    // 기록 시작 여부
-    boolean recordStart = false;
-
     // bindService 구현
-    private IBinder mIBinder = new MyBinder();
+    private final IBinder mIBinder = new MyBinder();
 
-    private LocationCallback mLocationCallback = new LocationCallback() {
+    private final LocationCallback mLocationCallback = new LocationCallback() {
         @Override
-        public void onLocationResult(LocationResult locationResult) {
+        public void onLocationResult(@NonNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
-            if (locationResult != null && locationResult.getLastLocation() != null) {
-                Location location = locationResult.getLastLocation();
-                float accuracy = location.getAccuracy();
-                if (accuracy > 12.0)
-                    return;
+            locationResult.getLastLocation();
+            Location location = locationResult.getLastLocation();
+            float accuracy = location.getAccuracy();
+            if (accuracy > 12.0)
+                return;
 
-                curLat = location.getLatitude();
-                curLng = location.getLongitude();
-                polyline.addPoint(MapPoint.mapPointWithGeoCoord(curLat, curLng));
-                distance = curDistance(polyline);
-                Log.d(TAG, String.format("UPDATE LOCATION acc: %f lat: %f, lng: %f", accuracy, curLat, curLng));
-            }
+            curLat = location.getLatitude();
+            curLng = location.getLongitude();
+            polyline.addPoint(MapPoint.mapPointWithGeoCoord(curLat, curLng));
+            distance = curDistance(polyline);
+            Log.d(TAG, String.format("UPDATE LOCATION acc: %f lat: %f, lng: %f", accuracy, curLat, curLng));
         }
     };
 
@@ -120,6 +116,35 @@ public class LocationService extends Service {
         return curLng;
     }
 
+    // 두 위치의 거리 계산 함수
+    public double getDistance(Double lat1, Double lon1, Double lat2, Double lon2) {
+        double R = 6372.8 * 1000;
+        double dLat = toRadians(lat2 - lat1);
+        double dLon = toRadians(lon2 - lon1);
+        double a = pow(sin(dLat / 2), 2.0) + pow(sin(dLon / 2), 2.0) * cos(toRadians(lat1)) * cos(toRadians(lat2));
+        double c = 2 * asin(sqrt(a));
+        return R * c / 1000;
+    }
+
+    // 최종 거리 계산
+    public double curDistance(MapPolyline mapPolyline) {
+        MapPoint[] mapPoint = mapPolyline.getMapPoints();
+        int index = mapPoint.length;
+        double dist = 0.0;
+        double latA, lngA, latB, lngB;
+        for (int i = 0; i < index - 1; i++) {
+            latA = mapPoint[i].getMapPointGeoCoord().latitude;
+            lngA = mapPoint[i].getMapPointGeoCoord().longitude;
+            latB = mapPoint[i + 1].getMapPointGeoCoord().latitude;
+            lngB = mapPoint[i + 1].getMapPointGeoCoord().longitude;
+            dist += getDistance(latA, lngA, latB, lngB);
+            Log.d(TAG, String.format("curDistance[%d] latA: %f lngA: %f latB: %f lngB: %f distance %f", i, latA, lngA, latB, lngB, dist));
+
+        }
+
+        return dist;
+    }
+
     private void startLocationService() {
         createNotificationChannel();
         displayNotification();
@@ -140,8 +165,7 @@ public class LocationService extends Service {
             return;
         }
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, mLocationCallback, Looper.getMainLooper());
-        startForeground(1, builder.build());
-        recordPressed = true;
+        startForeground(NOTIFICATION_ID, builder.build());
         startTimer();
     }
 
@@ -162,8 +186,6 @@ public class LocationService extends Service {
         polyline.setLineColor(Color.argb(128, 255, 51, 0)); // Polyline 컬러 지정.
 
         Log.d("LocationService", "service onCreate");
-        displayNotification();
-
     }
 
     @Override
@@ -186,43 +208,14 @@ public class LocationService extends Service {
     public void onDestroy() {
         // handler.removeCallbacks(sendUpdatesToUI);
         super.onDestroy();
-        Log.v("STOP_SERVICE", "DONE");
         pauseTimer();
         notificationManagerCompat.cancel(NOTIFICATION_ID);
         stopLocationService();
+        Log.v(TAG, "onDestroy");
     }
 
-    // 두 위치의 거리 계산 함수
-    public double getDistance(Double lat1, Double lon1, Double lat2, Double lon2) {
-        double R = 6372.8 * 1000;
-        double dLat = toRadians(lat2 - lat1);
-        double dLon = toRadians(lon2 - lon1);
-        double a = pow(sin(dLat / 2), 2.0) + pow(sin(dLon / 2), 2.0) * cos(toRadians(lat1)) * cos(toRadians(lat2));
-        double c = 2 * asin(sqrt(a));
-        return R * c / 1000;
-    }
-
-    public double curDistance(MapPolyline mapPolyline) {
-        MapPoint[] mapPoint = mapPolyline.getMapPoints();
-        int index = mapPoint.length;
-        double dist = 0.0;
-        double latA, lngA, latB, lngB;
-        for (int i = 0; i < index - 1; i++) {
-            latA = mapPoint[i].getMapPointGeoCoord().latitude;
-            lngA = mapPoint[i].getMapPointGeoCoord().longitude;
-            latB = mapPoint[i + 1].getMapPointGeoCoord().latitude;
-            lngB = mapPoint[i + 1].getMapPointGeoCoord().longitude;
-            dist += getDistance(latA, lngA, latB, lngB);
-            Log.d(TAG, String.format("curDistance[%d] latA: %f lngA: %f latB: %f lngB: %f distance %f", i, latA, lngA, latB, lngB, dist));
-
-        }
-
-        return dist;
-    }
-
-    // 타이머 기능
+    // 타이머 기능 + 데이터 전송
     public void startTimer() {
-        recordPressed = true;
 
         timer = new Timer();
         timerTask = new TimerTask() {
@@ -235,7 +228,7 @@ public class LocationService extends Service {
                 int hour = time / 3600;
 
                 // 액티비티로 데이터 전송
-                intent.setAction("Thread");
+                intent.setAction("etc");
                 intent.putExtra("timer", total_sec);
                 intent.putExtra("distance", distance);
                 intent.putExtra("calories", calories);
@@ -244,6 +237,8 @@ public class LocationService extends Service {
                 // notification 업데이트
                 builder.setContentText(String.format(Locale.KOREA, "%02d:%02d:%02d / %.2f km", hour, min, sec, distance));
                 startForeground(1, builder.build());
+
+
             }
         };
         timer.schedule(timerTask, 0, 1000);
@@ -251,22 +246,21 @@ public class LocationService extends Service {
 
     // 타이머 정지
     public void pauseTimer() {
-        recordPressed = false;
-        recordStart = false;
         if (timerTask != null) {
             timerTask.cancel();
             timerTask = null;
         }
     }
 
-    // notification 설정
+    // 알림 설정
+    @SuppressLint("LaunchActivityFromNotification")
     public void displayNotification() {
         createNotificationChannel();
         Intent intent = new Intent(this, NotificationBroadcast.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .addCategory(Intent.CATEGORY_LAUNCHER)
                 .setAction(Intent.ACTION_MAIN);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.walk_over)
@@ -279,6 +273,7 @@ public class LocationService extends Service {
         startForeground(NOTIFICATION_ID, builder.build());
     }
 
+    // 알림 채널 생성
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_LOW;

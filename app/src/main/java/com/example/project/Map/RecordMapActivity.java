@@ -26,7 +26,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.project.R;
-import com.example.project.Weather.GpsTrackerService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.daum.mf.map.api.MapPOIItem;
@@ -38,9 +37,10 @@ import net.daum.mf.map.api.MapView;
 public class RecordMapActivity extends AppCompatActivity implements View.OnClickListener,
         MapViewFragment.OnConnectListener {
 
+
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
-
+    // TAG
     private final String recordTag = "RecordTAG";
     private final String TAG = "RecordMapActivity";
 
@@ -74,8 +74,17 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 시간 변수
     private int time = -1;
 
+    // Service bind
     private LocationService mService;
 
+    MyBroadcast br;
+    IntentFilter filter;
+    // MapFragment와 RecordMapActivity를 연결
+    @Override
+    public void onConnect(MapView mapView) {
+        if (mapView != null)
+            mMap = mapView;
+    }
 
     ServiceConnection sconn = new ServiceConnection() {
         @Override //서비스가 실행될 때 호출
@@ -91,6 +100,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             Log.e(TAG, "onServiceDisconnected()");
         }
     };
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,18 +131,51 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         toRecordFab.setOnClickListener(this);
         toMapFab.setOnClickListener(this);
 
-        MyBroadcast br = new MyBroadcast();
-        IntentFilter filter = new IntentFilter();
-
-        filter.addAction("Thread");
+        // 서비스 <-> 액티비티간의 통신 등록
+        br = new MyBroadcast();
+        filter = new IntentFilter();
+        filter.addAction("etc");
         registerReceiver(br, filter);
 
-        GpsTrackerService gps = new GpsTrackerService(getApplicationContext());
 
 
     }
 
+    // 서비스로부터 값을 받아와서 UI에 적용
+    public class MyBroadcast extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                if (intent.getAction() != null) {
+                    if (intent.getAction().equals("etc")) {
+                        if (mService != null)
+                            polyline = mService.getPolyline();
+                        if (mMap != null)
+                            mMap.addPolyline(polyline);
 
+                        dist_tv = findViewById(R.id.distanceText);
+                        time_tv = findViewById(R.id.pedo_time);
+                        cal_tv = findViewById(R.id.calText);
+
+                        time = intent.getIntExtra("timer", 0);
+                        distance = intent.getDoubleExtra("distance", 0.0);
+                        calories = intent.getDoubleExtra("calories", 0.0);
+
+                        int sec = time % 60;
+                        int min = time / 60 % 60;
+                        int hour = time / 3600;
+                        if (time_tv != null)
+                            time_tv.setText(hour + "H " + min + "M " + sec + "S");
+                        if (dist_tv != null)
+                            dist_tv.setText(Double.toString(Math.round(distance * 100) / 100.0));
+                        if (cal_tv != null)
+                            cal_tv.setText(calories + "kcal");
+                        Log.d("BroadCast", "Received BroadCast " + time + " " + distance);
+                    }
+                }
+            }
+        }
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -142,7 +185,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onPause() {
         super.onPause();
-
         Log.d(TAG, "onPause");
     }
 
@@ -150,15 +192,15 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     public void onDestroy() {
         super.onDestroy();
 
+
         // 트래킹 중지
         stopTracking();
 
         // 서비스 중지
-        Toast.makeText(this.getApplicationContext(), "서비스 종료", Toast.LENGTH_SHORT).show();
-
-        if (isLocationServiceRunning())
+        if (isLocationServiceRunning()) {
             stopLocationService();
-
+            Toast.makeText(this.getApplicationContext(), "서비스 종료", Toast.LENGTH_SHORT).show();
+        }
         if (mService != null)
             unbindService(sconn);
     }
@@ -168,12 +210,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         super.onStart();
     }
 
-    // MapFragment와 RecordMapActivity를 연결
-    @Override
-    public void onConnect(MapView mapView) {
-        if (mapView != null)
-            mMap = mapView;
-    }
 
     @Override
     public void onClick(View v) {
@@ -276,10 +312,11 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         // 도착 마크 생성
         makeMarker("도착 지점");
 
-        mService.destroyNotification();
-        stopLocationService();
-
         // 서비스 종료
+        if (mService != null)
+            mService.destroyNotification();
+        if (isLocationServiceRunning())
+            stopLocationService();
         Toast.makeText(this.getApplicationContext(), "서비스 종료", Toast.LENGTH_SHORT).show();
     }
 
@@ -301,6 +338,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         toMapFab.show();
     }
 
+    // 권한
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -313,6 +351,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    // 서비스 실행 여부 체크
     private boolean isLocationServiceRunning() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         if (activityManager != null) {
@@ -349,37 +388,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    // 서비스로부터 값을 받아와서 UI에 적용
-    public class MyBroadcast extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("Thread")) {
-                if (mService != null)
-                    polyline = mService.getPolyline();
-                mMap.addPolyline(polyline);
-                dist_tv = findViewById(R.id.distanceText);
-                time_tv = findViewById(R.id.pedo_time);
-                cal_tv = findViewById(R.id.calText);
-
-                time = intent.getIntExtra("timer", 0);
-                distance = intent.getDoubleExtra("distance", 0.0);
-                calories = intent.getDoubleExtra("calories", 0.0);
-
-                int sec = time % 60;
-                int min = time / 60 % 60;
-                int hour = time / 3600;
-                if (time_tv != null)
-                    time_tv.setText(hour + "H " + min + "M " + sec + "S");
-                if (dist_tv != null)
-                    dist_tv.setText(Double.toString(Math.round(distance * 100) / 100.0));
-                if (cal_tv != null)
-                    cal_tv.setText(calories + "kcal");
-                Log.d("BroadCast", "Received BroadCast " + time + " " + distance);
-            }
-        }
-    }
-
-
     // Tracking 시작
     private void startTracking() {
         if (mMap != null)
@@ -408,6 +416,5 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             Log.i(TAG, "Marker " + String.format("위치 (%f, %f)에 %s 마커를 생성 ", mService.getCurLat(), mService.getCurLng(), tag));
         }
     }
-
 
 }
