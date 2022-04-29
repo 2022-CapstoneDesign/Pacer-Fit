@@ -11,16 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Response;
-import com.android.volley.toolbox.StringRequest;
 import com.example.project.R;
 import com.example.project.Weather.GpsTrackerService;
 import com.example.project.Weather.Weather;
@@ -41,13 +36,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MapViewFragment extends Fragment {
     private static String TAG = "MapViewFragment_getPath";
-    private static final String TAG_JSON="pacerfit";
+    private static final String TAG_JSON = "pacerfit";
     private static final String TAG_PATH = "gpxPath";
     private static final String TAG_SIGUN = "sigun";
 
@@ -77,10 +71,14 @@ public class MapViewFragment extends Fragment {
         double latitude = gpsTracker.getLatitude();
         double longitude = gpsTracker.getLongitude();
 
+        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 1, false);
+        mapView.fitMapViewAreaToShowAllPolylines();
+
+
         address = weatherMethod.getCurrentAddress(ct, latitude, longitude);
         String[] local = address.split(" ");  //주소를 대한민국, 서울특별시, xx구 ... 로 나눔
         local[1] = AreaChange(local[1]);  //서울특별시, 경기도등의 이름을 db에 맞게 수정
-        location=(local[1] + " " + local[2]);
+        location = (local[1] + " " + local[2]);
         Log.d(TAG, "location - " + location);
         pathArrayList = new ArrayList<>();
 
@@ -91,6 +89,7 @@ public class MapViewFragment extends Fragment {
         return rootView;
 
     }
+
     private class GetGpxPathData extends AsyncTask<String, Void, String> {
         ProgressDialog progressDialog;
         String errorString = null;
@@ -101,10 +100,9 @@ public class MapViewFragment extends Fragment {
             super.onPostExecute(result);
             //progressDialog.dismiss();
             Log.d(TAG, "response  - " + result);
-            if (result == null){
+            if (result == null) {
                 Log.d(TAG, errorString);
-            }
-            else {
+            } else {
                 pathJsonString = result;
                 showResult();
                 new Thread() {
@@ -119,12 +117,13 @@ public class MapViewFragment extends Fragment {
                 }.start();
             }
         }
+
         @Override
         protected String doInBackground(String... params) {
             String serverURL = params[0];
 
             try {
-                String selectLocation = "location="+location;
+                String selectLocation = "location=" + location;
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
@@ -143,10 +142,9 @@ public class MapViewFragment extends Fragment {
                 Log.d(TAG, "response code - " + responseStatusCode);
 
                 InputStream inputStream;
-                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
                     inputStream = httpURLConnection.getInputStream();
-                }
-                else{
+                } else {
                     inputStream = httpURLConnection.getErrorStream();
                 }//연결상태 확인
 
@@ -156,7 +154,7 @@ public class MapViewFragment extends Fragment {
                 StringBuilder sb = new StringBuilder();
                 String line;
 
-                while((line = bufferedReader.readLine()) != null){
+                while ((line = bufferedReader.readLine()) != null) {
                     sb.append(line);
                 }
                 bufferedReader.close();
@@ -169,12 +167,13 @@ public class MapViewFragment extends Fragment {
 
         }
     }
-    private void showResult(){
+
+    private void showResult() {
         try {
             JSONObject jsonObject = new JSONObject(pathJsonString);
             JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
-            for(int i=0;i<jsonArray.length();i++){
+            for (int i = 0; i < jsonArray.length(); i++) {
 
                 JSONObject item = jsonArray.getJSONObject(i);
 
@@ -182,7 +181,7 @@ public class MapViewFragment extends Fragment {
                 String sigun = item.getString(TAG_SIGUN);
 
 
-                HashMap<String,String> hashMap = new HashMap<>();
+                HashMap<String, String> hashMap = new HashMap<>();
 
                 hashMap.put(TAG_PATH, gpxPath);
                 hashMap.put(TAG_SIGUN, sigun);
