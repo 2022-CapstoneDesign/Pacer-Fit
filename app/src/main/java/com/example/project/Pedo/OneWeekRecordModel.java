@@ -1,14 +1,14 @@
 package com.example.project.Pedo;
 
-public class RecordModel {
+public class OneWeekRecordModel {
     String day;
-    String startEndTime;
+    String date;
     String totalTime;
     String step;
 
-    public RecordModel(String day, String startEndTime, String totalTime, String step) {
+    public OneWeekRecordModel(String day, String date, String totalTime, String step) {
         this.day = day;
-        this.startEndTime = startEndTime;
+        this.date = date;
         this.totalTime = totalTime;
         this.step = step;
     }
@@ -17,8 +17,8 @@ public class RecordModel {
         return day;
     }
 
-    public String getStartEndTime() {
-        return startEndTime;
+    public String getDate() {
+        return date;
     }
 
     public String getTotalTime() {

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.project"
+    android:launchMode="singleInstance"
     android:targetSandboxVersion="1">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,9 +10,11 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -21,10 +25,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project"
         android:usesCleartextTraffic="true">
-        <service
-            android:name=".Map.MapService"
-            android:enabled="true"
-            android:exported="true" />
+        <receiver android:name=".Map.NotificationBroadcast"
+            android:exported="false"/>
+        <service android:name=".Map.LocationService"
+            android:exported="false"/>
+
         <activity
             android:name=".Pedo.CountDownActivity"
             android:exported="false" />
@@ -44,7 +49,9 @@
             android:name=".Login.IntroActivity"
             android:exported="false"
             android:theme="@style/IntroTheme" />
-        <activity android:name=".Map.RecordMapActivity" />
+        <activity android:name=".Map.RecordMapActivity"
+            android:hardwareAccelerated="false"
+            android:exported="false" />
         <activity android:name=".Pedo.StepCounterActivity" />
         <activity
             android:name=".Main.SplashActivity"
@@ -56,8 +63,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Map.MapActivity"
-            android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name=".Map.MapActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".Main.BottomNavigation"
             android:exported="true"
