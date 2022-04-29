@@ -202,10 +202,9 @@ public class MapViewFragment extends Fragment {
         HttpURLConnection http = null;
         InputStreamReader isr = null;
         BufferedReader br = null;
-
-        HashMap<String, String> hashMap1 = pathArrayList.get(0);
-        HashMap<String, String> hashMap2 = pathArrayList.get(1);
-        HashMap<String, String> hashMap3 = pathArrayList.get(12);
+        HashMap<String,String> hashMap1 = pathArrayList.get(0);
+        HashMap<String,String> hashMap2 = pathArrayList.get(1);
+        HashMap<String,String> hashMap3 = pathArrayList.get(2);
 
         try {
             url = new URL(hashMap3.get(TAG_PATH));

@@ -1,4 +1,4 @@
-package com.example.project.Dist;
+package com.example.project.Pedo;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,11 +13,11 @@ import com.example.project.R;
 
 import java.util.List;
 
-public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder> {
+public class OneMonthRecordAdapter extends RecyclerView.Adapter<OneMonthRecordAdapter.ViewHolder> {
     Context context;
-    List<RecordModel> record_list;
+    List<OneMonthRecordModel> record_list;
 
-    public RecordAdapter(Context context, List<RecordModel> record_list) {
+    public OneMonthRecordAdapter(Context context, List<OneMonthRecordModel> record_list) {
         this.context = context;
         this.record_list = record_list;
     }
@@ -25,18 +25,17 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.dist_record_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.pedo_one_month_record_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (record_list != null && record_list.size() > 0) {
-            RecordModel model = record_list.get(position);
-            holder.day_record.setText(model.getDay());
-            holder.startEndTime_record.setText(model.getStartEndTime());
+            OneMonthRecordModel model = record_list.get(position);
+            holder.date_record.setText(model.getDate());
             holder.totalTime_record.setText(model.getTotalTime());
-            holder.km_record.setText(model.getStep());
+            holder.step_record.setText(model.getStep());
         } else {
         }
     }
@@ -47,14 +46,13 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView day_record, startEndTime_record, totalTime_record, km_record;
+        TextView date_record, totalTime_record, step_record;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            day_record = itemView.findViewById(R.id.day_record);
-            startEndTime_record = itemView.findViewById(R.id.startEndTime_record);
+            date_record = itemView.findViewById(R.id.date_record);
             totalTime_record = itemView.findViewById(R.id.totalTime_record);
-            km_record = itemView.findViewById(R.id.km_record);
+            step_record = itemView.findViewById(R.id.step_record);
         }
     }
 }

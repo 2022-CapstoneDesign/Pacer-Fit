@@ -19,14 +19,17 @@ public class RankingFragment extends Fragment {
     Button pedoBtn;
     DistRankingFragment distRankingFragment;
     PedoFragment pedoRankingFragment;
+    String userID;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.main_ranking_fragment, container, false);
 
+
         distBtn = v.findViewById(R.id.ranking_dist_btn);
         pedoBtn = v.findViewById(R.id.ranking_pedo_btn);
+
 
         distBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +49,7 @@ public class RankingFragment extends Fragment {
                 distBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style));
                 pedoBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style3));
 
+
                 // fragment 위에 그린 fragment를 교체하기 위해서 childFragment를 사용
                 getChildFragmentManager().beginTransaction().replace(R.id.ranking_fragment_container, new PedoFragment()).commit();
                 //FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
@@ -54,4 +58,6 @@ public class RankingFragment extends Fragment {
         });
         return v;
     }
+
+
 }

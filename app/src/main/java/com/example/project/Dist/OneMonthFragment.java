@@ -29,10 +29,9 @@ import java.util.Random;
 public class OneMonthFragment extends Fragment {
     private LineChart lineChart; // 만보기 30일 라인그래프
     RecyclerView recycler_view;
-    RecordAdapter adapter;
+    OneMonthRecordAdapter adapter;
 
     private TextView day_today_onemonthDist;
-    private TextView startEndTime_today_onemonthDist;
     private TextView totalTime_today_onemonthDist;
     private TextView km_today_onemonthDist;
 
@@ -44,8 +43,7 @@ public class OneMonthFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.dist_one_month_fragment, container, false);
 
-        day_today_onemonthDist = v.findViewById(R.id.day_today_onemonthDist);
-        startEndTime_today_onemonthDist = v.findViewById(R.id.startEndTime_today_onemonthDist);
+        day_today_onemonthDist = v.findViewById(R.id.date_today_onemonthDist);
         totalTime_today_onemonthDist = v.findViewById(R.id.totalTime_today_onemonthDist);
         km_today_onemonthDist = v.findViewById(R.id.km_today_onemonthDist);
         recycler_view = v.findViewById(R.id.recycler_view);
@@ -55,7 +53,7 @@ public class OneMonthFragment extends Fragment {
 
         setRecyclerView();
         // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
-        setTodayRecord("4/1", "오후 8:05 - 오후 10:11", "2시간 6분", "24km");
+        setTodayRecord("2022/4/1", "2시간 6분", "24km");
         setAvgTime();
 
         ArrayList<Float> lineChartValues = new ArrayList<>();
@@ -81,9 +79,8 @@ public class OneMonthFragment extends Fragment {
         dist_avg_time.setText(hours + "시간 " + minuates + "분");
     }
 
-    private void setTodayRecord(String day, String startEndTime, String totalTime, String km) {
+    private void setTodayRecord(String day, String totalTime, String km) {
         day_today_onemonthDist.setText(day);
-        startEndTime_today_onemonthDist.setText(startEndTime);
         totalTime_today_onemonthDist.setText(totalTime);
         km_today_onemonthDist.setText(km);
     }
@@ -91,15 +88,15 @@ public class OneMonthFragment extends Fragment {
     private void setRecyclerView() {
         recycler_view.setHasFixedSize(true);
         recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new RecordAdapter(getContext(), getList());
+        adapter = new OneMonthRecordAdapter(getContext(), getList());
         recycler_view.setAdapter(adapter);
     }
 
-    private List<RecordModel> getList() {
-        List<RecordModel> record_list = new ArrayList<>();
+    private List<OneMonthRecordModel> getList() {
+        List<OneMonthRecordModel> record_list = new ArrayList<>();
         // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
         for (int i = 2; i < 30; i++)
-            record_list.add(new RecordModel("4/" + i, "오후 6:21 - 오후 7:02", "2시간 33분", "8km"));
+            record_list.add(new OneMonthRecordModel("2022/4/" + i,"2시간 33분", "8km"));
 
         return record_list;
     }

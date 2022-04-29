@@ -2,7 +2,7 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:stretchColumns="2,3,4">
+    android:stretchColumns="2,3">
 
     <View
         android:layout_width="match_parent"
@@ -11,22 +11,14 @@
         android:layout_marginEnd="3dp"
         android:background="@color/lightgray_line" />
 
-    <TableRow>
+    <TableRow
+        android:weightSum="4">
 
         <TextView
-            android:id="@+id/day_record"
-            android:layout_width="60dp"
+            android:id="@+id/date_record"
+            android:layout_width="0dp"
             android:layout_height="33dp"
-            android:layout_column="1"
-            android:fontFamily="@font/nanumsquareroundeb"
-            android:gravity="center"
-            android:padding="5dp"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/startEndTime_record"
-            android:layout_height="33dp"
+            android:layout_weight="2"
             android:layout_column="1"
             android:fontFamily="@font/nanumsquareroundeb"
             android:gravity="center"
@@ -36,7 +28,9 @@
 
         <TextView
             android:id="@+id/totalTime_record"
+            android:layout_width="0dp"
             android:layout_height="33dp"
+            android:layout_weight="1"
             android:layout_column="1"
             android:fontFamily="@font/nanumsquareroundeb"
             android:gravity="center"
@@ -46,7 +40,9 @@
 
         <TextView
             android:id="@+id/step_record"
+            android:layout_width="0dp"
             android:layout_height="33dp"
+            android:layout_weight="1"
             android:layout_column="1"
             android:fontFamily="@font/nanumsquareroundeb"
             android:gravity="center"
