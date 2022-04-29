@@ -1,11 +1,8 @@
 package com.example.project.Ranking;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
