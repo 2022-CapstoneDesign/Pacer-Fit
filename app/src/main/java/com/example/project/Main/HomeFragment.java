@@ -69,6 +69,7 @@ import java.util.Random;
 
 public class HomeFragment extends Fragment {
     private TextView weatherInfo;
+    private TextView temperature;
     private ImageView weatherInfo_Image;
     private TransLocalPoint transLocalPoint;
     private GpsTrackerService gpsTracker;
@@ -98,8 +99,11 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.main_home_fragment, container, false);
         Context ct = container.getContext();
         TextView location = v.findViewById(R.id.location);
+        location.setSelected(true);
         weatherInfo = v.findViewById(R.id.weather);
+        weatherInfo.setSelected(true);
         weatherInfo_Image = v.findViewById(R.id.weather_image);
+        temperature = v.findViewById(R.id.temperature);
         Button Km_button = v.findViewById(R.id.Km_button);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             LocalDate now = null;
@@ -535,7 +539,8 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            weatherInfo.setText(weather + tmperature);
+            weatherInfo.setText(weather);
+            temperature.setText(tmperature);
             //doInBackground()로부터 리턴된 값이 onPostExecute()의 매개변수로 넘어오므로 s를 출력
             if (weather.equals("맑음\n")) {
                 weatherInfo_Image.setImageResource(R.color.lightgray_project);

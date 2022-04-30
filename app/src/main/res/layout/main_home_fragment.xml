@@ -133,10 +133,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
                 android:fontFamily="@font/nanumsquareroundeb"
-                android:maxLines="1"
                 android:text="로딩중.."
                 android:textColor="@color/white"
                 android:textSize="18sp"
+                android:singleLine="true"
+                android:ellipsize="marquee"
                 app:flow_verticalAlign="bottom"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView4"
                 app:layout_constraintStart_toEndOf="@+id/imageView4" />
@@ -144,15 +145,30 @@
             <TextView
                 android:id="@+id/weather"
                 android:layout_width="67dp"
-                android:layout_height="53dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="12dp"
-                android:layout_marginBottom="9dp"
+                android:gravity="bottom"
+                android:ellipsize="marquee"
                 android:fontFamily="@font/nanumsquareroundeb"
+                android:singleLine="true"
                 android:text="로딩중.."
                 android:textColor="@color/lightlightgray_text_color"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/view3"
-                app:layout_constraintEnd_toEndOf="@+id/view3" />
+                app:layout_constraintEnd_toEndOf="@+id/view3"
+                app:layout_constraintTop_toTopOf="@+id/weather_image" />
+
+            <TextView
+                android:id="@+id/temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:gravity="top"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text=""
+                android:textColor="@color/lightlightgray_text_color"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/weather"
+                app:layout_constraintTop_toBottomOf="@+id/weather" />
 
             <ImageView
                 android:id="@+id/weather_image"
