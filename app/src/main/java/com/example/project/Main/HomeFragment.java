@@ -100,6 +100,7 @@ public class HomeFragment extends Fragment {
         TextView location = v.findViewById(R.id.location);
         weatherInfo = v.findViewById(R.id.weather);
         weatherInfo_Image = v.findViewById(R.id.weather_image);
+        weatherInfo.setSelected(true);
         Button Km_button = v.findViewById(R.id.Km_button);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             LocalDate now = null;
