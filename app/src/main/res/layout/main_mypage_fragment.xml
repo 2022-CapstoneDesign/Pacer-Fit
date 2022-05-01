@@ -116,17 +116,17 @@
                 android:layout_marginTop="60dp"
                 app:layout_constraintStart_toStartOf="@+id/view4"
                 app:layout_constraintTop_toTopOf="@+id/view4"
-                app:srcCompat="@drawable/walk" />
+                app:srcCompat="@drawable/walk_over" />
 
             <TextView
                 android:id="@+id/maxStep"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:text=""
                 android:textColor="@color/white"
-                android:textSize="3sp"
+                android:textSize="23sp"
                 app:layout_constraintEnd_toEndOf="@+id/mypage_walkBtn"
                 app:layout_constraintStart_toStartOf="@+id/mypage_walkBtn"
                 app:layout_constraintTop_toBottomOf="@+id/mypage_walkBtn" />
@@ -138,9 +138,10 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:text="걸음"
-                android:textColor="@color/whitegray_project"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/mypage_walkBtn"
+                app:layout_constraintHorizontal_bias="0.516"
                 app:layout_constraintStart_toStartOf="@+id/mypage_walkBtn"
                 app:layout_constraintTop_toBottomOf="@+id/maxStep" />
 
@@ -150,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/nanumsquareroundeb"
-                android:text=""
+                android:text="최대 걸음"
                 android:textColor="@color/whitegray_project"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/stepTxt"
@@ -165,7 +166,7 @@
                 android:layout_marginEnd="60dp"
                 app:layout_constraintEnd_toEndOf="@+id/view4"
                 app:layout_constraintTop_toTopOf="@+id/view4"
-                app:srcCompat="@drawable/km" />
+                app:srcCompat="@drawable/km_over" />
 
             <TextView
                 android:id="@+id/maxKm"
@@ -175,7 +176,7 @@
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:text=""
                 android:textColor="@color/white"
-                android:textSize="3sp"
+                android:textSize="23sp"
                 app:layout_constraintEnd_toEndOf="@+id/mypage_kmBtn"
                 app:layout_constraintStart_toStartOf="@+id/mypage_kmBtn"
                 app:layout_constraintTop_toBottomOf="@+id/mypage_kmBtn" />
@@ -187,7 +188,7 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:text="거리"
-                android:textColor="@color/whitegray_project"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/mypage_kmBtn"
                 app:layout_constraintStart_toStartOf="@+id/mypage_kmBtn"
@@ -199,7 +200,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/nanumsquareroundeb"
-                android:text=""
+                android:text="최대 거리"
                 android:textColor="@color/whitegray_project"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/mypage_kmBtn"
@@ -214,7 +215,7 @@
                 android:layout_marginBottom="115dp"
                 app:layout_constraintBottom_toBottomOf="@+id/view4"
                 app:layout_constraintStart_toStartOf="@+id/view4"
-                app:srcCompat="@drawable/kcal" />
+                app:srcCompat="@drawable/kcal_over" />
 
             <TextView
                 android:id="@+id/maxKcal"
@@ -224,7 +225,7 @@
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:text=""
                 android:textColor="@color/white"
-                android:textSize="3sp"
+                android:textSize="23sp"
                 app:layout_constraintEnd_toEndOf="@+id/mypage_kcalBtn"
                 app:layout_constraintStart_toStartOf="@+id/mypage_kcalBtn"
                 app:layout_constraintTop_toBottomOf="@+id/mypage_kcalBtn" />
@@ -236,7 +237,7 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:text="칼로리 소모량"
-                android:textColor="@color/whitegray_project"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/mypage_kcalBtn"
                 app:layout_constraintStart_toStartOf="@+id/mypage_kcalBtn"
@@ -248,7 +249,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/nanumsquareroundeb"
-                android:text=""
+                android:text="최대 칼로리"
                 android:textColor="@color/whitegray_project"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/mypage_kcalBtn"
@@ -263,7 +264,7 @@
                 android:layout_marginBottom="115dp"
                 app:layout_constraintBottom_toBottomOf="@+id/view4"
                 app:layout_constraintEnd_toEndOf="@+id/view4"
-                app:srcCompat="@drawable/time" />
+                app:srcCompat="@drawable/time_over" />
 
             <TextView
                 android:id="@+id/maxTime"
@@ -273,7 +274,7 @@
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:text=""
                 android:textColor="@color/white"
-                android:textSize="3sp"
+                android:textSize="23sp"
                 app:layout_constraintEnd_toEndOf="@+id/mypage_timeBtn"
                 app:layout_constraintStart_toStartOf="@+id/mypage_timeBtn"
                 app:layout_constraintTop_toBottomOf="@+id/mypage_timeBtn" />
@@ -285,7 +286,7 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:text="운동시간"
-                android:textColor="@color/whitegray_project"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/mypage_timeBtn"
                 app:layout_constraintStart_toStartOf="@+id/mypage_timeBtn"
@@ -297,7 +298,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/nanumsquareroundeb"
-                android:text=""
+                android:text="최대 시간"
                 android:textColor="@color/whitegray_project"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/mypage_timeBtn"
