@@ -4,11 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <!-- 네이버 지도 -->
+    <com.naver.maps.map.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </RelativeLayout>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
