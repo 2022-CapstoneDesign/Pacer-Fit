@@ -51,13 +51,13 @@ public class OneYearFragment extends Fragment {
         // <--- 막대 그래프 --->
         barChart = v.findViewById(R.id.pedo_oneyear_barchart);
 
-        // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
-        setTodayRecord("2022년 4월", "2시간 6분", "2,351걸음");
+        // ***** 이 곳에서 이번달 만보기 기록 DB 값을 표시합니다 *****
+        setTodayRecord("2022년 5월", "2시간 6분", "2,351걸음");
         setAvgTime();
         setRecyclerView();
 
         ArrayList<Float> barChartValues = new ArrayList<>();
-        // 최근 7일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
+        // 최근 1년의 운동량 값(한달 단위로) 받아오기 -> DB 값으로 추후에 수정
         for (int i = 0; i < 12; i++) {
             float rand = (float) Math.round(new Random().nextFloat() * 400000);
             //Log.d("RAND", String.valueOf(rand));
@@ -94,7 +94,7 @@ public class OneYearFragment extends Fragment {
 
     private List<OneYearRecordModel> getList() {
         List<OneYearRecordModel> record_list = new ArrayList<>();
-        // ***** 이 곳에서 1년 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
+        // ***** 이 곳에서 1년 만보기 기록 DB 값을 표시합니다(월 단위로, 이번달 기록 제외) *****
         for (int i = 0; i < 11; i++) {
             record_list.add(new OneYearRecordModel("2022년 3월", "40분", "1,218걸음"));
         }

@@ -54,7 +54,7 @@ public class OneWeekFragment extends Fragment {
         lineChart = v.findViewById(R.id.dist_oneweek_linechart);
 
         setRecyclerView();
-        // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
+        // ***** 이 곳에서 오늘의 거리 기록 DB 값을 표시합니다 *****
         setTodayRecord("오늘(금)", "2022/4/18", "2시간 6분", "24km");
         setAvgTime();
 
@@ -97,7 +97,7 @@ public class OneWeekFragment extends Fragment {
 
     private List<OneWeekRecordModel> getList() {
         List<OneWeekRecordModel> record_list = new ArrayList<>();
-        // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
+        // ***** 이 곳에서 일주일 거리 기록 DB 값을 표시합니다(하루단위로, 오늘 기록 제외) *****
         record_list.add(new OneWeekRecordModel("목", "2022/4/17", "40분", "8km"));
         record_list.add(new OneWeekRecordModel("수", "2022/4/16", "2시간 33분", "31km"));
         record_list.add(new OneWeekRecordModel("화", "2022/4/15", "4시간 7분", "58km"));
@@ -122,10 +122,13 @@ public class OneWeekFragment extends Fragment {
 
         // x축 설정(꺾은선그래프 기준 아래쪽)
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setAxisMaximum(6.5f);
-        xAxis.setDrawAxisLine(false); // 축 그리기 설정
+        xAxis.setAxisMinimum(-0.5f); // 라인그래프만 x축 좌측 여유 공간 필요
+        xAxis.setAxisMaximum(6.5f); // x : 0, 1, ... , 6 -> 7개
+        xAxis.setDrawAxisLine(true); // 축 그리기 설정
+        xAxis.setLabelCount(7); // 이걸 써야 setGranularity가 작동함
         xAxis.setGranularity(1f); // 간격 설정(표시되는 값)
         xAxis.setAxisLineWidth(1.5f);
+        xAxis.setAxisLineColor(Color.parseColor("#5e5b5f")); // X축 색 설정
         xAxis.setTextSize(13f);
         xAxis.setTextColor(Color.parseColor("#909090"));
         xAxis.setDrawGridLines(false); // 격자
@@ -136,7 +139,7 @@ public class OneWeekFragment extends Fragment {
         xAxis.setTypeface(tf);
 
         YAxis yAxisLeft = lineChart.getAxisLeft();
-        yAxisLeft.setAxisMaximum(100f); // y축 최대값 설정
+        yAxisLeft.setAxisMaximum(101f); // y축 최대값 설정
         yAxisLeft.setAxisMinimum(0f); // y축 최소값 설정
         yAxisLeft.setDrawLabels(false); // 값 표기 설정
         yAxisLeft.setDrawGridLines(false); // 격자

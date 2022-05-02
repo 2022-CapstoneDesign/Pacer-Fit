@@ -135,7 +135,7 @@ public class OneWeekFragment extends Fragment {
     private List<OneWeekRecordModel> getList() {
 
         List<OneWeekRecordModel> record_list = new ArrayList<>();
-        // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
+        // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(하루 단위로, 오늘 기록 제외) *****
         //value = -1이면 어제..
         float value = 0;
         for(int i=5; i>=0; i--) {

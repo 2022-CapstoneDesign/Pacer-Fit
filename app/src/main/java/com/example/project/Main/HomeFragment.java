@@ -347,7 +347,8 @@ public class HomeFragment extends Fragment {
         //barChart.setExtraOffsets(10f, 0f, 40f, 0f);
         // x축 설정(막대그래프 기준 아래쪽)
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setAxisMaximum(30.5f); // x : 0, 1, ... , 30
+        xAxis.setAxisMinimum(-0.5f); // 라인그래프만 x축 좌측 여유 공간 필요
+        xAxis.setAxisMaximum(30.5f); // x : 0, 1, ... , 30 -> 31개
         xAxis.setDrawAxisLine(false); // 축 그리기 설정
         xAxis.setLabelCount(31); // 이걸 써야 setGranularity가 작동함
         xAxis.setGranularity(1f); // 간격 설정(표시되는 값) -> OneMonthXAxisValueFormatter.java에서 값 번갈아서 나오게 커스텀

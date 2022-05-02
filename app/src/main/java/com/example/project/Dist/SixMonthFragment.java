@@ -55,8 +55,9 @@ public class SixMonthFragment extends Fragment {
         lineChart = v.findViewById(R.id.dist_sixmonth_linechart);
 
         setRecyclerView();
-        // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
-        setTodayRecord("2022/4/1", "2시간 6분", "24km");
+        // ***** 이 곳에서 제일 최근 일주일 거리 기록 DB 값을 표시합니다 *****
+        // 일주일 기준 -> 시작 : 월요일, 끝 : 일요일
+        setTodayRecord("2022/5/2 ~ 2022/5/8", "2시간 6분", "24km");
         setAvgTime();
 
         ArrayList<Float> lineChartValues = new ArrayList<>();
@@ -97,9 +98,10 @@ public class SixMonthFragment extends Fragment {
 
     private List<SixMonthRecordModel> getList() {
         List<SixMonthRecordModel> record_list = new ArrayList<>();
-        // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
+        // ***** 이 곳에서 6개월 거리 기록 DB 값을 표시합니다(일주일 단위로, 이번주 기록 제외) *****
+        // 일주일 기준 -> 시작 : 월요일, 끝 : 일요일
         for (int i = 1; i < 24*7; i+=7)
-            record_list.add(new SixMonthRecordModel("2022/4/" + 1 + " ~ 2022/4/" + (1 + 6),"2시간 33분", "28km"));
+            record_list.add(new SixMonthRecordModel("2022/5/" + 2 + " ~ 2022/5/" + (2 + 6),"2시간 33분", "28km"));
 
         return record_list;
     }
@@ -117,13 +119,16 @@ public class SixMonthFragment extends Fragment {
 
         // x축 설정(꺾은선그래프 기준 아래쪽)
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setAxisMaximum(24.1f);
+        xAxis.setAxisMinimum(-0.5f); // 라인그래프만 x축 좌측 여유 공간 필요
+        xAxis.setAxisMaximum(23.5f); // x : 0, 1, ... , 23 -> 24개
         //xAxis.setLabelCount(7, true);
         //xAxis.setAvoidFirstLastClipping(true);
-        xAxis.setDrawAxisLine(false); // 축 그리기 설정
-        xAxis.setGranularity(5f); // 간격 설정(표시되는 값)
+        xAxis.setDrawAxisLine(true); // 축 그리기 설정
+        xAxis.setLabelCount(24); // 이걸 써야 setGranularity가 작동함
+        xAxis.setGranularity(1f); // 간격 설정(표시되는 값) -> SixMonthXAxisValueFormatter.java에서 값 번갈아서 나오게 커스텀
         xAxis.setTextSize(13f);
         xAxis.setAxisLineWidth(1.5f);
+        xAxis.setAxisLineColor(Color.parseColor("#5e5b5f")); // X축 색 설정
         xAxis.setTextColor(Color.parseColor("#909090"));
         xAxis.setDrawGridLines(false); // 격자
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
