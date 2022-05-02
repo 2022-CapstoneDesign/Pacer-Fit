@@ -50,13 +50,13 @@ public class OneYearFragment extends Fragment {
 
         // <--- 막대 그래프 --->
         barChart = v.findViewById(R.id.pedo_oneyear_barchart);
-        ArrayList<Float> barChartValues = new ArrayList<>();
 
         // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
         setTodayRecord("2022년 4월", "2시간 6분", "2,351걸음");
         setAvgTime();
         setRecyclerView();
 
+        ArrayList<Float> barChartValues = new ArrayList<>();
         // 최근 7일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
         for (int i = 0; i < 12; i++) {
             float rand = (float) Math.round(new Random().nextFloat() * 400000);
@@ -94,8 +94,8 @@ public class OneYearFragment extends Fragment {
 
     private List<OneYearRecordModel> getList() {
         List<OneYearRecordModel> record_list = new ArrayList<>();
-        // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
-        for (int i = 1; i < 12; i++) {
+        // ***** 이 곳에서 1년 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
+        for (int i = 0; i < 11; i++) {
             record_list.add(new OneYearRecordModel("2022년 3월", "40분", "1,218걸음"));
         }
 
@@ -118,20 +118,21 @@ public class OneYearFragment extends Fragment {
 
         // x축 설정(막대그래프 기준 아래쪽)
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setAxisMaximum(12f);
+        xAxis.setAxisMaximum(12f); // x축 최대값 설정
         xAxis.setDrawAxisLine(true); // 축 그리기 설정
-        xAxis.setAxisLineWidth(1.5f);
+        xAxis.setAxisLineWidth(1.5f); // x축 두께
         xAxis.setAxisLineColor(Color.parseColor("#5e5b5f")); // X축 색 설정
         xAxis.setGranularity(2f); // 간격 설정(표시되는 값)
-        xAxis.setTextSize(13f);
+        xAxis.setTextSize(13f); // x축 값 텍스트 사이즈
         xAxis.setTextColor(Color.parseColor("#909090"));
         xAxis.setDrawGridLines(false); // 격자
         //xAxis.setGridLineWidth(25f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
-        xAxis.setValueFormatter(new OneYearXAxisValueFormatter()); // X축에 요일 표시
+        xAxis.setValueFormatter(new OneYearXAxisValueFormatter()); // X축에 월 표시
         // X축 폰트 설정
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/nanumsquareroundeb.ttf");
         xAxis.setTypeface(tf);
+        //xAxis.setLabelCount(6, true);
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
