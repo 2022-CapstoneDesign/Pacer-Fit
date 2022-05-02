@@ -118,13 +118,15 @@ public class OneYearFragment extends Fragment {
 
         // x축 설정(막대그래프 기준 아래쪽)
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setAxisMaximum(12f); // x축 최대값 설정
+        xAxis.setAxisMaximum(11.5f); // x축 최대값 설정
         xAxis.setDrawAxisLine(true); // 축 그리기 설정
         xAxis.setAxisLineWidth(1.5f); // x축 두께
         xAxis.setAxisLineColor(Color.parseColor("#5e5b5f")); // X축 색 설정
-        xAxis.setGranularity(2f); // 간격 설정(표시되는 값)
+        xAxis.setLabelCount(12); // 이걸 써야 setGranularity가 작동함
+        //xAxis.setGranularityEnabled(true);
+        xAxis.setGranularity(1f); // 간격 설정(표시되는 값) -> OneYearXAxisValueFormatter.java에서 값 번갈아서 나오게 커스텀
         xAxis.setTextSize(13f); // x축 값 텍스트 사이즈
-        xAxis.setTextColor(Color.parseColor("#909090"));
+        xAxis.setTextColor(Color.parseColor("#909090")); // x축 텍스트 컬러
         xAxis.setDrawGridLines(false); // 격자
         //xAxis.setGridLineWidth(25f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
@@ -132,7 +134,7 @@ public class OneYearFragment extends Fragment {
         // X축 폰트 설정
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/nanumsquareroundeb.ttf");
         xAxis.setTypeface(tf);
-        //xAxis.setLabelCount(6, true);
+        //xAxis.setLabelRotationAngle(45); // x축 값 회전..
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
