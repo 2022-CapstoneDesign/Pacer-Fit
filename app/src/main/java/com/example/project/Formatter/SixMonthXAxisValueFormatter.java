@@ -19,7 +19,7 @@ public class SixMonthXAxisValueFormatter extends IndexAxisValueFormatter {
 //        return df.format(cal.getTime());
 
         // x축 값이 끝에서부터 나오게 설정.
-        // 맨 끝값 : 해당 주의 월요일 날짜 / 그 전값 : 4주 전의 월요일 날짜 / ...
+        // 맨 끝값 : 이번 주의 월요일 날짜 / 그 전값 : 4주 전의 월요일 날짜 / ...
         // => 총 6개의 x값이 표시됨
         if (value % 4.0f == 3.0f) {
             Calendar cal = Calendar.getInstance();

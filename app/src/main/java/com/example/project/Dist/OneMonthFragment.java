@@ -95,7 +95,7 @@ public class OneMonthFragment extends Fragment {
     private List<OneMonthRecordModel> getList() {
         List<OneMonthRecordModel> record_list = new ArrayList<>();
         // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
-        for (int i = 2; i < 30; i++)
+        for (int i = 0; i < 30; i++)
             record_list.add(new OneMonthRecordModel("2022/4/" + i,"2시간 33분", "8km"));
 
         return record_list;

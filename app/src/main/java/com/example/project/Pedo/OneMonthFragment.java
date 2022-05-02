@@ -58,7 +58,7 @@ public class OneMonthFragment extends Fragment {
         setAvgTime();
         setRecyclerView();
 
-        // 최근 7일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
+        // 최근 30일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
         for (int i = 0; i < 31; i++) {
             float rand = (float) Math.round(new Random().nextFloat() * 15000);
             //Log.d("RAND", String.valueOf(rand));
@@ -96,7 +96,7 @@ public class OneMonthFragment extends Fragment {
     private List<OneMonthRecordModel> getList() {
         List<OneMonthRecordModel> record_list = new ArrayList<>();
         // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
-        for (int i = 1; i < 30; i++)
+        for (int i = 1; i < 31; i++)
             record_list.add(new OneMonthRecordModel("2022/4/" + i, "40분", "1,218걸음"));
 
         return record_list;
@@ -118,11 +118,12 @@ public class OneMonthFragment extends Fragment {
 
         // x축 설정(막대그래프 기준 아래쪽)
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setAxisMaximum(30f);
+        xAxis.setAxisMaximum(30.5f); // x : 0, 1, ... , 30
         xAxis.setDrawAxisLine(true); // 축 그리기 설정
         xAxis.setAxisLineWidth(1.5f);
         xAxis.setAxisLineColor(Color.parseColor("#5e5b5f")); // X축 색 설정
-        xAxis.setGranularity(1f); // 간격 설정(표시되는 값)
+        xAxis.setLabelCount(31); // 이걸 써야 setGranularity가 작동함
+        xAxis.setGranularity(1f); // 간격 설정(표시되는 값) -> OneMonthXAxisValueFormatter.java에서 값 번갈아서 나오게 커스텀
         xAxis.setTextSize(13f);
         xAxis.setTextColor(Color.parseColor("#909090"));
         xAxis.setDrawGridLines(false); // 격자
@@ -155,7 +156,7 @@ public class OneMonthFragment extends Fragment {
     private BarData createBarchartData(ArrayList<Float> chartValues) {
         // 1. [BarEntry] BarChart에 표시될 데이터 값 생성
         ArrayList<BarEntry> values = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 31; i++) {
             float x = i;
             float y = chartValues.get(i);
             values.add(new BarEntry(x, y));

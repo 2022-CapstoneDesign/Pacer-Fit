@@ -31,6 +31,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.project.Formatter.OneMonthXAxisValueFormatter;
 import com.example.project.Map.RecordMapActivity;
 import com.example.project.Pedo.DetailRecordFragment;
+import com.example.project.Pedo.PedoBarRecordRequest;
 import com.example.project.Pedo.PedoRecordRequest;
 import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
@@ -233,7 +234,7 @@ public class HomeFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(response);
                 boolean success = jsonObject.getBoolean("success");
                 if (success) {
-                    System.out.println("30일치 데이터 가져오기 성공");
+                    System.out.println("31일치 데이터 가져오기 성공");
                     for (int i = 0; i < 31; i++) {
                         PedoRecord31[i] = jsonObject.getString(beforeMonth31[i]);
                     }
@@ -346,9 +347,10 @@ public class HomeFragment extends Fragment {
         //barChart.setExtraOffsets(10f, 0f, 40f, 0f);
         // x축 설정(막대그래프 기준 아래쪽)
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setAxisMaximum(30f);
+        xAxis.setAxisMaximum(30.5f); // x : 0, 1, ... , 30
         xAxis.setDrawAxisLine(false); // 축 그리기 설정
-        xAxis.setGranularity(5f); // 간격 설정(표시되는 값)
+        xAxis.setLabelCount(31); // 이걸 써야 setGranularity가 작동함
+        xAxis.setGranularity(1f); // 간격 설정(표시되는 값) -> OneMonthXAxisValueFormatter.java에서 값 번갈아서 나오게 커스텀
         xAxis.setTextSize(13f);
         xAxis.setTextColor(Color.parseColor("#909090"));
         xAxis.setDrawGridLines(false); // 격자
@@ -391,9 +393,10 @@ public class HomeFragment extends Fragment {
 
         // x축 설정(꺾은선그래프 기준 아래쪽)
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setAxisMaximum(30f);
+        xAxis.setAxisMaximum(30.5f); // x : 0, 1, ... , 30
         xAxis.setDrawAxisLine(false); // 축 그리기 설정
-        xAxis.setGranularity(5f); // 간격 설정(표시되는 값)
+        xAxis.setLabelCount(31); // 이걸 써야 setGranularity가 작동함
+        xAxis.setGranularity(1f); // 간격 설정(표시되는 값) -> OneMonthXAxisValueFormatter.java에서 값 번갈아서 나오게 커스텀
         xAxis.setTextSize(13f);
         xAxis.setTextColor(Color.parseColor("#909090"));
         xAxis.setDrawGridLines(false); // 격자
@@ -421,7 +424,7 @@ public class HomeFragment extends Fragment {
     private BarData createBarchartData(ArrayList<Float> chartValues) {
         // 1. [BarEntry] BarChart에 표시될 데이터 값 생성
         ArrayList<BarEntry> values = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 31; i++) {
             float x = i;
             float y = chartValues.get(i);
             values.add(new BarEntry(x, y));
@@ -445,7 +448,7 @@ public class HomeFragment extends Fragment {
     private LineData createLinechartData(ArrayList<Float> chartValues) {
         // 1. [Entry] LineChart에 표시될 데이터 값 생성
         ArrayList<Entry> values = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 31; i++) {
             float x = i;
             float y = chartValues.get(i);
             values.add(new Entry(x, y));
