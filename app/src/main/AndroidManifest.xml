@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.project"
     android:launchMode="singleInstance"
+    android:largeHeap ="true"
     android:targetSandboxVersion="1">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -73,8 +74,8 @@
             android:theme="@style/MainTheme" />
 
         <meta-data
-            android:name="com.kakao.sdk.AppKey"
-            android:value="7808ab1507268b30b797d68e1f2f9f9e" />
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="eulbpdsotm" />
     </application>
 
 </manifest>
