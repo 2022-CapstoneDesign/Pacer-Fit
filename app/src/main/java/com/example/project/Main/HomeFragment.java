@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,25 +24,18 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.project.Login.LoginActivity;
-import com.example.project.Login.LoginRequest;
-import com.example.project.Pedo.PedoBarRecordRequest;
-import com.example.project.Pedo.PedoRecordRequest;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
-import com.example.project.Weather.GpsTrackerService;
-import com.example.project.Map.RecordMapActivity;
 import com.example.project.Formatter.OneMonthXAxisValueFormatter;
+import com.example.project.Map.RecordMapActivity;
 import com.example.project.Pedo.DetailRecordFragment;
-import com.example.project.R;
-import com.example.project.Weather.RequestHttpConnection;
+import com.example.project.Pedo.PedoRecordRequest;
 import com.example.project.Pedo.StepCounterActivity;
+import com.example.project.R;
+import com.example.project.Weather.GpsTrackerService;
+import com.example.project.Weather.RequestHttpConnection;
 import com.example.project.Weather.TransLocalPoint;
 import com.example.project.Weather.Weather;
 import com.github.mikephil.charting.charts.BarChart;
@@ -112,15 +104,15 @@ public class HomeFragment extends Fragment {
 
             int monthValue = now.getMonthValue();
             int dayOfMonth = now.getDayOfMonth();
-            date_concat = monthValue+"m"+dayOfMonth+"d";
+            date_concat = monthValue + "m" + dayOfMonth + "d";
         }
         //한달 전 데이터 배열
-        for(int i=30,j=0; i>=0; i--,j++) {
+        for (int i = 30, j = 0; i >= 0; i--, j++) {
             Calendar month = Calendar.getInstance();
             month.add(Calendar.DATE, -i);
             beforeMonth31[j] = new java.text.SimpleDateFormat("M'm'dd'd'").format(month.getTime());
-            if (beforeMonth31[j].substring(2,3).equals("0")) {
-                beforeMonth31[j] = beforeMonth31[j].replaceFirst("0","");
+            if (beforeMonth31[j].substring(2, 3).equals("0")) {
+                beforeMonth31[j] = beforeMonth31[j].replaceFirst("0", "");
             }
 //            System.out.println(beforeMonth31[j]);
         }
@@ -154,15 +146,15 @@ public class HomeFragment extends Fragment {
                         JSONObject jsonObject = new JSONObject(response);
                         boolean success = jsonObject.getBoolean("success");
                         if (success) { // 만보기 클릭시
-                            String today_PedoStepsRecord = jsonObject.getString(date_concat+".step");
-                            String today_PedoTimeRecord = jsonObject.getString(date_concat+".time");
-                            String today_PedoCalorieRecord = jsonObject.getString(date_concat+".cal");
+                            String today_PedoStepsRecord = jsonObject.getString(date_concat + ".step");
+                            String today_PedoTimeRecord = jsonObject.getString(date_concat + ".time");
+                            String today_PedoCalorieRecord = jsonObject.getString(date_concat + ".cal");
                             Intent intent = new Intent(getActivity(), StepCounterActivity.class); //Fragment -> Activity로 이동 (StepCounterActivity.java)
-                            intent.putExtra("userID",userID);
-                            intent.putExtra("userWeight",userWeight);
-                            intent.putExtra("today_stepsRecord",today_PedoStepsRecord);
-                            intent.putExtra("today_stepsTimeRecord",today_PedoTimeRecord);
-                            intent.putExtra("today_stepsCalorieRecord",today_PedoCalorieRecord);
+                            intent.putExtra("userID", userID);
+                            intent.putExtra("userWeight", userWeight);
+                            intent.putExtra("today_stepsRecord", today_PedoStepsRecord);
+                            intent.putExtra("today_stepsTimeRecord", today_PedoTimeRecord);
+                            intent.putExtra("today_stepsCalorieRecord", today_PedoCalorieRecord);
                             startActivity(intent);
                         } else { // 로그인에 실패한 경우
                             return;
@@ -242,7 +234,7 @@ public class HomeFragment extends Fragment {
                 boolean success = jsonObject.getBoolean("success");
                 if (success) {
                     System.out.println("30일치 데이터 가져오기 성공");
-                    for(int i = 0; i < 31; i++) {
+                    for (int i = 0; i < 31; i++) {
                         PedoRecord31[i] = jsonObject.getString(beforeMonth31[i]);
                     }
                     ArrayList<Float> barChartValues = new ArrayList<>();
@@ -491,53 +483,61 @@ public class HomeFragment extends Fragment {
         String rain = "0";
 
         //response 키를 가지고 데이터를 파싱
-        JSONObject jsonObject1 = new JSONObject(jsonString);
-        String response = jsonObject1.getString("response");
+        if (jsonString != null) {
+            JSONObject jsonObject1 = new JSONObject(jsonString);
+            String response = jsonObject1.getString("response");
 
-        // response 로 부터 body 찾기
-        JSONObject jsonObject2 = new JSONObject(response);
-        String body = jsonObject2.getString("body");
+            // response 로 부터 body 찾기
+            if (response != null) {
+                JSONObject jsonObject2 = new JSONObject(response);
+                String body = jsonObject2.getString("body");
 
-        // body 로 부터 items 찾기
-        JSONObject jsonObject3 = new JSONObject(body);
-        String items = jsonObject3.getString("items");
+                // body 로 부터 items 찾기
+                if (body != null) {
+                    JSONObject jsonObject3 = new JSONObject(body);
+                    String items = jsonObject3.getString("items");
 
 
-        // itmes로 부터 itemlist 를 받기
-        JSONObject jsonObject4 = new JSONObject(items);
-        JSONArray jsonArray = jsonObject4.getJSONArray("item");
+                    // itmes로 부터 itemlist 를 받기
+                    if (items != null) {
+                        JSONObject jsonObject4 = new JSONObject(items);
+                        JSONArray jsonArray = jsonObject4.getJSONArray("item");
 
-        for (int i = 0; i < jsonArray.length(); i++) {
-            jsonObject4 = jsonArray.getJSONObject(i);
-            String fcstTime = jsonObject4.getString("fcstTime");
-            String fcstValue = jsonObject4.getString("fcstValue");
-            String category = jsonObject4.getString("category");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            jsonObject4 = jsonArray.getJSONObject(i);
+                            String fcstTime = jsonObject4.getString("fcstTime");
+                            String fcstValue = jsonObject4.getString("fcstValue");
+                            String category = jsonObject4.getString("category");
 
-            if (fcstTime.equals(mCurrentTime)) {
-                Log.d("ITEM", jsonObject4.toString());
-                if (category.equals("PTY")) {
-                    if (fcstValue.equals("1") || fcstValue.equals("2") || fcstValue.equals("5") || fcstValue.equals("6")) {
-                        weather = "비\n";
-                        rain = "1";
-                    } else if (fcstValue.equals("3") || fcstValue.equals("7")) {
-                        weather = "눈\n";
-                        rain = "1";
-                    } else if (fcstValue.equals("0")) {
-                        rain = "0";
+                            if (fcstTime.equals(mCurrentTime)) {
+                                Log.d("ITEM", jsonObject4.toString());
+                                if (category.equals("PTY")) {
+                                    if (fcstValue.equals("1") || fcstValue.equals("2") || fcstValue.equals("5") || fcstValue.equals("6")) {
+                                        weather = "비\n";
+                                        rain = "1";
+                                    } else if (fcstValue.equals("3") || fcstValue.equals("7")) {
+                                        weather = "눈\n";
+                                        rain = "1";
+                                    } else if (fcstValue.equals("0")) {
+                                        rain = "0";
+                                    }
+                                }
+                                if (category.equals("SKY") && rain.equals("0")) {
+                                    if (fcstValue.equals("1")) {
+                                        weather = "맑음\n";
+                                    } else if (fcstValue.equals("3")) {
+                                        weather = "구름 많음\n";
+                                    } else if (fcstValue.equals("4")) {
+                                        weather = "흐림\n";
+                                    }
+                                }
+
+                                if (category.equals("T1H")) {
+                                    tmperature = fcstValue + "℃";
+                                }
+                            }
+                        }
                     }
-                }
-                if (category.equals("SKY") && rain.equals("0")) {
-                    if (fcstValue.equals("1")) {
-                        weather = "맑음\n";
-                    } else if (fcstValue.equals("3")) {
-                        weather = "구름 많음\n";
-                    } else if (fcstValue.equals("4")) {
-                        weather = "흐림\n";
-                    }
-                }
-
-                if (category.equals("T1H")) {
-                    tmperature = fcstValue + "℃";
                 }
             }
         }

@@ -1,46 +1,11 @@
 package com.example.project.Map;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationManager;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import com.example.project.R;
+public class MapActivity extends AppCompatActivity {
+    /*
 
-import net.daum.mf.map.api.MapPOIItem;
-import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapPolyline;
-import net.daum.mf.map.api.MapView;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLEncoder;
-
-public class MapActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener {
     private final static String KEY = "gK02LAH%2FlvryeAYsHR08%2Byds3IuKYwmKnKEjPkvtot7WECTfDCyLeh9snhRqmJiWCWhHHwev8Sd3wvJTgXcVNA%3D%3D";
     private final static String TAG = "MapTAG";
     private final int ACCESS_FINE_LOCATION = 1000;
@@ -133,7 +98,7 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
                 Toast.makeText(this, "GPS를 켜주세요", Toast.LENGTH_SHORT).show();
             }
 
-            /* 정확도 체크 용
+             정확도 체크 용
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -156,7 +121,7 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
                 }
             }).start();
 
-        */
+
         });
         // 중지 버튼을 누르면 추적 중지
         stopBtn.setOnClickListener(v -> {
@@ -392,4 +357,6 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
         }
         return buffer.toString();//StringBuffer 문자열 객체 반환
     }
+
+    */
 }

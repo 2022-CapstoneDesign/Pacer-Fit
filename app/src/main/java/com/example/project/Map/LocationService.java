@@ -15,7 +15,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Build;
@@ -24,6 +23,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -33,10 +33,11 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.overlay.PolylineOverlay;
 
-import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapPolyline;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -47,32 +48,36 @@ public class LocationService extends Service {
 
     public static final String TAG = "LocationService";
     public static final String BROADCAST_ACTION = "LocationService";
-    public Intent intent;
-    public MapPolyline polyline;
+    private Intent intent;
 
-    public double curLng = 0.0;
-    public double curLat = 0.0;
 
     // notification
-    public final String CHANNEL_ID = "notification_channel";
-    public final int NOTIFICATION_ID = 1;
+    private final String CHANNEL_ID = "notification_channel";
+    private final int NOTIFICATION_ID = 1;
     private final CharSequence name = "map channel";
     private String description = "map";
     private NotificationCompat.Builder builder;
     private NotificationManagerCompat notificationManagerCompat;
+    private boolean isRecord = false;
 
     // 거리
-    double distance = 0.0;
+    private double distance = 0.0;
     // 칼로리
-    double calories = 0.0;
+    private double calories = 0.0;
     // 타이머 변수
     private int time = -1;
     private Timer timer;
     private TimerTask timerTask;
     int total_sec = 0;
 
+    // 백그라운드 확인 함수
+    public boolean isBackground = false;
+
+    //public MapPolyline polyline;
+    private PolylineOverlay curUserPolyline;
+    private List<LatLng> userLocationList;
     // bindService 구현
-    private final IBinder mIBinder = new MyBinder();
+    private IBinder mIBinder = new MyBinder();
 
     private final LocationCallback mLocationCallback = new LocationCallback() {
         @Override
@@ -80,18 +85,14 @@ public class LocationService extends Service {
             super.onLocationResult(locationResult);
             locationResult.getLastLocation();
             Location location = locationResult.getLastLocation();
-            float accuracy = location.getAccuracy();
-            if (accuracy > 12.0)
+            if (!isRecord || location.getAccuracy() > 12.0)
                 return;
 
-            curLat = location.getLatitude();
-            curLng = location.getLongitude();
-            polyline.addPoint(MapPoint.mapPointWithGeoCoord(curLat, curLng));
-            distance = curDistance(polyline);
-            Log.d(TAG, String.format("UPDATE LOCATION acc: %f lat: %f, lng: %f", accuracy, curLat, curLng));
+            userLocationList.add(new LatLng(location.getLatitude(), location.getLongitude()));
+            distance = curDistance(userLocationList);
+            Log.d(TAG, "onLocationResult");
         }
     };
-
 
     class MyBinder extends Binder {
         LocationService getService() {
@@ -104,18 +105,6 @@ public class LocationService extends Service {
         return mIBinder;
     }
 
-    MapPolyline getPolyline() {
-        return polyline;
-    }
-
-    Double getCurLat() {
-        return curLat;
-    }
-
-    Double getCurLng() {
-        return curLng;
-    }
-
     // 두 위치의 거리 계산 함수
     public double getDistance(Double lat1, Double lon1, Double lat2, Double lon2) {
         double R = 6372.8 * 1000;
@@ -125,33 +114,34 @@ public class LocationService extends Service {
         double c = 2 * asin(sqrt(a));
         return R * c / 1000;
     }
-
     // 최종 거리 계산
-    public double curDistance(MapPolyline mapPolyline) {
-        MapPoint[] mapPoint = mapPolyline.getMapPoints();
-        int index = mapPoint.length;
+
+    public double curDistance(List<LatLng> latLngList) {
+
+        int index = latLngList.size();
         double dist = 0.0;
         double latA, lngA, latB, lngB;
         for (int i = 0; i < index - 1; i++) {
-            latA = mapPoint[i].getMapPointGeoCoord().latitude;
-            lngA = mapPoint[i].getMapPointGeoCoord().longitude;
-            latB = mapPoint[i + 1].getMapPointGeoCoord().latitude;
-            lngB = mapPoint[i + 1].getMapPointGeoCoord().longitude;
+            latA = latLngList.get(i).latitude;
+            lngA = latLngList.get(i).longitude;
+            latB = latLngList.get(i + 1).latitude;
+            lngB = latLngList.get(i + 1).longitude;
             dist += getDistance(latA, lngA, latB, lngB);
-            Log.d(TAG, String.format("curDistance[%d] latA: %f lngA: %f latB: %f lngB: %f distance %f", i, latA, lngA, latB, lngB, dist));
+            //Log.d(TAG, String.format("curDistance[%d] latA: %f lngA: %f latB: %f lngB: %f distance %f", i, latA, lngA, latB, lngB, dist));
 
         }
 
         return dist;
     }
 
+
     private void startLocationService() {
         createNotificationChannel();
         displayNotification();
 
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(4000);
-        locationRequest.setFastestInterval(2000);
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(10000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -169,21 +159,21 @@ public class LocationService extends Service {
         startTimer();
     }
 
+
     private void stopLocationService() {
         LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(mLocationCallback);
         stopForeground(true);
         stopSelf();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public void onCreate() {
         super.onCreate();
         intent = new Intent(BROADCAST_ACTION);
 
-        // polyline 생성
-        polyline = new MapPolyline();
-        polyline.setTag(0);
-        polyline.setLineColor(Color.argb(128, 255, 51, 0)); // Polyline 컬러 지정.
+        curUserPolyline = new PolylineOverlay();
+        userLocationList = new ArrayList<>();
 
         Log.d("LocationService", "service onCreate");
     }
@@ -209,13 +199,16 @@ public class LocationService extends Service {
         // handler.removeCallbacks(sendUpdatesToUI);
         super.onDestroy();
         pauseTimer();
-        notificationManagerCompat.cancel(NOTIFICATION_ID);
+        if (notificationManagerCompat != null)
+            notificationManagerCompat.cancel(NOTIFICATION_ID);
+
         stopLocationService();
         Log.v(TAG, "onDestroy");
     }
 
     // 타이머 기능 + 데이터 전송
     public void startTimer() {
+        isRecord = true;
 
         timer = new Timer();
         timerTask = new TimerTask() {
@@ -246,10 +239,16 @@ public class LocationService extends Service {
 
     // 타이머 정지
     public void pauseTimer() {
+        isRecord = false;
         if (timerTask != null) {
             timerTask.cancel();
             timerTask = null;
         }
+    }
+
+    public List<LatLng> getUserLocationList() {
+        return userLocationList;
+
     }
 
     // 알림 설정
@@ -260,7 +259,8 @@ public class LocationService extends Service {
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .addCategory(Intent.CATEGORY_LAUNCHER)
                 .setAction(Intent.ACTION_MAIN);
-        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
+                0, intent, PendingIntent.FLAG_NO_CREATE |  PendingIntent.FLAG_IMMUTABLE);
 
         builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.walk_over)
