@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project.Formatter.OneMonthXAxisValueFormatter;
 import com.example.project.Formatter.SixMonthXAxisValueFormatter;
 import com.example.project.R;
 import com.github.mikephil.charting.charts.LineChart;
@@ -45,20 +44,21 @@ public class SixMonthFragment extends Fragment {
         View v = inflater.inflate(R.layout.dist_six_months_fragment, container, false);
 
         recycler_view = v.findViewById(R.id.recycler_view);
+        lineChart = v.findViewById(R.id.dist_sixmonth_linechart);
 
         date_sixmonthDist = v.findViewById(R.id.date_sixmonthDist);
         totalTime_sixmonthDist = v.findViewById(R.id.totalTime_sixmonthDist);
         km_sixmonthDist = v.findViewById(R.id.km_sixmonthDist);
         dist_avg_time = v.findViewById(R.id.dist_avg_time);
 
-        // <--- 라인 그래프 --->
-        lineChart = v.findViewById(R.id.dist_sixmonth_linechart);
-
+        // <--- 테이블 --->
         setRecyclerView();
-        // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
-        setTodayRecord("2022/4/1", "2시간 6분", "24km");
+        // ***** 이 곳에서 제일 최근 일주일 거리 기록 DB 값을 표시합니다 *****
+        // 일주일 기준 -> 시작 : 월요일, 끝 : 일요일
+        setTodayRecord("2022/5/2 ~ 2022/5/8", "2시간 6분", "24km");
         setAvgTime();
 
+        // <--- 라인 그래프 --->
         ArrayList<Float> lineChartValues = new ArrayList<>();
         // 최근 6개월(주차별)의 운동량 값 받아오기 -> DB 값으로 추후에 수정
         for (int i = 0; i < 24; i++) {
@@ -96,10 +96,12 @@ public class SixMonthFragment extends Fragment {
     }
 
     private List<SixMonthRecordModel> getList() {
+        // <--- 테이블 --->
         List<SixMonthRecordModel> record_list = new ArrayList<>();
-        // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
+        // ***** 이 곳에서 6개월 거리 기록 DB 값을 표시합니다(일주일 단위로, 이번주 기록 제외) *****
+        // 일주일 기준 -> 시작 : 월요일, 끝 : 일요일
         for (int i = 1; i < 24*7; i+=7)
-            record_list.add(new SixMonthRecordModel("2022/4/" + 1 + " ~ 2022/4/" + (1 + 6),"2시간 33분", "28km"));
+            record_list.add(new SixMonthRecordModel("2022/5/" + 2 + " ~ 2022/5/" + (2 + 6),"2시간 33분", "28km"));
 
         return record_list;
     }
@@ -113,17 +115,20 @@ public class SixMonthFragment extends Fragment {
         lineChart.getLegend().setEnabled(false); // legend는 차트의 범례
         lineChart.getDescription().setEnabled(false); // 우측 하단의 DescriptionLabel 삭제
         //lineChart.animateY(1500); // 밑에서부터 올라오는 애니메이션 적용
-        lineChart.animateX(1500); // 왼쪽-오른쪽 방향의 애니메이션 적용
+        lineChart.animateX(1000); // 왼쪽-오른쪽 방향의 애니메이션 적용
 
         // x축 설정(꺾은선그래프 기준 아래쪽)
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setAxisMaximum(24.1f);
+        xAxis.setAxisMinimum(-0.5f); // 라인그래프만 x축 좌측 여유 공간 필요
+        xAxis.setAxisMaximum(23.5f); // x : 0, 1, ... , 23 -> 24개
         //xAxis.setLabelCount(7, true);
         //xAxis.setAvoidFirstLastClipping(true);
-        xAxis.setDrawAxisLine(false); // 축 그리기 설정
-        xAxis.setGranularity(5f); // 간격 설정(표시되는 값)
+        xAxis.setDrawAxisLine(true); // 축 그리기 설정
+        xAxis.setLabelCount(24); // 이걸 써야 setGranularity가 작동함
+        xAxis.setGranularity(1f); // 간격 설정(표시되는 값) -> SixMonthXAxisValueFormatter.java에서 값 번갈아서 나오게 커스텀
         xAxis.setTextSize(13f);
         xAxis.setAxisLineWidth(1.5f);
+        xAxis.setAxisLineColor(Color.parseColor("#5e5b5f")); // X축 색 설정
         xAxis.setTextColor(Color.parseColor("#909090"));
         xAxis.setDrawGridLines(false); // 격자
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
@@ -160,7 +165,7 @@ public class SixMonthFragment extends Fragment {
         // 2. [LineDataSet] 단순 데이터를 꺾은선 모양으로 표시, LineChart의 막대 커스텀
         LineDataSet set = new LineDataSet(values, "꺾은선그래프");
         set.setDrawIcons(true);
-        set.setDrawValues(true);
+        set.setDrawValues(false);
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/nanumsquareroundeb.ttf");
         set.setValueTypeface(tf);
         set.setValueTextColor(Color.parseColor("#90DEC1")); // 라인 위에 값 색 설정
