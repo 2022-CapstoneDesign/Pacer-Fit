@@ -116,6 +116,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
         //건물 표시
         naverMap.setLayerGroupEnabled(naverMap.LAYER_GROUP_BUILDING, true);
+        naverMap.setIndoorEnabled(true);
 
         // 현재 좌표로 변경
         double curLat;

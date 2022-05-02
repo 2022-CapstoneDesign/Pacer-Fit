@@ -31,6 +31,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.project.Formatter.OneMonthXAxisValueFormatter;
 import com.example.project.Map.RecordMapActivity;
 import com.example.project.Pedo.DetailRecordFragment;
+import com.example.project.Pedo.PedoBarRecordRequest;
 import com.example.project.Pedo.PedoRecordRequest;
 import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
