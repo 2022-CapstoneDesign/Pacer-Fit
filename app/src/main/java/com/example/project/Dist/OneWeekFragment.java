@@ -44,20 +44,22 @@ public class OneWeekFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.dist_one_week_fragment, container, false);
 
+        recycler_view = v.findViewById(R.id.recycler_view);
+        lineChart = v.findViewById(R.id.dist_oneweek_linechart);
+
         day_today_oneweekDist = v.findViewById(R.id.day_today_oneweekDist);
         date_today_oneweekDist = v.findViewById(R.id.date_today_oneweekDist);
         totalTime_today_oneweekDist = v.findViewById(R.id.totalTime_today_oneweekDist);
         km_today_oneweekDist = v.findViewById(R.id.km_today_oneweekDist);
         dist_avg_time = v.findViewById(R.id.dist_avg_time);
-        recycler_view = v.findViewById(R.id.recycler_view);
-        // <--- 라인 그래프 --->
-        lineChart = v.findViewById(R.id.dist_oneweek_linechart);
 
+        // <--- 테이블 --->
         setRecyclerView();
         // ***** 이 곳에서 오늘의 거리 기록 DB 값을 표시합니다 *****
         setTodayRecord("오늘(금)", "2022/4/18", "2시간 6분", "24km");
         setAvgTime();
 
+        // <--- 라인 그래프 --->
         ArrayList<Float> lineChartValues = new ArrayList<>();
         // 최근 7일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
         for (int i = 0; i < 7; i++) {
@@ -96,6 +98,7 @@ public class OneWeekFragment extends Fragment {
     }
 
     private List<OneWeekRecordModel> getList() {
+        // <--- 테이블 --->
         List<OneWeekRecordModel> record_list = new ArrayList<>();
         // ***** 이 곳에서 일주일 거리 기록 DB 값을 표시합니다(하루단위로, 오늘 기록 제외) *****
         record_list.add(new OneWeekRecordModel("목", "2022/4/17", "40분", "8km"));

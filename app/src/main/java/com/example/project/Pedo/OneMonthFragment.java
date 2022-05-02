@@ -43,21 +43,21 @@ public class OneMonthFragment extends Fragment {
         View v = inflater.inflate(R.layout.pedo_one_month_fragment, container, false);
 
         recycler_view = v.findViewById(R.id.recycler_view);
+        barChart = v.findViewById(R.id.pedo_onemonth_barchart);
 
         date_today_onemonthPedo = v.findViewById(R.id.date_today_onemonthPedo);
         totalTime_today_onemonthPedo = v.findViewById(R.id.totalTime_today_onemonthPedo);
         step_today_onemonthPedo = v.findViewById(R.id.step_today_onemonthPedo);
         pedo_avg_time = v.findViewById(R.id.pedo_avg_time);
 
-        // <--- 막대 그래프 --->
-        barChart = v.findViewById(R.id.pedo_onemonth_barchart);
-        ArrayList<Float> barChartValues = new ArrayList<>();
-
+        // <--- 테이블 --->
         // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
         setTodayRecord("2022/4/18", "2시간 6분", "2,351걸음");
         setAvgTime();
         setRecyclerView();
 
+        // <--- 막대 그래프 --->
+        ArrayList<Float> barChartValues = new ArrayList<>();
         // 최근 30일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
         for (int i = 0; i < 31; i++) {
             float rand = (float) Math.round(new Random().nextFloat() * 15000);
@@ -94,6 +94,7 @@ public class OneMonthFragment extends Fragment {
     }
 
     private List<OneMonthRecordModel> getList() {
+        // <--- 테이블 --->
         List<OneMonthRecordModel> record_list = new ArrayList<>();
         // ***** 이 곳에서 한달 만보기 기록 DB 값을 표시합니다(하루 단위로, 오늘 기록 제외) *****
         for (int i = 1; i < 31; i++)

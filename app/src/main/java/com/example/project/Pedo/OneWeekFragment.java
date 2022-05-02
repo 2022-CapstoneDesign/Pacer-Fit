@@ -50,14 +50,15 @@ public class OneWeekFragment extends Fragment {
         View v = inflater.inflate(R.layout.pedo_one_week_fragment, container, false);
 
         recycler_view = v.findViewById(R.id.recycler_view);
+        barChart = v.findViewById(R.id.pedo_oneweek_barchart);
 
         day_today_oneweekPedo = v.findViewById(R.id.day_today_oneweekPedo);
         date_today_oneweekPedo = v.findViewById(R.id.date_today_oneweekPedo);
         totalTime_today_oneweekPedo = v.findViewById(R.id.totalTime_today_oneweekPedo);
         step_today_oneweekPedo = v.findViewById(R.id.step_today_oneweekPedo);
         pedo_avg_time = v.findViewById(R.id.pedo_avg_time);
+
         // <--- 막대 그래프 --->
-        barChart = v.findViewById(R.id.pedo_oneweek_barchart);
         ArrayList<Float> barChartValues = new ArrayList<>();
         // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
         int time = Integer.parseInt(data.PedoRecord7_time[6]);

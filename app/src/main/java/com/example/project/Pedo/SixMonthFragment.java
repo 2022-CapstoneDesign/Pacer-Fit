@@ -43,22 +43,22 @@ public class SixMonthFragment extends Fragment {
         View v = inflater.inflate(R.layout.pedo_six_months_fragment, container, false);
 
         recycler_view = v.findViewById(R.id.recycler_view);
+        barChart = v.findViewById(R.id.pedo_sixmonth_barchart);
 
         date_sixmonthPedo = v.findViewById(R.id.date_sixmonthPedo);
         totalTime_sixmonthPedo = v.findViewById(R.id.totalTime_sixmonthPedo);
         step_sixmonthPedo = v.findViewById(R.id.step_sixmonthPedo);
         pedo_avg_time = v.findViewById(R.id.pedo_avg_time);
 
-        // <--- 막대 그래프 --->
-        barChart = v.findViewById(R.id.pedo_sixmonth_barchart);
-        ArrayList<Float> barChartValues = new ArrayList<>();
-
+        // <--- 테이블 --->
         // ***** 이 곳에서 제일 최근 일주일 만보기 기록 DB 값을 표시합니다 *****
         // 일주일 기준 -> 시작 : 월요일, 끝 : 일요일
         setTodayRecord("2022/5/2 ~ 2022/5/8", "2시간 6분", "2,351걸음");
         setAvgTime();
         setRecyclerView();
 
+        // <--- 막대 그래프 --->
+        ArrayList<Float> barChartValues = new ArrayList<>();
         // 최근 6개월의 운동량 값(일주일 단위로) 받아오기 -> DB 값으로 추후에 수정
         // 일주일 기준 -> 시작 : 월요일, 끝 : 일요일
         for (int i = 0; i < 24; i++) {
@@ -96,6 +96,7 @@ public class SixMonthFragment extends Fragment {
     }
 
     private List<SixMonthRecordModel> getList() {
+        // <--- 테이블 --->
         List<SixMonthRecordModel> record_list = new ArrayList<>();
         // ***** 이 곳에서 6개월 만보기 기록 DB 값을 표시합니다(일주일 단위로, 이번주 기록 제외) *****
         // 일주일 기준 -> 시작 : 월요일, 끝 : 일요일
