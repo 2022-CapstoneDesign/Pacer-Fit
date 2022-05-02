@@ -62,6 +62,7 @@ import java.util.Random;
 
 public class HomeFragment extends Fragment {
     private TextView weatherInfo;
+    private TextView temperature;
     private ImageView weatherInfo_Image;
     private TransLocalPoint transLocalPoint;
     private GpsTrackerService gpsTracker;
@@ -91,8 +92,11 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.main_home_fragment, container, false);
         Context ct = container.getContext();
         TextView location = v.findViewById(R.id.location);
+        location.setSelected(true);
         weatherInfo = v.findViewById(R.id.weather);
+        weatherInfo.setSelected(true);
         weatherInfo_Image = v.findViewById(R.id.weather_image);
+        temperature = v.findViewById(R.id.temperature);
         Button Km_button = v.findViewById(R.id.Km_button);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             LocalDate now = null;
@@ -276,11 +280,40 @@ public class HomeFragment extends Fragment {
         moreBarChartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 더보기 탭으로 이동. 이전 프래그먼트로 돌아갈 수 있도록 설정
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                fm.beginTransaction()
-                        .replace(R.id.frame_container, new DetailRecordFragment())
-                        .addToBackStack(null).commit();
+                Response.Listener<String> responseListener = response -> {
+                    try {
+                        System.out.println("========================Click->" + response);
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean success = jsonObject.getBoolean("success");
+                        if (success) {
+                            Bundle bundle = new Bundle(); // 번들을 통해 값 전달
+                            bundle.putString("userID",userID);//번들에 넘길 값 저장
+                            for(int i=0; i<7; i++) {
+                                bundle.putString(i+".day_step",jsonObject.getString(i+".day_step"));
+                                bundle.putString(i+".day_time",jsonObject.getString(i+".day_time"));
+                            }
+                            bundle.putString("pedo_max_day",jsonObject.getString("pedo_max_day"));
+                            for(int i=0; i<31; i++) {
+                                bundle.putString(i+".month_step",jsonObject.getString(i+".month_step"));
+                                bundle.putString(i+".month_time",jsonObject.getString(i+".month_time"));
+                            }
+                            // 더보기 탭으로 이동. 이전 프래그먼트로 돌아갈 수 있도록 설정
+                            FragmentManager fm = getActivity().getSupportFragmentManager();
+                            DetailRecordFragment detailRecordFragment = new DetailRecordFragment();//프래그먼트2 선언
+                            detailRecordFragment.setArguments(bundle);//번들을 프래그먼트2로 보낼 준비
+                            fm.beginTransaction()
+                                    .replace(R.id.frame_container, detailRecordFragment)
+                                    .addToBackStack(null).commit();
+                        } else { //실패한 경우
+                            return;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                };
+                PedoBarRecordRequest pedoBarRecordRequest = new PedoBarRecordRequest(userID, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+                queue.add(pedoBarRecordRequest);
             }
         });
         moreLineChartBtn = v.findViewById(R.id.moreLineChartBtn);
@@ -536,7 +569,8 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            weatherInfo.setText(weather + tmperature);
+            weatherInfo.setText(weather);
+            temperature.setText(tmperature);
             //doInBackground()로부터 리턴된 값이 onPostExecute()의 매개변수로 넘어오므로 s를 출력
             if (weather.equals("맑음\n")) {
                 weatherInfo_Image.setImageResource(R.color.lightgray_project);

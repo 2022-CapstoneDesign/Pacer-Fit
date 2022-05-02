@@ -21,7 +21,11 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -35,6 +39,9 @@ public class OneWeekFragment extends Fragment {
     private TextView totalTime_today_oneweekPedo;
     private TextView step_today_oneweekPedo;
     private TextView pedo_avg_time;
+
+    //외부 class에 데이터 저장후 UI에 뿌려줌
+    PedoRecordData data = new PedoRecordData();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,15 +59,39 @@ public class OneWeekFragment extends Fragment {
         // <--- 막대 그래프 --->
         barChart = v.findViewById(R.id.pedo_oneweek_barchart);
         ArrayList<Float> barChartValues = new ArrayList<>();
-
         // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
-        setTodayRecord("오늘(금)", "2022/4/18", "2시간 6분", "2,351걸음");
+        int time = Integer.parseInt(data.PedoRecord7_time[6]);
+        int sec = time % 60;
+        int min = time / 60 % 60;
+        int hour = time / 3600;
+
+        //value = 1이면 어제..
+        float value = 0;
+        //오늘 요일 구하기
+        Calendar cal_day = Calendar.getInstance();
+        cal_day.setTime(new Date());
+        cal_day.add(Calendar.DATE, (int) value);
+        DateFormat df_day = new SimpleDateFormat("EE");
+
+        //오늘 일자 구하기
+        Calendar cal_week = Calendar.getInstance();
+        cal_week.setTime(new Date());
+        cal_week.add(Calendar.DATE, (int) value);
+        DateFormat df_week = new SimpleDateFormat("y/M/d");
+
+        //오늘의 만보기 기록
+        if(hour!=0)
+            setTodayRecord("오늘("+df_day.format(cal_day.getTime())+")", df_week.format(cal_week.getTime())+"", hour+"시간"+min+"분", data.PedoRecord7_step[6]+"걸음");
+        else
+            setTodayRecord("오늘("+df_day.format(cal_day.getTime())+")", df_week.format(cal_week.getTime())+"", min+"분", data.PedoRecord7_step[6]+"걸음");
+
         setAvgTime();
         setRecyclerView();
-
+        data.getPedoRecord7();
         // 최근 7일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
         for (int i = 0; i < 7; i++) {
-            float rand = (float) Math.round(new Random().nextFloat() * 15000);
+            //float rand = (float) Math.round(new Random().nextFloat() * 15000);
+            float rand = Float.parseFloat(data.PedoRecord7_step[i]);
             //Log.d("RAND", String.valueOf(rand));
             barChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
         }
@@ -75,9 +106,16 @@ public class OneWeekFragment extends Fragment {
 
     private void setAvgTime() {
         // 이곳에 DB에서 불러온 운동시간들의 평균 구하는 알고리즘 작성... 추후에 추가
-        int hours = 1;
-        int minutes = 52;
-        pedo_avg_time.setText(hours + "시간 " + minutes + "분");
+        int time = 0;
+        for(int i=0; i<6; i++)
+            time += Integer.parseInt(data.PedoRecord7_time[i]);
+        time /= 6;
+        int minutes = time / 60 % 60;
+        int hours = time / 3600;
+        if(hours != 0)
+            pedo_avg_time.setText(hours + "시간 " + minutes + "분");
+        else
+            pedo_avg_time.setText(minutes + "분");
     }
 
     private void setTodayRecord(String day, String date, String totalTime, String step) {
@@ -95,15 +133,42 @@ public class OneWeekFragment extends Fragment {
     }
 
     private List<OneWeekRecordModel> getList() {
+
         List<OneWeekRecordModel> record_list = new ArrayList<>();
         // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
-        record_list.add(new OneWeekRecordModel("목", "2022/4/17", "40분", "1,218걸음"));
-        record_list.add(new OneWeekRecordModel("수", "2022/4/16", "2시간 33분", "2,752걸음"));
-        record_list.add(new OneWeekRecordModel("화", "2022/4/15", "4시간 7분", "4,188걸음"));
-        record_list.add(new OneWeekRecordModel("월", "2022/4/14", "1시간 22분", "1,530걸음"));
-        record_list.add(new OneWeekRecordModel("일", "2022/4/13", "41분", "1,087걸음"));
-        record_list.add(new OneWeekRecordModel("토", "2022/4/12", "2시간 8분", "2,455걸음"));
+        //value = -1이면 어제..
+        float value = 0;
+        for(int i=5; i>=0; i--) {
+            int time = Integer.parseInt(data.PedoRecord7_time[i]);
+            int sec = time % 60;
+            int min = time / 60 % 60;
+            int hour = time / 3600;
 
+            //오늘 요일 구하기
+            value--;
+
+            Calendar cal_day = Calendar.getInstance();
+            cal_day.setTime(new Date());
+            cal_day.add(Calendar.DATE, (int) value);
+            DateFormat df_day = new SimpleDateFormat("EE");
+
+            //오늘 일자 구하기
+            Calendar cal_week = Calendar.getInstance();
+            cal_week.setTime(new Date());
+            cal_week.add(Calendar.DATE, (int) value);
+            DateFormat df_week = new SimpleDateFormat("y/M/d");
+
+            if(hour!=0)
+                record_list.add(new OneWeekRecordModel(df_day.format(cal_day.getTime())+"",
+                        df_week.format(cal_week.getTime())+"",
+                        hour+"시간"+min+"분",
+                        data.PedoRecord7_step[i]+"걸음"));
+            else
+                record_list.add(new OneWeekRecordModel(df_day.format(cal_day.getTime())+"",
+                        df_week.format(cal_week.getTime())+"",
+                        min+"분",
+                        data.PedoRecord7_step[i]+"걸음"));
+        }
         return record_list;
     }
 
@@ -140,7 +205,8 @@ public class OneWeekFragment extends Fragment {
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
-        axisLeft.setAxisMaximum(15001f); // y축 최대값 설정
+        Float max = Float.parseFloat(data.pedo_max_day);
+        axisLeft.setAxisMaximum(max); // y축 최대값 설정
         axisLeft.setAxisMinimum(0f); // y축 최소값 설정
         axisLeft.setDrawLabels(false); // 값 표기 설정
         axisLeft.setDrawGridLines(false); // 격자
