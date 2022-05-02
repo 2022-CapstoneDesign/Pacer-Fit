@@ -119,11 +119,12 @@ public class SixMonthFragment extends Fragment {
 
         // x축 설정(막대그래프 기준 아래쪽)
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setAxisMaximum(24f);
+        xAxis.setAxisMaximum(23.5f);
         xAxis.setDrawAxisLine(true); // 축 그리기 설정
         xAxis.setAxisLineWidth(1.5f);
         xAxis.setAxisLineColor(Color.parseColor("#5e5b5f")); // X축 색 설정
-        xAxis.setGranularity(4f); // 간격 설정(표시되는 값)
+        xAxis.setLabelCount(24); // 이걸 써야 setGranularity가 작동함
+        xAxis.setGranularity(1f); // 간격 설정(표시되는 값) -> SixMonthXAxisValueFormatter.java에서 값 번갈아서 나오게 커스텀
         xAxis.setTextSize(13f);
         xAxis.setTextColor(Color.parseColor("#909090"));
         xAxis.setDrawGridLines(false); // 격자

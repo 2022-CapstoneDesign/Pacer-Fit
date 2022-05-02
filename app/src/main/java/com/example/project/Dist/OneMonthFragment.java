@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Random;
 
 public class OneMonthFragment extends Fragment {
-    private LineChart lineChart; // 만보기 30일 라인그래프
+    private LineChart lineChart; // 거리 30일 라인그래프
     RecyclerView recycler_view;
     OneMonthRecordAdapter adapter;
 
@@ -57,7 +57,7 @@ public class OneMonthFragment extends Fragment {
         setAvgTime();
 
         ArrayList<Float> lineChartValues = new ArrayList<>();
-        // 최근 7일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
+        // 최근 30일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
         for (int i = 0; i < 30; i++) {
             float rand = (float) Math.round(new Random().nextFloat() * 100);
             //Log.d("RAND", String.valueOf(rand));
@@ -66,8 +66,8 @@ public class OneMonthFragment extends Fragment {
 
         linechartConfigureAppearance();
         LineData lineChartData = createLinechartData(lineChartValues);
-        lineChart.setData(lineChartData); // BarData 전달
-        lineChart.invalidate(); // BarChart 갱신해 데이터 표시
+        lineChart.setData(lineChartData); // lineData 전달
+        lineChart.invalidate(); // lineChart 갱신해 데이터 표시
 
         return v;
     } // onCreateView
@@ -95,7 +95,7 @@ public class OneMonthFragment extends Fragment {
     private List<OneMonthRecordModel> getList() {
         List<OneMonthRecordModel> record_list = new ArrayList<>();
         // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
-        for (int i = 2; i < 30; i++)
+        for (int i = 0; i < 30; i++)
             record_list.add(new OneMonthRecordModel("2022/4/" + i,"2시간 33분", "8km"));
 
         return record_list;

@@ -113,6 +113,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull NaverMap naverMap) {
         //배경 지도 선택
         naverMap.setMapType(NaverMap.MapType.Basic);
+        naverMap.setIndoorEnabled(true);
 
         //건물 표시
         naverMap.setLayerGroupEnabled(naverMap.LAYER_GROUP_BUILDING, true);
