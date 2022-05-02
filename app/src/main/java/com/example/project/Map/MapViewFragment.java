@@ -142,7 +142,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
         UiSettings uiSettings = naverMap.getUiSettings();
         uiSettings.setLocationButtonEnabled(true);
-
+        naverMap.setIndoorEnabled(true);
         Log.d(TAG, "onMapReady");
     }
 }

@@ -298,6 +298,7 @@ public class HomeFragment extends Fragment {
                                 bundle.putString(i+".month_step",jsonObject.getString(i+".month_step"));
                                 bundle.putString(i+".month_time",jsonObject.getString(i+".month_time"));
                             }
+                            bundle.putString("pedo_max_month",jsonObject.getString("pedo_max_month"));
                             // 더보기 탭으로 이동. 이전 프래그먼트로 돌아갈 수 있도록 설정
                             FragmentManager fm = getActivity().getSupportFragmentManager();
                             DetailRecordFragment detailRecordFragment = new DetailRecordFragment();//프래그먼트2 선언

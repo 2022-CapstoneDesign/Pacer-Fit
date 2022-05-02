@@ -66,7 +66,7 @@ public class OneWeekFragment extends Fragment {
         int min = time / 60 % 60;
         int hour = time / 3600;
 
-        //value = 1이면 어제..
+        //value = -1이면 어제..
         float value = 0;
         //오늘 요일 구하기
         Calendar cal_day = Calendar.getInstance();
@@ -108,9 +108,9 @@ public class OneWeekFragment extends Fragment {
     private void setAvgTime() {
         // 이곳에 DB에서 불러온 운동시간들의 평균 구하는 알고리즘 작성... 추후에 추가
         int time = 0;
-        for(int i=0; i<6; i++)
+        for(int i=0; i<7; i++)
             time += Integer.parseInt(data.PedoRecord7_time[i]);
-        time /= 6;
+        time /= data.PedoRecord7_time.length;
         int minutes = time / 60 % 60;
         int hours = time / 3600;
         if(hours != 0)
