@@ -22,7 +22,9 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -35,6 +37,9 @@ public class OneYearFragment extends Fragment {
     private TextView totalTime_oneyearPedo;
     private TextView step_oneyearPedo;
     private TextView pedo_avg_time;
+
+    //외부 class에 데이터 저장후 UI에 뿌려줌
+    PedoRecordData data = new PedoRecordData();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,15 +56,35 @@ public class OneYearFragment extends Fragment {
 
         // <--- 테이블 --->
         // ***** 이 곳에서 이번달 만보기 기록 DB 값을 표시합니다 *****
-        setTodayRecord("2022년 5월", "2시간 6분", "2,351걸음");
+        int time = Integer.parseInt(data.PedoRecordYear_time[0]);
+        int sec = time % 60;
+        int min = time / 60 % 60;
+        int hour = time / 3600;
+        float value = 0;
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, (int)value);
+        //cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        SimpleDateFormat df = new SimpleDateFormat("y년 M월");
+
+        //이번달 만보기 기록
+        if(hour!=0)
+            setTodayRecord(df.format(cal.getTime())+"",
+                    hour+"시간"+min+"분",
+                    data.PedoRecordYear_step[0]+"걸음");
+        else
+            setTodayRecord(df.format(cal.getTime())+"",
+                    min+"분",
+                    data.PedoRecordYear_step[0]+"걸음");
+
         setAvgTime();
         setRecyclerView();
 
         // <--- 막대 그래프 --->
         ArrayList<Float> barChartValues = new ArrayList<>();
         // 최근 1년의 운동량 값(한달 단위로) 받아오기 -> DB 값으로 추후에 수정
-        for (int i = 0; i < 12; i++) {
-            float rand = (float) Math.round(new Random().nextFloat() * 400000);
+        for (int i = 11; i >=0; i--) {
+            //float rand = (float) Math.round(new Random().nextFloat() * 400000);
+            float rand = Float.parseFloat(data.PedoRecordYear_step[i]);
             //Log.d("RAND", String.valueOf(rand));
             barChartValues.add(rand); // 0 ~ 400,000 사이의 랜덤값
         }
@@ -74,9 +99,16 @@ public class OneYearFragment extends Fragment {
 
     private void setAvgTime() {
         // 이곳에 DB에서 불러온 운동시간들의 평균 구하는 알고리즘 작성... 추후에 추가
-        int hours = 40;
-        int minutes = 52;
-        pedo_avg_time.setText(hours + "시간 " + minutes + "분");
+        int time = 0;
+        for(int i=0; i<12; i++)
+            time += Integer.parseInt(data.PedoRecordYear_time[i]);
+        time /= data.PedoRecordYear_time.length;
+        int minutes = time / 60 % 60;
+        int hours = time / 3600;
+        if(hours != 0)
+            pedo_avg_time.setText(hours + "시간 " + minutes + "분");
+        else
+            pedo_avg_time.setText(minutes + "분");
     }
 
     private void setTodayRecord(String date, String totalTime, String step) {
@@ -95,8 +127,28 @@ public class OneYearFragment extends Fragment {
     private List<OneYearRecordModel> getList() {
         List<OneYearRecordModel> record_list = new ArrayList<>();
         // ***** 이 곳에서 1년 만보기 기록 DB 값을 표시합니다(월 단위로, 이번달 기록 제외) *****
+
+        float value = 0;
         for (int i = 1; i < 12; i++) {
-            record_list.add(new OneYearRecordModel("2022년 4월", "40분", "1,218걸음"));
+            int time = Integer.parseInt(data.PedoRecordYear_time[i]);
+            int sec = time % 60;
+            int min = time / 60 % 60;
+            int hour = time / 3600;
+
+            value--;
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.MONTH, (int)value);
+            //cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            SimpleDateFormat df = new SimpleDateFormat("y년 M월");
+
+            if(hour!=0)
+                record_list.add(new OneYearRecordModel(df.format(cal.getTime())+"",
+                        hour+"시간"+min+"분",
+                        data.PedoRecordYear_step[i]+"걸음"));
+            else
+                record_list.add(new OneYearRecordModel(df.format(cal.getTime())+"",
+                        min+"분",
+                        data.PedoRecordYear_step[i]+"걸음"));
         }
 
         return record_list;
@@ -138,7 +190,8 @@ public class OneYearFragment extends Fragment {
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
-        axisLeft.setAxisMaximum(400001f); // y축 최대값 설정
+        Float max = Float.parseFloat(data.pedo_max_year);
+        axisLeft.setAxisMaximum(max); // y축 최대값 설정
         axisLeft.setAxisMinimum(0f); // y축 최소값 설정
         axisLeft.setDrawLabels(false); // 값 표기 설정
         axisLeft.setDrawGridLines(false); // 격자
