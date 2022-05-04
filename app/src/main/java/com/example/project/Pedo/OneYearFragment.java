@@ -156,7 +156,7 @@ public class OneYearFragment extends Fragment {
 
     // 막대그래프 각종 설정
     private void barchartConfigureAppearance() {
-        barChart.setTouchEnabled(false); // 터치 유무
+        barChart.setTouchEnabled(true); // 터치 유무
         barChart.setPinchZoom(false); // 두 손가락으로 줌인,줌아웃 설정
         barChart.setDrawBarShadow(false); // 그래프의 그림자
         barChart.setDrawGridBackground(false); // 격자무늬 유무

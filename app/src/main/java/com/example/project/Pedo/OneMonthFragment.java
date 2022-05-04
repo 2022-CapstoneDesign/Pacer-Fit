@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.listener.BarLineChartTouchListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -162,7 +164,7 @@ public class OneMonthFragment extends Fragment {
 
     // 막대그래프 각종 설정
     private void barchartConfigureAppearance() {
-        barChart.setTouchEnabled(false); // 터치 유무
+        barChart.setTouchEnabled(true); // 터치 유무 -> 마커뷰 보이게 하기 위해 true로 설정해야 함
         barChart.setPinchZoom(false); // 두 손가락으로 줌인,줌아웃 설정
         barChart.setDrawBarShadow(false); // 그래프의 그림자
         barChart.setDrawGridBackground(false); // 격자무늬 유무
@@ -173,6 +175,10 @@ public class OneMonthFragment extends Fragment {
         barChart.setExtraBottomOffset(5f); // X축 글자 깨짐 방지
         //barChart.setDescription();
         //barChart.setExtraOffsets(10f, 0f, 40f, 0f);
+        // 막대 클릭 시 마커뷰 보이도록 설정
+        PedoGraphMarkerView marker = new PedoGraphMarkerView(getContext(), R.layout.graph_marker_view);
+        marker.setChartView(barChart);
+        barChart.setMarker(marker);
 
         // x축 설정(막대그래프 기준 아래쪽)
         XAxis xAxis = barChart.getXAxis();
@@ -194,7 +200,7 @@ public class OneMonthFragment extends Fragment {
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
-        Float max = Float.parseFloat(data.pedo_max_month);
+        Float max = Float.parseFloat(data.pedo_max_month) + 800;
         axisLeft.setAxisMaximum(max); // y축 최대값 설정
         axisLeft.setAxisMinimum(0f); // y축 최소값 설정
         axisLeft.setDrawLabels(false); // 값 표기 설정
