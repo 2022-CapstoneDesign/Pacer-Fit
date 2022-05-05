@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.Formatter.OneYearXAxisValueFormatter;
+import com.example.project.GraphMarker.GraphMarkerView;
 import com.example.project.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -162,6 +163,10 @@ public class OneYearFragment extends Fragment {
         //lineChart.animateY(1500); // 밑에서부터 올라오는 애니메이션 적용
         lineChart.animateX(500); // 왼쪽-오른쪽 방향의 애니메이션 적용
         lineChart.setExtraBottomOffset(3f); // x축 글씨 잘림 방지
+        // 값 클릭 시 마커뷰 보이도록 설정
+        GraphMarkerView marker = new GraphMarkerView(getContext(), R.layout.graph_marker_view, "dist", 1);
+        marker.setChartView(lineChart);
+        lineChart.setMarker(marker);
 
         // x축 설정(꺾은선그래프 기준 아래쪽)
         XAxis xAxis = lineChart.getXAxis();

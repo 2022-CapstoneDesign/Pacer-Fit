@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.Formatter.OneMonthXAxisValueFormatter;
-import com.example.project.Formatter.OneWeekXAxisValueFormatter;
+import com.example.project.GraphMarker.GraphMarkerView;
 import com.example.project.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -22,7 +21,6 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.listener.BarLineChartTouchListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 public class OneMonthFragment extends Fragment {
     private BarChart barChart; // 만보기 30일 막대그래프
@@ -176,7 +173,7 @@ public class OneMonthFragment extends Fragment {
         //barChart.setDescription();
         //barChart.setExtraOffsets(10f, 0f, 40f, 0f);
         // 막대 클릭 시 마커뷰 보이도록 설정
-        PedoGraphMarkerView marker = new PedoGraphMarkerView(getContext(), R.layout.graph_marker_view);
+        GraphMarkerView marker = new GraphMarkerView(getContext(), R.layout.graph_marker_view, "pedo", 30);
         marker.setChartView(barChart);
         barChart.setMarker(marker);
 
