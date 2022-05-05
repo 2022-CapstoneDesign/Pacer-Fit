@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.Formatter.OneYearXAxisValueFormatter;
 import com.example.project.Formatter.SixMonthXAxisValueFormatter;
+import com.example.project.GraphMarker.GraphMarkerView;
 import com.example.project.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -167,6 +168,10 @@ public class OneYearFragment extends Fragment {
         barChart.setExtraBottomOffset(5f); // X축 글자 깨짐 방지
         //barChart.setDescription();
         //barChart.setExtraOffsets(10f, 0f, 40f, 0f);
+        // 막대 클릭 시 마커뷰 보이도록 설정
+        GraphMarkerView marker = new GraphMarkerView(getContext(), R.layout.graph_marker_view, "pedo", 1);
+        marker.setChartView(barChart);
+        barChart.setMarker(marker);
 
         // x축 설정(막대그래프 기준 아래쪽)
         XAxis xAxis = barChart.getXAxis();
@@ -190,7 +195,7 @@ public class OneYearFragment extends Fragment {
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
-        Float max = Float.parseFloat(data.pedo_max_year);
+        Float max = Float.parseFloat(data.pedo_max_year) + 2600;
         axisLeft.setAxisMaximum(max); // y축 최대값 설정
         axisLeft.setAxisMinimum(0f); // y축 최소값 설정
         axisLeft.setDrawLabels(false); // 값 표기 설정

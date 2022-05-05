@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.Formatter.OneMonthXAxisValueFormatter;
+import com.example.project.GraphMarker.GraphMarkerView;
 import com.example.project.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -159,14 +160,18 @@ public class OneMonthFragment extends Fragment {
 
     // 꺾은선그래프 각종 설정
     private void linechartConfigureAppearance() {
-        lineChart.setTouchEnabled(false);
-        lineChart.setTouchEnabled(false); // 터치 유무
+        lineChart.setTouchEnabled(true); // 터치 유무
         lineChart.setPinchZoom(false); // 두 손가락으로 줌인,줌아웃 설정
         lineChart.setDrawGridBackground(false); // 격자무늬 유무
         lineChart.getLegend().setEnabled(false); // legend는 차트의 범례
         lineChart.getDescription().setEnabled(false); // 우측 하단의 DescriptionLabel 삭제
         //lineChart.animateY(1500); // 밑에서부터 올라오는 애니메이션 적용
         lineChart.animateX(1000); // 왼쪽-오른쪽 방향의 애니메이션 적용
+        // 값 클릭 시 마커뷰 보이도록 설정
+        GraphMarkerView marker = new GraphMarkerView(getContext(), R.layout.graph_marker_view, "dist", 30);
+        marker.setChartView(lineChart);
+        marker.setPadding(0, 0, 0, 5); // 라인그래프는 default가 마커가 딱 붙어서 나옴
+        lineChart.setMarker(marker);
 
         // x축 설정(꺾은선그래프 기준 아래쪽)
         XAxis xAxis = lineChart.getXAxis();
@@ -189,6 +194,7 @@ public class OneMonthFragment extends Fragment {
         YAxis yAxisLeft = lineChart.getAxisLeft();
         Float max = Float.parseFloat(data.km_max_month);
         max += max/10;
+        max += 1.8f;
         yAxisLeft.setAxisMaximum(max); // y축 최대값 설정
         yAxisLeft.setAxisMinimum(0f); // y축 최소값 설정
         yAxisLeft.setDrawLabels(false); // 값 표기 설정
@@ -231,6 +237,8 @@ public class OneMonthFragment extends Fragment {
         set.setCircleSize(4f);
         set.setDrawCircles(true); //선 둥글게 만들기
         set.setDrawFilled(false); //그래프 밑부분 색칠X
+        set.setDrawHorizontalHighlightIndicator(false); // 마커 나올 때 강조 선 안 나오게
+        set.setDrawVerticalHighlightIndicator(false); // 마커 나올 때 강조 선 안 나오게
 
         // 3. [LineData] 보여질 데이터 구성
         LineData data = new LineData(set);
