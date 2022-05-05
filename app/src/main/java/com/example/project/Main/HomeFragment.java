@@ -121,9 +121,6 @@ public class HomeFragment extends Fragment {
         Intent receiveIntent = getActivity().getIntent();
         userID = receiveIntent.getStringExtra("userID");
         userWeight = receiveIntent.getStringExtra("userWeight");
-        today_userPedoRecord = receiveIntent.getStringExtra("today_stepsRecord");
-        today_userPedoTimeRecord = receiveIntent.getStringExtra("today_stepsTimeRecord");
-        today_userPedoCalorieRecord = receiveIntent.getStringExtra("today_stepsCalorieRecord");
         pedo_max = receiveIntent.getStringExtra("pedo_max");
 
         Km_button.setOnClickListener(new View.OnClickListener() {
