@@ -28,6 +28,8 @@ import androidx.fragment.app.FragmentManager;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.project.Dist.DistDetailRecordFragment;
+import com.example.project.Dist.KmLineRecordRequest;
 import com.example.project.Formatter.OneMonthXAxisValueFormatter;
 import com.example.project.Map.RecordMapActivity;
 import com.example.project.Pedo.DetailRecordFragment;
@@ -84,9 +86,10 @@ public class HomeFragment extends Fragment {
     String today_userPedoCalorieRecord;
     String date_concat;
     String[] PedoRecord31 = new String[31];
+    String[] KmRecord31 = new String[31];
     String[] beforeMonth31 = new String[31];
-    String pedo_max;
-
+    String pedo_max, km_max;
+    int green,gray;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -99,6 +102,9 @@ public class HomeFragment extends Fragment {
         weatherInfo_Image = v.findViewById(R.id.weather_image);
         temperature = v.findViewById(R.id.temperature);
         Button Km_button = v.findViewById(R.id.Km_button);
+        //null포인터 오류로 빼놈
+        green = ContextCompat.getColor(getContext(), R.color.green_project);
+        gray = ContextCompat.getColor(getContext(), R.color.gray_project);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             LocalDate now = null;
             now = LocalDate.now();
@@ -122,6 +128,7 @@ public class HomeFragment extends Fragment {
         userID = receiveIntent.getStringExtra("userID");
         userWeight = receiveIntent.getStringExtra("userWeight");
         pedo_max = receiveIntent.getStringExtra("pedo_max");
+        km_max = receiveIntent.getStringExtra("km_max");
 
         Km_button.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.P)
@@ -224,6 +231,22 @@ public class HomeFragment extends Fragment {
         barChart.setData(barChartData2); //초기화
         barChart.invalidate(); //초기화
 
+        // <----------- 꺾은선 그래프 ----------->
+        lineChart = v.findViewById(R.id.linechart);
+        //DB 연결 (Response)
+
+        ArrayList<Float> lineChartValues2 = new ArrayList<>();
+        // 최근 1달의 운동량 값 받아오기 -> DB 값으로 추후에 수정
+        for (int i = 0; i < 31; i++) {
+            //Log.d("RAND", String.valueOf(rand));
+            lineChartValues2.add(0f); // 0 ~ 15,000 사이의 랜덤값
+        }
+
+        linechartConfigureAppearance();
+        LineData lineChartData2 = createLinechartData(lineChartValues2);
+        lineChart.setData(lineChartData2); // LineData 전달
+        lineChart.invalidate(); // LineChart 갱신해 데이터 표시
+
         //barChart.setOnChartValueSelectedListener(this);
         Response.Listener<String> responseListener = response -> {
             try {
@@ -235,6 +258,10 @@ public class HomeFragment extends Fragment {
                     for (int i = 0; i < 31; i++) {
                         PedoRecord31[i] = jsonObject.getString(beforeMonth31[i]);
                     }
+                    for (int i = 0; i < 31; i++) {
+                        KmRecord31[i] = jsonObject.getString(beforeMonth31[i]+".km");
+                    }
+                    //막대
                     ArrayList<Float> barChartValues = new ArrayList<>();
                     // 최근 1달의 운동량 값 받아오기 -> DB 값으로 추후에 수정
                     for (int i = 0; i < 31; i++) {
@@ -244,6 +271,18 @@ public class HomeFragment extends Fragment {
                     BarData barChartData = createBarchartData(barChartValues);
                     barChart.setData(barChartData); // BarData 전달
                     barChart.invalidate(); // BarChart 갱신해 데이터 표시
+
+                    //꺾은선
+                    ArrayList<Float> lineChartValues = new ArrayList<>();
+                    // 최근 1달의 운동량 값 받아오기 -> DB 값으로 추후에 수정
+                    for (int i = 0; i < 31; i++) {
+                        float rand2 = Float.parseFloat(KmRecord31[i]);
+                        //Log.d("RAND", String.valueOf(rand));
+                        lineChartValues.add(rand2); // 0 ~ 15,000 사이의 랜덤값
+                    }
+                    LineData lineChartData = createLinechartData(lineChartValues);
+                    lineChart.setData(lineChartData); // LineData 전달
+                    lineChart.invalidate(); // LineChart 갱신해 데이터 표시
                 } else { //실패한 경우
                     return;
                 }
@@ -254,25 +293,6 @@ public class HomeFragment extends Fragment {
         MainPedoRecentRecordRequest mainPedoRecentRecordRequest = new MainPedoRecentRecordRequest(userID, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
         queue.add(mainPedoRecentRecordRequest);
-
-
-        // <----------- 꺾은선 그래프 ----------->
-        lineChart = v.findViewById(R.id.linechart);
-        //DB 연결 (Response)
-
-
-        ArrayList<Float> lineChartValues = new ArrayList<>();
-        // 최근 1달의 운동량 값 받아오기 -> DB 값으로 추후에 수정
-        for (int i = 0; i < 31; i++) {
-            float rand = (float) Math.round(new Random().nextFloat() * 15000);
-            //Log.d("RAND", String.valueOf(rand));
-            lineChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
-        }
-
-        linechartConfigureAppearance();
-        LineData lineChartData = createLinechartData(lineChartValues);
-        lineChart.setData(lineChartData); // LineData 전달
-        lineChart.invalidate(); // LineChart 갱신해 데이터 표시
 
         moreBarChartBtn = v.findViewById(R.id.moreBarChartBtn);
         moreBarChartBtn.setOnClickListener(new View.OnClickListener() {
@@ -329,11 +349,51 @@ public class HomeFragment extends Fragment {
         moreLineChartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 더보기 탭으로 이동. 이전 프래그먼트로 돌아갈 수 있도록 설정
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                fm.beginTransaction()
-                        .replace(R.id.frame_container, new com.example.project.Dist.DetailRecordFragment())
-                        .addToBackStack(null).commit();
+                Response.Listener<String> responseListener = response -> {
+                    try {
+                        System.out.println("========================Click->" + response);
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean success = jsonObject.getBoolean("success");
+                        if (success) {
+                            Bundle bundle = new Bundle(); // 번들을 통해 값 전달
+                            bundle.putString("userID",userID);//번들에 넘길 값 저장
+                            for(int i=0; i<7; i++) {
+                                bundle.putString(i+".day_km",jsonObject.getString(i+".day_km"));
+                                bundle.putString(i+".day_time",jsonObject.getString(i+".day_time"));
+                            }
+                            bundle.putString("km_max_day",jsonObject.getString("km_max_day"));
+                            for(int i=0; i<31; i++) {
+                                bundle.putString(i+".month_km",jsonObject.getString(i+".month_km"));
+                                bundle.putString(i+".month_time",jsonObject.getString(i+".month_time"));
+                            }
+                            bundle.putString("km_max_month",jsonObject.getString("km_max_month"));
+                            for(int i=0; i<24; i++){
+                                bundle.putString(i+".week_km",jsonObject.getString(i+".week_km"));
+                                bundle.putString(i+".week_time",jsonObject.getString(i+".week_time"));
+                            }
+                            bundle.putString("km_max_180",jsonObject.getString("km_max_180"));
+                            for(int i=0; i<12; i++){
+                                bundle.putString(i+".year_km",jsonObject.getString(i+".year_km"));
+                                bundle.putString(i+".year_time",jsonObject.getString(i+".year_time"));
+                            }
+                            bundle.putString("km_max_year",jsonObject.getString("km_max_year"));
+                            // 더보기 탭으로 이동. 이전 프래그먼트로 돌아갈 수 있도록 설정
+                            FragmentManager fm = getActivity().getSupportFragmentManager();
+                            DistDetailRecordFragment distDetailRecordFragment = new DistDetailRecordFragment();//프래그먼트2 선언
+                            distDetailRecordFragment.setArguments(bundle);//번들을 프래그먼트2로 보낼 준비
+                            fm.beginTransaction()
+                                    .replace(R.id.frame_container, distDetailRecordFragment)
+                                    .addToBackStack(null).commit();
+                        } else { //실패한 경우
+                            return;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                };
+                KmLineRecordRequest kmLineRecordRequest = new KmLineRecordRequest(userID, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+                queue.add(kmLineRecordRequest);
             }
         });
 
@@ -416,7 +476,9 @@ public class HomeFragment extends Fragment {
         xAxis.setTypeface(tf);
 
         YAxis yAxisLeft = lineChart.getAxisLeft();
-        yAxisLeft.setAxisMaximum(15001f); // y축 최대값 설정
+        float km_max_float = Float.parseFloat(km_max);
+        km_max_float += km_max_float/10;
+        yAxisLeft.setAxisMaximum(km_max_float); // y축 최대값 설정
         yAxisLeft.setAxisMinimum(0f); // y축 최소값 설정
         yAxisLeft.setDrawLabels(false); // 값 표기 설정
         yAxisLeft.setDrawGridLines(false); // 격자
@@ -467,8 +529,9 @@ public class HomeFragment extends Fragment {
         LineDataSet set = new LineDataSet(values, "꺾은선그래프");
         set.setDrawIcons(false);
         set.setDrawValues(false);
-        int green = ContextCompat.getColor(getContext(), R.color.green_project);
-        int gray = ContextCompat.getColor(getContext(), R.color.gray_project);
+        //널포인터 오류로 onCreate로 빼놈
+//        green = ContextCompat.getColor(getContext(), R.color.green_project);
+//        gray = ContextCompat.getColor(getContext(), R.color.gray_project);
         set.setFillColor(green);
         set.setColor(green);
         set.setDrawCircleHole(true);

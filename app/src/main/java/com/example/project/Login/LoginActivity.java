@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(String response) {
                     try {
-                        //System.out.println("========================" + response);
+                        System.out.println("========================" + response);
                         JSONObject jsonObject = new JSONObject(response);
                         boolean success = jsonObject.getBoolean("success");
                         if (success) { // 로그인에 성공한 경우
@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                             String userName = jsonObject.getString("userName");
                             String userWeight = jsonObject.getString("userWeight");
                             String pedo_max = jsonObject.getString("pedo_max");
+                            String km_max = jsonObject.getString("km_max");
                             Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, BottomNavigation.class);// 메인 액티비티로 전환
                             intent.putExtra("userID", userID);
@@ -73,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("userName",userName);
                             intent.putExtra("userWeight", userWeight);
                             intent.putExtra("pedo_max",pedo_max);
+                            intent.putExtra("km_max",km_max);
 
                             startActivity(intent);
                             finish();
