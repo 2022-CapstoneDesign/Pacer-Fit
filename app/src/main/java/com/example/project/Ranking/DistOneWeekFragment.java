@@ -35,11 +35,13 @@ public class DistOneWeekFragment extends Fragment {
     String distWeekRankingJsonString;
     ArrayList<distWeekRankingData> distWeekRankingArrayList;
     String userName = UserInfo.getInstance().getUserName();
+    int userProfileNum = UserInfo.getInstance().getUserProfileNum();
     int myIndexNumber;
     private static final String TAG_JSON="pacerfit";
     private static final String TAG_NAME = "userName";
     private static final String TAG_ID = "userID";
     private static final String TAG_WEEKSUM = "week_sum";
+    private static final String TAG_PROFILE = "profile_num";
 
 
     TextView myIndex;
@@ -47,8 +49,12 @@ public class DistOneWeekFragment extends Fragment {
     TextView myID;
     TextView myKm;
 
-    int[] ProfileDrawable = {R.drawable.profile_man_horn, R.drawable.profile_man_beard, R.drawable.profile_woman_old,
-            R.drawable.profile_woman_scarf, R.drawable.profile_woman_neck, R.drawable.profile_man_hood, R.drawable.profile_man_round};
+    int[] ProfileDrawable = {
+            R.drawable.profile_default, R.drawable.profile_man, R.drawable.profile_man_beard, R.drawable.profile_man_cap,
+            R.drawable.profile_man_hat, R.drawable.profile_man_hood, R.drawable.profile_man_horn, R.drawable.profile_man_round,
+            R.drawable.profile_man_suit, R.drawable.profile_man_sunglass, R.drawable.profile_woman_glasses, R.drawable.profile_woman_neck,
+            R.drawable.profile_woman_old, R.drawable.profile_woman_scarf
+    };
 
 
     @Override
@@ -71,7 +77,7 @@ public class DistOneWeekFragment extends Fragment {
         return v;
     }
 
-    private void createMyRank(int index, int profile, String id, int km) {
+    private void createMyRank(int index, int profile, String id, double km) {
         DecimalFormat myFormatter = new DecimalFormat("###,##0.0");
         myIndex.setText(String.valueOf(index+1));
         myProfile.setImageResource(profile);
@@ -83,8 +89,7 @@ public class DistOneWeekFragment extends Fragment {
         ArrayList<DistRankingModel> rankingModels = new ArrayList<>();
         for(int i=1;i<distWeekRankingArrayList.size();i++){
             if(i!=myIndexNumber){
-                int randomNum = (int) (Math.random() * 7);
-                rankingModels.add(new DistRankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
+                rankingModels.add(new DistRankingModel(String.valueOf(i+1),ProfileDrawable[distWeekRankingArrayList.get(i).profile_num],
                         distWeekRankingArrayList.get(i).userName,distWeekRankingArrayList.get(i).week_sum));
             }
         }
@@ -99,9 +104,9 @@ public class DistOneWeekFragment extends Fragment {
     }
 
     private void createRankOne() {
-        int randomNum = (int) (Math.random() * 7);
         ArrayList<DistRankOneModel> rankOneModels = new ArrayList<>();
-        rankOneModels.add(new DistRankOneModel(ProfileDrawable[randomNum],distWeekRankingArrayList.get(0).userName, distWeekRankingArrayList.get(0).week_sum));
+        rankOneModels.add(new DistRankOneModel(ProfileDrawable[distWeekRankingArrayList.get(0).profile_num],
+                distWeekRankingArrayList.get(0).userName, distWeekRankingArrayList.get(0).week_sum));
         rankingAdapter.setRank1List(rankOneModels);
     }
 
@@ -126,9 +131,8 @@ public class DistOneWeekFragment extends Fragment {
                     if(distWeekRankingArrayList.get(i).userName.equals(userName))
                         myIndexNumber = i;
                 }
-                int randomNum = (int) (Math.random() * 7);
 
-                createMyRank(myIndexNumber, ProfileDrawable[randomNum], userName, distWeekRankingArrayList.get(myIndexNumber).week_sum);
+                createMyRank(myIndexNumber, ProfileDrawable[userProfileNum], userName, distWeekRankingArrayList.get(myIndexNumber).week_sum);
                 createRankOne();
                 createList();
 
@@ -146,12 +150,14 @@ public class DistOneWeekFragment extends Fragment {
 
                     String userName = item.getString(TAG_NAME);
                     String userID = item.getString(TAG_ID);
-                    int week_sum = item.getInt(TAG_WEEKSUM);
+                    double week_sum = item.getDouble(TAG_WEEKSUM);
+                    int profile_num = item.getInt(TAG_PROFILE);
 
                     distWeekRankingData distWeekRankingData = new distWeekRankingData();
                     distWeekRankingData.setUserName(userName);
                     distWeekRankingData.setUserID(userID);
                     distWeekRankingData.setMonth_sum(week_sum);
+                    distWeekRankingData.setProfile_num(profile_num);
 
                     distWeekRankingArrayList.add(distWeekRankingData);
 
@@ -209,7 +215,8 @@ public class DistOneWeekFragment extends Fragment {
     private class distWeekRankingData{  //DB에서 받은 데이터를 저장할 클래스
         private String userName;
         private String userID;
-        private int week_sum;
+        private double week_sum;
+        private int profile_num;
 
         public String getUserID(){
             return userID;
@@ -217,17 +224,19 @@ public class DistOneWeekFragment extends Fragment {
         public String getUserName(){
             return userName;
         }
-        public int getWeek_sum(){
+        public double getWeek_sum(){
             return week_sum;
         }
+        public int getProfile_num() {return profile_num; }
         public void setUserName(String userName){
             this.userName = userName;
         }
         public void setUserID(String userID){
             this.userID = userID;
         }
-        public void setMonth_sum(int week_sum){
+        public void setMonth_sum(double week_sum){
             this.week_sum = week_sum;
         }
+        public void setProfile_num(int profile_num) {this.profile_num = profile_num; }
     }
 }
