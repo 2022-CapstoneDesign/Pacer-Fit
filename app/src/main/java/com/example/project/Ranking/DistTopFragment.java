@@ -35,11 +35,14 @@ public class DistTopFragment extends Fragment {
     String distTopRankingJsonString;
     ArrayList<distTopRankingData> distTopRankingArrayList;
     String userName = UserInfo.getInstance().getUserName();
+    int userProfileNum = UserInfo.getInstance().getUserProfileNum();
     int myIndexNumber;
     private static final String TAG_JSON="pacerfit";
     private static final String TAG_NAME = "userName";
     private static final String TAG_ID = "userID";
     private static final String TAG_TOPSUM = "top_sum";
+    private static final String TAG_PROFILE = "profile_num";
+
 
 
     TextView myIndex;
@@ -47,8 +50,12 @@ public class DistTopFragment extends Fragment {
     TextView myID;
     TextView myKm;
 
-    int[] ProfileDrawable = {R.drawable.profile_man_horn, R.drawable.profile_man_beard, R.drawable.profile_woman_old,
-            R.drawable.profile_woman_scarf, R.drawable.profile_woman_neck, R.drawable.profile_man_hood, R.drawable.profile_man_round};
+    int[] ProfileDrawable = {
+            R.drawable.profile_default, R.drawable.profile_man, R.drawable.profile_man_beard, R.drawable.profile_man_cap,
+            R.drawable.profile_man_hat, R.drawable.profile_man_hood, R.drawable.profile_man_horn, R.drawable.profile_man_round,
+            R.drawable.profile_man_suit, R.drawable.profile_man_sunglass, R.drawable.profile_woman_glasses, R.drawable.profile_woman_neck,
+            R.drawable.profile_woman_old, R.drawable.profile_woman_scarf
+    };
 
 
     @Override
@@ -83,8 +90,7 @@ public class DistTopFragment extends Fragment {
         ArrayList<DistRankingModel> rankingModels = new ArrayList<>();
         for(int i=1;i<distTopRankingArrayList.size();i++){
             if(i!=myIndexNumber){
-                int randomNum = (int) (Math.random() * 7);
-                rankingModels.add(new DistRankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
+                rankingModels.add(new DistRankingModel(String.valueOf(i+1),ProfileDrawable[distTopRankingArrayList.get(i).profile_num],
                         distTopRankingArrayList.get(i).userName,distTopRankingArrayList.get(i).top_sum));
             }
         }
@@ -99,9 +105,9 @@ public class DistTopFragment extends Fragment {
     }
 
     private void createRankOne() {
-        int randomNum = (int) (Math.random() * 7);
         ArrayList<DistRankOneModel> rankOneModels = new ArrayList<>();
-        rankOneModels.add(new DistRankOneModel(ProfileDrawable[randomNum],distTopRankingArrayList.get(0).userName, distTopRankingArrayList.get(0).top_sum));
+        rankOneModels.add(new DistRankOneModel(ProfileDrawable[distTopRankingArrayList.get(0).profile_num],
+                distTopRankingArrayList.get(0).userName, distTopRankingArrayList.get(0).top_sum));
         rankingAdapter.setRank1List(rankOneModels);
     }
 
@@ -125,9 +131,8 @@ public class DistTopFragment extends Fragment {
                     if(distTopRankingArrayList.get(i).userName.equals(userName))
                         myIndexNumber = i;
                 }
-                int randomNum = (int) (Math.random() * 7);
 
-                createMyRank(myIndexNumber, ProfileDrawable[randomNum], userName, distTopRankingArrayList.get(myIndexNumber).top_sum);
+                createMyRank(myIndexNumber, ProfileDrawable[userProfileNum], userName, distTopRankingArrayList.get(myIndexNumber).top_sum);
                 createRankOne();
                 createList();
 
@@ -146,11 +151,13 @@ public class DistTopFragment extends Fragment {
                     String userName = item.getString(TAG_NAME);
                     String userID = item.getString(TAG_ID);
                     double top_sum = item.getDouble(TAG_TOPSUM);
+                    int profile_num = item.getInt(TAG_PROFILE);
 
                     distTopRankingData distTopRankingData = new distTopRankingData();
                     distTopRankingData.setUserName(userName);
                     distTopRankingData.setUserID(userID);
                     distTopRankingData.setTop_sum(top_sum);
+                    distTopRankingData.setProfile_num(profile_num);
 
                     distTopRankingArrayList.add(distTopRankingData);
 
@@ -209,6 +216,7 @@ public class DistTopFragment extends Fragment {
         private String userName;
         private String userID;
         private double top_sum;
+        private int profile_num;
 
         public String getUserID(){
             return userID;
@@ -219,6 +227,7 @@ public class DistTopFragment extends Fragment {
         public double getTop_sum(){
             return top_sum;
         }
+        private int getProfile_num() {return profile_num; }
         public void setUserName(String userName){
             this.userName = userName;
         }
@@ -228,5 +237,6 @@ public class DistTopFragment extends Fragment {
         public void setTop_sum(double top_sum){
             this.top_sum = top_sum;
         }
+        public void setProfile_num(int profile_num) {this.profile_num = profile_num; }
     }
 }

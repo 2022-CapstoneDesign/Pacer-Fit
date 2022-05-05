@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                             String userWeight = jsonObject.getString("userWeight");
                             String pedo_max = jsonObject.getString("pedo_max");
                             String km_max = jsonObject.getString("km_max");
+                            int userProfileNum = jsonObject.getInt("userProfileNum");
                             Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, BottomNavigation.class);// 메인 액티비티로 전환
                             intent.putExtra("userID", userID);
@@ -75,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("userWeight", userWeight);
                             intent.putExtra("pedo_max",pedo_max);
                             intent.putExtra("km_max",km_max);
+                            intent.putExtra("userProfileNum",userProfileNum);
 
                             startActivity(intent);
                             finish();

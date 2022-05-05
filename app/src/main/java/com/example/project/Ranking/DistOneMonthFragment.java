@@ -35,11 +35,13 @@ public class DistOneMonthFragment extends Fragment {
     String distMonthRankingJsonString;
     ArrayList<distMonthRankingData> distMonthRankingArrayList;
     String userName = UserInfo.getInstance().getUserName();
+    int userProfileNum = UserInfo.getInstance().getUserProfileNum();
     int myIndexNumber;
     private static final String TAG_JSON="pacerfit";
     private static final String TAG_NAME = "userName";
     private static final String TAG_ID = "userID";
     private static final String TAG_MONTHSUM = "month_sum";
+    private static final String TAG_PROFILE = "profile_num";
 
 
     TextView myIndex;
@@ -47,8 +49,12 @@ public class DistOneMonthFragment extends Fragment {
     TextView myID;
     TextView myKm;
 
-    int[] ProfileDrawable = {R.drawable.profile_man_horn, R.drawable.profile_man_beard, R.drawable.profile_woman_old,
-            R.drawable.profile_woman_scarf, R.drawable.profile_woman_neck, R.drawable.profile_man_hood, R.drawable.profile_man_round};
+    int[] ProfileDrawable = {
+            R.drawable.profile_default, R.drawable.profile_man, R.drawable.profile_man_beard, R.drawable.profile_man_cap,
+            R.drawable.profile_man_hat, R.drawable.profile_man_hood, R.drawable.profile_man_horn, R.drawable.profile_man_round,
+            R.drawable.profile_man_suit, R.drawable.profile_man_sunglass, R.drawable.profile_woman_glasses, R.drawable.profile_woman_neck,
+            R.drawable.profile_woman_old, R.drawable.profile_woman_scarf
+    };
 
 
     @Override
@@ -71,7 +77,7 @@ public class DistOneMonthFragment extends Fragment {
         return v;
     }
 
-    private void createMyRank(int index, int profile, String id, int km) { //내 랭킹 출력
+    private void createMyRank(int index,int profile, String id, double km) { //내 랭킹 출력
         DecimalFormat myFormatter = new DecimalFormat("###,##0.0");
         myIndex.setText(String.valueOf(index+1));
         myProfile.setImageResource(profile);
@@ -83,8 +89,7 @@ public class DistOneMonthFragment extends Fragment {
         ArrayList<DistRankingModel> rankingModels = new ArrayList<>();
         for(int i=1;i<distMonthRankingArrayList.size();i++){
             if(i!=myIndexNumber){
-                int randomNum = (int) (Math.random() * 7);
-                rankingModels.add(new DistRankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
+                rankingModels.add(new DistRankingModel(String.valueOf(i+1),ProfileDrawable[distMonthRankingArrayList.get(i).profile_num],
                         distMonthRankingArrayList.get(i).userName,distMonthRankingArrayList.get(i).month_sum));
             }
         }
@@ -99,9 +104,9 @@ public class DistOneMonthFragment extends Fragment {
     }
 
     private void createRankOne() {  //1등 랭킹 출력
-        int randomNum = (int) (Math.random() * 7);
         ArrayList<DistRankOneModel> rankOneModels = new ArrayList<>();
-        rankOneModels.add(new DistRankOneModel(ProfileDrawable[randomNum],distMonthRankingArrayList.get(0).userName, distMonthRankingArrayList.get(0).month_sum));
+        rankOneModels.add(new DistRankOneModel(ProfileDrawable[distMonthRankingArrayList.get(0).profile_num],
+                distMonthRankingArrayList.get(0).userName, distMonthRankingArrayList.get(0).month_sum));
         rankingAdapter.setRank1List(rankOneModels);
     }
 
@@ -126,9 +131,8 @@ public class DistOneMonthFragment extends Fragment {
                     if(distMonthRankingArrayList.get(i).userName.equals(userName))
                         myIndexNumber = i;
                 }
-                int randomNum = (int) (Math.random() * 7);
 
-                createMyRank(myIndexNumber, ProfileDrawable[randomNum], userName, distMonthRankingArrayList.get(myIndexNumber).month_sum);
+                createMyRank(myIndexNumber,ProfileDrawable[userProfileNum], userName, distMonthRankingArrayList.get(myIndexNumber).month_sum);
                 createRankOne();
                 createList();
 
@@ -146,12 +150,14 @@ public class DistOneMonthFragment extends Fragment {
 
                     String userName = item.getString(TAG_NAME);
                     String userID = item.getString(TAG_ID);
-                    int month_sum = item.getInt(TAG_MONTHSUM);
+                    double month_sum = item.getDouble(TAG_MONTHSUM);
+                    int profile_num = item.getInt(TAG_PROFILE);
 
                     distMonthRankingData distMonthRankingData = new distMonthRankingData();
                     distMonthRankingData.setUserName(userName);
                     distMonthRankingData.setUserID(userID);
                     distMonthRankingData.setMonth_sum(month_sum);
+                    distMonthRankingData.setProfile_num(profile_num);
 
                     distMonthRankingArrayList.add(distMonthRankingData);
 
@@ -209,7 +215,8 @@ public class DistOneMonthFragment extends Fragment {
     private class distMonthRankingData{  //DB에서 받은 데이터를 저장할 클래스
             private String userName;
             private String userID;
-            private int month_sum;
+            private double month_sum;
+            private int profile_num;
 
             public String getUserID(){
                 return userID;
@@ -217,17 +224,19 @@ public class DistOneMonthFragment extends Fragment {
             public String getUserName(){
                 return userName;
             }
-            public int getMonth_sum(){
+            public double getMonth_sum(){
                 return month_sum;
             }
+            public int getProfile_num() {return profile_num; }
             public void setUserName(String userName){
                 this.userName = userName;
             }
             public void setUserID(String userID){
                 this.userID = userID;
             }
-            public void setMonth_sum(int month_sum){
+            public void setMonth_sum(double month_sum){
                 this.month_sum = month_sum;
             }
+            public void setProfile_num(int profile_num) {this.profile_num = profile_num; }
     }
 }
