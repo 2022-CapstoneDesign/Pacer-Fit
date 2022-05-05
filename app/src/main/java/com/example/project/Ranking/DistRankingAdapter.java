@@ -13,10 +13,10 @@ import com.example.project.R;
 
 import java.util.ArrayList;
 
-public class RankingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class DistRankingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<RankingModel> rankList;
-    private ArrayList<RankOneModel> rank1;
+    private ArrayList<DistRankingModel> rankList;
+    private ArrayList<DistRankOneModel> rank1;
     private final int TYPE_HEADER = 0;
     private final int TYPE_ITEM = 1;
 
@@ -26,10 +26,10 @@ public class RankingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         RecyclerView.ViewHolder holder;
         View view;
         if (viewType == TYPE_HEADER) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_rankone_header, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_dist_rankone_header, parent, false);
             holder = new HeaderViewHolder(view);
         } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_item_recylerview, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_dist_item_recylerview, parent, false);
             holder = new ItemViewHolder(view);
         }
 
@@ -48,12 +48,12 @@ public class RankingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public void setRankList(ArrayList<RankingModel> list) {
+    public void setRankList(ArrayList<DistRankingModel> list) {
         this.rankList = list;
         notifyDataSetChanged();
     }
 
-    public void setRank1List(ArrayList<RankOneModel> list) {
+    public void setRank1List(ArrayList<DistRankOneModel> list) {
         this.rank1 = list;
         notifyDataSetChanged();
     }
@@ -69,19 +69,19 @@ public class RankingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
         ImageView rank1Profile;
         TextView rank1ID;
-        TextView rank1Step;
+        TextView rank1Km;
 
         HeaderViewHolder(@NonNull View headerView) {
             super(headerView);
             rank1Profile = (ImageView) headerView.findViewById(R.id.rank1_profile);
             rank1ID = (TextView) headerView.findViewById(R.id.rank1_id);
-            rank1Step = (TextView) headerView.findViewById(R.id.rank1_step);
+            rank1Km = (TextView) headerView.findViewById(R.id.rank1_km);
         }
 
-        void onBind(RankOneModel rank1Model) {
+        void onBind(DistRankOneModel rank1Model) {
             rank1Profile.setImageResource(rank1Model.getRank1Profile());
             rank1ID.setText(rank1Model.getRank1Id());
-            rank1Step.setText(rank1Model.getRank1Step());
+            rank1Km.setText(rank1Model.getRank1Km());
         }
     }
 
@@ -96,21 +96,21 @@ public class RankingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView rankIndex;
         ImageView rankProfile;
         TextView rankID;
-        TextView rankStep;
+        TextView rankKm;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             rankIndex = (TextView) itemView.findViewById(R.id.rank_index);
             rankProfile = (ImageView) itemView.findViewById(R.id.rank_profile);
             rankID = (TextView) itemView.findViewById(R.id.rank_id);
-            rankStep = (TextView) itemView.findViewById(R.id.rank_step);
+            rankKm = (TextView) itemView.findViewById(R.id.rank_km);
         }
 
-        void onBind(RankingModel rankingModel) {
+        void onBind(DistRankingModel rankingModel) {
             rankIndex.setText(rankingModel.getRankIndex());
             rankProfile.setImageResource(rankingModel.getRankProfile());
             rankID.setText(rankingModel.getRankId());
-            rankStep.setText(rankingModel.getRankStep());
+            rankKm.setText(String.valueOf(rankingModel.getRankKm()));
         }
     }
 }

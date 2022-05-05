@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 public class DistOneWeekFragment extends Fragment {
     RecyclerView recyclerView;
-    RankingAdapter rankingAdapter;
+    DistRankingAdapter rankingAdapter;
     String distWeekRankingJsonString;
     ArrayList<distWeekRankingData> distWeekRankingArrayList;
     String userName = UserInfo.getInstance().getUserName();
@@ -45,7 +45,7 @@ public class DistOneWeekFragment extends Fragment {
     TextView myIndex;
     ImageView myProfile;
     TextView myID;
-    TextView myStep;
+    TextView myKm;
 
     int[] ProfileDrawable = {R.drawable.profile_man_horn, R.drawable.profile_man_beard, R.drawable.profile_woman_old,
             R.drawable.profile_woman_scarf, R.drawable.profile_woman_neck, R.drawable.profile_man_hood, R.drawable.profile_man_round};
@@ -60,7 +60,7 @@ public class DistOneWeekFragment extends Fragment {
         myIndex = v.findViewById(R.id.myrank_index);
         myProfile = v.findViewById(R.id.myrank_profile);
         myID = v.findViewById(R.id.myrank_id);
-        myStep = v.findViewById(R.id.myrank_step);
+        myKm = v.findViewById(R.id.myrank_km);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
         distWeekRankingArrayList = new ArrayList<>();
 
@@ -71,20 +71,20 @@ public class DistOneWeekFragment extends Fragment {
         return v;
     }
 
-    private void createMyRank(int index, int profile, String id, int step) {
-        DecimalFormat myFormatter = new DecimalFormat("###,###");
+    private void createMyRank(int index, int profile, String id, int km) {
+        DecimalFormat myFormatter = new DecimalFormat("###,##0.0");
         myIndex.setText(String.valueOf(index+1));
         myProfile.setImageResource(profile);
         myID.setText(id);
-        myStep.setText(myFormatter.format(step));
+        myKm.setText(myFormatter.format(km));
     }
 
     private void createList(){
-        ArrayList<RankingModel> rankingModels = new ArrayList<>();
+        ArrayList<DistRankingModel> rankingModels = new ArrayList<>();
         for(int i=1;i<distWeekRankingArrayList.size();i++){
             if(i!=myIndexNumber){
                 int randomNum = (int) (Math.random() * 7);
-                rankingModels.add(new RankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
+                rankingModels.add(new DistRankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
                         distWeekRankingArrayList.get(i).userName,distWeekRankingArrayList.get(i).week_sum));
             }
         }
@@ -93,15 +93,15 @@ public class DistOneWeekFragment extends Fragment {
 
     private void setRecyclerView() {
         recyclerView.setHasFixedSize(true);
-        rankingAdapter = new RankingAdapter();
+        rankingAdapter = new DistRankingAdapter();
         recyclerView.setAdapter(rankingAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void createRankOne() {
         int randomNum = (int) (Math.random() * 7);
-        ArrayList<RankOneModel> rankOneModels = new ArrayList<>();
-        rankOneModels.add(new RankOneModel(ProfileDrawable[randomNum],distWeekRankingArrayList.get(0).userName, distWeekRankingArrayList.get(0).week_sum));
+        ArrayList<DistRankOneModel> rankOneModels = new ArrayList<>();
+        rankOneModels.add(new DistRankOneModel(ProfileDrawable[randomNum],distWeekRankingArrayList.get(0).userName, distWeekRankingArrayList.get(0).week_sum));
         rankingAdapter.setRank1List(rankOneModels);
     }
 

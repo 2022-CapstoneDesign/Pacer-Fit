@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 public class PedoOneMonthFragment extends Fragment {
     RecyclerView recyclerView;
-    RankingAdapter rankingAdapter;
+    PedoRankingAdapter rankingAdapter;
     String pedoMonthRankingJsonString;
     ArrayList<pedoMonthRankingData> pedoMonthRankingArrayList;
     String userName = UserInfo.getInstance().getUserName();
@@ -77,11 +77,11 @@ public class PedoOneMonthFragment extends Fragment {
     }
 
     private void createList(){  //랭킹 리스트 출력
-        ArrayList<RankingModel> rankingModels = new ArrayList<>();
+        ArrayList<PedoRankingModel> rankingModels = new ArrayList<>();
         for(int i=1;i<pedoMonthRankingArrayList.size();i++){
             if(i!=myIndexNumber){
                 int randomNum = (int) (Math.random() * 7);
-                rankingModels.add(new RankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
+                rankingModels.add(new PedoRankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
                         pedoMonthRankingArrayList.get(i).userName,pedoMonthRankingArrayList.get(i).month_sum));
             }
         }
@@ -90,15 +90,15 @@ public class PedoOneMonthFragment extends Fragment {
 
     private void setRecyclerView() {
         recyclerView.setHasFixedSize(true);
-        rankingAdapter = new RankingAdapter();
+        rankingAdapter = new PedoRankingAdapter();
         recyclerView.setAdapter(rankingAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void createRankOne() {  //1등 랭킹 출력
         int randomNum = (int) (Math.random() * 7);
-        ArrayList<RankOneModel> rankOneModels = new ArrayList<>();
-        rankOneModels.add(new RankOneModel(ProfileDrawable[randomNum],pedoMonthRankingArrayList.get(0).userName, pedoMonthRankingArrayList.get(0).month_sum));
+        ArrayList<PedoRankOneModel> rankOneModels = new ArrayList<>();
+        rankOneModels.add(new PedoRankOneModel(ProfileDrawable[randomNum],pedoMonthRankingArrayList.get(0).userName, pedoMonthRankingArrayList.get(0).month_sum));
         rankingAdapter.setRank1List(rankOneModels);
     }
 

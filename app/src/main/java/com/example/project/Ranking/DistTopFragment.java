@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 public class DistTopFragment extends Fragment {
     RecyclerView recyclerView;
-    RankingAdapter rankingAdapter;
+    DistRankingAdapter rankingAdapter;
     String distTopRankingJsonString;
     ArrayList<distTopRankingData> distTopRankingArrayList;
     String userName = UserInfo.getInstance().getUserName();
@@ -45,7 +45,7 @@ public class DistTopFragment extends Fragment {
     TextView myIndex;
     ImageView myProfile;
     TextView myID;
-    TextView myStep;
+    TextView myKm;
 
     int[] ProfileDrawable = {R.drawable.profile_man_horn, R.drawable.profile_man_beard, R.drawable.profile_woman_old,
             R.drawable.profile_woman_scarf, R.drawable.profile_woman_neck, R.drawable.profile_man_hood, R.drawable.profile_man_round};
@@ -60,7 +60,7 @@ public class DistTopFragment extends Fragment {
         myIndex = v.findViewById(R.id.myrank_index);
         myProfile = v.findViewById(R.id.myrank_profile);
         myID = v.findViewById(R.id.myrank_id);
-        myStep = v.findViewById(R.id.myrank_step);
+        myKm = v.findViewById(R.id.myrank_km);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
         distTopRankingArrayList = new ArrayList<>();
 
@@ -71,20 +71,20 @@ public class DistTopFragment extends Fragment {
         return v;
     }
 
-    private void createMyRank(int index, int profile, String id, int step) {
-        DecimalFormat myFormatter = new DecimalFormat("###,###");
+    private void createMyRank(int index, int profile, String id, double km) {
+        DecimalFormat myFormatter = new DecimalFormat("###,##0.0");
         myIndex.setText(String.valueOf(index+1));
         myProfile.setImageResource(profile);
         myID.setText(id);
-        myStep.setText(myFormatter.format(step));
+        myKm.setText(myFormatter.format(km));
     }
 
     private void createList(){
-        ArrayList<RankingModel> rankingModels = new ArrayList<>();
+        ArrayList<DistRankingModel> rankingModels = new ArrayList<>();
         for(int i=1;i<distTopRankingArrayList.size();i++){
             if(i!=myIndexNumber){
                 int randomNum = (int) (Math.random() * 7);
-                rankingModels.add(new RankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
+                rankingModels.add(new DistRankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
                         distTopRankingArrayList.get(i).userName,distTopRankingArrayList.get(i).top_sum));
             }
         }
@@ -93,15 +93,15 @@ public class DistTopFragment extends Fragment {
 
     private void setRecyclerView() {
         recyclerView.setHasFixedSize(true);
-        rankingAdapter = new RankingAdapter();
+        rankingAdapter = new DistRankingAdapter();
         recyclerView.setAdapter(rankingAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void createRankOne() {
         int randomNum = (int) (Math.random() * 7);
-        ArrayList<RankOneModel> rankOneModels = new ArrayList<>();
-        rankOneModels.add(new RankOneModel(ProfileDrawable[randomNum],distTopRankingArrayList.get(0).userName, distTopRankingArrayList.get(0).top_sum));
+        ArrayList<DistRankOneModel> rankOneModels = new ArrayList<>();
+        rankOneModels.add(new DistRankOneModel(ProfileDrawable[randomNum],distTopRankingArrayList.get(0).userName, distTopRankingArrayList.get(0).top_sum));
         rankingAdapter.setRank1List(rankOneModels);
     }
 
@@ -145,7 +145,7 @@ public class DistTopFragment extends Fragment {
 
                     String userName = item.getString(TAG_NAME);
                     String userID = item.getString(TAG_ID);
-                    int top_sum = item.getInt(TAG_TOPSUM);
+                    double top_sum = item.getDouble(TAG_TOPSUM);
 
                     distTopRankingData distTopRankingData = new distTopRankingData();
                     distTopRankingData.setUserName(userName);
@@ -208,7 +208,7 @@ public class DistTopFragment extends Fragment {
     private class distTopRankingData{  //DB에서 받은 데이터를 저장할 클래스
         private String userName;
         private String userID;
-        private int top_sum;
+        private double top_sum;
 
         public String getUserID(){
             return userID;
@@ -216,7 +216,7 @@ public class DistTopFragment extends Fragment {
         public String getUserName(){
             return userName;
         }
-        public int getTop_sum(){
+        public double getTop_sum(){
             return top_sum;
         }
         public void setUserName(String userName){
@@ -225,7 +225,7 @@ public class DistTopFragment extends Fragment {
         public void setUserID(String userID){
             this.userID = userID;
         }
-        public void setTop_sum(int top_sum){
+        public void setTop_sum(double top_sum){
             this.top_sum = top_sum;
         }
     }
