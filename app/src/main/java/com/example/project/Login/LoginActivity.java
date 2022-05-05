@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(String response) {
                     try {
-                        //System.out.println("========================" + response);
+                        System.out.println("========================" + response);
                         JSONObject jsonObject = new JSONObject(response);
                         boolean success = jsonObject.getBoolean("success");
                         if (success) { // 로그인에 성공한 경우
@@ -65,20 +65,16 @@ public class LoginActivity extends AppCompatActivity {
                             String userPass = jsonObject.getString("userPassword");
                             String userName = jsonObject.getString("userName");
                             String userWeight = jsonObject.getString("userWeight");
-                            String today_PedoStepsRecord = jsonObject.getString(date_concat+".step");
-                            String today_PedoTimeRecord = jsonObject.getString(date_concat+".time");
-                            String today_PedoCalorieRecord = jsonObject.getString(date_concat+".cal");
                             String pedo_max = jsonObject.getString("pedo_max");
+                            String km_max = jsonObject.getString("km_max");
                             Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, BottomNavigation.class);// 메인 액티비티로 전환
                             intent.putExtra("userID", userID);
                             intent.putExtra("userPass", userPass);
                             intent.putExtra("userName",userName);
                             intent.putExtra("userWeight", userWeight);
-                            intent.putExtra("today_stepsRecord",today_PedoStepsRecord);
-                            intent.putExtra("today_stepsTimeRecord",today_PedoTimeRecord);
-                            intent.putExtra("today_stepsCalorieRecord",today_PedoCalorieRecord);
                             intent.putExtra("pedo_max",pedo_max);
+                            intent.putExtra("km_max",km_max);
 
                             startActivity(intent);
                             finish();

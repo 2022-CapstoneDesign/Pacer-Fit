@@ -19,9 +19,6 @@ public class DetailRecordFragment extends Fragment {
     PedoRecordData data = new PedoRecordData();
     String[] PedoRecord7_step = new String[7];
     String[] PedoRecord7_time = new String[7];
-    String[] PedoRecord30_step = new String[31];
-    String[] PedoRecord30_time = new String[31];
-    String[] PedoRecord30 = new String[31];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

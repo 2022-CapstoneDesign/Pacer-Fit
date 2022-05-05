@@ -22,7 +22,11 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -36,7 +40,7 @@ public class OneMonthFragment extends Fragment {
     private TextView km_today_onemonthDist;
 
     private TextView dist_avg_time;
-
+    DistRecordData data = new DistRecordData();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,14 +58,31 @@ public class OneMonthFragment extends Fragment {
         // <--- 테이블 --->
         setRecyclerView();
         // ***** 이 곳에서 오늘의 거리 기록 DB 값을 표시합니다 *****
-        setTodayRecord("2022/4/1", "2시간 6분", "24km");
+        int time = Integer.parseInt(data.KmRecord30_time[30]);
+        int sec = time % 60;
+        int min = time / 60 % 60;
+        int hour = time / 3600;
+
+        //value = -1이면 어제..
+        float value = 0;
+        //오늘 일자 구하기
+        Calendar cal_week = Calendar.getInstance();
+        cal_week.setTime(new Date());
+        cal_week.add(Calendar.DATE, (int) value);
+        DateFormat df_week = new SimpleDateFormat("y/M/d");
+        //오늘의 만보기 기록
+        if(hour!=0)
+            setTodayRecord(df_week.format(cal_week.getTime())+"", hour+"시간"+min+"분", data.KmRecord30_km[30]+"km");
+        else
+            setTodayRecord(df_week.format(cal_week.getTime())+"", min+"분", data.KmRecord30_km[30]+"km");
+
         setAvgTime();
 
         // <--- 라인 그래프 --->
         ArrayList<Float> lineChartValues = new ArrayList<>();
         // 최근 31일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
         for (int i = 0; i < 31; i++) {
-            float rand = (float) Math.round(new Random().nextFloat() * 100);
+            float rand = Float.parseFloat(data.KmRecord30_km[i]);
             //Log.d("RAND", String.valueOf(rand));
             lineChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
         }
@@ -76,9 +97,16 @@ public class OneMonthFragment extends Fragment {
 
     private void setAvgTime() {
         // 이곳에 DB에서 불러온 운동시간들의 평균 구하는 알고리즘 작성... 추후에 추가
-        Integer hours = 1;
-        Integer minuates = 52;
-        dist_avg_time.setText(hours + "시간 " + minuates + "분");
+        int time = 0;
+        for(int i=0; i<31; i++)
+            time += Integer.parseInt(data.KmRecord30_time[i]);
+        time /= data.KmRecord30_time.length;
+        int minutes = time / 60 % 60;
+        int hours = time / 3600;
+        if(hours != 0)
+            dist_avg_time.setText(hours + "시간 " + minutes + "분");
+        else
+            dist_avg_time.setText(minutes + "분");
     }
 
     private void setTodayRecord(String day, String totalTime, String km) {
@@ -98,9 +126,34 @@ public class OneMonthFragment extends Fragment {
         // <--- 테이블 --->
         List<OneMonthRecordModel> record_list = new ArrayList<>();
         // ***** 이 곳에서 한달 거리 기록 DB 값을 표시합니다(하루단위로, 오늘 기록 제외) *****
-        for (int i = 0; i < 30; i++)
-            record_list.add(new OneMonthRecordModel("2022/4/" + i,"2시간 33분", "8km"));
+        //value = -1이면 어제..
+        float value = 0;
+        for(int i=29; i>=0; i--) {
+            int time = Integer.parseInt(data.KmRecord30_time[i]);
+            int sec = time % 60;
+            int min = time / 60 % 60;
+            int hour = time / 3600;
 
+            //오늘 요일 구하기
+            value--;
+
+            //오늘 일자 구하기
+            Calendar cal_week = Calendar.getInstance();
+            cal_week.setTime(new Date());
+            cal_week.add(Calendar.DATE, (int) value);
+            DateFormat df_week = new SimpleDateFormat("y/M/d");
+
+            if(hour!=0)
+                record_list.add(new OneMonthRecordModel(
+                        df_week.format(cal_week.getTime())+"",
+                        hour+"시간"+min+"분",
+                        data.KmRecord30_km[i]+"km"));
+            else
+                record_list.add(new OneMonthRecordModel(
+                        df_week.format(cal_week.getTime())+"",
+                        min+"분",
+                        data.KmRecord30_km[i]+"km"));
+        }
         return record_list;
     }
 
@@ -134,7 +187,9 @@ public class OneMonthFragment extends Fragment {
         xAxis.setTypeface(tf);
 
         YAxis yAxisLeft = lineChart.getAxisLeft();
-        yAxisLeft.setAxisMaximum(100f); // y축 최대값 설정
+        Float max = Float.parseFloat(data.km_max_month);
+        max += max/10;
+        yAxisLeft.setAxisMaximum(max); // y축 최대값 설정
         yAxisLeft.setAxisMinimum(0f); // y축 최소값 설정
         yAxisLeft.setDrawLabels(false); // 값 표기 설정
         yAxisLeft.setDrawGridLines(false); // 격자
