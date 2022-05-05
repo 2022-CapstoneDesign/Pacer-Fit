@@ -29,9 +29,9 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class TopFragment extends Fragment {
+public class PedoTopFragment extends Fragment {
     RecyclerView recyclerView;
-    RankingAdapter rankingAdapter;
+    PedoRankingAdapter rankingAdapter;
     String pedoTopRankingJsonString;
     ArrayList<pedoTopRankingData> pedoTopRankingArrayList;
     String userName = UserInfo.getInstance().getUserName();
@@ -61,7 +61,7 @@ public class TopFragment extends Fragment {
         myProfile = v.findViewById(R.id.myrank_profile);
         myID = v.findViewById(R.id.myrank_id);
         myStep = v.findViewById(R.id.myrank_step);
-        recyclerView = (RecyclerView) v.findViewById(R.id.month_pedo_recycler);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
         pedoTopRankingArrayList = new ArrayList<>();
 
 
@@ -80,11 +80,11 @@ public class TopFragment extends Fragment {
     }
 
     private void createList(){
-        ArrayList<RankingModel> rankingModels = new ArrayList<>();
+        ArrayList<PedoRankingModel> rankingModels = new ArrayList<>();
         for(int i=1;i<pedoTopRankingArrayList.size();i++){
             if(i!=myIndexNumber){
                 int randomNum = (int) (Math.random() * 7);
-                rankingModels.add(new RankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
+                rankingModels.add(new PedoRankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
                         pedoTopRankingArrayList.get(i).userName,pedoTopRankingArrayList.get(i).top_sum));
             }
         }
@@ -93,15 +93,15 @@ public class TopFragment extends Fragment {
 
     private void setRecyclerView() {
         recyclerView.setHasFixedSize(true);
-        rankingAdapter = new RankingAdapter();
+        rankingAdapter = new PedoRankingAdapter();
         recyclerView.setAdapter(rankingAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void createRankOne() {
         int randomNum = (int) (Math.random() * 7);
-        ArrayList<RankOneModel> rankOneModels = new ArrayList<>();
-        rankOneModels.add(new RankOneModel(ProfileDrawable[randomNum],pedoTopRankingArrayList.get(0).userName, pedoTopRankingArrayList.get(0).top_sum));
+        ArrayList<PedoRankOneModel> rankOneModels = new ArrayList<>();
+        rankOneModels.add(new PedoRankOneModel(ProfileDrawable[randomNum],pedoTopRankingArrayList.get(0).userName, pedoTopRankingArrayList.get(0).top_sum));
         rankingAdapter.setRank1List(rankOneModels);
     }
 
