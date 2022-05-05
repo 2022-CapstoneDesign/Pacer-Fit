@@ -83,9 +83,9 @@ public class OneWeekFragment extends Fragment {
 
         //오늘의 만보기 기록
         if(hour!=0)
-            setTodayRecord("오늘("+df_day.format(cal_day.getTime())+")", df_week.format(cal_week.getTime())+"", hour+"시간"+min+"분", data.KmRecord7_time[6]+"km");
+            setTodayRecord("오늘("+df_day.format(cal_day.getTime())+")", df_week.format(cal_week.getTime())+"", hour+"시간"+min+"분", data.KmRecord7_km[6]+"km");
         else
-            setTodayRecord("오늘("+df_day.format(cal_day.getTime())+")", df_week.format(cal_week.getTime())+"", min+"분", data.KmRecord7_time[6]+"km");
+            setTodayRecord("오늘("+df_day.format(cal_day.getTime())+")", df_week.format(cal_week.getTime())+"", min+"분", data.KmRecord7_km[6]+"km");
 
         setAvgTime();
 
