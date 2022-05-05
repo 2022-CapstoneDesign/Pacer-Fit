@@ -35,11 +35,13 @@ public class PedoTopFragment extends Fragment {
     String pedoTopRankingJsonString;
     ArrayList<pedoTopRankingData> pedoTopRankingArrayList;
     String userName = UserInfo.getInstance().getUserName();
+    int userProfileNum = UserInfo.getInstance().getUserProfileNum();
     int myIndexNumber;
     private static final String TAG_JSON="pacerfit";
     private static final String TAG_NAME = "userName";
     private static final String TAG_ID = "userID";
     private static final String TAG_TOPSUM = "top_sum";
+    private static final String TAG_PROFILE = "profile_num";
 
 
     TextView myIndex;
@@ -47,8 +49,12 @@ public class PedoTopFragment extends Fragment {
     TextView myID;
     TextView myStep;
 
-    int[] ProfileDrawable = {R.drawable.profile_man_horn, R.drawable.profile_man_beard, R.drawable.profile_woman_old,
-            R.drawable.profile_woman_scarf, R.drawable.profile_woman_neck, R.drawable.profile_man_hood, R.drawable.profile_man_round};
+    int[] ProfileDrawable = {
+            R.drawable.profile_default, R.drawable.profile_man, R.drawable.profile_man_beard, R.drawable.profile_man_cap,
+            R.drawable.profile_man_hat, R.drawable.profile_man_hood, R.drawable.profile_man_horn, R.drawable.profile_man_round,
+            R.drawable.profile_man_suit, R.drawable.profile_man_sunglass, R.drawable.profile_woman_glasses, R.drawable.profile_woman_neck,
+            R.drawable.profile_woman_old, R.drawable.profile_woman_scarf
+    };
 
 
     @Override
@@ -83,8 +89,7 @@ public class PedoTopFragment extends Fragment {
         ArrayList<PedoRankingModel> rankingModels = new ArrayList<>();
         for(int i=1;i<pedoTopRankingArrayList.size();i++){
             if(i!=myIndexNumber){
-                int randomNum = (int) (Math.random() * 7);
-                rankingModels.add(new PedoRankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
+                rankingModels.add(new PedoRankingModel(String.valueOf(i+1),ProfileDrawable[pedoTopRankingArrayList.get(i).profile_num],
                         pedoTopRankingArrayList.get(i).userName,pedoTopRankingArrayList.get(i).top_sum));
             }
         }
@@ -99,9 +104,9 @@ public class PedoTopFragment extends Fragment {
     }
 
     private void createRankOne() {
-        int randomNum = (int) (Math.random() * 7);
         ArrayList<PedoRankOneModel> rankOneModels = new ArrayList<>();
-        rankOneModels.add(new PedoRankOneModel(ProfileDrawable[randomNum],pedoTopRankingArrayList.get(0).userName, pedoTopRankingArrayList.get(0).top_sum));
+        rankOneModels.add(new PedoRankOneModel(ProfileDrawable[pedoTopRankingArrayList.get(0).profile_num],
+                pedoTopRankingArrayList.get(0).userName, pedoTopRankingArrayList.get(0).top_sum));
         rankingAdapter.setRank1List(rankOneModels);
     }
 
@@ -125,9 +130,8 @@ public class PedoTopFragment extends Fragment {
                     if(pedoTopRankingArrayList.get(i).userName.equals(userName))
                         myIndexNumber = i;
                 }
-                int randomNum = (int) (Math.random() * 7);
 
-                createMyRank(myIndexNumber, ProfileDrawable[randomNum], userName, pedoTopRankingArrayList.get(myIndexNumber).top_sum);
+                createMyRank(myIndexNumber, ProfileDrawable[userProfileNum], userName, pedoTopRankingArrayList.get(myIndexNumber).top_sum);
                 createRankOne();
                 createList();
 
@@ -146,11 +150,13 @@ public class PedoTopFragment extends Fragment {
                     String userName = item.getString(TAG_NAME);
                     String userID = item.getString(TAG_ID);
                     int top_sum = item.getInt(TAG_TOPSUM);
+                    int profile_num = item.getInt(TAG_PROFILE);
 
                     pedoTopRankingData pedoTopRankingData = new pedoTopRankingData();
                     pedoTopRankingData.setUserName(userName);
                     pedoTopRankingData.setUserID(userID);
                     pedoTopRankingData.setTop_sum(top_sum);
+                    pedoTopRankingData.setProfile_num(profile_num);
 
                     pedoTopRankingArrayList.add(pedoTopRankingData);
 
@@ -209,6 +215,7 @@ public class PedoTopFragment extends Fragment {
         private String userName;
         private String userID;
         private int top_sum;
+        private int profile_num;
 
         public String getUserID(){
             return userID;
@@ -219,6 +226,7 @@ public class PedoTopFragment extends Fragment {
         public int getTop_sum(){
             return top_sum;
         }
+        public int getProfile_num() { return profile_num; }
         public void setUserName(String userName){
             this.userName = userName;
         }
@@ -228,5 +236,6 @@ public class PedoTopFragment extends Fragment {
         public void setTop_sum(int top_sum){
             this.top_sum = top_sum;
         }
+        public void setProfile_num(int profile_num) { this.profile_num = profile_num; }
     }
 }

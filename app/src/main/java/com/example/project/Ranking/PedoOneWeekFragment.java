@@ -35,20 +35,25 @@ public class PedoOneWeekFragment extends Fragment {
     String pedoWeekRankingJsonString;
     ArrayList<pedoWeekRankingData> pedoWeekRankingArrayList;
     String userName = UserInfo.getInstance().getUserName();
+    int userProfileNum = UserInfo.getInstance().getUserProfileNum();
     int myIndexNumber;
     private static final String TAG_JSON="pacerfit";
     private static final String TAG_NAME = "userName";
     private static final String TAG_ID = "userID";
     private static final String TAG_WEEKSUM = "week_sum";
-
+    private static final String TAG_PROFILE = "profile_num";
 
     TextView myIndex;
     ImageView myProfile;
     TextView myID;
     TextView myStep;
 
-    int[] ProfileDrawable = {R.drawable.profile_man_horn, R.drawable.profile_man_beard, R.drawable.profile_woman_old,
-            R.drawable.profile_woman_scarf, R.drawable.profile_woman_neck, R.drawable.profile_man_hood, R.drawable.profile_man_round};
+    int[] ProfileDrawable = {
+            R.drawable.profile_default, R.drawable.profile_man, R.drawable.profile_man_beard, R.drawable.profile_man_cap,
+            R.drawable.profile_man_hat, R.drawable.profile_man_hood, R.drawable.profile_man_horn, R.drawable.profile_man_round,
+            R.drawable.profile_man_suit, R.drawable.profile_man_sunglass, R.drawable.profile_woman_glasses, R.drawable.profile_woman_neck,
+            R.drawable.profile_woman_old, R.drawable.profile_woman_scarf
+    };
 
 
     @Override
@@ -83,8 +88,7 @@ public class PedoOneWeekFragment extends Fragment {
         ArrayList<PedoRankingModel> rankingModels = new ArrayList<>();
         for(int i=1;i<pedoWeekRankingArrayList.size();i++){
             if(i!=myIndexNumber){
-                int randomNum = (int) (Math.random() * 7);
-                rankingModels.add(new PedoRankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
+                rankingModels.add(new PedoRankingModel(String.valueOf(i+1),ProfileDrawable[pedoWeekRankingArrayList.get(i).profile_num],
                         pedoWeekRankingArrayList.get(i).userName,pedoWeekRankingArrayList.get(i).week_sum));
             }
         }
@@ -99,9 +103,9 @@ public class PedoOneWeekFragment extends Fragment {
     }
 
     private void createRankOne() {
-        int randomNum = (int) (Math.random() * 7);
         ArrayList<PedoRankOneModel> rankOneModels = new ArrayList<>();
-        rankOneModels.add(new PedoRankOneModel(ProfileDrawable[randomNum],pedoWeekRankingArrayList.get(0).userName, pedoWeekRankingArrayList.get(0).week_sum));
+        rankOneModels.add(new PedoRankOneModel(ProfileDrawable[pedoWeekRankingArrayList.get(0).profile_num],
+                pedoWeekRankingArrayList.get(0).userName, pedoWeekRankingArrayList.get(0).week_sum));
         rankingAdapter.setRank1List(rankOneModels);
     }
 
@@ -126,9 +130,7 @@ public class PedoOneWeekFragment extends Fragment {
                     if(pedoWeekRankingArrayList.get(i).userName.equals(userName))
                         myIndexNumber = i;
                 }
-                int randomNum = (int) (Math.random() * 7);
-
-                createMyRank(myIndexNumber, ProfileDrawable[randomNum], userName, pedoWeekRankingArrayList.get(myIndexNumber).week_sum);
+                createMyRank(myIndexNumber, ProfileDrawable[userProfileNum], userName, pedoWeekRankingArrayList.get(myIndexNumber).week_sum);
                 createRankOne();
                 createList();
 
@@ -147,11 +149,13 @@ public class PedoOneWeekFragment extends Fragment {
                     String userName = item.getString(TAG_NAME);
                     String userID = item.getString(TAG_ID);
                     int week_sum = item.getInt(TAG_WEEKSUM);
+                    int profile_num = item.getInt(TAG_PROFILE);
 
                     pedoWeekRankingData pedoWeekRankingData = new pedoWeekRankingData();
                     pedoWeekRankingData.setUserName(userName);
                     pedoWeekRankingData.setUserID(userID);
                     pedoWeekRankingData.setMonth_sum(week_sum);
+                    pedoWeekRankingData.setProfile_num(profile_num);
 
                     pedoWeekRankingArrayList.add(pedoWeekRankingData);
 
@@ -210,6 +214,7 @@ public class PedoOneWeekFragment extends Fragment {
         private String userName;
         private String userID;
         private int week_sum;
+        private int profile_num;
 
         public String getUserID(){
             return userID;
@@ -220,6 +225,7 @@ public class PedoOneWeekFragment extends Fragment {
         public int getWeek_sum(){
             return week_sum;
         }
+        public int getProfile_num() { return profile_num; }
         public void setUserName(String userName){
             this.userName = userName;
         }
@@ -229,5 +235,6 @@ public class PedoOneWeekFragment extends Fragment {
         public void setMonth_sum(int week_sum){
             this.week_sum = week_sum;
         }
+        public void setProfile_num(int profile_num) { this.profile_num = profile_num; }
     }
 }
