@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:background="@android:color/transparent" >
+
+    <View
+        android:id="@+id/markerbubble"
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:background="@drawable/speechbubble_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/markerDate"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:gravity="bottom|center"
+        android:text="testing"
+        android:textColor="@color/graph_blue"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/markerbubble"
+        app:layout_constraintStart_toStartOf="@+id/markerbubble"
+        app:layout_constraintTop_toTopOf="@+id/markerbubble" />
+
+    <TextView
+        android:id="@+id/tvContent"
+        android:layout_width="0dp"
+        android:layout_height="23dp"
+        android:layout_centerHorizontal="true"
+        android:ellipsize="end"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:gravity="bottom|center"
+        android:lineSpacingExtra="5dp"
+        android:paddingStart="10dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:singleLine="false"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/markerbubble"
+        app:layout_constraintStart_toStartOf="@+id/markerbubble"
+        app:layout_constraintTop_toBottomOf="@+id/markerDate" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

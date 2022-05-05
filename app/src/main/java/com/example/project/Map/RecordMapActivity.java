@@ -234,12 +234,17 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         // 위치 변경 리스너
         naverMap.addOnLocationChangeListener(location -> {
             // 액티비티가 포그라운드 상태이면
-            if (!isBackground) {
+            if (!isBackground && location.getAccuracy() < 50) {
+                // 평균 속도
+                if (location.hasSpeed())
+                    avgSpeed = location.getSpeed() * 3600 / 1000;
+                Toast.makeText(getApplicationContext(), "정확도: " + location.getAccuracy() + "속도: " + avgSpeed, Toast.LENGTH_SHORT).show();
+
+
                 // 리스트 추가
                 addList(new LatLng(location.getLatitude(), location.getLongitude()));
 
-                // 평균 속도
-                avgSpeed = location.getSpeed() * 3600 / 1000;
+
                 if (avgSpeed >= 3.5) {
                     // 칼로리 계산 변수
                     MET = 3.8;

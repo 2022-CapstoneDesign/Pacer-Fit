@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(String response) {
                     try {
-                        System.out.println("========================" + response);
+                        //System.out.println("========================" + response);
                         JSONObject jsonObject = new JSONObject(response);
                         boolean success = jsonObject.getBoolean("success");
                         if (success) { // 로그인에 성공한 경우
@@ -65,15 +65,9 @@ public class LoginActivity extends AppCompatActivity {
                             String userPass = jsonObject.getString("userPassword");
                             String userName = jsonObject.getString("userName");
                             String userWeight = jsonObject.getString("userWeight");
-                            String bestSteps = jsonObject.getString("bestSteps");
-                            String bestKm = jsonObject.getString("bestKm");
-                            String bestTime_Km = jsonObject.getString("bestTime(km)");
-                            String bestCalorie_Km = jsonObject.getString("bestCalorie(km)");
-                            String bestTime_Steps = jsonObject.getString("bestTime(steps)");
-                            String bestCalorie_Steps = jsonObject.getString("bestCalorie(steps)");
-                            String today_PedoStepsRecord = jsonObject.getString(date_concat+".step");
-                            String today_PedoTimeRecord = jsonObject.getString(date_concat+".time");
-                            String today_PedoCalorieRecord = jsonObject.getString(date_concat+".cal");
+                            String today_PedoStepsRecord = jsonObject.optString(date_concat+".step",null);
+                            String today_PedoTimeRecord = jsonObject.optString(date_concat+".time",null);
+                            String today_PedoCalorieRecord = jsonObject.optString(date_concat+".cal",null);
                             String pedo_max = jsonObject.getString("pedo_max");
                             Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, BottomNavigation.class);// 메인 액티비티로 전환
@@ -81,12 +75,6 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("userPass", userPass);
                             intent.putExtra("userName",userName);
                             intent.putExtra("userWeight", userWeight);
-                            intent.putExtra("bestSteps", bestSteps);
-                            intent.putExtra("bestKm", bestKm);
-                            intent.putExtra("bestTime_Km", bestTime_Km);
-                            intent.putExtra("bestCalorie_Km", bestCalorie_Km);
-                            intent.putExtra("bestTime_Steps", bestTime_Steps);
-                            intent.putExtra("bestCalorie_Steps", bestCalorie_Steps);
                             intent.putExtra("today_stepsRecord",today_PedoStepsRecord);
                             intent.putExtra("today_stepsTimeRecord",today_PedoTimeRecord);
                             intent.putExtra("today_stepsCalorieRecord",today_PedoCalorieRecord);

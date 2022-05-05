@@ -46,8 +46,16 @@ public class DetailRecordFragment extends Fragment {
                 //30일 데이터
                 data.setPedoRecord30(i,getArguments().getString(i+".month_step"),getArguments().getString(i+".month_time"));
             }
+            for(int i=0; i<24; i++){
+                data.setPedoRecord180(i,getArguments().getString(i+".week_step"),getArguments().getString(i+".week_time"));
+            }
+            for(int i=0; i<12; i++){
+                data.setPedoRecordYear(i,getArguments().getString(i+".year_step"),getArguments().getString(i+".year_time"));
+            }
             data.pedo_max_day = getArguments().getString("pedo_max_day");
             data.pedo_max_month = getArguments().getString("pedo_max_month");
+            data.pedo_max_180 = getArguments().getString("pedo_max_180");
+            data.pedo_max_year = getArguments().getString("pedo_max_year");
         }
         PedoVPAdapter pedoVPAdapter = new PedoVPAdapter(getActivity().getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         pedoVPAdapter.addFragment(new OneWeekFragment(), "7일");

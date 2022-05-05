@@ -11,7 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+import com.example.project.Pedo.PedoRecordRequest;
+import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MyPageFragment extends Fragment {
 
@@ -20,6 +28,7 @@ public class MyPageFragment extends Fragment {
     String bestTime_Steps;
     String bestTime_Km;
     String bestTime;
+    String userID;
     String userName;
     String bestCalorie;
     String bestSteps;
@@ -39,41 +48,60 @@ public class MyPageFragment extends Fragment {
         TextView maxTime = v.findViewById(R.id.maxTime);
 
         Intent intent = getActivity().getIntent();
+        userID = intent.getStringExtra("userID");
         userName = intent.getStringExtra("userName");
-        bestSteps = intent.getStringExtra("bestSteps");
-        bestKm = intent.getStringExtra("bestKm");
-        bestTime_Km = intent.getStringExtra("bestTime_Km");
-        bestCalorie_Km = intent.getStringExtra("bestCalorie_Km");
-        bestTime_Steps = intent.getStringExtra("bestTime_Steps");
-        bestCalorie_Steps = intent.getStringExtra("bestCalorie_Steps");
 
-        System.out.println("1===========" + bestSteps);
-        System.out.println("1===========" + bestKm);
-        System.out.println("2===========" + bestTime_Km);
-        System.out.println("3===========" + bestCalorie_Km);
-        System.out.println("4===========" + bestTime_Steps);
-        System.out.println("5===========" + bestCalorie_Steps);
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    System.out.println("========================" + response);
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+                    if (success) { // 만보기 클릭시
+                        bestSteps = jsonObject.getString("bestSteps");
+                        bestKm = jsonObject.getString("bestKm");
+                        bestTime_Km = jsonObject.getString("bestTime(km)");
+                        bestCalorie_Km = jsonObject.getString("bestCalorie(km)");
+                        bestTime_Steps = jsonObject.getString("bestTime(steps)");
+                        bestCalorie_Steps = jsonObject.getString("bestCalorie(steps)");
 
+                        myID.setText(userName); // user이름 설정해주기
+                        
+                        //칼로리
+                        if (Float.parseFloat(bestCalorie_Km) > Float.parseFloat(bestCalorie_Steps))
+                            bestCalorie = bestCalorie_Km;
+                        else
+                            bestCalorie = bestCalorie_Steps;
 
-        myID.setText(userName); // user이름 설정해주기
+                        //시간
+                        if (Integer.parseInt(bestTime_Km) > Integer.parseInt(bestTime_Steps))
+                            bestTime = bestTime_Km;
+                        else
+                            bestTime = bestTime_Steps;
+                        minutes = Integer.parseInt(bestTime) / 60;
+                        hour = minutes / 60;
+                        minutes %= 60;
 
-        if (Integer.parseInt(bestCalorie_Km) > Integer.parseInt(bestCalorie_Steps))
-            bestCalorie = bestCalorie_Km;
-        else
-            bestCalorie = bestCalorie_Steps;
-
-        if (Integer.parseInt(bestTime_Km) > Integer.parseInt(bestTime_Steps))
-            bestTime = bestTime_Km;
-        else
-            bestTime = bestTime_Steps;
-        minutes = Integer.parseInt(bestTime) / 60;
-        hour = minutes / 60;
-        minutes %= 60;
-
-        maxStep.setText(bestSteps); // DB에서 불러온 값으로 바꾸기
-        maxKm.setText(bestKm + "km"); // DB에서 불러온 값으로 바꾸기
-        maxKcal.setText(bestCalorie + "kcal"); // DB에서 불러온 값으로 바꾸기
-        maxTime.setText(hour + "시간 " + minutes + "분"); // DB에서 불러온 값으로 바꾸기
+                        //만보기 기록
+                        maxStep.setText(bestSteps); // DB에서 불러온 값으로 바꾸기
+                        //거리 기록
+                        maxKm.setText(bestKm + "km"); // DB에서 불러온 값으로 바꾸기
+                        //칼로리 기록
+                        maxKcal.setText(bestCalorie + "kcal"); // DB에서 불러온 값으로 바꾸기
+                        //시간 기록
+                        maxTime.setText(hour + "시간 " + minutes + "분"); // DB에서 불러온 값으로 바꾸기
+                    } else { // 로그인에 실패한 경우
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        MyPageBestRecordRequest myPageBestRecordRequest = new MyPageBestRecordRequest(userID, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        queue.add(myPageBestRecordRequest);
 
         return v;
     }

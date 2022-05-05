@@ -65,7 +65,7 @@ public class LocationService extends Service {
     private Timer timer;
     private TimerTask timerTask;
     private int total_sec = 0;
-    private double accuracy = 10.0;
+    private double accuracy = 8.5;
 
     // 백그라운드 확인 함수
     public boolean isBackground = false;
