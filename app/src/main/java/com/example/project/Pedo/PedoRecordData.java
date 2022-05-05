@@ -7,7 +7,7 @@ public class PedoRecordData {
 
     static String[] PedoRecord30_step = new String[31];
     static String[] PedoRecord30_time = new String[31];
-    static String pedo_max_30;
+    static String pedo_max_month;
 
     static String[] PedoRecord180_step = new String[25];
     static String[] PedoRecord180_time = new String[25];

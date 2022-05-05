@@ -298,6 +298,17 @@ public class HomeFragment extends Fragment {
                                 bundle.putString(i+".month_step",jsonObject.getString(i+".month_step"));
                                 bundle.putString(i+".month_time",jsonObject.getString(i+".month_time"));
                             }
+                            bundle.putString("pedo_max_month",jsonObject.getString("pedo_max_month"));
+                            for(int i=0; i<24; i++){
+                                bundle.putString(i+".week_step",jsonObject.getString(i+".week_step"));
+                                bundle.putString(i+".week_time",jsonObject.getString(i+".week_time"));
+                            }
+                            bundle.putString("pedo_max_180",jsonObject.getString("pedo_max_180"));
+                            for(int i=0; i<12; i++){
+                                bundle.putString(i+".year_step",jsonObject.getString(i+".year_step"));
+                                bundle.putString(i+".year_time",jsonObject.getString(i+".year_time"));
+                            }
+                            bundle.putString("pedo_max_year",jsonObject.getString("pedo_max_year"));
                             // 더보기 탭으로 이동. 이전 프래그먼트로 돌아갈 수 있도록 설정
                             FragmentManager fm = getActivity().getSupportFragmentManager();
                             DetailRecordFragment detailRecordFragment = new DetailRecordFragment();//프래그먼트2 선언
@@ -347,7 +358,8 @@ public class HomeFragment extends Fragment {
         //barChart.setExtraOffsets(10f, 0f, 40f, 0f);
         // x축 설정(막대그래프 기준 아래쪽)
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setAxisMaximum(30.5f); // x : 0, 1, ... , 30
+        xAxis.setAxisMinimum(-0.5f); // 라인그래프만 x축 좌측 여유 공간 필요
+        xAxis.setAxisMaximum(30.5f); // x : 0, 1, ... , 30 -> 31개
         xAxis.setDrawAxisLine(false); // 축 그리기 설정
         xAxis.setLabelCount(31); // 이걸 써야 setGranularity가 작동함
         xAxis.setGranularity(1f); // 간격 설정(표시되는 값) -> OneMonthXAxisValueFormatter.java에서 값 번갈아서 나오게 커스텀

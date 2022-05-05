@@ -19,6 +19,8 @@ public class DetailRecordFragment extends Fragment {
     PedoRecordData data = new PedoRecordData();
     String[] PedoRecord7_step = new String[7];
     String[] PedoRecord7_time = new String[7];
+    String[] PedoRecord30_step = new String[31];
+    String[] PedoRecord30_time = new String[31];
     String[] PedoRecord30 = new String[31];
 
     @Override
@@ -29,16 +31,31 @@ public class DetailRecordFragment extends Fragment {
         viewPager = v.findViewById(R.id.barchart_viewpager);
         tabLayout.setupWithViewPager(viewPager);
 
+        //나중에 코드 정리하기
         if (getArguments() != null)
         {
             for(int i=0; i<7; i++) {
                 PedoRecord7_step[i] = getArguments().getString(i+".day_step"); // HomeFragment에서 받아온 값 넣기
                 PedoRecord7_time[i] = getArguments().getString(i+".day_time"); // HomeFragment에서 받아온 값 넣기
 //                System.out.println("getArguments Test =====================Step:" + PedoRecord7[i]);
+                //7일 데이터
                 data.setPedoRecord7(i, PedoRecord7_step[i], PedoRecord7_time[i]);
-//                System.out.println("getArguments Test =====================Time:" + PedoRecord7[i]);
+               //                System.out.println("getArguments Test =====================Time:" + PedoRecord7[i]);
+            }
+            for(int i=0; i<31; i++){
+                //30일 데이터
+                data.setPedoRecord30(i,getArguments().getString(i+".month_step"),getArguments().getString(i+".month_time"));
+            }
+            for(int i=0; i<24; i++){
+                data.setPedoRecord180(i,getArguments().getString(i+".week_step"),getArguments().getString(i+".week_time"));
+            }
+            for(int i=0; i<12; i++){
+                data.setPedoRecordYear(i,getArguments().getString(i+".year_step"),getArguments().getString(i+".year_time"));
             }
             data.pedo_max_day = getArguments().getString("pedo_max_day");
+            data.pedo_max_month = getArguments().getString("pedo_max_month");
+            data.pedo_max_180 = getArguments().getString("pedo_max_180");
+            data.pedo_max_year = getArguments().getString("pedo_max_year");
         }
         PedoVPAdapter pedoVPAdapter = new PedoVPAdapter(getActivity().getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         pedoVPAdapter.addFragment(new OneWeekFragment(), "7일");

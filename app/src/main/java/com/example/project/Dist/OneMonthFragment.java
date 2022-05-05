@@ -43,22 +43,24 @@ public class OneMonthFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.dist_one_month_fragment, container, false);
 
+        recycler_view = v.findViewById(R.id.recycler_view);
+        lineChart = v.findViewById(R.id.dist_onemonth_linechart);
+
         day_today_onemonthDist = v.findViewById(R.id.date_today_onemonthDist);
         totalTime_today_onemonthDist = v.findViewById(R.id.totalTime_today_onemonthDist);
         km_today_onemonthDist = v.findViewById(R.id.km_today_onemonthDist);
-        recycler_view = v.findViewById(R.id.recycler_view);
         dist_avg_time = v.findViewById(R.id.dist_avg_time);
-        // <--- 라인 그래프 --->
-        lineChart = v.findViewById(R.id.dist_onemonth_linechart);
 
+        // <--- 테이블 --->
         setRecyclerView();
-        // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
+        // ***** 이 곳에서 오늘의 거리 기록 DB 값을 표시합니다 *****
         setTodayRecord("2022/4/1", "2시간 6분", "24km");
         setAvgTime();
 
+        // <--- 라인 그래프 --->
         ArrayList<Float> lineChartValues = new ArrayList<>();
-        // 최근 30일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
-        for (int i = 0; i < 30; i++) {
+        // 최근 31일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
+        for (int i = 0; i < 31; i++) {
             float rand = (float) Math.round(new Random().nextFloat() * 100);
             //Log.d("RAND", String.valueOf(rand));
             lineChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
@@ -93,8 +95,9 @@ public class OneMonthFragment extends Fragment {
     }
 
     private List<OneMonthRecordModel> getList() {
+        // <--- 테이블 --->
         List<OneMonthRecordModel> record_list = new ArrayList<>();
-        // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
+        // ***** 이 곳에서 한달 거리 기록 DB 값을 표시합니다(하루단위로, 오늘 기록 제외) *****
         for (int i = 0; i < 30; i++)
             record_list.add(new OneMonthRecordModel("2022/4/" + i,"2시간 33분", "8km"));
 
@@ -110,15 +113,18 @@ public class OneMonthFragment extends Fragment {
         lineChart.getLegend().setEnabled(false); // legend는 차트의 범례
         lineChart.getDescription().setEnabled(false); // 우측 하단의 DescriptionLabel 삭제
         //lineChart.animateY(1500); // 밑에서부터 올라오는 애니메이션 적용
-        lineChart.animateX(1500); // 왼쪽-오른쪽 방향의 애니메이션 적용
+        lineChart.animateX(1000); // 왼쪽-오른쪽 방향의 애니메이션 적용
 
         // x축 설정(꺾은선그래프 기준 아래쪽)
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setAxisMaximum(30f);
-        xAxis.setDrawAxisLine(false); // 축 그리기 설정
-        xAxis.setGranularity(5f); // 간격 설정(표시되는 값)
+        xAxis.setAxisMinimum(-0.5f); // 라인그래프만 x축 좌측 여유 공간 필요
+        xAxis.setAxisMaximum(30.5f); // x : 0, 1, ... , 30 -> 31개
+        xAxis.setDrawAxisLine(true); // 축 그리기 설정
+        xAxis.setLabelCount(31); // 이걸 써야 setGranularity가 작동함
+        xAxis.setGranularity(1f); // 간격 설정(표시되는 값) -> OneMonthXAxisValueFormatter.java에서 값 번갈아서 나오게 커스텀
         xAxis.setTextSize(13f);
         xAxis.setAxisLineWidth(1.5f);
+        xAxis.setAxisLineColor(Color.parseColor("#5e5b5f")); // X축 색 설정
         xAxis.setTextColor(Color.parseColor("#909090"));
         xAxis.setDrawGridLines(false); // 격자
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 데이터 표시 위치
@@ -145,7 +151,7 @@ public class OneMonthFragment extends Fragment {
     private LineData createLinechartData(ArrayList<Float> chartValues) {
         // 1. [Entry] LineChart에 표시될 데이터 값 생성
         ArrayList<Entry> values = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 31; i++) {
             float x = i;
             float y = chartValues.get(i);
             values.add(new Entry(x, y));
@@ -154,7 +160,7 @@ public class OneMonthFragment extends Fragment {
         // 2. [LineDataSet] 단순 데이터를 꺾은선 모양으로 표시, LineChart의 막대 커스텀
         LineDataSet set = new LineDataSet(values, "꺾은선그래프");
         set.setDrawIcons(true);
-        set.setDrawValues(true);
+        set.setDrawValues(false);
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/nanumsquareroundeb.ttf");
         set.setValueTypeface(tf);
         set.setValueTextColor(Color.parseColor("#90DEC1")); // 라인 위에 값 색 설정

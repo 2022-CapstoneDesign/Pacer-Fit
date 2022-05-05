@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -21,8 +22,13 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.listener.BarLineChartTouchListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -36,6 +42,9 @@ public class OneMonthFragment extends Fragment {
     private TextView step_today_onemonthPedo;
     private TextView pedo_avg_time;
 
+    //외부 class에 데이터 저장후 UI에 뿌려줌
+    PedoRecordData data = new PedoRecordData();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,24 +52,42 @@ public class OneMonthFragment extends Fragment {
         View v = inflater.inflate(R.layout.pedo_one_month_fragment, container, false);
 
         recycler_view = v.findViewById(R.id.recycler_view);
+        barChart = v.findViewById(R.id.pedo_onemonth_barchart);
 
         date_today_onemonthPedo = v.findViewById(R.id.date_today_onemonthPedo);
         totalTime_today_onemonthPedo = v.findViewById(R.id.totalTime_today_onemonthPedo);
         step_today_onemonthPedo = v.findViewById(R.id.step_today_onemonthPedo);
         pedo_avg_time = v.findViewById(R.id.pedo_avg_time);
 
-        // <--- 막대 그래프 --->
-        barChart = v.findViewById(R.id.pedo_onemonth_barchart);
-        ArrayList<Float> barChartValues = new ArrayList<>();
-
+        // <--- 테이블 --->
         // ***** 이 곳에서 오늘의 만보기 기록 DB 값을 표시합니다 *****
-        setTodayRecord("2022/4/18", "2시간 6분", "2,351걸음");
+        int time = Integer.parseInt(data.PedoRecord30_time[30]);
+        int sec = time % 60;
+        int min = time / 60 % 60;
+        int hour = time / 3600;
+
+        //value = -1이면 어제..
+        float value = 0;
+        //오늘 일자 구하기
+        Calendar cal_week = Calendar.getInstance();
+        cal_week.setTime(new Date());
+        cal_week.add(Calendar.DATE, (int) value);
+        DateFormat df_week = new SimpleDateFormat("y/M/d");
+        //오늘의 만보기 기록
+        if(hour!=0)
+            setTodayRecord(df_week.format(cal_week.getTime())+"", hour+"시간"+min+"분", data.PedoRecord30_step[30]+"걸음");
+        else
+            setTodayRecord(df_week.format(cal_week.getTime())+"", min+"분", data.PedoRecord30_step[30]+"걸음");
+
         setAvgTime();
         setRecyclerView();
 
+        // <--- 막대 그래프 --->
+        ArrayList<Float> barChartValues = new ArrayList<>();
         // 최근 30일의 운동량 값 받아오기 -> DB 값으로 추후에 수정
         for (int i = 0; i < 31; i++) {
-            float rand = (float) Math.round(new Random().nextFloat() * 15000);
+            //float rand = (float) Math.round(new Random().nextFloat() * 15000);
+            float rand = Float.parseFloat(data.PedoRecord30_step[i]);
             //Log.d("RAND", String.valueOf(rand));
             barChartValues.add(rand); // 0 ~ 15,000 사이의 랜덤값
         }
@@ -75,9 +102,16 @@ public class OneMonthFragment extends Fragment {
 
     private void setAvgTime() {
         // 이곳에 DB에서 불러온 운동시간들의 평균 구하는 알고리즘 작성... 추후에 추가
-        int hours = 1;
-        int minutes = 52;
-        pedo_avg_time.setText(hours + "시간 " + minutes + "분");
+        int time = 0;
+        for(int i=0; i<31; i++)
+            time += Integer.parseInt(data.PedoRecord30_time[i]);
+        time /= data.PedoRecord30_time.length;
+        int minutes = time / 60 % 60;
+        int hours = time / 3600;
+        if(hours != 0)
+            pedo_avg_time.setText(hours + "시간 " + minutes + "분");
+        else
+            pedo_avg_time.setText(minutes + "분");
     }
 
     private void setTodayRecord(String date, String totalTime, String step) {
@@ -94,17 +128,43 @@ public class OneMonthFragment extends Fragment {
     }
 
     private List<OneMonthRecordModel> getList() {
+        // <--- 테이블 --->
         List<OneMonthRecordModel> record_list = new ArrayList<>();
-        // ***** 이 곳에서 일주일 만보기 기록 DB 값을 표시합니다(오늘 기록 제외) *****
-        for (int i = 1; i < 31; i++)
-            record_list.add(new OneMonthRecordModel("2022/4/" + i, "40분", "1,218걸음"));
+        // ***** 이 곳에서 한달 만보기 기록 DB 값을 표시합니다(하루 단위로, 오늘 기록 제외) *****
+        //value = -1이면 어제..
+        float value = 0;
+        for(int i=29; i>=0; i--) {
+            int time = Integer.parseInt(data.PedoRecord30_time[i]);
+            int sec = time % 60;
+            int min = time / 60 % 60;
+            int hour = time / 3600;
 
+            //오늘 요일 구하기
+            value--;
+
+            //오늘 일자 구하기
+            Calendar cal_week = Calendar.getInstance();
+            cal_week.setTime(new Date());
+            cal_week.add(Calendar.DATE, (int) value);
+            DateFormat df_week = new SimpleDateFormat("y/M/d");
+
+            if(hour!=0)
+                record_list.add(new OneMonthRecordModel(
+                        df_week.format(cal_week.getTime())+"",
+                        hour+"시간"+min+"분",
+                        data.PedoRecord30_step[i]+"걸음"));
+            else
+                record_list.add(new OneMonthRecordModel(
+                        df_week.format(cal_week.getTime())+"",
+                        min+"분",
+                        data.PedoRecord30_step[i]+"걸음"));
+        }
         return record_list;
     }
 
     // 막대그래프 각종 설정
     private void barchartConfigureAppearance() {
-        barChart.setTouchEnabled(false); // 터치 유무
+        barChart.setTouchEnabled(true); // 터치 유무 -> 마커뷰 보이게 하기 위해 true로 설정해야 함
         barChart.setPinchZoom(false); // 두 손가락으로 줌인,줌아웃 설정
         barChart.setDrawBarShadow(false); // 그래프의 그림자
         barChart.setDrawGridBackground(false); // 격자무늬 유무
@@ -115,10 +175,14 @@ public class OneMonthFragment extends Fragment {
         barChart.setExtraBottomOffset(5f); // X축 글자 깨짐 방지
         //barChart.setDescription();
         //barChart.setExtraOffsets(10f, 0f, 40f, 0f);
+        // 막대 클릭 시 마커뷰 보이도록 설정
+        PedoGraphMarkerView marker = new PedoGraphMarkerView(getContext(), R.layout.graph_marker_view);
+        marker.setChartView(barChart);
+        barChart.setMarker(marker);
 
         // x축 설정(막대그래프 기준 아래쪽)
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setAxisMaximum(30.5f); // x : 0, 1, ... , 30
+        xAxis.setAxisMaximum(30.5f); // x : 0, 1, ... , 30 -> 31개
         xAxis.setDrawAxisLine(true); // 축 그리기 설정
         xAxis.setAxisLineWidth(1.5f);
         xAxis.setAxisLineColor(Color.parseColor("#5e5b5f")); // X축 색 설정
@@ -136,7 +200,8 @@ public class OneMonthFragment extends Fragment {
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
-        axisLeft.setAxisMaximum(15001f); // y축 최대값 설정
+        Float max = Float.parseFloat(data.pedo_max_month) + 800;
+        axisLeft.setAxisMaximum(max); // y축 최대값 설정
         axisLeft.setAxisMinimum(0f); // y축 최소값 설정
         axisLeft.setDrawLabels(false); // 값 표기 설정
         axisLeft.setDrawGridLines(false); // 격자
