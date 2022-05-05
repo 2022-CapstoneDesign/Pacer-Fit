@@ -19,7 +19,6 @@ import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
-import com.naver.maps.map.overlay.LocationOverlay;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
@@ -136,14 +135,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         );
         naverMap.setCameraPosition(cameraPosition);
 
-        LocationOverlay locationOverlay = naverMap.getLocationOverlay();
-        locationOverlay.setPosition(new LatLng(curLat, curLng));
-        locationOverlay.setVisible(true);
-
         UiSettings uiSettings = naverMap.getUiSettings();
         uiSettings.setLocationButtonEnabled(true);
         naverMap.setIndoorEnabled(true);
+
         Log.d(TAG, "onMapReady");
     }
 }
-

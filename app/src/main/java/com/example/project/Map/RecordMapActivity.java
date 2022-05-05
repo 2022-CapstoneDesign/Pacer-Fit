@@ -40,6 +40,7 @@ import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.overlay.PolylineOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
 
@@ -65,6 +66,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
 
     // TAG
     private final String recordTag = "RecordTAG";
@@ -76,13 +78,13 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 네이버 맵 변수
     private MapView mapView;
     private NaverMap naverMap;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationSource locationSource;
     private PolylineOverlay curUserPolyline;
-    private List<LatLng> latLngList;
+    public static List<LatLng> latLngList;
 
     private boolean startPoint = false;
     private boolean isBackground = false;
+
     // Fragment
     private MapViewFragment mapViewFrag;
     private RecordFragment recordFrag;
@@ -103,23 +105,37 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 거리 변수
     private double distance = 0.0;
     // 칼로리 변수
-    private double calories;
+    private double calories = 0.0;
+    // 속도 변수
+    private double avgSpeed = 0.0;
     // 시간 변수
     private int time = -1;
 
     // Service bind
     private LocationService mService;
+    private double userKg;
+    private double MET = 0.0;
 
-    MyBroadcast br;
-    IntentFilter filter;
-
+    // 서비스 <-> 액티비티 통신
+    private MyBroadcast br;
+    private IntentFilter filter;
 
     private GpsTrackerService gpsTracker;
     private String address = ""; // x,y는 격자x,y좌표
-    String location = null;
-    String pathJsonString;
-    ArrayList<HashMap<String, String>> pathArrayList;
+    private String location = null;
+    private String pathJsonString;
+    private ArrayList<HashMap<String, String>> pathArrayList;
 
+
+    // 리스트 반환
+    public static List<LatLng> getList() {
+        return latLngList;
+    }
+
+    // 리스트 추가
+    public static void addList(LatLng latLng) {
+        latLngList.add(new LatLng(latLng.latitude, latLng.longitude));
+    }
 
     ServiceConnection sconn = new ServiceConnection() {
         @Override //서비스가 실행될 때 호출
@@ -179,13 +195,13 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         filter.addAction("etc");
         registerReceiver(br, filter);
 
+
         latLngList = new ArrayList<>();
         curUserPolyline = new PolylineOverlay();
         curUserPolyline.setWidth(10);
         curUserPolyline.setColor(Color.RED);
-        latLngList.add(new LatLng(33.124124,126.12215));
-        latLngList.add(new LatLng(33.1254124,35.122515));
-        curUserPolyline.setCoords(latLngList);
+
+        userKg = 50.0;
 
         Weather weatherMethod = new Weather();
         gpsTracker = new GpsTrackerService(this);
@@ -206,6 +222,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
@@ -214,7 +231,30 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         // 트래킹 모드
         naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
 
-        naverMap.addOnLocationChangeListener(location ->{
+        // 위치 변경 리스너
+        naverMap.addOnLocationChangeListener(location -> {
+            // 액티비티가 포그라운드 상태이면
+            if (!isBackground) {
+                // 리스트 추가
+                addList(new LatLng(location.getLatitude(), location.getLongitude()));
+
+                // 평균 속도
+                avgSpeed = location.getSpeed() * 3600 / 1000;
+                if (avgSpeed >= 3.5) {
+                    // 칼로리 계산 변수
+                    MET = 3.8;
+                } else if (avgSpeed <= 3.5 && avgSpeed >= 1.0) {
+                    MET = 3.0;
+                } else {
+                    MET = 0.0;
+                }
+
+                // 폴리라인 맵에 갱신
+                if (latLngList.size() > 2) {
+                    curUserPolyline.setCoords(latLngList);
+                    curUserPolyline.setMap(naverMap);
+                }
+            }
 
         });
         Log.d(TAG, "onMapReady");
@@ -234,7 +274,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 requestCode, permissions, grantResults);
     }
 
-
     // 서비스로부터 값을 받아와서 UI에 적용
     public class MyBroadcast extends BroadcastReceiver {
         @Override
@@ -242,16 +281,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             if (intent != null) {
                 if (intent.getAction() != null) {
                     if (intent.getAction().equals("etc")) {
-                        if (mService != null) {
-                            latLngList = mService.getUserLocationList();
-                            if (!startPoint && !latLngList.isEmpty()) {
-                                startPoint = true;
-                                makeMarker("출발지점", latLngList.get(0).latitude, latLngList.get(0).longitude);
-                            }
-                            if (latLngList.size() > 2) {
-                                curUserPolyline.setCoords(latLngList);
-                                curUserPolyline.setMap(naverMap);
-                            }
+
+                        if (!startPoint && !latLngList.isEmpty()) {
+                            startPoint = true;
+                            makeMarker("출발지점", latLngList.get(0).latitude, latLngList.get(0).longitude);
                         }
 
                         dist_tv = findViewById(R.id.distanceText);
@@ -260,8 +293,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
                         time = intent.getIntExtra("timer", 0);
                         distance = intent.getDoubleExtra("distance", 0.0);
-                        calories = intent.getDoubleExtra("calories", 0.0);
-
+                        calories += getCalories(MET);
                         int sec = time % 60;
                         int min = time / 60 % 60;
                         int hour = time / 3600;
@@ -270,7 +302,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                         if (dist_tv != null)
                             dist_tv.setText(Double.toString(Math.round(distance * 100) / 100.0));
                         if (cal_tv != null)
-                            cal_tv.setText(calories + "kcal");
+                            cal_tv.setText(Math.round(calories * 100) / 100.0 + "kcal");
                         Log.d("BroadCast", "Received BroadCast " + time + " " + distance);
                     }
                 }
@@ -281,9 +313,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onResume() {
         super.onResume();
-        isBackground = false;
-        if(mService !=null)
+        if (mService != null)
             mService.isBackground = false;
+        isBackground = false;
+
         Log.d(TAG, "onResume " + isBackground);
     }
 
@@ -291,7 +324,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     public void onPause() {
         super.onPause();
         isBackground = true;
-        if(mService !=null)
+
+        if (mService != null)
             mService.isBackground = true;
         Log.d(TAG, "onPause " + isBackground);
     }
@@ -349,7 +383,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         } else {
             startLocationService();
         }
-        //startTracking(naverMap);
 
         // 버튼 숨김
         recordStartFab.hide();
@@ -373,7 +406,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 정지 기능
     public void PauseFab() {
         // 트래킹 중지
-        //stopTracking(naverMap);
 
         // 서비스 타이머 정지
         mService.pauseTimer();
@@ -392,7 +424,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 재개 기능
     public void ResumeFab() {
         // 트래킹 시작
-        //startTracking(naverMap);
 
         // 서비스 타이머 시작
         mService.startTimer();
@@ -435,6 +466,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         getSupportFragmentManager().beginTransaction().hide(recordFrag).commit();
         toRecordFab.show();
         toMapFab.hide();
+
     }
 
     // 맵 -> 기록
@@ -495,36 +527,30 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE);
             stopService(intent);
             unbindService(sconn);
-            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
             unregisterReceiver(br);
+            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
         }
     }
 
-    /*
-        // Tracking 시작
-        private void startTracking(@NonNull NaverMap naverMap) {
-            naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
-            Log.d(TAG, "startTracking");
-        }
-
-        // Tracking 중지
-        private void stopTracking(@NonNull NaverMap naverMap) {
-            naverMap.setLocationTrackingMode(LocationTrackingMode.None);
-            Log.d(TAG, "stopTracking");
-        }
-
-     */
     // 현재 위치에 마커를 생성하는 함수
     public void makeMarker(String tag, double lat, double lng) {
         Marker marker = new Marker();
         marker.setPosition(new LatLng(lat, lng));
+        marker.setIcon(OverlayImage.fromResource(R.drawable.marker_icon));
         marker.setCaptionText(tag);
-        marker.setIconTintColor(Color.BLUE);
-        marker.setWidth(50);
-        marker.setHeight(50);
+        marker.setWidth(100);
+        marker.setHeight(100);
         marker.setMap(naverMap);
         Log.d(TAG, "makeMarker " + tag + " " + lat + ", " + lng);
     }
+
+    // 칼로리 계산
+    private double getCalories(double met) {
+        double cal;
+        cal = met * 3.5 * userKg / 60 * 5 / 1000;
+        return cal;
+    }
+
 
     private class GetGpxPathData extends AsyncTask<String, Void, String> {
         ProgressDialog progressDialog;
