@@ -11,15 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.project.R;
-import com.example.project.Ranking.DistRankingFragment;
+import com.example.project.Ranking.DistFragment;
 import com.example.project.Ranking.PedoFragment;
 
 public class RankingFragment extends Fragment {
     Button distBtn;
     Button pedoBtn;
-    DistRankingFragment distRankingFragment;
-    PedoFragment pedoRankingFragment;
-    String userID;
 
     @Nullable
     @Override
@@ -38,7 +35,7 @@ public class RankingFragment extends Fragment {
                 pedoBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style));
 
                 // fragment 위에 그린 fragment를 교체하기 위해서 childFragment를 사용
-                getChildFragmentManager().beginTransaction().replace(R.id.ranking_fragment_container, new DistRankingFragment()).commit();
+                getChildFragmentManager().beginTransaction().replace(R.id.ranking_fragment_container, new DistFragment()).commit();
                 //FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
                 //fm.replace(R.id.ranking_fragment_container,new DistRankingFragment()).commit();
             }

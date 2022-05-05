@@ -29,17 +29,17 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class OneWeekFragment extends Fragment {
+public class PedoTopFragment extends Fragment {
     RecyclerView recyclerView;
     RankingAdapter rankingAdapter;
-    String pedoWeekRankingJsonString;
-    ArrayList<pedoWeekRankingData> pedoWeekRankingArrayList;
+    String pedoTopRankingJsonString;
+    ArrayList<pedoTopRankingData> pedoTopRankingArrayList;
     String userName = UserInfo.getInstance().getUserName();
     int myIndexNumber;
     private static final String TAG_JSON="pacerfit";
     private static final String TAG_NAME = "userName";
     private static final String TAG_ID = "userID";
-    private static final String TAG_WEEKSUM = "week_sum";
+    private static final String TAG_TOPSUM = "top_sum";
 
 
     TextView myIndex;
@@ -54,19 +54,19 @@ public class OneWeekFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.ranking_pedo_week_fragment, container, false);
+        View v = inflater.inflate(R.layout.ranking_pedo_top_fragment, container, false);
 
 
         myIndex = v.findViewById(R.id.myrank_index);
         myProfile = v.findViewById(R.id.myrank_profile);
         myID = v.findViewById(R.id.myrank_id);
         myStep = v.findViewById(R.id.myrank_step);
-        recyclerView = (RecyclerView) v.findViewById(R.id.month_pedo_recycler);
-        pedoWeekRankingArrayList = new ArrayList<>();
+        recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
+        pedoTopRankingArrayList = new ArrayList<>();
 
 
-        getPedoWeekRanking task = new getPedoWeekRanking();
-        task.execute("http://pacerfit.dothome.co.kr/oneWeekPedoRanking.php");
+        getPedoTopRanking task = new getPedoTopRanking();
+        task.execute("http://pacerfit.dothome.co.kr/TopPedoRanking.php");
 
         return v;
     }
@@ -81,11 +81,11 @@ public class OneWeekFragment extends Fragment {
 
     private void createList(){
         ArrayList<RankingModel> rankingModels = new ArrayList<>();
-        for(int i=1;i<pedoWeekRankingArrayList.size();i++){
+        for(int i=1;i<pedoTopRankingArrayList.size();i++){
             if(i!=myIndexNumber){
                 int randomNum = (int) (Math.random() * 7);
                 rankingModels.add(new RankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
-                        pedoWeekRankingArrayList.get(i).userName,pedoWeekRankingArrayList.get(i).week_sum));
+                        pedoTopRankingArrayList.get(i).userName,pedoTopRankingArrayList.get(i).top_sum));
             }
         }
         rankingAdapter.setRankList(rankingModels);
@@ -101,12 +101,11 @@ public class OneWeekFragment extends Fragment {
     private void createRankOne() {
         int randomNum = (int) (Math.random() * 7);
         ArrayList<RankOneModel> rankOneModels = new ArrayList<>();
-        rankOneModels.add(new RankOneModel(ProfileDrawable[randomNum],pedoWeekRankingArrayList.get(0).userName, pedoWeekRankingArrayList.get(0).week_sum));
+        rankOneModels.add(new RankOneModel(ProfileDrawable[randomNum],pedoTopRankingArrayList.get(0).userName, pedoTopRankingArrayList.get(0).top_sum));
         rankingAdapter.setRank1List(rankOneModels);
     }
 
-
-    private class getPedoWeekRanking extends AsyncTask<String, Void, String> {  // DB에서 월간랭킹데이터 받아오는 부분
+    private class getPedoTopRanking extends AsyncTask<String, Void, String> {  // DB에서 월간랭킹데이터 받아오는 부분
         String errorString = null;
 
         @Override
@@ -118,17 +117,17 @@ public class OneWeekFragment extends Fragment {
                 Log.d(TAG, errorString);
             }
             else {
-                pedoWeekRankingJsonString = result;
+                pedoTopRankingJsonString = result;
                 showResult();
                 setRecyclerView();
 
-                for(int i=0;i<pedoWeekRankingArrayList.size();i++){
-                    if(pedoWeekRankingArrayList.get(i).userName.equals(userName))
+                for(int i=0;i<pedoTopRankingArrayList.size();i++){
+                    if(pedoTopRankingArrayList.get(i).userName.equals(userName))
                         myIndexNumber = i;
                 }
                 int randomNum = (int) (Math.random() * 7);
 
-                createMyRank(myIndexNumber, ProfileDrawable[randomNum], userName, pedoWeekRankingArrayList.get(myIndexNumber).week_sum);
+                createMyRank(myIndexNumber, ProfileDrawable[randomNum], userName, pedoTopRankingArrayList.get(myIndexNumber).top_sum);
                 createRankOne();
                 createList();
 
@@ -137,7 +136,7 @@ public class OneWeekFragment extends Fragment {
 
         private void showResult(){
             try {
-                JSONObject jsonObject = new JSONObject(pedoWeekRankingJsonString);
+                JSONObject jsonObject = new JSONObject(pedoTopRankingJsonString);
                 JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
                 for(int i=0;i<jsonArray.length();i++){
@@ -146,14 +145,14 @@ public class OneWeekFragment extends Fragment {
 
                     String userName = item.getString(TAG_NAME);
                     String userID = item.getString(TAG_ID);
-                    int week_sum = item.getInt(TAG_WEEKSUM);
+                    int top_sum = item.getInt(TAG_TOPSUM);
 
-                    pedoWeekRankingData pedoWeekRankingData = new pedoWeekRankingData();
-                    pedoWeekRankingData.setUserName(userName);
-                    pedoWeekRankingData.setUserID(userID);
-                    pedoWeekRankingData.setMonth_sum(week_sum);
+                    pedoTopRankingData pedoTopRankingData = new pedoTopRankingData();
+                    pedoTopRankingData.setUserName(userName);
+                    pedoTopRankingData.setUserID(userID);
+                    pedoTopRankingData.setTop_sum(top_sum);
 
-                    pedoWeekRankingArrayList.add(pedoWeekRankingData);
+                    pedoTopRankingArrayList.add(pedoTopRankingData);
 
                 }
             } catch (JSONException e) {
@@ -206,10 +205,10 @@ public class OneWeekFragment extends Fragment {
         }
     }
 
-    private class pedoWeekRankingData{  //DB에서 받은 데이터를 저장할 클래스
+    private class pedoTopRankingData{  //DB에서 받은 데이터를 저장할 클래스
         private String userName;
         private String userID;
-        private int week_sum;
+        private int top_sum;
 
         public String getUserID(){
             return userID;
@@ -217,8 +216,8 @@ public class OneWeekFragment extends Fragment {
         public String getUserName(){
             return userName;
         }
-        public int getWeek_sum(){
-            return week_sum;
+        public int getTop_sum(){
+            return top_sum;
         }
         public void setUserName(String userName){
             this.userName = userName;
@@ -226,8 +225,8 @@ public class OneWeekFragment extends Fragment {
         public void setUserID(String userID){
             this.userID = userID;
         }
-        public void setMonth_sum(int week_sum){
-            this.week_sum = week_sum;
+        public void setTop_sum(int top_sum){
+            this.top_sum = top_sum;
         }
     }
 }

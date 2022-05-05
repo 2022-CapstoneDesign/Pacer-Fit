@@ -113,7 +113,7 @@
                                 android:layout_column="1"
                                 android:fontFamily="@font/nanumsquareroundeb"
                                 android:gravity="right"
-                                android:text="걸음"
+                                android:text="km"
                                 android:textColor="@color/lightlightgray_text_color"
                                 android:textSize="11sp" />
                         </TableRow>

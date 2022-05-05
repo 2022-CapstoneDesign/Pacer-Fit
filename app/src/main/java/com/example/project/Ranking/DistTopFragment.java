@@ -1,6 +1,7 @@
 package com.example.project.Ranking;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +14,9 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.project.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,17 +29,17 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class OneMonthFragment extends Fragment {
+public class DistTopFragment extends Fragment {
     RecyclerView recyclerView;
     RankingAdapter rankingAdapter;
-    String pedoMonthRankingJsonString;
-    ArrayList<pedoMonthRankingData> pedoMonthRankingArrayList;
+    String distTopRankingJsonString;
+    ArrayList<distTopRankingData> distTopRankingArrayList;
     String userName = UserInfo.getInstance().getUserName();
     int myIndexNumber;
     private static final String TAG_JSON="pacerfit";
     private static final String TAG_NAME = "userName";
     private static final String TAG_ID = "userID";
-    private static final String TAG_MONTHSUM = "month_sum";
+    private static final String TAG_TOPSUM = "top_sum";
 
 
     TextView myIndex;
@@ -51,24 +54,24 @@ public class OneMonthFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.ranking_pedo_month_fragment, container, false);
+        View v = inflater.inflate(R.layout.ranking_dist_top_fragment, container, false);
 
 
         myIndex = v.findViewById(R.id.myrank_index);
         myProfile = v.findViewById(R.id.myrank_profile);
         myID = v.findViewById(R.id.myrank_id);
         myStep = v.findViewById(R.id.myrank_step);
-        recyclerView = (RecyclerView) v.findViewById(R.id.month_pedo_recycler);
-        pedoMonthRankingArrayList = new ArrayList<>();
+        recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
+        distTopRankingArrayList = new ArrayList<>();
 
 
-        getPedoMonthRanking task = new getPedoMonthRanking();
-        task.execute("http://pacerfit.dothome.co.kr/oneMonthPedoRanking.php");
+        getDistTopRanking task = new getDistTopRanking();
+        task.execute("http://pacerfit.dothome.co.kr/TopDistRanking.php");
 
         return v;
     }
 
-    private void createMyRank(int index, int profile, String id, int step) { //내 랭킹 출력
+    private void createMyRank(int index, int profile, String id, int step) {
         DecimalFormat myFormatter = new DecimalFormat("###,###");
         myIndex.setText(String.valueOf(index+1));
         myProfile.setImageResource(profile);
@@ -76,13 +79,13 @@ public class OneMonthFragment extends Fragment {
         myStep.setText(myFormatter.format(step));
     }
 
-    private void createList(){  //랭킹 리스트 출력
+    private void createList(){
         ArrayList<RankingModel> rankingModels = new ArrayList<>();
-        for(int i=1;i<pedoMonthRankingArrayList.size();i++){
+        for(int i=1;i<distTopRankingArrayList.size();i++){
             if(i!=myIndexNumber){
                 int randomNum = (int) (Math.random() * 7);
                 rankingModels.add(new RankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
-                        pedoMonthRankingArrayList.get(i).userName,pedoMonthRankingArrayList.get(i).month_sum));
+                        distTopRankingArrayList.get(i).userName,distTopRankingArrayList.get(i).top_sum));
             }
         }
         rankingAdapter.setRankList(rankingModels);
@@ -95,15 +98,14 @@ public class OneMonthFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    private void createRankOne() {  //1등 랭킹 출력
+    private void createRankOne() {
         int randomNum = (int) (Math.random() * 7);
         ArrayList<RankOneModel> rankOneModels = new ArrayList<>();
-        rankOneModels.add(new RankOneModel(ProfileDrawable[randomNum],pedoMonthRankingArrayList.get(0).userName, pedoMonthRankingArrayList.get(0).month_sum));
+        rankOneModels.add(new RankOneModel(ProfileDrawable[randomNum],distTopRankingArrayList.get(0).userName, distTopRankingArrayList.get(0).top_sum));
         rankingAdapter.setRank1List(rankOneModels);
     }
 
-
-    private class getPedoMonthRanking extends AsyncTask<String, Void, String> {  // DB에서 월간랭킹데이터 받아오는 부분
+    private class getDistTopRanking extends AsyncTask<String, Void, String> {  // DB에서 월간랭킹데이터 받아오는 부분
         String errorString = null;
 
         @Override
@@ -115,17 +117,17 @@ public class OneMonthFragment extends Fragment {
                 Log.d(TAG, errorString);
             }
             else {
-                pedoMonthRankingJsonString = result;
+                distTopRankingJsonString = result;
                 showResult();
                 setRecyclerView();
 
-                for(int i=0;i<pedoMonthRankingArrayList.size();i++){
-                    if(pedoMonthRankingArrayList.get(i).userName.equals(userName))
+                for(int i=0;i<distTopRankingArrayList.size();i++){
+                    if(distTopRankingArrayList.get(i).userName.equals(userName))
                         myIndexNumber = i;
                 }
                 int randomNum = (int) (Math.random() * 7);
 
-                createMyRank(myIndexNumber, ProfileDrawable[randomNum], userName, pedoMonthRankingArrayList.get(myIndexNumber).month_sum);
+                createMyRank(myIndexNumber, ProfileDrawable[randomNum], userName, distTopRankingArrayList.get(myIndexNumber).top_sum);
                 createRankOne();
                 createList();
 
@@ -134,7 +136,7 @@ public class OneMonthFragment extends Fragment {
 
         private void showResult(){
             try {
-                JSONObject jsonObject = new JSONObject(pedoMonthRankingJsonString);
+                JSONObject jsonObject = new JSONObject(distTopRankingJsonString);
                 JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
                 for(int i=0;i<jsonArray.length();i++){
@@ -143,14 +145,14 @@ public class OneMonthFragment extends Fragment {
 
                     String userName = item.getString(TAG_NAME);
                     String userID = item.getString(TAG_ID);
-                    int month_sum = item.getInt(TAG_MONTHSUM);
+                    int top_sum = item.getInt(TAG_TOPSUM);
 
-                    pedoMonthRankingData pedoMonthRankingData = new pedoMonthRankingData();
-                    pedoMonthRankingData.setUserName(userName);
-                    pedoMonthRankingData.setUserID(userID);
-                    pedoMonthRankingData.setMonth_sum(month_sum);
+                    distTopRankingData distTopRankingData = new distTopRankingData();
+                    distTopRankingData.setUserName(userName);
+                    distTopRankingData.setUserID(userID);
+                    distTopRankingData.setTop_sum(top_sum);
 
-                    pedoMonthRankingArrayList.add(pedoMonthRankingData);
+                    distTopRankingArrayList.add(distTopRankingData);
 
                 }
             } catch (JSONException e) {
@@ -203,28 +205,28 @@ public class OneMonthFragment extends Fragment {
         }
     }
 
-    private class pedoMonthRankingData{  //DB에서 받은 데이터를 저장할 클래스
-            private String userName;
-            private String userID;
-            private int month_sum;
+    private class distTopRankingData{  //DB에서 받은 데이터를 저장할 클래스
+        private String userName;
+        private String userID;
+        private int top_sum;
 
-            public String getUserID(){
-                return userID;
-            }
-            public String getUserName(){
-                return userName;
-            }
-            public int getMonth_sum(){
-                return month_sum;
-            }
-            public void setUserName(String userName){
-                this.userName = userName;
-            }
-            public void setUserID(String userID){
-                this.userID = userID;
-            }
-            public void setMonth_sum(int month_sum){
-                this.month_sum = month_sum;
-            }
+        public String getUserID(){
+            return userID;
+        }
+        public String getUserName(){
+            return userName;
+        }
+        public int getTop_sum(){
+            return top_sum;
+        }
+        public void setUserName(String userName){
+            this.userName = userName;
+        }
+        public void setUserID(String userID){
+            this.userID = userID;
+        }
+        public void setTop_sum(int top_sum){
+            this.top_sum = top_sum;
+        }
     }
 }
