@@ -26,6 +26,7 @@ public class GraphMarkerView extends MarkerView {
     private TextView markerDate;
     private View markerbubble;
 
+    private String type;
     private int period;
     private String periodTxt;
 
@@ -37,14 +38,15 @@ public class GraphMarkerView extends MarkerView {
         markerDate = findViewById(R.id.markerDate);
         markerbubble = findViewById(R.id.markerbubble);
         this.period = period;
+        this.type = type;
 
         if (period == 6) { // 6개월 마커
-            markerbubble.setBackground(Drawable.createFromPath("@drawable/speechbubble_gray"));
-            markerbubble.getLayoutParams().height = 140;
+            markerbubble.setBackgroundResource(R.drawable.speechbubble_gray_large);
+            markerbubble.getLayoutParams().width = 330;
         }
         else { // 30일, 1년 마커
-            markerbubble.setBackground(Drawable.createFromPath("@drawable/speechbubble_gray_large"));
-            markerbubble.getLayoutParams().height = 70;
+            markerbubble.setBackgroundResource(R.drawable.speechbubble_gray);
+            markerbubble.getLayoutParams().width = 180;
         }
 
         if (type.equals("pedo"))
@@ -88,7 +90,9 @@ public class GraphMarkerView extends MarkerView {
             cal2.add(Calendar.DATE, 1); // 일주일 끝이 토요일이라 토요일에 하루를 더해서 일요일로 만든다
 
             df = new SimpleDateFormat("M월 d일");
-            periodTxt = df.format(cal.getTime());
+            String p1 = df.format(cal.getTime());
+            String p2 = df.format(cal2.getTime());
+            periodTxt = p1 + " ~ " + p2;
         }
         else { // 1년 날짜 표현
             Calendar cal = Calendar.getInstance();
@@ -102,11 +106,21 @@ public class GraphMarkerView extends MarkerView {
             CandleEntry ce = (CandleEntry) e;
             tvContent.setText("" + Utils.formatNumber(ce.getHigh(), 0, true));
         } else { // 일반 차트
+            markerDate.setText("" + periodTxt);
+
             // 천단위 구분 적용 (,)
             DecimalFormat df1 = new DecimalFormat("#,##0");
-            String val = df1.format(Integer.parseInt(Utils.formatNumber(e.getY(), 0, false)));
-            markerDate.setText("" + periodTxt);
-            tvContent.setText("" + val + "걸음");
+
+            //String val = df1.format(Integer.parseInt(Utils.formatNumber(e.getY(), 0, false)));
+            String val;
+            if (type.equals("pedo")) {
+                val = df1.format(e.getY());
+                tvContent.setText("" + val + "걸음");
+            }
+            else {
+                val = String.valueOf(e.getY());
+                tvContent.setText("" + val + "km");
+            }
         }
 
         super.refreshContent(e, highlight);

@@ -181,8 +181,7 @@ public class SixMonthFragment extends Fragment {
 
     // 꺾은선그래프 각종 설정
     private void linechartConfigureAppearance() {
-        lineChart.setTouchEnabled(false);
-        lineChart.setTouchEnabled(false); // 터치 유무
+        lineChart.setTouchEnabled(true); // 터치 유무
         lineChart.setPinchZoom(false); // 두 손가락으로 줌인,줌아웃 설정
         lineChart.setDrawGridBackground(false); // 격자무늬 유무
         lineChart.getLegend().setEnabled(false); // legend는 차트의 범례
@@ -192,6 +191,7 @@ public class SixMonthFragment extends Fragment {
         // 값 클릭 시 마커뷰 보이도록 설정
         GraphMarkerView marker = new GraphMarkerView(getContext(), R.layout.graph_marker_view, "dist", 6);
         marker.setChartView(lineChart);
+        marker.setPadding(0, 0, 0, 5); // 라인그래프는 default가 마커가 딱 붙어서 나옴
         lineChart.setMarker(marker);
 
         // x축 설정(꺾은선그래프 기준 아래쪽)
@@ -218,6 +218,7 @@ public class SixMonthFragment extends Fragment {
         YAxis yAxisLeft = lineChart.getAxisLeft();
         Float max = Float.parseFloat(data.km_max_180);
         max += max/10;
+        max += 4.5f;
         yAxisLeft.setAxisMaximum(max); // y축 최대값 설정
         yAxisLeft.setAxisMinimum(0f); // y축 최소값 설정
         yAxisLeft.setDrawLabels(false); // 값 표기 설정
@@ -260,6 +261,8 @@ public class SixMonthFragment extends Fragment {
         set.setCircleSize(4f);
         set.setDrawCircles(true); //선 둥글게 만들기
         set.setDrawFilled(false); //그래프 밑부분 색칠X
+        set.setDrawHorizontalHighlightIndicator(false); // 마커 나올 때 강조 선 안 나오게
+        set.setDrawVerticalHighlightIndicator(false); // 마커 나올 때 강조 선 안 나오게
 
         // 3. [LineData] 보여질 데이터 구성
         LineData data = new LineData(set);

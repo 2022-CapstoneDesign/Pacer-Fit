@@ -9,9 +9,8 @@
 
     <View
         android:id="@+id/markerbubble"
-        android:layout_width="70dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:background="@drawable/speechbubble_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

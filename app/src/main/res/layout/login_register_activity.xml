@@ -134,7 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:fontFamily="@font/nanumsquareroundeb"
-                android:hint="@string/name"
+                android:hint="닉네임"
                 android:maxLength="10"
                 android:maxLines="1"
                 android:paddingStart="10dp"
