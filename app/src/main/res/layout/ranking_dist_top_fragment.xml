@@ -89,7 +89,7 @@
                             android:layout_height="match_parent">
 
                             <TextView
-                                android:id="@+id/myrank_step"
+                                android:id="@+id/myrank_km"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_column="1"
@@ -113,7 +113,7 @@
                                 android:layout_column="1"
                                 android:fontFamily="@font/nanumsquareroundeb"
                                 android:gravity="right"
-                                android:text="걸음"
+                                android:text="km"
                                 android:textColor="@color/lightlightgray_text_color"
                                 android:textSize="11sp" />
                         </TableRow>

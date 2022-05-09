@@ -29,41 +29,38 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
 
-public class PedoFragment extends Fragment {
-
+public class DistFragment extends Fragment{
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private TextView member;
-    String pedoMembersJsonString;
+    String distMembersJsonString;
     private static final String TAG_JSON="pacerfit";
     private static final String TAG_MEMBERS="members";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.ranking_pedo_fragment, container, false);
+        View v = inflater.inflate(R.layout.ranking_dist_fragment, container, false);
 
+        tabLayout = v.findViewById(R.id.dist_tabLayout);
+        viewPager = v.findViewById(R.id.dist_ranking_vp);
+        member = v.findViewById(R.id.textView13);
 
-        tabLayout = v.findViewById(R.id.pedo_tabLayout);
-        viewPager = v.findViewById(R.id.pedo_ranking_vp);
-        member = v.findViewById(R.id.textView11);
-
-        getPedoMembers task = new getPedoMembers();
-        task.execute("http://pacerfit.dothome.co.kr/getPedoMembers.php");
-
+        getDistMembers task = new getDistMembers();
+        task.execute("http://pacerfit.dothome.co.kr/getDistMembers.php");
 
         RankingVPAdapter rankingVPAdapter = new RankingVPAdapter(getActivity().getSupportFragmentManager());
-        rankingVPAdapter.addFragment(new PedoOneWeekFragment(), "주간랭킹");
-        rankingVPAdapter.addFragment(new PedoOneMonthFragment(), "월간랭킹");
-        rankingVPAdapter.addFragment(new PedoTopFragment(), "역대랭킹");
+        rankingVPAdapter.addFragment(new DistOneWeekFragment(), "주간랭킹");
+        rankingVPAdapter.addFragment(new DistOneMonthFragment(), "월간랭킹");
+        rankingVPAdapter.addFragment(new DistTopFragment(), "역대랭킹");
 
         viewPager.setAdapter(rankingVPAdapter);
         tabLayout.setupWithViewPager(viewPager);
-
         return v;
     }
 
-    private class getPedoMembers extends AsyncTask<String, Void, String> {
+
+    private class getDistMembers extends AsyncTask<String, Void, String> {
         String errorString = null;
 
         @Override
@@ -75,7 +72,7 @@ public class PedoFragment extends Fragment {
                 Log.d(TAG, errorString);
             }
             else {
-                pedoMembersJsonString = result;
+                distMembersJsonString = result;
                 showResult();
 
 
@@ -84,7 +81,7 @@ public class PedoFragment extends Fragment {
 
         private void showResult(){
             try {
-                JSONObject jsonObject = new JSONObject(pedoMembersJsonString);
+                JSONObject jsonObject = new JSONObject(distMembersJsonString);
                 JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
                 int members = 0 ;
                 for(int i=0;i<jsonArray.length();i++){

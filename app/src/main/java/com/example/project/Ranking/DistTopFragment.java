@@ -29,63 +29,69 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class TopFragment extends Fragment {
+public class DistTopFragment extends Fragment {
     RecyclerView recyclerView;
-    RankingAdapter rankingAdapter;
-    String pedoTopRankingJsonString;
-    ArrayList<pedoTopRankingData> pedoTopRankingArrayList;
+    DistRankingAdapter rankingAdapter;
+    String distTopRankingJsonString;
+    ArrayList<distTopRankingData> distTopRankingArrayList;
     String userName = UserInfo.getInstance().getUserName();
+    int userProfileNum = UserInfo.getInstance().getUserProfileNum();
     int myIndexNumber;
     private static final String TAG_JSON="pacerfit";
     private static final String TAG_NAME = "userName";
     private static final String TAG_ID = "userID";
     private static final String TAG_TOPSUM = "top_sum";
+    private static final String TAG_PROFILE = "profile_num";
+
 
 
     TextView myIndex;
     ImageView myProfile;
     TextView myID;
-    TextView myStep;
+    TextView myKm;
 
-    int[] ProfileDrawable = {R.drawable.profile_man_horn, R.drawable.profile_man_beard, R.drawable.profile_woman_old,
-            R.drawable.profile_woman_scarf, R.drawable.profile_woman_neck, R.drawable.profile_man_hood, R.drawable.profile_man_round};
+    int[] ProfileDrawable = {
+            R.drawable.profile_default, R.drawable.profile_man, R.drawable.profile_man_beard, R.drawable.profile_man_cap,
+            R.drawable.profile_man_hat, R.drawable.profile_man_hood, R.drawable.profile_man_horn, R.drawable.profile_man_round,
+            R.drawable.profile_man_suit, R.drawable.profile_man_sunglass, R.drawable.profile_woman_glasses, R.drawable.profile_woman_neck,
+            R.drawable.profile_woman_old, R.drawable.profile_woman_scarf
+    };
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.ranking_pedo_top_fragment, container, false);
+        View v = inflater.inflate(R.layout.ranking_dist_top_fragment, container, false);
 
 
         myIndex = v.findViewById(R.id.myrank_index);
         myProfile = v.findViewById(R.id.myrank_profile);
         myID = v.findViewById(R.id.myrank_id);
-        myStep = v.findViewById(R.id.myrank_step);
-        recyclerView = (RecyclerView) v.findViewById(R.id.month_pedo_recycler);
-        pedoTopRankingArrayList = new ArrayList<>();
+        myKm = v.findViewById(R.id.myrank_km);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
+        distTopRankingArrayList = new ArrayList<>();
 
 
-        getPedoTopRanking task = new getPedoTopRanking();
-        task.execute("http://pacerfit.dothome.co.kr/TopPedoRanking.php");
+        getDistTopRanking task = new getDistTopRanking();
+        task.execute("http://pacerfit.dothome.co.kr/TopDistRanking.php");
 
         return v;
     }
 
-    private void createMyRank(int index, int profile, String id, int step) {
-        DecimalFormat myFormatter = new DecimalFormat("###,###");
+    private void createMyRank(int index, int profile, String id, double km) {
+        DecimalFormat myFormatter = new DecimalFormat("###,##0.0");
         myIndex.setText(String.valueOf(index+1));
         myProfile.setImageResource(profile);
         myID.setText(id);
-        myStep.setText(myFormatter.format(step));
+        myKm.setText(myFormatter.format(km));
     }
 
     private void createList(){
-        ArrayList<RankingModel> rankingModels = new ArrayList<>();
-        for(int i=1;i<pedoTopRankingArrayList.size();i++){
+        ArrayList<DistRankingModel> rankingModels = new ArrayList<>();
+        for(int i=1;i<distTopRankingArrayList.size();i++){
             if(i!=myIndexNumber){
-                int randomNum = (int) (Math.random() * 7);
-                rankingModels.add(new RankingModel(String.valueOf(i+1),ProfileDrawable[randomNum],
-                        pedoTopRankingArrayList.get(i).userName,pedoTopRankingArrayList.get(i).top_sum));
+                rankingModels.add(new DistRankingModel(String.valueOf(i+1),ProfileDrawable[distTopRankingArrayList.get(i).profile_num],
+                        distTopRankingArrayList.get(i).userName,distTopRankingArrayList.get(i).top_sum));
             }
         }
         rankingAdapter.setRankList(rankingModels);
@@ -93,19 +99,19 @@ public class TopFragment extends Fragment {
 
     private void setRecyclerView() {
         recyclerView.setHasFixedSize(true);
-        rankingAdapter = new RankingAdapter();
+        rankingAdapter = new DistRankingAdapter();
         recyclerView.setAdapter(rankingAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void createRankOne() {
-        int randomNum = (int) (Math.random() * 7);
-        ArrayList<RankOneModel> rankOneModels = new ArrayList<>();
-        rankOneModels.add(new RankOneModel(ProfileDrawable[randomNum],pedoTopRankingArrayList.get(0).userName, pedoTopRankingArrayList.get(0).top_sum));
+        ArrayList<DistRankOneModel> rankOneModels = new ArrayList<>();
+        rankOneModels.add(new DistRankOneModel(ProfileDrawable[distTopRankingArrayList.get(0).profile_num],
+                distTopRankingArrayList.get(0).userName, distTopRankingArrayList.get(0).top_sum));
         rankingAdapter.setRank1List(rankOneModels);
     }
 
-    private class getPedoTopRanking extends AsyncTask<String, Void, String> {  // DB에서 월간랭킹데이터 받아오는 부분
+    private class getDistTopRanking extends AsyncTask<String, Void, String> {  // DB에서 월간랭킹데이터 받아오는 부분
         String errorString = null;
 
         @Override
@@ -117,17 +123,16 @@ public class TopFragment extends Fragment {
                 Log.d(TAG, errorString);
             }
             else {
-                pedoTopRankingJsonString = result;
+                distTopRankingJsonString = result;
                 showResult();
                 setRecyclerView();
 
-                for(int i=0;i<pedoTopRankingArrayList.size();i++){
-                    if(pedoTopRankingArrayList.get(i).userName.equals(userName))
+                for(int i=0;i<distTopRankingArrayList.size();i++){
+                    if(distTopRankingArrayList.get(i).userName.equals(userName))
                         myIndexNumber = i;
                 }
-                int randomNum = (int) (Math.random() * 7);
 
-                createMyRank(myIndexNumber, ProfileDrawable[randomNum], userName, pedoTopRankingArrayList.get(myIndexNumber).top_sum);
+                createMyRank(myIndexNumber, ProfileDrawable[userProfileNum], userName, distTopRankingArrayList.get(myIndexNumber).top_sum);
                 createRankOne();
                 createList();
 
@@ -136,7 +141,7 @@ public class TopFragment extends Fragment {
 
         private void showResult(){
             try {
-                JSONObject jsonObject = new JSONObject(pedoTopRankingJsonString);
+                JSONObject jsonObject = new JSONObject(distTopRankingJsonString);
                 JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
                 for(int i=0;i<jsonArray.length();i++){
@@ -145,14 +150,16 @@ public class TopFragment extends Fragment {
 
                     String userName = item.getString(TAG_NAME);
                     String userID = item.getString(TAG_ID);
-                    int top_sum = item.getInt(TAG_TOPSUM);
+                    double top_sum = item.getDouble(TAG_TOPSUM);
+                    int profile_num = item.getInt(TAG_PROFILE);
 
-                    pedoTopRankingData pedoTopRankingData = new pedoTopRankingData();
-                    pedoTopRankingData.setUserName(userName);
-                    pedoTopRankingData.setUserID(userID);
-                    pedoTopRankingData.setTop_sum(top_sum);
+                    distTopRankingData distTopRankingData = new distTopRankingData();
+                    distTopRankingData.setUserName(userName);
+                    distTopRankingData.setUserID(userID);
+                    distTopRankingData.setTop_sum(top_sum);
+                    distTopRankingData.setProfile_num(profile_num);
 
-                    pedoTopRankingArrayList.add(pedoTopRankingData);
+                    distTopRankingArrayList.add(distTopRankingData);
 
                 }
             } catch (JSONException e) {
@@ -205,10 +212,11 @@ public class TopFragment extends Fragment {
         }
     }
 
-    private class pedoTopRankingData{  //DB에서 받은 데이터를 저장할 클래스
+    private class distTopRankingData{  //DB에서 받은 데이터를 저장할 클래스
         private String userName;
         private String userID;
-        private int top_sum;
+        private double top_sum;
+        private int profile_num;
 
         public String getUserID(){
             return userID;
@@ -216,17 +224,19 @@ public class TopFragment extends Fragment {
         public String getUserName(){
             return userName;
         }
-        public int getTop_sum(){
+        public double getTop_sum(){
             return top_sum;
         }
+        private int getProfile_num() {return profile_num; }
         public void setUserName(String userName){
             this.userName = userName;
         }
         public void setUserID(String userID){
             this.userID = userID;
         }
-        public void setTop_sum(int top_sum){
+        public void setTop_sum(double top_sum){
             this.top_sum = top_sum;
         }
+        public void setProfile_num(int profile_num) {this.profile_num = profile_num; }
     }
 }

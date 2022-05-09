@@ -2,18 +2,18 @@ package com.example.project.Ranking;
 
 import java.text.DecimalFormat;
 
-public class RankingModel {
+public class DistRankingModel {
     String rankIndex;
     int rankProfile;
     String rankID;
-    String rankStep;
+    String rankKm;
 
-    public RankingModel(String rankIndex, int rankProfile, String rankId, int rankStep) {
-        DecimalFormat myFormatter = new DecimalFormat("###,###");
+    public DistRankingModel(String rankIndex, int rankProfile, String rankId, double rankKm) {
+        DecimalFormat myFormatter = new DecimalFormat("###,##0.0");
         this.rankIndex = rankIndex;
         this.rankProfile = rankProfile;
         this.rankID = rankId;
-        this.rankStep = myFormatter.format(rankStep);
+        this.rankKm = myFormatter.format(rankKm);
     }
 
     public String getRankIndex() {
@@ -28,8 +28,8 @@ public class RankingModel {
         return rankID;
     }
 
-    public String getRankStep() {
-        return rankStep;
+    public String getRankKm() {
+        return rankKm;
     }
 
 }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.Formatter.OneYearXAxisValueFormatter;
+import com.example.project.GraphMarker.GraphMarkerView;
 import com.example.project.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -22,7 +23,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -36,6 +39,7 @@ public class OneYearFragment extends Fragment {
     private TextView km_oneyearDist;
 
     private TextView dist_avg_time;
+    DistRecordData data = new DistRecordData();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,14 +59,32 @@ public class OneYearFragment extends Fragment {
         setRecyclerView();
         // ***** 이 곳에서 제일 최근 일주일 거리 기록 DB 값을 표시합니다 *****
         // 일주일 기준 -> 시작 : 월요일, 끝 : 일요일
-        setTodayRecord("2022년 5월", "2시간 6분", "24km");
+        int time = Integer.parseInt(data.KmRecordYear_time[0]);
+        int sec = time % 60;
+        int min = time / 60 % 60;
+        int hour = time / 3600;
+        float value = 0;
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, (int)value);
+        //cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        SimpleDateFormat df = new SimpleDateFormat("y년 M월");
+
+        //이번달 만보기 기록
+        if(hour!=0)
+            setTodayRecord(df.format(cal.getTime())+"",
+                    hour+"시간"+min+"분",
+                    data.KmRecordYear_km[0]+"km");
+        else
+            setTodayRecord(df.format(cal.getTime())+"",
+                    min+"분",
+                    data.KmRecordYear_km[0]+"km");
         setAvgTime();
 
         // <--- 라인 그래프 --->
         ArrayList<Float> lineChartValues = new ArrayList<>();
         // 최근 1년의 운동량 값(한달 단위로) 받아오기 -> DB 값으로 추후에 수정
-        for (int i = 0; i < 12; i++) {
-            float rand = (float) Math.round(new Random().nextFloat() * 2800);
+        for (int i = 11; i >=0; i--) {
+            float rand = Float.parseFloat(data.KmRecordYear_km[i]);
             //Log.d("RAND", String.valueOf(rand));
             lineChartValues.add(rand); // 0 ~ 2800 사이의 랜덤값
         }
@@ -77,9 +99,16 @@ public class OneYearFragment extends Fragment {
 
     private void setAvgTime() {
         // 이곳에 DB에서 불러온 운동시간들의 평균 구하는 알고리즘 작성... 추후에 추가
-        Integer hours = 10;
-        Integer minuates = 52;
-        dist_avg_time.setText(hours + "시간 " + minuates + "분");
+        int time = 0;
+        for(int i=0; i<12; i++)
+            time += Integer.parseInt(data.KmRecordYear_time[i]);
+        time /= data.KmRecordYear_time.length;
+        int minutes = time / 60 % 60;
+        int hours = time / 3600;
+        if(hours != 0)
+            dist_avg_time.setText(hours + "시간 " + minutes + "분");
+        else
+            dist_avg_time.setText(minutes + "분");
     }
 
     private void setTodayRecord(String date, String totalTime, String km) {
@@ -99,15 +128,34 @@ public class OneYearFragment extends Fragment {
         // <--- 테이블 --->
         List<OneYearRecordModel> record_list = new ArrayList<>();
         // ***** 이 곳에서 1년 거리 기록 DB 값을 표시합니다(월 단위로, 이번달 기록 제외) *****
-        for (int i = 1; i < 12; i++)
-            record_list.add(new OneYearRecordModel("2022 4월","2시간 33분", "28km"));
+        float value = 0;
+        for (int i = 1; i < 12; i++) {
+            int time = Integer.parseInt(data.KmRecordYear_time[i]);
+            int sec = time % 60;
+            int min = time / 60 % 60;
+            int hour = time / 3600;
 
+            value--;
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.MONTH, (int)value);
+            //cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            SimpleDateFormat df = new SimpleDateFormat("y년 M월");
+
+            if(hour!=0)
+                record_list.add(new OneYearRecordModel(df.format(cal.getTime())+"",
+                        hour+"시간"+min+"분",
+                        data.KmRecordYear_km[i]+"km"));
+            else
+                record_list.add(new OneYearRecordModel(df.format(cal.getTime())+"",
+                        min+"분",
+                        data.KmRecordYear_km[i]+"km"));
+        }
         return record_list;
     }
 
     // 꺾은선그래프 각종 설정
     private void linechartConfigureAppearance() {
-        lineChart.setTouchEnabled(false); // 터치 유무
+        lineChart.setTouchEnabled(true); // 터치 유무
         lineChart.setPinchZoom(false); // 두 손가락으로 줌인,줌아웃 설정
         lineChart.setDrawGridBackground(false); // 격자무늬 유무
         lineChart.getLegend().setEnabled(false); // legend는 차트의 범례
@@ -115,6 +163,11 @@ public class OneYearFragment extends Fragment {
         //lineChart.animateY(1500); // 밑에서부터 올라오는 애니메이션 적용
         lineChart.animateX(500); // 왼쪽-오른쪽 방향의 애니메이션 적용
         lineChart.setExtraBottomOffset(3f); // x축 글씨 잘림 방지
+        // 값 클릭 시 마커뷰 보이도록 설정
+        GraphMarkerView marker = new GraphMarkerView(getContext(), R.layout.graph_marker_view, "dist", 1);
+        marker.setChartView(lineChart);
+        marker.setPadding(0, 0, 0, 5); // 라인그래프는 default가 마커가 딱 붙어서 나옴
+        lineChart.setMarker(marker);
 
         // x축 설정(꺾은선그래프 기준 아래쪽)
         XAxis xAxis = lineChart.getXAxis();
@@ -138,7 +191,10 @@ public class OneYearFragment extends Fragment {
         //xAxis.setSpaceMax(200f); // 차트 맨 오른쪽 간격 띄우기
 
         YAxis yAxisLeft = lineChart.getAxisLeft();
-        yAxisLeft.setAxisMaximum(2801f); // y축 최대값 설정
+        Float max = Float.parseFloat(data.km_max_year);
+        max += max/10;
+        max += 3.7f;
+        yAxisLeft.setAxisMaximum(max); // y축 최대값 설정
         yAxisLeft.setAxisMinimum(0f); // y축 최소값 설정
         yAxisLeft.setDrawLabels(false); // 값 표기 설정
         yAxisLeft.setDrawGridLines(false); // 격자
@@ -180,6 +236,8 @@ public class OneYearFragment extends Fragment {
         set.setCircleSize(4f);
         set.setDrawCircles(true); //선 둥글게 만들기
         set.setDrawFilled(false); //그래프 밑부분 색칠X
+        set.setDrawHorizontalHighlightIndicator(false); // 마커 나올 때 강조 선 안 나오게
+        set.setDrawVerticalHighlightIndicator(false); // 마커 나올 때 강조 선 안 나오게
 
         // 3. [LineData] 보여질 데이터 구성
         LineData data = new LineData(set);

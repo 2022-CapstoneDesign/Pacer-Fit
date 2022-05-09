@@ -21,6 +21,8 @@ import com.example.project.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MyPageFragment extends Fragment {
 
     String bestCalorie_Steps;
@@ -33,7 +35,15 @@ public class MyPageFragment extends Fragment {
     String bestCalorie;
     String bestSteps;
     String bestKm;
+    int userProfileNum;
     int hour, minutes;
+
+    int[] ProfileDrawable = {
+            R.drawable.profile_default, R.drawable.profile_man, R.drawable.profile_man_beard, R.drawable.profile_man_cap,
+            R.drawable.profile_man_hat, R.drawable.profile_man_hood, R.drawable.profile_man_horn, R.drawable.profile_man_round,
+            R.drawable.profile_man_suit, R.drawable.profile_man_sunglass, R.drawable.profile_woman_glasses, R.drawable.profile_woman_neck,
+            R.drawable.profile_woman_old, R.drawable.profile_woman_scarf
+    };
 
     @Nullable
     @Override
@@ -46,10 +56,14 @@ public class MyPageFragment extends Fragment {
         TextView maxKm = v.findViewById(R.id.maxKm);
         TextView maxKcal = v.findViewById(R.id.maxKcal);
         TextView maxTime = v.findViewById(R.id.maxTime);
+        CircleImageView imageView = v.findViewById(R.id.circleImageView);
 
         Intent intent = getActivity().getIntent();
         userID = intent.getStringExtra("userID");
         userName = intent.getStringExtra("userName");
+        userProfileNum = intent.getIntExtra("userProfileNum",0);
+
+        imageView.setImageResource(ProfileDrawable[userProfileNum]);
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
