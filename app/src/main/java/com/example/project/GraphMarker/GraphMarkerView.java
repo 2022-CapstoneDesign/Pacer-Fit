@@ -46,7 +46,7 @@ public class GraphMarkerView extends MarkerView {
         }
         else { // 30일, 1년 마커
             markerbubble.setBackgroundResource(R.drawable.speechbubble_gray);
-            markerbubble.getLayoutParams().width = 180;
+            markerbubble.getLayoutParams().width = 210;
         }
 
         if (type.equals("pedo"))
