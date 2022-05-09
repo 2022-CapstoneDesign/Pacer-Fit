@@ -14,7 +14,8 @@
         tools:layout_editor_absoluteX="41dp"
         tools:layout_editor_absoluteY="52dp" />
 
-    <ScrollView
+    <!-- 그냥 ScrollView는 RecyclerView의 스크롤과 중첩돼 원활한 작동이 안됨 -->
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,30 +34,52 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="WebViewLayout">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="뉴스"
+                android:textSize="20dp"
+                android:padding = "15dp"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textColor="@color/white"
+                />
+
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/main_recycler_view"
+                android:id="@+id/news_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:padding="10dp"
+                android:background="@drawable/feed_round_style" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="피트니스"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:padding="15dp"
+                android:layout_marginTop="20dp"
+                />
 
-            </androidx.recyclerview.widget.RecyclerView>
-
-            <Button
-                android:id="@+id/DetailFrag"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fitness_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Button" />
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/feed_round_style"
+                android:padding="10dp" />
 
-            <WebView
-                android:id="@+id/webview2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+
+
+
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
