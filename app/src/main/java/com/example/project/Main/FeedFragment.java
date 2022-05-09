@@ -25,12 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ChattingFragment extends Fragment{
+public class FeedFragment extends Fragment{
     Button detailfrag;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v=inflater.inflate(R.layout.main_chatting_fragment,container,false);
+        View v=inflater.inflate(R.layout.main_feed_fragment,container,false);
         detailfrag = v.findViewById(R.id.DetailFrag);
         detailfrag.setOnClickListener(new View.OnClickListener() {
 

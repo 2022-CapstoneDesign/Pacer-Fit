@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/include7"
-        layout="@layout/toolbar_chatting"
+        layout="@layout/toolbar_feed"
         tools:layout_editor_absoluteX="41dp"
         tools:layout_editor_absoluteY="52dp" />
 

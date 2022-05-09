@@ -81,7 +81,7 @@ public class BottomNavigation extends AppCompatActivity {
                         menu.findItem(R.id.bottom_2_rank).setIcon(R.drawable.unselected_rank);
                         menu.findItem(R.id.bottom_4_account).setIcon(R.drawable.unselected_account);
                         getSupportFragmentManager().popBackStack();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ChattingFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new FeedFragment()).commit();
                         break;
 
                     case R.id.bottom_4_account:
