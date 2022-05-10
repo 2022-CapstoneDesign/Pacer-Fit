@@ -34,8 +34,11 @@
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable-v24/btn_style2.xml" value="0.3275" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable-v24/btn_style3.xml" value="0.3275" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable-v24/btn_style4.xml" value="0.3275" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable-v24/feed_component_style.xml" value="0.327" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable-v24/feed_round_style.xml" value="0.2435" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/btn_style.xml" value="0.1695" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/custom_auto_highlight.xml" value="0.2375" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/day_round.xml" value="0.2435" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/graph_marker_custom_body.xml" value="0.1" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/graph_marker_custom_tail.xml" value="0.1" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/radiobtn_style.xml" value="0.1" />
@@ -99,7 +102,9 @@
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/login_intro_activity.xml" value="0.2953125" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/login_register_activity.xml" value="0.2953125" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_bottom_navigation.xml" value="0.20923913043478262" />
-        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_chatting_fragment.xml" value="0.20923913043478262" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_chatting_fragment.xml" value="0.33" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_feed_fragment_item.xml" value="0.3242753623188406" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_feed_item.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_home_fragment.xml" value="0.25" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_mypage_fragment.xml" value="0.27708333333333335" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/map_activity.xml" value="0.2115036231884058" />
@@ -121,11 +126,14 @@
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/pedo_stepcounter_activity.xml" value="0.25" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/pedo_toolbar.xml" value="0.24456521739130435" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/rank1_recyclerview_header.xml" value="0.3532608695652174" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/ranking_dist_fragment.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/ranking_dist_item_recylerview.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/ranking_item_recylerview.xml" value="0.3532608695652174" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/ranking_toolbar.xml" value="0.24456521739130435" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/record_circle_fragment.xml" value="0.2305194805194805" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/record_item_layout.xml" value="0.33" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/toolbar.xml" value="0.2758152173913043" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/toolbar_chatting.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/toolbar_mypage.xml" value="0.2115036231884058" />
         <entry key="..\:/Users/dh980/AndroidProjects/Pacer-Fit/app/src/main/res/drawable/view_style.xml" value="0.23" />
         <entry key="..\:/Users/dh980/AndroidProjects/Pacer-Fit/app/src/main/res/layout/activity_login.xml" value="0.36614583333333334" />

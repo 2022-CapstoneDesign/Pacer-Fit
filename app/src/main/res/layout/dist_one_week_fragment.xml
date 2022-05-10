@@ -7,7 +7,7 @@
     android:background="@color/gray_project"
     tools:context=".Dist.OneWeekFragment">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -163,5 +163,5 @@
                     android:layout_height="wrap_content" />
             </TableLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
