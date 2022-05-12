@@ -6,13 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.R;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerUtils;
 
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class YouTubeAdapter extends RecyclerView.Adapter<YouTubeViewHolder> {
     @NonNull
     @Override
     public YouTubeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_you_tube_content, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.youtube_card_you_tube_content, parent, false);
 
         return new YouTubeViewHolder(view);
     }

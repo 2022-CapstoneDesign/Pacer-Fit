@@ -50,6 +50,10 @@
             android:name=".Login.IntroActivity"
             android:exported="false"
             android:theme="@style/IntroTheme" />
+        <activity
+            android:name=".Main.fitnessActivity"
+            android:exported="false"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name=".Map.RecordMapActivity"
             android:hardwareAccelerated="false"
             android:exported="false" />
