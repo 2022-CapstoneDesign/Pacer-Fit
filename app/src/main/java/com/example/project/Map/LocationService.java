@@ -34,9 +34,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.naver.maps.geometry.LatLng;
-import com.naver.maps.map.overlay.PolylineOverlay;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -62,34 +60,32 @@ public class LocationService extends Service {
 
     // 거리
     private double distance = 0.0;
-    // 칼로리
-    private double calories = 0.0;
     // 타이머 변수
     private int time = -1;
     private Timer timer;
     private TimerTask timerTask;
-    int total_sec = 0;
+    private int total_sec = 0;
+    private double accuracy = 8.5;
 
     // 백그라운드 확인 함수
     public boolean isBackground = false;
-
-    //public MapPolyline polyline;
-    private PolylineOverlay curUserPolyline;
-    private List<LatLng> userLocationList;
     // bindService 구현
     private IBinder mIBinder = new MyBinder();
 
     private final LocationCallback mLocationCallback = new LocationCallback() {
+        @RequiresApi(api = Build.VERSION_CODES.P)
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
             locationResult.getLastLocation();
             Location location = locationResult.getLastLocation();
-            if (!isRecord || location.getAccuracy() > 12.0)
+
+            // 타이머가 돌아가지 않거나, 정확도가 accuracy보다 크거나, 포그라운드 상태이면 return
+            if (!isRecord || location.getAccuracy() > accuracy || !isBackground)
                 return;
 
-            userLocationList.add(new LatLng(location.getLatitude(), location.getLongitude()));
-            distance = curDistance(userLocationList);
+            // 리스트에 좌표 추가
+            RecordMapActivity.addList(new LatLng(location.getLatitude(), location.getLongitude()));
             Log.d(TAG, "onLocationResult");
         }
     };
@@ -140,8 +136,8 @@ public class LocationService extends Service {
         displayNotification();
 
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(10000);
+        locationRequest.setInterval(4000);
+        locationRequest.setFastestInterval(2000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -157,6 +153,7 @@ public class LocationService extends Service {
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, mLocationCallback, Looper.getMainLooper());
         startForeground(NOTIFICATION_ID, builder.build());
         startTimer();
+
     }
 
 
@@ -171,10 +168,6 @@ public class LocationService extends Service {
     public void onCreate() {
         super.onCreate();
         intent = new Intent(BROADCAST_ACTION);
-
-        curUserPolyline = new PolylineOverlay();
-        userLocationList = new ArrayList<>();
-
         Log.d("LocationService", "service onCreate");
     }
 
@@ -212,6 +205,7 @@ public class LocationService extends Service {
 
         timer = new Timer();
         timerTask = new TimerTask() {
+            @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
             public void run() {
                 time++;
@@ -224,13 +218,14 @@ public class LocationService extends Service {
                 intent.setAction("etc");
                 intent.putExtra("timer", total_sec);
                 intent.putExtra("distance", distance);
-                intent.putExtra("calories", calories);
                 sendBroadcast(intent);
 
                 // notification 업데이트
                 builder.setContentText(String.format(Locale.KOREA, "%02d:%02d:%02d / %.2f km", hour, min, sec, distance));
-                startForeground(1, builder.build());
+                startForeground(NOTIFICATION_ID, builder.build());
 
+                // 리스트에 담긴 거리 계산
+                distance = curDistance(RecordMapActivity.getList());
 
             }
         };
@@ -246,11 +241,6 @@ public class LocationService extends Service {
         }
     }
 
-    public List<LatLng> getUserLocationList() {
-        return userLocationList;
-
-    }
-
     // 알림 설정
     @SuppressLint("LaunchActivityFromNotification")
     public void displayNotification() {
@@ -260,7 +250,7 @@ public class LocationService extends Service {
                 .addCategory(Intent.CATEGORY_LAUNCHER)
                 .setAction(Intent.ACTION_MAIN);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
-                0, intent, PendingIntent.FLAG_NO_CREATE |  PendingIntent.FLAG_IMMUTABLE);
+                0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
 
         builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.walk_over)
