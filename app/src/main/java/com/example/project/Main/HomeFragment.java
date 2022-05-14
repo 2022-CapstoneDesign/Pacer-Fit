@@ -188,7 +188,6 @@ public class HomeFragment extends Fragment {
 //                Intent intent = new Intent(getActivity(), PopupPedo.class); //Fragment -> Activity로 이동 (만보기팝업)
 //                startActivity(intent);
         });
-
         Weather weatherMethod = new Weather();
         gpsTracker = new GpsTrackerService(ct);
         double latitude = gpsTracker.getLatitude();
@@ -241,7 +240,6 @@ public class HomeFragment extends Fragment {
             //Log.d("RAND", String.valueOf(rand));
             lineChartValues2.add(0f); // 0 ~ 15,000 사이의 랜덤값
         }
-
         linechartConfigureAppearance();
         LineData lineChartData2 = createLinechartData(lineChartValues2);
         lineChart.setData(lineChartData2); // LineData 전달
@@ -255,6 +253,8 @@ public class HomeFragment extends Fragment {
                 boolean success = jsonObject.getBoolean("success");
                 if (success) {
                     System.out.println("31일치 데이터 가져오기 성공");
+                    km_max = jsonObject.getString("km_max_recent");
+                    pedo_max = jsonObject.getString("pedo_max_recent");
                     for (int i = 0; i < 31; i++) {
                         PedoRecord31[i] = jsonObject.getString(beforeMonth31[i]);
                     }
@@ -293,7 +293,6 @@ public class HomeFragment extends Fragment {
         MainPedoRecentRecordRequest mainPedoRecentRecordRequest = new MainPedoRecentRecordRequest(userID, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
         queue.add(mainPedoRecentRecordRequest);
-
         moreBarChartBtn = v.findViewById(R.id.moreBarChartBtn);
         moreBarChartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -432,7 +431,9 @@ public class HomeFragment extends Fragment {
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
-        float pedo_max_float = Float.parseFloat(pedo_max);
+        float pedo_max_float = 0f;
+        pedo_max_float = Float.parseFloat(pedo_max);
+
         axisLeft.setAxisMaximum(pedo_max_float); // y축 최대값 설정
         axisLeft.setAxisMinimum(0f); // y축 최소값 설정
         axisLeft.setDrawLabels(false); // 값 표기 설정
@@ -476,7 +477,9 @@ public class HomeFragment extends Fragment {
         xAxis.setTypeface(tf);
 
         YAxis yAxisLeft = lineChart.getAxisLeft();
-        float km_max_float = Float.parseFloat(km_max);
+        float km_max_float=0f;
+        km_max_float = Float.parseFloat(km_max);
+
         km_max_float += km_max_float/10;
         yAxisLeft.setAxisMaximum(km_max_float); // y축 최대값 설정
         yAxisLeft.setAxisMinimum(0f); // y축 최소값 설정

@@ -16,8 +16,6 @@ public class DistDetailRecordFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     DistRecordData data = new DistRecordData();
-    String[] KmRecord7_km = new String[7];
-    String[] KmRecord7_time = new String[7];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,12 +29,13 @@ public class DistDetailRecordFragment extends Fragment {
         if (getArguments() != null)
         {
             for(int i=0; i<7; i++) {
-                KmRecord7_km[i] = getArguments().getString(i+".day_km"); // HomeFragment에서 받아온 값 넣기
-                KmRecord7_time[i] = getArguments().getString(i+".day_time"); // HomeFragment에서 받아온 값 넣기
+//                KmRecord7_km[i] = getArguments().getString(i+".day_km"); // HomeFragment에서 받아온 값 넣기
+//                KmRecord7_time[i] = getArguments().getString(i+".day_time"); // HomeFragment에서 받아온 값 넣기
 //                System.out.println("getArguments Test =====================Step:" + PedoRecord7[i]);
                 //7일 데이터
-                data.setKmRecord7(i, KmRecord7_km[i], KmRecord7_time[i]);
+//                data.setKmRecord7(i, KmRecord7_km[i], KmRecord7_time[i]);
                 //                System.out.println("getArguments Test =====================Time:" + PedoRecord7[i]);
+                data.setKmRecord7(i, getArguments().getString(i+".day_km"), getArguments().getString(i+".day_time"));
             }
             for(int i=0; i<31; i++){
                 //30일 데이터

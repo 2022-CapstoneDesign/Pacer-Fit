@@ -82,8 +82,17 @@ public class RegisterActivity extends AppCompatActivity {
                         startActivity(new Intent(RegisterActivity.this, LoginActivity.class)); // 로그인 액티비티로 전환
                         finish();
                     } else { // 회원등록에 실패한 경우
-                        Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
-                        return;
+                        String answer = jsonObject.getString("answer");
+                        if(answer.equals("id")){ //id중복
+                            Toast.makeText(getApplicationContext(), "존재하는 아이디입니다", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(answer.equals("name")){ //이름 중복
+                            Toast.makeText(getApplicationContext(), "이미 사용중인 이름입니다", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -94,12 +103,6 @@ public class RegisterActivity extends AppCompatActivity {
             RegisterRequest registerRequest = new RegisterRequest(userID, userPass, userName, userGender, userAge, userheight, userweight, responseListener);
             RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
             queue.add(registerRequest);
-
-            //DB추가 주석 없앨때 아래 2줄 지우기
-            /*
-            startActivity(new Intent(JoinActivity.this, LoginActivity.class)); // 로그인 액티비티로 전환
-            finish();
-             */
         });
     }
 
