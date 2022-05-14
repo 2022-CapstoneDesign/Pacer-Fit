@@ -1,6 +1,7 @@
 package com.example.project.Map;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -71,4 +72,10 @@ public class CrsInfoBottomFragment extends BottomSheetDialogFragment {
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        ((RecordMapActivity)getActivity()).colorInit();
+    }
 }
