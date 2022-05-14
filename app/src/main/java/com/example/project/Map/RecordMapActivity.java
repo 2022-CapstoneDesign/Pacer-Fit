@@ -35,12 +35,17 @@ import com.example.project.Weather.GpsTrackerService;
 import com.example.project.Weather.Weather;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraAnimation;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.overlay.OverlayImage;
+import com.naver.maps.map.overlay.PathOverlay;
 import com.naver.maps.map.overlay.PolylineOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
 
@@ -64,30 +69,46 @@ import java.util.regex.Pattern;
 @RequiresApi(api = Build.VERSION_CODES.P)
 public class RecordMapActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback, MapViewFragment.OnConnectListener {
 
-
-    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
+    // color
+    // gpx 구분하기 위해 여러 색으로 뒀는데, 기준을 주면 좋을 것 같음. ex 코스 레벨
+    int[] ColorEnum = {Color.RED, Color.BLUE, Color.BLACK, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.YELLOW, Color.WHITE};
+    int colorIdx = 0;
 
     // TAG
-    private final String recordTag = "RecordTAG";
-    private final String TAG = "RecordMapActivity";
+    private static final String TAG = "RecordMapActivity";
+    private static final String recordTag = "RecordTAG";
     private static final String TAG_JSON = "pacerfit";
     private static final String TAG_PATH = "gpxPath";
     private static final String TAG_SIGUN = "sigun";
+    private static final String TAG_NAME = "crsKorNm";
+    private static final String TAG_SUMMRAY = "crsSummary";
+    private static final String TAG_TIME = "crsTotlRqrmHour";
+    private static final String TAG_LEVEL = "crsLevel";
+    private static final String TAG_DIST = "crsDstnc";
 
-    // 네이버 맵 변수
+    // 네이버 맵, 맵 관련 변수
     private MapView mapView;
     private NaverMap naverMap;
+
+    // 맵 위치
     private FusedLocationSource locationSource;
+
+    // 폴리라인
     private PolylineOverlay curUserPolyline;
+    // 유저 위치 리스트
     public static List<LatLng> latLngList;
 
+    // 시작지점 체크
     private boolean startPoint = false;
+    // 백그라운드 체크
     private boolean isBackground = false;
+    // 거리 측정 확인 변수
+    private boolean isRecord = false;
 
     // Fragment
     private MapViewFragment mapViewFrag;
     private RecordFragment recordFrag;
+    private CrsInfoBottomFragment crsInfoBottomFragment;
 
     // FloatingActionButton
     private FloatingActionButton recordStartFab;
@@ -113,30 +134,46 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     // Service bind
     private LocationService mService;
+
+    // 몸무게
     private double userKg;
+    // 칼로리 계산 변수 (산소)
     private double MET = 0.0;
 
     // 서비스 <-> 액티비티 통신
     private MyBroadcast br;
     private IntentFilter filter;
 
+    // weather
     private GpsTrackerService gpsTracker;
     private String address = ""; // x,y는 격자x,y좌표
-    private String location = null;
+    private String location = "";
     private String pathJsonString;
     private ArrayList<HashMap<String, String>> pathArrayList;
 
+    // 코스 정보 리스트
+    private ArrayList<String> crsNameList;
+    private ArrayList<String> crsSummaryList;
+    private ArrayList<String> crsTimeList;
+    private ArrayList<String> crsLevelList;
+    private ArrayList<String> crsDistList;
+    private ArrayList<PolylineOverlay> crsPolylineOverlays;
+    private ArrayList<Marker> crsMarkers;
 
-    // 리스트 반환
+    // 마커 listener
+    private InfoWindow infoWindow;
+
+    // 서비스 <- 액티비티 위치 리스트 반환
     public static List<LatLng> getList() {
         return latLngList;
     }
 
-    // 리스트 추가
+    // 서비스 -> 액티비티 위치 리스트 추가
     public static void addList(LatLng latLng) {
         latLngList.add(new LatLng(latLng.latitude, latLng.longitude));
     }
 
+    // 서비스와 binder 연결
     ServiceConnection sconn = new ServiceConnection() {
         @Override //서비스가 실행될 때 호출
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -152,6 +189,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         }
     };
 
+    // fragment <-> activity 연결 후 mapView 변수 연결
     @Override
     public void onConnect(MapView mapView) {
         if (mapView != null) {
@@ -166,12 +204,14 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_record_activity);
 
+        // 맵 화면
         if (mapViewFrag == null) {
             mapViewFrag = new MapViewFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.mainFrame, mapViewFrag).commit();
         }
 
-        locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+        // 위치 변수 생성
+        locationSource = new FusedLocationSource(this, Constants.LOCATION_PERMISSION_REQUEST_CODE);
 
         // FloatingActionButton
         recordStartFab = findViewById(R.id.recordStartFab);
@@ -196,11 +236,19 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         registerReceiver(br, filter);
 
 
+        // 유저의 위치, 폴리라인 리스트 생성 및 설정
         latLngList = new ArrayList<>();
         curUserPolyline = new PolylineOverlay();
         curUserPolyline.setWidth(10);
         curUserPolyline.setColor(Color.RED);
 
+        // 코스들 폴리라인, 마커 리스트 생성
+        crsPolylineOverlays = new ArrayList<>();
+        crsMarkers = new ArrayList<>();
+        infoWindow = new InfoWindow();
+
+
+        // 유저 몸무게 받아오기 (db에서 받아오기)
         userKg = 50.0;
 
         Weather weatherMethod = new Weather();
@@ -208,45 +256,65 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         double latitude = gpsTracker.getLatitude();
         double longitude = gpsTracker.getLongitude();
 
-
         address = weatherMethod.getCurrentAddress(this, latitude, longitude);
         String[] local = address.split(" ");  //주소를 대한민국, 서울특별시, xx구 ... 로 나눔
         local[1] = AreaChange(local[1]);  //서울특별시, 경기도등의 이름을 db에 맞게 수정
         location = (local[1] + " " + local[2]);
         Log.d(TAG, "location - " + location);
+
+        // 코스 리스트들 생성
         pathArrayList = new ArrayList<>();
+        crsNameList = new ArrayList<>();
+        crsSummaryList = new ArrayList<>();
+        crsTimeList = new ArrayList<>();
+        crsLevelList = new ArrayList<>();
+        crsDistList = new ArrayList<>();
 
         GetGpxPathData task = new GetGpxPathData();
         task.execute("http://pacerfit.dothome.co.kr/getPathWithArea.php");
-
-
     }
 
-
+    // 맵이 생성되면 불려지는 callback 함수
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
+        // 네이버 맵 설정
         this.naverMap = naverMap;
 
+        // 위치
         naverMap.setLocationSource(locationSource);
-        // 트래킹 모드
-        naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
+
+        // 지도를 클릭하면 정보 창을 닫기
+        naverMap.setOnMapClickListener((coord, point) -> {
+            infoWindow.close();
+        });
+
+        // 정보 창의 어댑터 지정
+        infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(getApplicationContext()) {
+            @NonNull
+            @Override
+            public CharSequence getText(@NonNull InfoWindow infoWindow) {
+                // 정보 창이 열린 마커의 tag를 텍스트로 노출하도록 반환
+                return (CharSequence) infoWindow.getMarker().getTag();
+            }
+        });
+
+        // 트래킹 모드 (추적 안함)
+        naverMap.setLocationTrackingMode(LocationTrackingMode.NoFollow);
 
         // 위치 변경 리스너
         naverMap.addOnLocationChangeListener(location -> {
-            // 액티비티가 포그라운드 상태이면
-            if (!isBackground && location.getAccuracy() < 50) {
-                // 평균 속도
+            // 액티비티가 포그라운드 상태이고 운동이 시작된 상태이면
+            if (isRecord && !isBackground && location.getAccuracy() < 8.5) {
+                // 속도가 있으면 평균 속도 구하기
                 if (location.hasSpeed())
                     avgSpeed = location.getSpeed() * 3600 / 1000;
                 Toast.makeText(getApplicationContext(), "정확도: " + location.getAccuracy() + "속도: " + avgSpeed, Toast.LENGTH_SHORT).show();
 
-
                 // 리스트 추가
                 addList(new LatLng(location.getLatitude(), location.getLongitude()));
 
-
+                // 칼로리 계산 변수
                 if (avgSpeed >= 3.5) {
-                    // 칼로리 계산 변수
                     MET = 3.8;
                 } else if (avgSpeed <= 3.5 && avgSpeed >= 1.0) {
                     MET = 3.0;
@@ -265,6 +333,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         Log.d(TAG, "onMapReady");
     }
 
+    // 권한 요청
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -286,7 +355,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             if (intent != null) {
                 if (intent.getAction() != null) {
                     if (intent.getAction().equals("etc")) {
-
+                        // 출발 지점 표시
                         if (!startPoint && !latLngList.isEmpty()) {
                             startPoint = true;
                             makeMarker("출발지점", latLngList.get(0).latitude, latLngList.get(0).longitude);
@@ -383,8 +452,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     // 시작 기능
     public void StartFab() {
+
+        // 권한 체크 후 서비스 시작
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(RecordMapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
+            ActivityCompat.requestPermissions(RecordMapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.REQUEST_CODE_LOCATION_PERMISSION);
         } else {
             startLocationService();
         }
@@ -401,8 +472,14 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         getSupportFragmentManager().beginTransaction().
                 add(R.id.mainFrame, recordFrag, recordTag).
                 hide(recordFrag).commit();
+
+        // 맵 <-> 기록
         MapToRecord();
 
+        isRecord = true;
+
+        // 트래킹 모드 follow
+        naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
 
         // 로그
         Log.d(TAG, "StartFab");
@@ -411,6 +488,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 정지 기능
     public void PauseFab() {
         // 트래킹 중지
+        naverMap.setLocationTrackingMode(LocationTrackingMode.NoFollow);
 
         // 서비스 타이머 정지
         mService.pauseTimer();
@@ -429,6 +507,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 재개 기능
     public void ResumeFab() {
         // 트래킹 시작
+        naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
 
         // 서비스 타이머 시작
         mService.startTimer();
@@ -483,20 +562,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         toMapFab.show();
     }
 
-    /*
-        // 권한
-        @Override
-        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startLocationService();
-                } else {
-                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    */
     // 서비스 실행 여부 체크
     private boolean isLocationServiceRunning() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -556,7 +621,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         return cal;
     }
 
-
     private class GetGpxPathData extends AsyncTask<String, Void, String> {
         ProgressDialog progressDialog;
         String errorString = null;
@@ -574,16 +638,25 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 showResult();
                 new Thread() {
                     public void run() {
-                        String gpxpt = getData();
-                        Bundle bun = new Bundle();
-                        bun.putString("gpxpt", gpxpt);
-                        Message msg = handler.obtainMessage();
-                        msg.setData(bun);
-                        handler.sendMessage(msg);
+                        for (int i = 0; i < pathArrayList.size(); i++) {
+                            String gpxpt = getData(i);
+                            Bundle bun = new Bundle();
+                            bun.putString("gpxpt", gpxpt);
+                            bun.putInt("color", i);
+                            bun.putString("name", crsNameList.get(i));
+                            bun.putString("summary", crsSummaryList.get(i));
+                            bun.putString("time", crsTimeList.get(i));
+                            bun.putString("level", crsLevelList.get(i));
+                            bun.putString("dist", crsDistList.get(i));
+                            Message msg = handler.obtainMessage();
+                            msg.setData(bun);
+                            handler.sendMessage(msg);
+                        }
                     }
                 }.start();
             }
         }
+
 
         @Override
         protected String doInBackground(String... params) {
@@ -644,9 +717,14 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
                 JSONObject item = jsonArray.getJSONObject(i);
 
+                // 코스 정보 리스트에 저장
                 String gpxPath = item.getString(TAG_PATH);
                 String sigun = item.getString(TAG_SIGUN);
-
+                String name = item.getString(TAG_NAME);
+                String summary = item.getString(TAG_SUMMRAY);
+                String time = item.getString(TAG_TIME);
+                String level = item.getString(TAG_LEVEL);
+                String dist = item.getString(TAG_DIST);
 
                 HashMap<String, String> hashMap = new HashMap<>();
 
@@ -654,6 +732,11 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 hashMap.put(TAG_SIGUN, sigun);
 
                 pathArrayList.add(hashMap);
+                crsNameList.add(name);
+                crsSummaryList.add(summary);
+                crsTimeList.add(time);
+                crsLevelList.add(level);
+                crsDistList.add(dist);
 
             }
         } catch (JSONException e) {
@@ -662,7 +745,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     }
 
 
-    private String getData() {
+    private String getData(int index) {
 
         String gpxpt = "";
         URL url = null;
@@ -671,54 +754,53 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         BufferedReader br = null;
         int size = pathArrayList.size();
 
-        if (size >= 2) {
-            HashMap<String, String> hashMap1 = pathArrayList.get(0);
-            HashMap<String, String> hashMap2 = pathArrayList.get(1);
-            HashMap<String, String> hashMap3 = pathArrayList.get(2);
 
-            try {
-                url = new URL(hashMap3.get(TAG_PATH));
-                http = (HttpURLConnection) url.openConnection();
-                http.setConnectTimeout(3 * 1000);
-                http.setReadTimeout(3 * 1000);
-                isr = new InputStreamReader(http.getInputStream());
-                br = new BufferedReader(isr);
-                String str = null;
-                while ((str = br.readLine()) != null) {
-                    if (str.contains("trkpt")) {
-                        Pattern pattern = Pattern.compile("[\"](.*?)[\"]");
-                        Matcher matcher = pattern.matcher(str);
-                        while (matcher.find()) {  // 일치하는 게 있다면
-                            gpxpt += matcher.group(1) + " ";
-                            if (matcher.group(1) == null)
-                                break;
+        HashMap<String, String> hashMap3 = pathArrayList.get(index);
 
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                Log.e("Exception", e.toString());
-            } finally {
-                if (http != null) {
-                    try {
-                        http.disconnect();
-                    } catch (Exception e) {
-                    }
-                }
-                if (isr != null) {
-                    try {
-                        isr.close();
-                    } catch (Exception e) {
-                    }
-                }
-                if (br != null) {
-                    try {
-                        br.close();
-                    } catch (Exception e) {
+        try {
+            url = new URL(hashMap3.get(TAG_PATH));
+            http = (HttpURLConnection) url.openConnection();
+            http.setConnectTimeout(3 * 1000);
+            http.setReadTimeout(3 * 1000);
+            isr = new InputStreamReader(http.getInputStream());
+            br = new BufferedReader(isr);
+            String str = null;
+            while ((str = br.readLine()) != null) {
+                if (str.contains("trkpt")) {
+                    Pattern pattern = Pattern.compile("[\"](.*?)[\"]");
+                    Matcher matcher = pattern.matcher(str);
+                    while (matcher.find()) {  // 일치하는 게 있다면
+                        gpxpt += matcher.group(1) + " ";
+                        if (matcher.group(1) == null)
+                            break;
+
                     }
                 }
             }
+        } catch (Exception e) {
+            Log.e("Exception", e.toString());
+        } finally {
+            if (http != null) {
+                try {
+                    http.disconnect();
+                } catch (Exception e) {
+                }
+            }
+            if (isr != null) {
+                try {
+                    isr.close();
+                } catch (Exception e) {
+                }
+            }
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (Exception e) {
+                }
+            }
         }
+
+        System.out.println("gpxpt: " + gpxpt);
         return gpxpt;
     }
 
@@ -728,20 +810,96 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             Bundle bun = msg.getData();
             String gpxpt = bun.getString("gpxpt");
             String[] latLon = gpxpt.split(" ");
+            String name = bun.getString("name");
+            String summary = bun.getString("summary");
+            String time = bun.getString("time");
+            String level = bun.getString("level");
+            String dist = bun.getString("dist");
+            int color = bun.getInt("color");
             List<LatLng> COORDS = new ArrayList<>();
             for (int i = 0; i < latLon.length; i += 2) {
-                COORDS.add(new LatLng(Double.valueOf(latLon[i]), Double.valueOf(latLon[i + 1])));
+                try {
+                    if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7) continue;
+                    COORDS.add(new LatLng(Double.valueOf(latLon[i]), Double.valueOf(latLon[i + 1])));
+                } catch (NumberFormatException e) {
+                    // 문자열을 숫자로 인식할때 예외처리
+                    // java.lang.NumberFormatException: For input string: "http://www.topografix.com/GPX/1/1" 에러
+                } catch (Exception e) {
+                    //다른 에러 예외처리
+                }
+
             }
-            PolylineOverlay polylineOverlay1 = new PolylineOverlay();
-            polylineOverlay1.setWidth(10);
-            polylineOverlay1.setCoords(COORDS);
-            polylineOverlay1.setColor(Color.GREEN);
-            polylineOverlay1.setMap(naverMap);
+            if (COORDS.size() > 2) {
+                PolylineOverlay polylineOverlay1 = new PolylineOverlay();
+                polylineOverlay1.setWidth(10);
+                polylineOverlay1.setCoords(COORDS);
+                polylineOverlay1.setTag(name);
+                polylineOverlay1.setColor(ColorEnum[color % ColorEnum.length]);
+                makeGPXMarker(name, summary, time, level, dist, COORDS.get(0).latitude, COORDS.get(0).longitude, color % ColorEnum.length);
+                polylineOverlay1.setMap(naverMap);
+                crsPolylineOverlays.add(polylineOverlay1);
+            }
 
         }
 
 
     };
+
+    public void makeGPXMarker(String GPXName, String summary, String time, String level, String dist, double lat, double lng, int color) {
+        Marker marker = new Marker();
+        marker.setPosition(new LatLng(lat, lng));
+        marker.setCaptionText(GPXName);
+        marker.setMap(naverMap);
+        marker.setTag(GPXName);
+        marker.setIconTintColor(ColorEnum[color]);
+
+        Overlay.OnClickListener listener = overlay -> {
+            Toast.makeText(getApplicationContext(), "마커 " + overlay.getTag() + " 클릭됨",
+                    Toast.LENGTH_SHORT).show();
+
+            if (marker.getInfoWindow() == null) {
+                // 현재 마커에 정보 창이 열려있지 않을 경우 엶
+                infoWindow.open(marker);
+
+            } else {
+                // 이미 현재 마커에 정보 창이 열려있을 경우 닫음
+                infoWindow.close();
+            }
+            CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(lat, lng))
+                    .animate(CameraAnimation.Easing);
+            naverMap.moveCamera(cameraUpdate);
+
+            crsInfoBottomFragment = new CrsInfoBottomFragment(getApplicationContext(), GPXName, summary, time, level, dist);
+            crsInfoBottomFragment.show(getSupportFragmentManager(), crsInfoBottomFragment.getTag());
+
+            return true;
+        };
+        marker.setOnClickListener(listener);
+        crsMarkers.add(marker);
+    }
+
+    public void selectCrs(String crsName) {
+        int curIndex = 0;
+        for (PolylineOverlay polylineOverlay : crsPolylineOverlays) {
+            if (polylineOverlay.getTag().equals(crsName)) {
+                PathOverlay pathOverlay = new PathOverlay(polylineOverlay.getCoords());
+                pathOverlay.setTag(crsName);
+                pathOverlay.setWidth(20);
+                pathOverlay.setColor(Color.RED);
+                pathOverlay.setMap(naverMap);
+                CameraUpdate cameraUpdate = CameraUpdate.fitBounds(polylineOverlay.getBounds(), 100,100,100,100).animate(CameraAnimation.Easing);
+                naverMap.moveCamera(cameraUpdate);
+                Log.d(TAG, curIndex + " crsName: " + polylineOverlay.getTag());
+            }
+
+            polylineOverlay.setMap(null);
+            crsMarkers.get(curIndex).setMap(null);
+            Log.d(TAG, curIndex + " setNull " + polylineOverlay.getTag());
+            curIndex++;
+        }
+        crsPolylineOverlays.clear();
+        crsMarkers.clear();
+    }
 
 
     public String AreaChange(String area) {
