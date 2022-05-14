@@ -28,7 +28,7 @@ public class DetailBottomFragment extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.help_bottom_fragment, container, false);
+        View view = inflater.inflate(R.layout.map_detail_bottom_fragment, container, false);
         return view;
     }
 }

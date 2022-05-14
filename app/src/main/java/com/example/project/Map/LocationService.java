@@ -23,6 +23,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -40,19 +41,12 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 public class LocationService extends Service {
 
-
     public static final String TAG = "LocationService";
-    public static final String BROADCAST_ACTION = "LocationService";
     private Intent intent;
 
 
-    // notification
-    private final String CHANNEL_ID = "notification_channel";
-    private final int NOTIFICATION_ID = 1;
-    private final CharSequence name = "map channel";
     private String description = "map";
     private NotificationCompat.Builder builder;
     private NotificationManagerCompat notificationManagerCompat;
@@ -96,10 +90,6 @@ public class LocationService extends Service {
         }
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mIBinder;
-    }
 
     // 두 위치의 거리 계산 함수
     public double getDistance(Double lat1, Double lon1, Double lat2, Double lon2) {
@@ -131,6 +121,7 @@ public class LocationService extends Service {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     private void startLocationService() {
         createNotificationChannel();
         displayNotification();
@@ -151,7 +142,8 @@ public class LocationService extends Service {
             return;
         }
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, mLocationCallback, Looper.getMainLooper());
-        startForeground(NOTIFICATION_ID, builder.build());
+
+        notificationManagerCompat.notify(Constants.NOTIFICATION_ID, builder.build());
         startTimer();
 
     }
@@ -167,10 +159,11 @@ public class LocationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        intent = new Intent(BROADCAST_ACTION);
+        intent = new Intent(Constants.BROADCAST_ACTION);
         Log.d("LocationService", "service onCreate");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
@@ -188,15 +181,29 @@ public class LocationService extends Service {
 
 
     @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        stopSelf();
+    }
+
+    @Override
     public void onDestroy() {
         // handler.removeCallbacks(sendUpdatesToUI);
         super.onDestroy();
+
+
         pauseTimer();
         if (notificationManagerCompat != null)
-            notificationManagerCompat.cancel(NOTIFICATION_ID);
+            notificationManagerCompat.cancel(Constants.NOTIFICATION_ID);
 
         stopLocationService();
         Log.v(TAG, "onDestroy");
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mIBinder;
     }
 
     // 타이머 기능 + 데이터 전송
@@ -222,7 +229,7 @@ public class LocationService extends Service {
 
                 // notification 업데이트
                 builder.setContentText(String.format(Locale.KOREA, "%02d:%02d:%02d / %.2f km", hour, min, sec, distance));
-                startForeground(NOTIFICATION_ID, builder.build());
+                notificationManagerCompat.notify(Constants.NOTIFICATION_ID, builder.build());
 
                 // 리스트에 담긴 거리 계산
                 distance = curDistance(RecordMapActivity.getList());
@@ -242,25 +249,28 @@ public class LocationService extends Service {
     }
 
     // 알림 설정
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @SuppressLint("LaunchActivityFromNotification")
     public void displayNotification() {
         createNotificationChannel();
-        Intent intent = new Intent(this, NotificationBroadcast.class)
+        Intent tapIntent = new Intent(getApplicationContext(), NotificationBroadcast.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .addCategory(Intent.CATEGORY_LAUNCHER)
                 .setAction(Intent.ACTION_MAIN);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
-                0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+                0, tapIntent, PendingIntent.FLAG_NO_CREATE |  PendingIntent.FLAG_IMMUTABLE);
 
-        builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        builder = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
                 .setSmallIcon(R.drawable.walk_over)
                 .setContentTitle("걷기")
                 .setContentText("00:00:00 / 0.0 km")
                 .setPriority(NotificationManagerCompat.IMPORTANCE_DEFAULT) // 알림음 없음
                 .setContentIntent(pendingIntent)
                 .setOngoing(true); // 알림바 지우지 못하게 유지
+
         notificationManagerCompat = NotificationManagerCompat.from(this);
-        startForeground(NOTIFICATION_ID, builder.build());
+        notificationManagerCompat.notify(Constants.NOTIFICATION_ID, builder.build());
+
     }
 
     // 알림 채널 생성
@@ -268,7 +278,7 @@ public class LocationService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_LOW;
 
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            NotificationChannel notificationChannel = new NotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_NAME, importance);
             notificationChannel.setDescription(description);
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);
@@ -276,7 +286,7 @@ public class LocationService extends Service {
     }
 
     public void destroyNotification() {
-        notificationManagerCompat.cancel(NOTIFICATION_ID);
+        notificationManagerCompat.cancel(Constants.NOTIFICATION_ID);
     }
 
 }

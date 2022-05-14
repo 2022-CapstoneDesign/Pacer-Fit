@@ -33,4 +33,5 @@
     <color name="darkgreen_project">#07724A</color>
     <color name="darkgreen2_project">#08A268</color>
     <color name="graph_blue">#6563FF</color>
+    <color name="colorContainerBackground">#1F1B1B</color>
 </resources>
