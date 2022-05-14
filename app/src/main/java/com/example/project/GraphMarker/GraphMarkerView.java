@@ -42,7 +42,7 @@ public class GraphMarkerView extends MarkerView {
 
         if (period == 6) { // 6개월 마커
             markerbubble.setBackgroundResource(R.drawable.speechbubble_gray_large);
-            markerbubble.getLayoutParams().width = 330;
+            markerbubble.getLayoutParams().width = 360;
         }
         else { // 30일, 1년 마커
             markerbubble.setBackgroundResource(R.drawable.speechbubble_gray);

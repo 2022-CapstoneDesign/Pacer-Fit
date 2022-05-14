@@ -60,7 +60,7 @@ public class BottomNavigation extends AppCompatActivity {
                     case R.id.bottom_1_home: //bottom_menu의 id를 가져옴
                         item.setIcon(R.drawable.bottom_home);
                         menu.findItem(R.id.bottom_2_rank).setIcon(R.drawable.unselected_rank);
-                        menu.findItem(R.id.bottom_3_chat).setIcon(R.drawable.unselected_chat);
+                        menu.findItem(R.id.bottom_3_feed).setIcon(R.drawable.unselected_feed);
                         menu.findItem(R.id.bottom_4_account).setIcon(R.drawable.unselected_account);
                         getSupportFragmentManager().popBackStack();
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new HomeFragment()).commit();
@@ -69,26 +69,26 @@ public class BottomNavigation extends AppCompatActivity {
                     case R.id.bottom_2_rank:
                         item.setIcon(R.drawable.bottom_rank);
                         menu.findItem(R.id.bottom_1_home).setIcon(R.drawable.unselected_home);
-                        menu.findItem(R.id.bottom_3_chat).setIcon(R.drawable.unselected_chat);
+                        menu.findItem(R.id.bottom_3_feed).setIcon(R.drawable.unselected_feed);
                         menu.findItem(R.id.bottom_4_account).setIcon(R.drawable.unselected_account);
                         getSupportFragmentManager().popBackStack();
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new RankingFragment()).commit();
                         break;
 
-                    case R.id.bottom_3_chat:
-                        item.setIcon(R.drawable.bottom_chat);
+                    case R.id.bottom_3_feed:
+                        item.setIcon(R.drawable.bottom_feed);
                         menu.findItem(R.id.bottom_1_home).setIcon(R.drawable.unselected_home);
                         menu.findItem(R.id.bottom_2_rank).setIcon(R.drawable.unselected_rank);
                         menu.findItem(R.id.bottom_4_account).setIcon(R.drawable.unselected_account);
                         getSupportFragmentManager().popBackStack();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ChattingFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new FeedFragment()).commit();
                         break;
 
                     case R.id.bottom_4_account:
                         item.setIcon(R.drawable.bottom_account);
                         menu.findItem(R.id.bottom_1_home).setIcon(R.drawable.unselected_home);
                         menu.findItem(R.id.bottom_2_rank).setIcon(R.drawable.unselected_rank);
-                        menu.findItem(R.id.bottom_3_chat).setIcon(R.drawable.unselected_chat);
+                        menu.findItem(R.id.bottom_3_feed).setIcon(R.drawable.unselected_feed);
                         getSupportFragmentManager().popBackStack();
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new MyPageFragment()).commit();
                         break;

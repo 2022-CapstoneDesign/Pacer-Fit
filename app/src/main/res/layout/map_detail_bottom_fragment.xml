@@ -7,7 +7,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="246dp"
+        android:layout_height="300dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +45,7 @@
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/nanumsquareroundeb"
             android:lineSpacingExtra="10dp"
-            android:text="도움말 더보기를 누르면 나오는 설명창입니다. \n추가적인 기능이나 내용들을 알려줍니다.        "
+            android:text="거리 운동은 \n운동한 거리, 운동시간, 칼로리소모량이 측정됩니다. \n\n운동하신 기록은 \n'Home > 기록-거리' 에 저장되니 \n더보기를 눌러 확인 가능합니다.\n\n또한 거리 데이터가 랭킹에도 측정됩니다."
             android:textColor="@color/whitegray_project"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"

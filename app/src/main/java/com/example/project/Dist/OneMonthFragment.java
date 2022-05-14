@@ -194,7 +194,7 @@ public class OneMonthFragment extends Fragment {
         YAxis yAxisLeft = lineChart.getAxisLeft();
         Float max = Float.parseFloat(data.km_max_month);
         max += max/10;
-        max += 1.8f;
+        max += max/3;
         yAxisLeft.setAxisMaximum(max); // y축 최대값 설정
         yAxisLeft.setAxisMinimum(0f); // y축 최소값 설정
         yAxisLeft.setDrawLabels(false); // 값 표기 설정
