@@ -195,7 +195,8 @@ public class OneYearFragment extends Fragment {
 
         // y축 설정(막대그래프 기준 왼쪽)
         YAxis axisLeft = barChart.getAxisLeft();
-        Float max = Float.parseFloat(data.pedo_max_year) + 2600;
+        Float max = Float.parseFloat(data.pedo_max_year);
+        max += max/3;
         axisLeft.setAxisMaximum(max); // y축 최대값 설정
         axisLeft.setAxisMinimum(0f); // y축 최소값 설정
         axisLeft.setDrawLabels(false); // 값 표기 설정

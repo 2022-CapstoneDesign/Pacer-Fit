@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.46" />
+                app:layout_constraintGuide_begin="189dp" />
 
             <TextView
                 android:id="@+id/hours"
@@ -111,7 +111,7 @@
                 android:layout_marginStart="30dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:gravity="right"
-                android:text="0h 0m 0s"
+                android:text="0H 0M 0S"
                 android:textColor="#00A2F9"
                 android:textSize="23dp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/hours"
@@ -157,7 +157,7 @@
                 android:layout_marginStart="30dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:gravity="right"
-                android:text="0kcal"
+                android:text="0.0kcal"
                 android:textColor="#00A2F9"
                 android:textSize="23dp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/pedo_cal_text"

@@ -17,8 +17,6 @@ public class DetailRecordFragment extends Fragment {
     private ViewPager viewPager;
 
     PedoRecordData data = new PedoRecordData();
-    String[] PedoRecord7_step = new String[7];
-    String[] PedoRecord7_time = new String[7];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,16 +26,11 @@ public class DetailRecordFragment extends Fragment {
         viewPager = v.findViewById(R.id.barchart_viewpager);
         tabLayout.setupWithViewPager(viewPager);
 
-        //나중에 코드 정리하기
         if (getArguments() != null)
         {
             for(int i=0; i<7; i++) {
-                PedoRecord7_step[i] = getArguments().getString(i+".day_step"); // HomeFragment에서 받아온 값 넣기
-                PedoRecord7_time[i] = getArguments().getString(i+".day_time"); // HomeFragment에서 받아온 값 넣기
-//                System.out.println("getArguments Test =====================Step:" + PedoRecord7[i]);
                 //7일 데이터
-                data.setPedoRecord7(i, PedoRecord7_step[i], PedoRecord7_time[i]);
-               //                System.out.println("getArguments Test =====================Time:" + PedoRecord7[i]);
+                data.setPedoRecord7(i, getArguments().getString(i+".day_step"), getArguments().getString(i+".day_time"));
             }
             for(int i=0; i<31; i++){
                 //30일 데이터

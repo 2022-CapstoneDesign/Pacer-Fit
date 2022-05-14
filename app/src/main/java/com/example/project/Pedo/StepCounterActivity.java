@@ -29,13 +29,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.project.Main.HomeFragment;
-import com.example.project.Map.DetailBottomFragment;
 import com.example.project.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -179,8 +179,8 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
             @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
             public void onClick(View map) {
-                DetailBottomFragment helpFragment = new DetailBottomFragment(getApplicationContext());
-                helpFragment.show(getSupportFragmentManager(), helpFragment.getTag());
+                PedoDetailBottomFragment helpPedoFragment = new PedoDetailBottomFragment(getApplicationContext());
+                helpPedoFragment.show(getSupportFragmentManager(), helpPedoFragment.getTag());
             }
         });
     }
@@ -216,6 +216,9 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
             int dayOfMonth = now.getDayOfMonth();
             date_concat = monthValue + "m" + dayOfMonth + "d";
         }
+        SaveMyRecordDB();
+    }
+    public void SaveMyRecordDB(){
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -223,9 +226,9 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
                     System.out.println("========================" + response);
                     JSONObject jsonObject = new JSONObject(response);
                     boolean success = jsonObject.getBoolean("success");
-                    if (success) { // 만보기 클릭시
+                    if (success) { // 만보기 값 저장완료
                         System.out.println("성공");
-                    } else { // 로그인에 실패한 경우
+                    } else { // 실패한경우 강제종료
                         return;
                     }
                 } catch (JSONException e) {
@@ -237,7 +240,12 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
         RequestQueue queue = Volley.newRequestQueue(StepCounterActivity.this);
         queue.add(pedoRecordSaveRequest);
     }
-
+//    홈버튼 눌렀을때 이벤트 처리
+//    @Override
+//    protected void onUserLeaveHint() {
+//        super.onUserLeaveHint();
+//        SaveMyRecordDB();
+//    }
     @Override
     protected void onResume(){
         super.onResume();
@@ -297,10 +305,16 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
                 int hour = time / 3600;
 
                 runOnUiThread(new Runnable() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void run() {
                         // textview의 값들이 계속 null로 나와서 여기에 뒀습니다.
+                        // 현재 시간
+                        LocalTime now = LocalTime.now();
+                        if(now.getHour()==0&&now.getMinute()==0&&now.getSecond()==0){
+                            time=0; currentSteps=0; calories=0;
+                        }
                         pedoStep = findViewById(R.id.pedo_step);
                         pedoTime = findViewById(R.id.pedo_time);
                         pedoCal = findViewById(R.id.pedo_cal);
@@ -311,6 +325,9 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
                         if (pedoCal != null) {
                             //calories = (currentSteps*((0.0007*Integer.parseInt(userKg))+0.04));
                             pedoCal.setText(String.format("%.2f",calories) + "kcal");
+                        }
+                        if(sec%10==0){//10초마다 db저장.
+                            SaveMyRecordDB();
                         }
                     }
                 });

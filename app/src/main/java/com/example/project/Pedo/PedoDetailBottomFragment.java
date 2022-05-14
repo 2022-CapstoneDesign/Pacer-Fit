@@ -1,4 +1,4 @@
-package com.example.project.Map;
+package com.example.project.Pedo;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,10 +12,10 @@ import androidx.annotation.Nullable;
 import com.example.project.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class DetailBottomFragment extends BottomSheetDialogFragment {
+public class PedoDetailBottomFragment extends BottomSheetDialogFragment {
     Context context;
 
-    public DetailBottomFragment(Context context) {
+    public PedoDetailBottomFragment(Context context) {
         this.context = context;
     }
 
@@ -28,7 +28,8 @@ public class DetailBottomFragment extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.map_detail_bottom_fragment, container, false);
+        View view = inflater.inflate(R.layout.pedo_help_bottom_fragment, container, false);
         return view;
     }
 }
+
