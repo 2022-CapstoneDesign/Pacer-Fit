@@ -2,6 +2,7 @@ package com.example.project.Main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.project.Pedo.PedoRecordRequest;
 import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
+import com.ramotion.foldingcell.FoldingCell;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +40,10 @@ public class MyPageFragment extends Fragment {
     int userProfileNum;
     int hour, minutes;
 
+    FoldingCell foldingCell;
+    String userWeight;
+
+
     int[] ProfileDrawable = {
             R.drawable.profile_default, R.drawable.profile_man, R.drawable.profile_man_beard, R.drawable.profile_man_cap,
             R.drawable.profile_man_hat, R.drawable.profile_man_hood, R.drawable.profile_man_horn, R.drawable.profile_man_round,
@@ -58,10 +64,14 @@ public class MyPageFragment extends Fragment {
         TextView maxTime = v.findViewById(R.id.maxTime);
         CircleImageView imageView = v.findViewById(R.id.circleImageView);
 
+        TextView heightTxt = v.findViewById(R.id.heightTxt);
+        TextView weightTxt = v.findViewById(R.id.weightTxt);
+
         Intent intent = getActivity().getIntent();
         userID = intent.getStringExtra("userID");
         userName = intent.getStringExtra("userName");
         userProfileNum = intent.getIntExtra("userProfileNum",0);
+        userWeight = intent.getStringExtra("userWeight");
 
         imageView.setImageResource(ProfileDrawable[userProfileNum]);
 
@@ -116,6 +126,18 @@ public class MyPageFragment extends Fragment {
         MyPageBestRecordRequest myPageBestRecordRequest = new MyPageBestRecordRequest(userID, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
         queue.add(myPageBestRecordRequest);
+
+        foldingCell = (FoldingCell) v.findViewById(R.id.folding_cell);
+        foldingCell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                foldingCell.toggle(false);
+            }
+        });
+
+        weightTxt.setText("몸무게 : " + userWeight + "kg");
+
+
 
         return v;
     }

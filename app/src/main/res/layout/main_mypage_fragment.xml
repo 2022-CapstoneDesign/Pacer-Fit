@@ -79,12 +79,82 @@
                 app:layout_constraintTop_toTopOf="@+id/view2"
                 tools:ignore="TouchTargetSizeCheck" />
 
+            <com.ramotion.foldingcell.FoldingCell
+                android:id="@+id/folding_cell"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:animationDuration="1000"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                app:backSideColor="@color/lightgray_project"
+                app:layout_constraintEnd_toEndOf="@+id/view2"
+                app:layout_constraintStart_toStartOf="@+id/view2"
+                app:layout_constraintTop_toBottomOf="@+id/mypageId">
+
+                <LinearLayout
+                    android:id="@+id/cell_content_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/view_style"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/heightTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginStart="15dp"
+                        android:text="키 : "
+                        android:textSize="15sp"
+                        android:fontFamily="@font/nanumsquareroundeb"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/weightTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="15dp"
+                        android:text="몸무게 : "
+                        android:textSize="15sp"
+                        android:fontFamily="@font/nanumsquareroundeb"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="15dp"
+                        android:text="bmi : "
+                        android:textSize="15sp"
+                        android:fontFamily="@font/nanumsquareroundeb"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cell_title_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/view_style"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="end|bottom"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_round_expand_more_24" />
+                </LinearLayout>
+
+            </com.ramotion.foldingcell.FoldingCell>
+
             <View
                 android:id="@+id/view4"
                 android:layout_width="0dp"
                 android:layout_height="400dp"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/view_style"
@@ -92,8 +162,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view2"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toBottomOf="@id/folding_cell" />
 
             <TextView
                 android:id="@+id/textView2"
