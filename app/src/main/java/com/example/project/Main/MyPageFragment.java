@@ -41,7 +41,8 @@ public class MyPageFragment extends Fragment {
     int hour, minutes;
 
     FoldingCell foldingCell;
-    String userWeight;
+    Float userHeight;
+    Float userWeight;
 
 
     int[] ProfileDrawable = {
@@ -66,12 +67,14 @@ public class MyPageFragment extends Fragment {
 
         TextView heightTxt = v.findViewById(R.id.heightTxt);
         TextView weightTxt = v.findViewById(R.id.weightTxt);
+        TextView bmiTxt = v.findViewById(R.id.bmiTxt);
 
         Intent intent = getActivity().getIntent();
         userID = intent.getStringExtra("userID");
         userName = intent.getStringExtra("userName");
         userProfileNum = intent.getIntExtra("userProfileNum",0);
-        userWeight = intent.getStringExtra("userWeight");
+        userHeight = Float.valueOf(intent.getStringExtra("userHeight"));
+        userWeight = Float.valueOf(intent.getStringExtra("userWeight"));
 
         imageView.setImageResource(ProfileDrawable[userProfileNum]);
 
@@ -135,8 +138,11 @@ public class MyPageFragment extends Fragment {
             }
         });
 
+        heightTxt.setText("키 : " + userHeight + "cm");
         weightTxt.setText("몸무게 : " + userWeight + "kg");
-
+        double bmi = userWeight / ((userHeight*0.01)*(userHeight*0.01));
+        bmi = Math.round(bmi*100)/100.0; // 소수점 아래 둘째자리가지 반올림
+        bmiTxt.setText("bmi : " + bmi);
 
 
         return v;
