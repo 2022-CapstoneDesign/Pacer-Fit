@@ -95,48 +95,111 @@
                     android:id="@+id/cell_content_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:background="@drawable/view_style"
+                    android:orientation="vertical"
                     android:visibility="gone">
 
                     <TextView
                         android:id="@+id/heightTxt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="40dp"
                         android:layout_marginStart="15dp"
-                        android:text="키 : "
-                        android:textSize="15sp"
+                        android:layout_marginTop="40dp"
                         android:fontFamily="@font/nanumsquareroundeb"
-                        android:textColor="@color/white" />
+                        android:text="키 : "
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/weightTxt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:layout_marginStart="15dp"
-                        android:text="몸무게 : "
-                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
                         android:fontFamily="@font/nanumsquareroundeb"
-                        android:textColor="@color/white" />
+                        android:text="몸무게 : "
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/bmiTxt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:layout_marginStart="15dp"
-                        android:text="bmi : "
-                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
                         android:fontFamily="@font/nanumsquareroundeb"
-                        android:textColor="@color/white" />
+                        android:text="bmi : "
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="20dp">
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline_bmi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.5" />
+
+                        <ImageView
+                            android:id="@+id/bmi_marker"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginBottom="-3dp"
+                            android:src="@drawable/bmi_marker"
+                            app:layout_constraintBottom_toTopOf="@+id/imageView9"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline_bmi"
+                            app:layout_constraintStart_toStartOf="@+id/guideline_bmi" />
+
+                        <ImageView
+                            android:id="@+id/imageView9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/bmi_bar"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/bmi_explain"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nanumsquareroundeb"
+                            android:text=""
+                            android:textColor="#AFAFAF"
+                            android:textSize="11sp"
+                            app:layout_constraintEnd_toStartOf="@+id/textView"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintHorizontal_chainStyle="packed"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nanumsquareroundeb"
+                            android:text=" 입니다"
+                            android:textColor="#AFAFAF"
+                            android:textSize="11sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/bmi_explain"
+                            app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/cell_title_view"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/view_style"
                     android:orientation="vertical">
 

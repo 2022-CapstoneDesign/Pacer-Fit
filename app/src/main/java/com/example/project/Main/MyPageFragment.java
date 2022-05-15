@@ -6,10 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Guideline;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.RequestQueue;
@@ -68,6 +71,7 @@ public class MyPageFragment extends Fragment {
         TextView heightTxt = v.findViewById(R.id.heightTxt);
         TextView weightTxt = v.findViewById(R.id.weightTxt);
         TextView bmiTxt = v.findViewById(R.id.bmiTxt);
+        TextView bmiExplain = v.findViewById(R.id.bmi_explain);
 
         Intent intent = getActivity().getIntent();
         userID = intent.getStringExtra("userID");
@@ -141,8 +145,36 @@ public class MyPageFragment extends Fragment {
         heightTxt.setText("키 : " + userHeight + "cm");
         weightTxt.setText("몸무게 : " + userWeight + "kg");
         double bmi = userWeight / ((userHeight*0.01)*(userHeight*0.01));
-        bmi = Math.round(bmi*100)/100.0; // 소수점 아래 둘째자리가지 반올림
+        bmi = Math.round(bmi*100)/100.0; // 소수점 아래 둘째자리까지 반올림
         bmiTxt.setText("bmi : " + bmi);
+
+        float markerVal;
+        Guideline guideline_bmi = v.findViewById(R.id.guideline_bmi);
+        if (bmi < 20) { // 0 ~ 20
+            markerVal = (float) (0.0125 * bmi);
+            bmiExplain.setText("저체중");
+            bmiExplain.setTextColor(ContextCompat.getColor(getContext(), R.color.bmi_blue));
+        }
+        else if (bmi >= 20 && bmi < 24) {
+            markerVal = (float) (0.0625 * bmi - 1);
+            bmiExplain.setText("정상 체중");
+            bmiExplain.setTextColor(ContextCompat.getColor(getContext(), R.color.bmi_green));
+        }
+        else if (bmi >= 24 && bmi < 30) {
+            markerVal = (float) (0.0417 * bmi - 0.5);
+            bmiExplain.setText("과체중");
+            bmiExplain.setTextColor(ContextCompat.getColor(getContext(), R.color.bmi_yellow));
+        }
+        else { // 30 ~ 100
+            markerVal = (float) (0.0036 * bmi + 0.64);
+            bmiExplain.setText("비만");
+            bmiExplain.setTextColor(ContextCompat.getColor(getContext(), R.color.bmi_red));
+        }
+        markerVal = (float) (Math.round(markerVal*100)/100.0); // 소수점 아래 둘째자리까지 반올림
+        guideline_bmi.setGuidelinePercent(markerVal);
+
+        ImageView bmi_marker = v.findViewById(R.id.bmi_marker);
+        bmi_marker.bringToFront();
 
 
         return v;
