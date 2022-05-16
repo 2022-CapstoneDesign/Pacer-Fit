@@ -142,11 +142,11 @@ public class MyPageFragment extends Fragment {
             }
         });
 
-        heightTxt.setText("키 : " + userHeight + "cm");
-        weightTxt.setText("몸무게 : " + userWeight + "kg");
+        heightTxt.setText(userHeight + "cm");
+        weightTxt.setText(userWeight + "kg");
         double bmi = userWeight / ((userHeight*0.01)*(userHeight*0.01));
         bmi = Math.round(bmi*100)/100.0; // 소수점 아래 둘째자리까지 반올림
-        bmiTxt.setText("bmi : " + bmi);
+        bmiTxt.setText("BMI : " + bmi);
 
         float markerVal;
         Guideline guideline_bmi = v.findViewById(R.id.guideline_bmi);
