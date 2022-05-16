@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,6 +49,8 @@ public class MyPageFragment extends Fragment {
     Float userHeight;
     Float userWeight;
 
+    Dialog dialog;
+
     int[] ProfileDrawable = {
             R.drawable.profile_default, R.drawable.profile_man, R.drawable.profile_man_beard, R.drawable.profile_man_cap,
             R.drawable.profile_man_hat, R.drawable.profile_man_hood, R.drawable.profile_man_horn, R.drawable.profile_man_round,
@@ -80,13 +84,21 @@ public class MyPageFragment extends Fragment {
         userWeight = Float.valueOf(intent.getStringExtra("userWeight"));
 
         profileImg.setImageResource(ProfileDrawable[userProfileNum]);
+
+        // <------ 팝업 다이얼로그 ------>
+        dialog = new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_my_page_popup_img);
+
         profileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MyPagePopupImgActivity.class); //Fragment -> Activity로 이동 (만보기팝업)
-                startActivity(intent);
+//                Intent intent = new Intent(getActivity(), MyPagePopupImgActivity.class); //Fragment -> Activity로 이동 (만보기팝업)
+//                startActivity(intent);
+                showProfileDialog();
             }
         });
+        // <--------------------------->
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -140,6 +152,7 @@ public class MyPageFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
         queue.add(myPageBestRecordRequest);
 
+        // <-------- 폴딩셀 -------->
         foldingCell = (FoldingCell) v.findViewById(R.id.folding_cell);
         foldingCell.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,9 +194,29 @@ public class MyPageFragment extends Fragment {
 
         ImageView bmi_marker = v.findViewById(R.id.bmi_marker);
         bmi_marker.bringToFront();
+        // <----------------------->
 
 
         return v;
+    }
+
+    private void showProfileDialog() {
+        dialog.show();
+
+        Button okBtn = dialog.findViewById(R.id.popupProfileOK);
+        Button cancelBtn = dialog.findViewById(R.id.popupProfileCancel);
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
 }
