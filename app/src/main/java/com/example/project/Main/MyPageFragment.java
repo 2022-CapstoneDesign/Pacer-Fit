@@ -1,8 +1,10 @@
 package com.example.project.Main;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +20,6 @@ import androidx.fragment.app.Fragment;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.project.Pedo.PedoRecordRequest;
-import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
 import com.ramotion.foldingcell.FoldingCell;
 
@@ -47,7 +47,6 @@ public class MyPageFragment extends Fragment {
     Float userHeight;
     Float userWeight;
 
-
     int[] ProfileDrawable = {
             R.drawable.profile_default, R.drawable.profile_man, R.drawable.profile_man_beard, R.drawable.profile_man_cap,
             R.drawable.profile_man_hat, R.drawable.profile_man_hood, R.drawable.profile_man_horn, R.drawable.profile_man_round,
@@ -66,7 +65,7 @@ public class MyPageFragment extends Fragment {
         TextView maxKm = v.findViewById(R.id.maxKm);
         TextView maxKcal = v.findViewById(R.id.maxKcal);
         TextView maxTime = v.findViewById(R.id.maxTime);
-        CircleImageView imageView = v.findViewById(R.id.circleImageView);
+        CircleImageView profileImg = v.findViewById(R.id.profileImg);
 
         TextView heightTxt = v.findViewById(R.id.heightTxt);
         TextView weightTxt = v.findViewById(R.id.weightTxt);
@@ -80,7 +79,14 @@ public class MyPageFragment extends Fragment {
         userHeight = Float.valueOf(intent.getStringExtra("userHeight"));
         userWeight = Float.valueOf(intent.getStringExtra("userWeight"));
 
-        imageView.setImageResource(ProfileDrawable[userProfileNum]);
+        profileImg.setImageResource(ProfileDrawable[userProfileNum]);
+        profileImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MyPagePopupImgActivity.class); //Fragment -> Activity로 이동 (만보기팝업)
+                startActivity(intent);
+            }
+        });
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
