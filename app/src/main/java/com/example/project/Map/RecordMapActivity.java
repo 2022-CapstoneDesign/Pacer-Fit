@@ -823,7 +823,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 List<LatLng> COORDS = new ArrayList<>();
                 for (int i = 0; i < latLon.length; i += 2) {
                     try {
-                        if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7) continue;
+                        if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7
+                                &&latLon[i+1].substring(latLon[i].indexOf(".")).length() == 7) continue;
                         COORDS.add(new LatLng(Double.valueOf(latLon[i]), Double.valueOf(latLon[i + 1])));
                     } catch (NumberFormatException e) {
                         // 문자열을 숫자로 인식할때 예외처리
