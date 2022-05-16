@@ -1,22 +1,29 @@
 package com.example.project.Main;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Guideline;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.project.Pedo.PedoRecordRequest;
-import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
+import com.ramotion.foldingcell.FoldingCell;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +45,12 @@ public class MyPageFragment extends Fragment {
     int userProfileNum;
     int hour, minutes;
 
+    FoldingCell foldingCell;
+    Float userHeight;
+    Float userWeight;
+
+    Dialog dialog;
+
     int[] ProfileDrawable = {
             R.drawable.profile_default, R.drawable.profile_man, R.drawable.profile_man_beard, R.drawable.profile_man_cap,
             R.drawable.profile_man_hat, R.drawable.profile_man_hood, R.drawable.profile_man_horn, R.drawable.profile_man_round,
@@ -56,14 +69,36 @@ public class MyPageFragment extends Fragment {
         TextView maxKm = v.findViewById(R.id.maxKm);
         TextView maxKcal = v.findViewById(R.id.maxKcal);
         TextView maxTime = v.findViewById(R.id.maxTime);
-        CircleImageView imageView = v.findViewById(R.id.circleImageView);
+        CircleImageView profileImg = v.findViewById(R.id.profileImg);
+
+        TextView heightTxt = v.findViewById(R.id.heightTxt);
+        TextView weightTxt = v.findViewById(R.id.weightTxt);
+        TextView bmiTxt = v.findViewById(R.id.bmiTxt);
+        TextView bmiExplain = v.findViewById(R.id.bmi_explain);
 
         Intent intent = getActivity().getIntent();
         userID = intent.getStringExtra("userID");
         userName = intent.getStringExtra("userName");
         userProfileNum = intent.getIntExtra("userProfileNum",0);
+        userHeight = Float.valueOf(intent.getStringExtra("userHeight"));
+        userWeight = Float.valueOf(intent.getStringExtra("userWeight"));
 
-        imageView.setImageResource(ProfileDrawable[userProfileNum]);
+        profileImg.setImageResource(ProfileDrawable[userProfileNum]);
+
+        // <------ 팝업 다이얼로그 ------>
+        dialog = new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_my_page_popup_img);
+
+        profileImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(), MyPagePopupImgActivity.class); //Fragment -> Activity로 이동 (만보기팝업)
+//                startActivity(intent);
+                showProfileDialog();
+            }
+        });
+        // <--------------------------->
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -117,7 +152,71 @@ public class MyPageFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
         queue.add(myPageBestRecordRequest);
 
+        // <-------- 폴딩셀 -------->
+        foldingCell = (FoldingCell) v.findViewById(R.id.folding_cell);
+        foldingCell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                foldingCell.toggle(false);
+            }
+        });
+
+        heightTxt.setText(userHeight + "cm");
+        weightTxt.setText(userWeight + "kg");
+        double bmi = userWeight / ((userHeight*0.01)*(userHeight*0.01));
+        bmi = Math.round(bmi*100)/100.0; // 소수점 아래 둘째자리까지 반올림
+        bmiTxt.setText("BMI : " + bmi);
+
+        float markerVal;
+        Guideline guideline_bmi = v.findViewById(R.id.guideline_bmi);
+        if (bmi < 20) { // 0 ~ 20
+            markerVal = (float) (0.0125 * bmi);
+            bmiExplain.setText("저체중");
+            bmiExplain.setTextColor(ContextCompat.getColor(getContext(), R.color.bmi_blue));
+        }
+        else if (bmi >= 20 && bmi < 24) {
+            markerVal = (float) (0.0625 * bmi - 1);
+            bmiExplain.setText("정상 체중");
+            bmiExplain.setTextColor(ContextCompat.getColor(getContext(), R.color.bmi_green));
+        }
+        else if (bmi >= 24 && bmi < 30) {
+            markerVal = (float) (0.0417 * bmi - 0.5);
+            bmiExplain.setText("과체중");
+            bmiExplain.setTextColor(ContextCompat.getColor(getContext(), R.color.bmi_yellow));
+        }
+        else { // 30 ~ 100
+            markerVal = (float) (0.0036 * bmi + 0.64);
+            bmiExplain.setText("비만");
+            bmiExplain.setTextColor(ContextCompat.getColor(getContext(), R.color.bmi_red));
+        }
+        markerVal = (float) (Math.round(markerVal*100)/100.0); // 소수점 아래 둘째자리까지 반올림
+        guideline_bmi.setGuidelinePercent(markerVal);
+
+        ImageView bmi_marker = v.findViewById(R.id.bmi_marker);
+        bmi_marker.bringToFront();
+        // <----------------------->
+
+
         return v;
+    }
+
+    private void showProfileDialog() {
+        dialog.show();
+
+        Button okBtn = dialog.findViewById(R.id.popupProfileOK);
+        Button cancelBtn = dialog.findViewById(R.id.popupProfileCancel);
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
 }

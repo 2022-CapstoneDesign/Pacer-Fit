@@ -34,4 +34,8 @@
     <color name="darkgreen2_project">#08A268</color>
     <color name="graph_blue">#6563FF</color>
     <color name="colorContainerBackground">#1F1B1B</color>
+    <color name="bmi_red">#EC5F1A</color>
+    <color name="bmi_yellow">#F3E85F</color>
+    <color name="bmi_green">#12BF7E</color>
+    <color name="bmi_blue">#278FC7</color>
 </resources>

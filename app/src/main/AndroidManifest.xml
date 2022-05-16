@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.project"
+    android:largeHeap="true"
     android:launchMode="singleInstance"
-    android:largeHeap ="true"
     android:targetSandboxVersion="1">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -26,10 +26,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project"
         android:usesCleartextTraffic="true">
-        <receiver android:name=".Map.NotificationBroadcast"
-            android:exported="false"/>
-        <service android:name=".Map.LocationService"
-            android:exported="false"/>
+        <activity
+            android:name=".Main.MyPagePopupImgActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
+
+        <receiver
+            android:name=".Map.NotificationBroadcast"
+            android:exported="false" />
+
+        <service
+            android:name=".Map.LocationService"
+            android:exported="false" />
 
         <activity
             android:name=".Pedo.CountDownActivity"
@@ -52,11 +60,12 @@
             android:theme="@style/IntroTheme" />
         <activity
             android:name=".Main.fitnessActivity"
-            android:exported="false"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name=".Map.RecordMapActivity"
-            android:hardwareAccelerated="false"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false" />
+        <activity
+            android:name=".Map.RecordMapActivity"
+            android:exported="false"
+            android:hardwareAccelerated="false" />
         <activity android:name=".Pedo.StepCounterActivity" />
         <activity
             android:name=".Main.SplashActivity"

@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                             String userID = jsonObject.getString("userID");
                             String userPass = jsonObject.getString("userPassword");
                             String userName = jsonObject.getString("userName");
+                            String userHeight = jsonObject.getString("userHeight"); // 키
                             String userWeight = jsonObject.getString("userWeight");
                             String pedo_max = jsonObject.getString("pedo_max");
                             String km_max = jsonObject.getString("km_max");
@@ -73,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("userID", userID);
                             intent.putExtra("userPass", userPass);
                             intent.putExtra("userName",userName);
+                            intent.putExtra("userHeight", userHeight); // 키
                             intent.putExtra("userWeight", userWeight);
                             intent.putExtra("pedo_max",pedo_max);
                             intent.putExtra("km_max",km_max);
