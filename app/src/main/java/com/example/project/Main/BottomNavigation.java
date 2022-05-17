@@ -98,7 +98,6 @@ public class BottomNavigation extends AppCompatActivity {
         });
     } // onCreate
 
-
     // 뒤로가기 버튼을 두 번 누를 시 종료되도록 설정
     @Override
     public void onBackPressed() {

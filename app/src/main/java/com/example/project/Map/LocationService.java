@@ -143,7 +143,6 @@ public class LocationService extends Service {
         }
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, mLocationCallback, Looper.getMainLooper());
 
-        notificationManagerCompat.notify(Constants.NOTIFICATION_ID, builder.build());
         startTimer();
 
     }
@@ -176,7 +175,7 @@ public class LocationService extends Service {
                 }
             }
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
 
@@ -253,12 +252,14 @@ public class LocationService extends Service {
     @SuppressLint("LaunchActivityFromNotification")
     public void displayNotification() {
         createNotificationChannel();
-        Intent tapIntent = new Intent(getApplicationContext(), NotificationBroadcast.class)
+        Intent tapIntent = new Intent(getApplicationContext(), RecordMapActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .addCategory(Intent.CATEGORY_LAUNCHER)
-                .setAction(Intent.ACTION_MAIN);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
-                0, tapIntent, PendingIntent.FLAG_NO_CREATE |  PendingIntent.FLAG_IMMUTABLE);
+                .setAction(Intent.ACTION_MAIN)
+                .putExtra("OnNewIntent","resume");;
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                0, tapIntent, PendingIntent.FLAG_UPDATE_CURRENT |  PendingIntent.FLAG_IMMUTABLE);
+
 
         builder = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
                 .setSmallIcon(R.drawable.walk_over)

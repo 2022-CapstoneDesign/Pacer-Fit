@@ -1,121 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackgroundDefault"
+    android:gravity="bottom"
     android:orientation="vertical"
+    app:umanoDragView="@+id/dragView"
+    app:umanoOverlay="true"
+    app:umanoPanelHeight="68dp"
+    app:umanoParallaxOffset="100dp"
+    app:umanoScrollableView="@+id/list"
+    app:umanoShadowHeight="4dp"
     tools:context=".Map.RecordMapActivity">
 
-    <FrameLayout
-        android:id="@+id/mainFrame"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
-    </FrameLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/bottom_menu_color">
-        <!--레코드 시작 버튼-->
-
-        <View
+        <FrameLayout
+            android:id="@+id/mainFrame"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@color/colorMAIN" />
+            android:layout_height="match_parent">
+        </FrameLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/recordStartFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/colorMAIN"
-            android:clickable="true"
-            android:tint="#FFFFFF"
-            app:fabSize="normal"
-            app:srcCompat="@drawable/walk_over" />
-
-        <!--레코드 중지 버튼-->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/recordPauseFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/colorMAIN"
-            android:clickable="true"
-            android:tint="#FFFFFF"
-            android:visibility="invisible"
-            app:fabSize="normal"
-            app:srcCompat="@android:drawable/ic_media_pause" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/toRecordFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
             android:backgroundTint="@color/colorMAIN"
             android:clickable="true"
             android:tint="#F9A602"
             android:visibility="invisible"
             app:fabSize="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/locationpin_white" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/toMapFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="40dp"
             android:backgroundTint="@color/colorMAIN"
             android:clickable="true"
-            android:tint="#FFFFFF"
-            android:visibility="invisible"
+            android:tint="#F9A602"
+            android:visibility="visible"
             app:fabSize="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/locationpin_white" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/recordResumeFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="120dp"
-            android:layout_marginEnd="2dp"
-            android:layout_marginBottom="16dp"
-            android:layout_toStartOf="@+id/recordPauseFab"
-            android:backgroundTint="@color/colorMAIN"
-            android:clickable="true"
-            android:tint="#FFFFFF"
-            android:visibility="invisible"
-            app:srcCompat="@android:drawable/ic_menu_rotate" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/recordSaveFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="3dp"
-            android:layout_marginEnd="118dp"
-            android:layout_marginBottom="16dp"
-            android:layout_toEndOf="@+id/recordPauseFab"
-            android:backgroundTint="@color/colorMAIN"
-            android:clickable="true"
-            android:tint="#FFFFFF"
-            android:visibility="invisible"
-            app:srcCompat="@android:drawable/ic_menu_upload" />
+    <include layout="@layout/map_crsinfo_bottom_fragment" />
+    <!--    <RelativeLayout-->
+    <!--        android:id="@+id/relative_layout"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="100dp"-->
+    <!--        android:background="@color/bottom_menu_color"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent">-->
+    <!--        &lt;!&ndash;레코드 시작 버튼&ndash;&gt;-->
 
-    </RelativeLayout>
-</LinearLayout>
+    <!--        <View-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="5dp"-->
+    <!--            android:background="@color/colorMAIN" />-->
+
+    <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--            android:id="@+id/recordStartFab"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_alignParentBottom="true"-->
+    <!--            android:layout_centerHorizontal="true"-->
+    <!--            android:layout_marginBottom="16dp"-->
+    <!--            android:backgroundTint="@color/colorMAIN"-->
+    <!--            android:clickable="true"-->
+    <!--            android:tint="#FFFFFF"-->
+    <!--            app:fabSize="normal"-->
+    <!--            app:srcCompat="@drawable/walk_over" />-->
+
+    <!--        &lt;!&ndash;레코드 중지 버튼&ndash;&gt;-->
+    <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--            android:id="@+id/recordPauseFab"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_alignParentBottom="true"-->
+    <!--            android:layout_centerHorizontal="true"-->
+    <!--            android:layout_marginBottom="16dp"-->
+    <!--            android:backgroundTint="@color/colorMAIN"-->
+    <!--            android:clickable="true"-->
+    <!--            android:tint="#FFFFFF"-->
+    <!--            android:visibility="invisible"-->
+    <!--            app:fabSize="normal"-->
+    <!--            app:srcCompat="@android:drawable/ic_media_pause" />-->
+
+    <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--            android:id="@+id/toRecordFab"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_alignParentEnd="true"-->
+    <!--            android:layout_alignParentBottom="true"-->
+    <!--            android:layout_marginEnd="16dp"-->
+    <!--            android:layout_marginBottom="16dp"-->
+    <!--            android:backgroundTint="@color/colorMAIN"-->
+    <!--            android:clickable="true"-->
+    <!--            android:tint="#F9A602"-->
+    <!--            android:visibility="invisible"-->
+    <!--            app:fabSize="normal"-->
+    <!--            app:srcCompat="@drawable/locationpin_white" />-->
+
+    <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--            android:id="@+id/toMapFab"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_alignParentEnd="true"-->
+    <!--            android:layout_alignParentBottom="true"-->
+    <!--            android:layout_marginEnd="16dp"-->
+    <!--            android:layout_marginBottom="16dp"-->
+    <!--            android:backgroundTint="@color/colorMAIN"-->
+    <!--            android:clickable="true"-->
+    <!--            android:tint="#FFFFFF"-->
+    <!--            android:visibility="invisible"-->
+    <!--            app:fabSize="normal"-->
+    <!--            app:srcCompat="@drawable/locationpin_white" />-->
+
+    <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--            android:id="@+id/recordResumeFab"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_alignParentStart="true"-->
+    <!--            android:layout_alignParentBottom="true"-->
+    <!--            android:layout_marginStart="120dp"-->
+    <!--            android:layout_marginEnd="2dp"-->
+    <!--            android:layout_marginBottom="16dp"-->
+    <!--            android:layout_toStartOf="@+id/recordPauseFab"-->
+    <!--            android:backgroundTint="@color/colorMAIN"-->
+    <!--            android:clickable="true"-->
+    <!--            android:tint="#FFFFFF"-->
+    <!--            android:visibility="invisible"-->
+    <!--            app:srcCompat="@android:drawable/ic_menu_rotate" />-->
+
+    <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--            android:id="@+id/recordSaveFab"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_alignParentEnd="true"-->
+    <!--            android:layout_alignParentBottom="true"-->
+    <!--            android:layout_marginStart="3dp"-->
+    <!--            android:layout_marginEnd="118dp"-->
+    <!--            android:layout_marginBottom="16dp"-->
+    <!--            android:layout_toEndOf="@+id/recordPauseFab"-->
+    <!--            android:backgroundTint="@color/colorMAIN"-->
+    <!--            android:clickable="true"-->
+    <!--            android:tint="#FFFFFF"-->
+    <!--            android:visibility="invisible"-->
+    <!--            app:srcCompat="@android:drawable/ic_menu_upload" />-->
+
+    <!--    </RelativeLayout>-->
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

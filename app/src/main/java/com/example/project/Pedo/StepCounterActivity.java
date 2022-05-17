@@ -2,7 +2,6 @@ package com.example.project.Pedo;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,7 +16,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +26,6 @@ import androidx.core.content.ContextCompat;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.project.Main.HomeFragment;
 import com.example.project.R;
 
 import org.json.JSONException;
@@ -101,10 +98,10 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
 
         pedoStep = findViewById(R.id.pedo_step);
         pedoStepText = findViewById(R.id.pedo_step_text);
-        pedoTime = findViewById(R.id.pedo_time);
+        pedoTime = findViewById(R.id.dist_time_text);
         pedoTimeText = findViewById(R.id.pedo_time_text);
         pedoCal = findViewById(R.id.pedo_cal);
-        pedoCalText = findViewById(R.id.pedo_cal_text);
+        pedoCalText = findViewById(R.id.dist_cal_text);
 
         recordStartPedo = findViewById(R.id.stopPedoBtn);
         detailBack = findViewById(R.id.pedo_detail_img);
@@ -316,7 +313,7 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
                             time=0; currentSteps=0; calories=0;
                         }
                         pedoStep = findViewById(R.id.pedo_step);
-                        pedoTime = findViewById(R.id.pedo_time);
+                        pedoTime = findViewById(R.id.dist_time_text);
                         pedoCal = findViewById(R.id.pedo_cal);
                         if (pedoTime != null)
                             pedoTime.setText(hour + "H " + min + "M " + sec + "S");
