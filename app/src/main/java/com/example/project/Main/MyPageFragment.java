@@ -1,5 +1,6 @@
 package com.example.project.Main;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -101,6 +102,7 @@ public class MyPageFragment extends Fragment {
         // <--------------------------->
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onResponse(String response) {
                 try {
@@ -133,13 +135,61 @@ public class MyPageFragment extends Fragment {
                         minutes %= 60;
 
                         //만보기 기록
-                        maxStep.setText(bestSteps); // DB에서 불러온 값으로 바꾸기
+                        if(bestSteps.equals("0")){
+                            maxStep.setText("");
+                            TextView maxtxt = v.findViewById(R.id.maxStepTxt);
+                            maxtxt.setText("");
+                            TextView steptxt = v.findViewById(R.id.stepTxt);
+                            steptxt.setTextColor(Color.GRAY);
+                            ImageView stepBtn = v.findViewById(R.id.mypage_walkBtn);
+                            stepBtn.setImageResource(R.drawable.walk);
+                        }
+                        else
+                            maxStep.setText(bestSteps); // DB에서 불러온 값으로 바꾸기
                         //거리 기록
-                        maxKm.setText(bestKm + "km"); // DB에서 불러온 값으로 바꾸기
+                        if(bestKm.equals("0")){
+                            //숫자 데이터
+                            maxKm.setText("");
+                            //"최대거리" 텍스트
+                            TextView maxtxt = v.findViewById(R.id.maxKmTxt);
+                            maxtxt.setText("");
+                            //"거리" 텍스트
+                            TextView kmtxt = v.findViewById(R.id.kmTxt);
+                            kmtxt.setTextColor(Color.GRAY);
+                            //Image
+                            ImageView kmBtn = v.findViewById(R.id.mypage_kmBtn);
+                            kmBtn.setImageResource(R.drawable.km);
+                        }
+                        else
+                            maxKm.setText(bestKm + "km"); // DB에서 불러온 값으로 바꾸기
                         //칼로리 기록
-                        maxKcal.setText(bestCalorie + "kcal"); // DB에서 불러온 값으로 바꾸기
+                        if(bestCalorie.equals("0")){
+                            maxKcal.setText("");
+                            TextView maxtxt = v.findViewById(R.id.maxKcalTxt);
+                            maxtxt.setText("");
+                            TextView caltxt = v.findViewById(R.id.kcalTxt);
+                            caltxt.setTextColor(Color.GRAY);
+                            ImageView calBtn = v.findViewById(R.id.mypage_kcalBtn);
+                            calBtn.setImageResource(R.drawable.kcal);
+                        }
+                        else
+                            maxKcal.setText(bestCalorie + "kcal"); // DB에서 불러온 값으로 바꾸기
                         //시간 기록
-                        maxTime.setText(hour + "시간 " + minutes + "분"); // DB에서 불러온 값으로 바꾸기
+                        if(Integer.parseInt(bestTime)<60){
+                            maxTime.setText("");
+                            TextView maxtxt = v.findViewById(R.id.maxTimeTxt);
+                            maxtxt.setText("");
+                            TextView timetxt = v.findViewById(R.id.timeTxt);
+                            timetxt.setTextColor(Color.GRAY);
+                            ImageView timeBtn = v.findViewById(R.id.mypage_timeBtn);
+                            timeBtn.setImageResource(R.drawable.time);
+                        }
+                        else {
+                            if(hour!=0)
+                                maxTime.setText(hour + "시간 " + minutes + "분"); // DB에서 불러온 값으로 바꾸기
+                            else
+                                maxTime.setText(minutes + "분");
+                        }
                     } else { // 로그인에 실패한 경우
                         return;
                     }
