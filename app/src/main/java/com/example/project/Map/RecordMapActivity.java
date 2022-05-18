@@ -85,6 +85,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private static final String TAG_TIME = "crsTotlRqrmHour";
     private static final String TAG_LEVEL = "crsLevel";
     private static final String TAG_DIST = "crsDstnc";
+    private static final String TAG_HASH = "tag";
 
     // 네이버 맵, 맵 관련 변수
     private MapView mapView;
@@ -159,6 +160,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<String> crsTimeList;
     private ArrayList<String> crsLevelList;
     private ArrayList<String> crsDistList;
+    private ArrayList<String> crsHashTagList;
     private ArrayList<PolylineOverlay> crsPolylineOverlays;
     private ArrayList<Marker> crsMarkers;
 
@@ -271,6 +273,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         crsTimeList = new ArrayList<>();
         crsLevelList = new ArrayList<>();
         crsDistList = new ArrayList<>();
+        crsHashTagList = new ArrayList<>();
 
         GetGpxPathData task = new GetGpxPathData();
         task.execute("http://pacerfit.dothome.co.kr/getPathWithArea.php");
@@ -650,6 +653,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                                 bun.putString("time", crsTimeList.get(i));
                                 bun.putString("level", crsLevelList.get(i));
                                 bun.putString("dist", crsDistList.get(i));
+                                bun.putString("tag", crsHashTagList.get(i));
                                 Message msg = handler.obtainMessage();
                                 msg.setData(bun);
                                 handler.sendMessage(msg);
@@ -728,6 +732,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 String time = item.getString(TAG_TIME);
                 String level = item.getString(TAG_LEVEL);
                 String dist = item.getString(TAG_DIST);
+                String tag = item.getString(TAG_HASH);
 
                 HashMap<String, String> hashMap = new HashMap<>();
 
@@ -740,6 +745,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 crsTimeList.add(time);
                 crsLevelList.add(level);
                 crsDistList.add(dist);
+                crsHashTagList.add(tag);
 
             }
         } catch (JSONException e) {
@@ -819,6 +825,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 String time = bun.getString("time");
                 String level = bun.getString("level");
                 String dist = bun.getString("dist");
+                String tag = bun.getString("tag");
                 int color = bun.getInt("color");
                 List<LatLng> COORDS = new ArrayList<>();
                 for (int i = 0; i < latLon.length; i += 2) {
@@ -839,7 +846,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                     polylineOverlay1.setWidth(10);
                     polylineOverlay1.setCoords(COORDS);
                     polylineOverlay1.setTag(name);
-                    makeGPXMarker(name, summary, time, level, dist, COORDS.get(0).latitude, COORDS.get(0).longitude, color % ColorEnum.length, polylineOverlay1);
+                    makeGPXMarker(name, summary, time, level, dist, tag, COORDS.get(0).latitude, COORDS.get(0).longitude, color % ColorEnum.length, polylineOverlay1);
                     polylineOverlay1.setMap(naverMap);
                     crsPolylineOverlays.add(polylineOverlay1);
                 }
@@ -859,7 +866,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         }
 
     }
-    public void makeGPXMarker(String GPXName, String summary, String time, String level, String dist, double lat, double lng, int color, PolylineOverlay polylineOverlay1) {
+    public void makeGPXMarker(String GPXName, String summary, String time, String level, String dist, String tag, double lat, double lng, int color, PolylineOverlay polylineOverlay1) {
         Marker marker = new Marker();
         marker.setPosition(new LatLng(lat, lng));
         marker.setCaptionText(GPXName);
@@ -885,7 +892,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                     .animate(CameraAnimation.Easing);
             naverMap.moveCamera(cameraUpdate);
 
-            crsInfoBottomFragment = new CrsInfoBottomFragment(getApplicationContext(), GPXName, summary, time, level, dist);
+            crsInfoBottomFragment = new CrsInfoBottomFragment(getApplicationContext(), GPXName, summary, time, level, dist, tag);
             crsInfoBottomFragment.show(getSupportFragmentManager(), crsInfoBottomFragment.getTag());
 
             return true;
