@@ -1,4 +1,4 @@
-Pacer-Fit
+![pacerfit_logo](https://user-images.githubusercontent.com/96832560/169596197-d029fc2f-9c13-4f86-906c-d8c0996588ce.png)
 =========
 
 [목적]
