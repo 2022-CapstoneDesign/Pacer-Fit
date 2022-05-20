@@ -877,8 +877,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 List<LatLng> COORDS = new ArrayList<>();
                 for (int i = 0; i < latLon.length; i += 2) {
                     try {
-                        if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7
-                                && latLon[i + 1].substring(latLon[i].indexOf(".")).length() == 7)
+                        if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7)
                             continue;
 
                         COORDS.add(new LatLng(Double.valueOf(latLon[i]), Double.valueOf(latLon[i + 1])));
@@ -975,15 +974,25 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         list.add(item);
         item = new HashMap<>();
         item.put("item1", "난이도");
-        item.put("item2", level);
+        switch (level) {
+            case "1":
+                item.put("item2", "쉬움");
+                break;
+            case "2":
+                item.put("item2", "보통");
+                break;
+            case "3":
+                item.put("item2", "어려움");
+                break;
+        }
         list.add(item);
         item = new HashMap<>();
         item.put("item1", "코스 거리");
-        item.put("item2", time);
+        item.put("item2", dist+"km");
         list.add(item);
         item = new HashMap<>();
         item.put("item1", "코스 시간");
-        item.put("item2", dist);
+        item.put("item2", time+"분");
         list.add(item);
 
         SimpleAdapter adapter = new SimpleAdapter(this, list, R.layout.map_bottom_listview_layout, new String[]{"item1", "item2"}, new int[]{R.id.title, R.id.content}) {
@@ -1015,10 +1024,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 polylineOverlay.setColor(Color.BLUE);
                 break;
             case "2":
-                polylineOverlay.setColor(Color.RED);
+                polylineOverlay.setColor(Color.GREEN);
                 break;
             case "3":
-                polylineOverlay.setColor(Color.GREEN);
+                polylineOverlay.setColor(Color.RED);
                 break;
         }
     }
