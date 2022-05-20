@@ -15,12 +15,10 @@ public class NotificationBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> taskInfos = activityManager.getRunningTasks(Integer.MAX_VALUE);
+        List<ActivityManager.RunningTaskInfo> taskInfos = activityManager.getRunningTasks(1);
         if (!taskInfos.isEmpty()) {
-            int taskSize = taskInfos.size();
-            for (int i = 0; i < taskSize; i++) {
-                ActivityManager.RunningTaskInfo taskInfo = taskInfos.get(i);
-                if (taskInfo.topActivity.getPackageName().equals(context.getApplicationContext().getPackageName())) {
+            for (ActivityManager.RunningTaskInfo taskInfo : taskInfos) {
+                if (taskInfo.topActivity.getPackageName().equals("com.example.project.Map.RecordMapActivity")) {
                     activityManager.moveTaskToFront(taskInfo.id, 0);
                 }
             }

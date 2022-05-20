@@ -31,32 +31,32 @@ public class BottomNavigation extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-                    super.onCreate(savedInstanceState);
-                    setContentView(R.layout.main_bottom_navigation);
-                    mBottomNavigationView = findViewById(R.id.bottom_navigation);
-                    menu = mBottomNavigationView.getMenu();
-                    //참고 : https://itstudy-mary.tistory.com/190
-                    //첫 화면 띄우기
-                    getSupportFragmentManager().beginTransaction().add(R.id.frame_container, new HomeFragment()).commit();
-                    Intent intent = getIntent();
-                    String userID = intent.getStringExtra("userID"); //UserID 가져옴
-                    String userPass = intent.getStringExtra("userPass"); //UserPass 가져옴
-                    String userName = intent.getStringExtra("userName");
-                    String userWeight = intent.getStringExtra("userWeight");
-                    String userStepsRecord = intent.getStringExtra("today_stepsRecord");
-                    int userProfileNum = intent.getIntExtra("userProfileNum",0);
-                    System.out.println("userKg??????????????"+userWeight);
-                    mBottomNavigationView.setItemIconTintList(null);
-                    UserInfo.getInstance().setUserID(userID);
-                    UserInfo.getInstance().setUserName(userName);
-                    UserInfo.getInstance().setUserProfileNum(userProfileNum);
-                    System.out.println("================================" + userName);
-                    System.out.println("userStepsRecord======================:"+userStepsRecord);
-                    //case 함수를 통해 클릭 받을 때마다 화면 변경하기
-                    mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-                        @Override
-                        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                            switch (item.getItemId()) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_bottom_navigation);
+        mBottomNavigationView = findViewById(R.id.bottom_navigation);
+        menu = mBottomNavigationView.getMenu();
+        //참고 : https://itstudy-mary.tistory.com/190
+        //첫 화면 띄우기
+        getSupportFragmentManager().beginTransaction().add(R.id.frame_container, new HomeFragment()).commit();
+        Intent intent = getIntent();
+        String userID = intent.getStringExtra("userID"); //UserID 가져옴
+        String userPass = intent.getStringExtra("userPass"); //UserPass 가져옴
+        String userName = intent.getStringExtra("userName");
+        String userWeight = intent.getStringExtra("userWeight");
+        String userStepsRecord = intent.getStringExtra("today_stepsRecord");
+        int userProfileNum = intent.getIntExtra("userProfileNum", 0);
+        System.out.println("userKg??????????????" + userWeight);
+        mBottomNavigationView.setItemIconTintList(null);
+        UserInfo.getInstance().setUserID(userID);
+        UserInfo.getInstance().setUserName(userName);
+        UserInfo.getInstance().setUserProfileNum(userProfileNum);
+        System.out.println("================================" + userName);
+        System.out.println("userStepsRecord======================:" + userStepsRecord);
+        //case 함수를 통해 클릭 받을 때마다 화면 변경하기
+        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
                     case R.id.bottom_1_home: //bottom_menu의 id를 가져옴
                         item.setIcon(R.drawable.bottom_home);
                         menu.findItem(R.id.bottom_2_rank).setIcon(R.drawable.unselected_rank);
@@ -97,7 +97,6 @@ public class BottomNavigation extends AppCompatActivity {
             }
         });
     } // onCreate
-
 
     // 뒤로가기 버튼을 두 번 누를 시 종료되도록 설정
     @Override

@@ -65,8 +65,10 @@
         <activity
             android:name=".Map.RecordMapActivity"
             android:exported="false"
-            android:hardwareAccelerated="false" />
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTop" />
         <activity android:name=".Pedo.StepCounterActivity" />
+        <activity android:name=".Map.RecordActivity" />
         <activity
             android:name=".Main.SplashActivity"
             android:exported="true"

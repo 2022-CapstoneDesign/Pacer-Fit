@@ -7,9 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,35 +48,26 @@ public class CrsInfoBottomFragment extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_crsinfo_bottom_fragment, container, false);
 
-        TextView crsName = view.findViewById(R.id.crs_Name);
-        TextView crsSummary = view.findViewById(R.id.crs_summary);
-        TextView crsTime = view.findViewById(R.id.crs_time);
-        TextView crsLevel = view.findViewById(R.id.crs_level);
-        TextView crsDist = view.findViewById(R.id.crs_dist);
-        TextView crsHashTag = view.findViewById(R.id.crs_hashtag);
-        crsName.setText(name);
-        crsSummary.setText(summary);
-        crsTime.setText(time);
-        crsLevel.setText(level);
-        crsDist.setText(dist);
-        crsHashTag.setText(tag);
-        Button selectBtn = view.findViewById(R.id.select_crs_btn);
+//        TextView crsName = view.findViewById(R.id.crs_Name);
+//        TextView crsSummary = view.findViewById(R.id.crs_summary);
+//        TextView crsTime = view.findViewById(R.id.crs_time);
+//        TextView crsLevel = view.findViewById(R.id.crs_level);
+//        TextView crsDist = view.findViewById(R.id.crs_dist);
+//        crsName.setText(name);
+//        crsSummary.setText(summary);
+//        crsTime.setText(time);
+//        crsLevel.setText(level);
+//        crsDist.setText(dist);
 
-        selectBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context,"selected",Toast.LENGTH_SHORT).show();
-                ((RecordMapActivity)getActivity()).selectCrs(name);
-                CrsInfoBottomFragment.this.dismiss();
-            }
-        });
         return view;
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        ((RecordMapActivity)getActivity()).colorInit();
+        ((RecordMapActivity) getActivity()).dismissCrs();
+
     }
 }
