@@ -54,33 +54,9 @@ public class RecordFragment extends Fragment {
         detailBack = view.findViewById(R.id.dist_detail_img);
         h = new Handler();
         // 초기 투명도 설정
-        setTextAlpha(0.3f);
+        setTextAlpha(1f);
         // 어두운 배경
-        detailBack.setImageResource(R.drawable.exer_dist_background01);
-        startStopBtn = view.findViewById(R.id.start_stop_KmBtn);
-        startStopBtn.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.P)
-            @Override
-            public void onClick(View v) {
-//                if (startStopBtn.getText().equals("시작하기")) {
-//                    startStopBtn.setText("그만하기");
-//                    startStopBtn.setBackgroundResource(R.drawable.btn_style5);
-//                    detailBack.setImageResource(R.drawable.exer_dist_background02);
-//                    setTextAlpha(1f);
-//                    startStopBtn.setEnabled(false); // 클릭 무효화
-//                    h.postDelayed(new splashhandler(), 1500);//1.5초 지연
-//                } else {
-//                    startStopBtn.setText("운동 시작");
-//                    detailBack.setImageResource(R.drawable.exer_dist_background01);
-//                    startStopBtn.setBackgroundResource(R.drawable.btn_style5_dist_ready);
-//                    setTextAlpha(0.3f);
-//                    ((RecordMapActivity) getActivity()).RecordSave();
-//                    startStopBtn.setEnabled(false); // 클릭 무효화
-//                    h.postDelayed(new splashhandler(), 1500);//1.5초 지연
-//                }
-            }
-        });
-
+        detailBack.setImageResource(R.drawable.exer_dist_background02);
 
         return view;
     }

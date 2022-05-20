@@ -29,11 +29,90 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
 
-    </ListView>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@color/lightgray_project"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/crs_hashtag"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="#숲 #역사"
+                android:textColor="@color/colorGrey"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/crs_level"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="난이도 - 중간"
+                android:textColor="@color/green_project"
+                android:textSize="15sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/crs_dist"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="# 13KM"
+                android:textColor="@color/green_project"
+                android:textSize="15sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/crs_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="# 4시간 10분"
+                android:textColor="@color/green_project"
+                android:textSize="15sp" />
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/crs_summary"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:text="자연의 회복력을 인정받아 람사르습지로 지정된 운곡습지를 둘러보는 생태길
+위대한 자연을 느낄 수 있는 운곡습지를 통해 자연의 가치를 깨닫게 되는 길"
+        android:textColor="@color/lightlightgray_text_color"
+        android:textSize="13sp" />
+
 </LinearLayout>
