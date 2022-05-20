@@ -54,6 +54,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/exer_dist_background02"
                 app:layout_constraintBottom_toTopOf="@+id/start_stop_KmBtn"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"

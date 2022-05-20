@@ -328,6 +328,14 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             }
         });
+        // 코스 리스트들 생성
+//         pathArrayList = new ArrayList<>();
+//         crsNameList = new ArrayList<>();
+//         crsSummaryList = new ArrayList<>();
+//         crsTimeList = new ArrayList<>();
+//         crsLevelList = new ArrayList<>();
+//         crsDistList = new ArrayList<>();
+//         crsHashTagList = new ArrayList<>();
 
         GetGpxPathData task = new GetGpxPathData();
         task.execute("http://pacerfit.dothome.co.kr/getPathWithArea.php");
@@ -872,6 +880,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                         if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7
                                 && latLon[i + 1].substring(latLon[i].indexOf(".")).length() == 7)
                             continue;
+
                         COORDS.add(new LatLng(Double.valueOf(latLon[i]), Double.valueOf(latLon[i + 1])));
                     } catch (NumberFormatException e) {
                         // 문자열을 숫자로 인식할때 예외처리
@@ -892,6 +901,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                         polylineOverlay1.setMap(naverMap);
                     else
                         polylineOverlay1.setMap(null);
+
                     crsPolylineOverlays.add(polylineOverlay1);
                     Log.d("crsPoly", Integer.toString(crsPolylineOverlays.size()));
                 }
@@ -899,8 +909,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         }
     };
 
-
     public void makeGPXMarker(String name, String summary, String time, String level, String dist, String tag, double lat, double lng, PolylineOverlay polylineOverlay1) {
+
         Marker marker = new Marker();
         marker.setPosition(new LatLng(lat, lng));
         marker.setCaptionText(name);
