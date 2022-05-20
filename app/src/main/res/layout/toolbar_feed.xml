@@ -29,23 +29,6 @@
             android:textSize="20sp"
             android:fontFamily="@font/nanumsquareroundeb"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="20dp"
-            android:src="@drawable/more"
-            app:tint="@color/purple_project" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="13dp"
-            android:src="@drawable/plus"
-            app:tint="@color/purple_project"/>
-
-
     </androidx.appcompat.widget.Toolbar>
 
     <View

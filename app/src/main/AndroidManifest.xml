@@ -26,9 +26,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Main.MyPagePopupImgActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
+
         <receiver
             android:name=".Map.NotificationBroadcast"
             android:exported="false" />
+
         <service
             android:name=".Map.LocationService"
             android:exported="false" />

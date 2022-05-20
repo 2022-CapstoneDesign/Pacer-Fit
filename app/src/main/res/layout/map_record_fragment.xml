@@ -173,7 +173,7 @@
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/btn_style5_dist_ready"
                 android:fontFamily="@font/nanumsquareroundeb"
-                android:text="운동 시작"
+                android:text="그만하기"
                 android:textColor="@color/white"
                 android:textSize="22sp"
                 app:layout_constraintBottom_toBottomOf="parent"

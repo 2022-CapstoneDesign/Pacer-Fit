@@ -44,25 +44,30 @@ import java.util.TimerTask;
 public class LocationService extends Service {
 
     public static final String TAG = "LocationService";
+
     private Intent intent;
-
-
-    private String description = "map";
     private NotificationCompat.Builder builder;
     private NotificationManagerCompat notificationManagerCompat;
+    // 기록 체크
     private boolean isRecord = false;
+
+    // 서비스 처음 시작 확인
+    private boolean isFirst = false;
+
+    // 백그라운드 확인
+    public boolean isBackground = false;
 
     // 거리
     private double distance = 0.0;
+
     // 타이머 변수
-    private int time = -1;
-    private Timer timer;
-    private TimerTask timerTask;
     private int total_sec = 0;
+    private int time = -1;
+    private TimerTask timerTask;
+
+    // 거리 정확도
     private double accuracy = 8.5;
 
-    // 백그라운드 확인 함수
-    public boolean isBackground = false;
     // bindService 구현
     private IBinder mIBinder = new MyBinder();
 
@@ -90,7 +95,6 @@ public class LocationService extends Service {
         }
     }
 
-
     // 두 위치의 거리 계산 함수
     public double getDistance(Double lat1, Double lon1, Double lat2, Double lon2) {
         double R = 6372.8 * 1000;
@@ -100,8 +104,8 @@ public class LocationService extends Service {
         double c = 2 * asin(sqrt(a));
         return R * c / 1000;
     }
-    // 최종 거리 계산
 
+    // 최종 거리 계산
     public double curDistance(List<LatLng> latLngList) {
 
         int index = latLngList.size();
@@ -113,40 +117,39 @@ public class LocationService extends Service {
             latB = latLngList.get(i + 1).latitude;
             lngB = latLngList.get(i + 1).longitude;
             dist += getDistance(latA, lngA, latB, lngB);
-            //Log.d(TAG, String.format("curDistance[%d] latA: %f lngA: %f latB: %f lngB: %f distance %f", i, latA, lngA, latB, lngB, dist));
-
         }
-
         return dist;
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     private void startLocationService() {
-        createNotificationChannel();
-        displayNotification();
+        if (!isFirst) {
+            createNotificationChannel();
+            displayNotification();
+            LocationRequest locationRequest = LocationRequest.create();
+            locationRequest.setInterval(4000);
+            locationRequest.setFastestInterval(2000);
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(4000);
-        locationRequest.setFastestInterval(2000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, mLocationCallback, Looper.getMainLooper());
         }
-        LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, mLocationCallback, Looper.getMainLooper());
-
         startTimer();
-
     }
 
+    private void pauseLocationService() {
+        pauseTimer();
+    }
 
     private void stopLocationService() {
         LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(mLocationCallback);
@@ -170,6 +173,9 @@ public class LocationService extends Service {
             if (action != null) {
                 if (action.equals(Constants.ACTION_START_LOCATION_SERVICE)) {
                     startLocationService();
+                    isFirst = true;
+                } else if (action.equals(Constants.ACTION_PAUSE_LOCATION_SERVICE)) {
+                    pauseLocationService();
                 } else if (action.equals(Constants.ACTION_STOP_LOCATION_SERVICE)) {
                     stopLocationService();
                 }
@@ -177,7 +183,6 @@ public class LocationService extends Service {
         }
         return START_STICKY;
     }
-
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
@@ -187,11 +192,10 @@ public class LocationService extends Service {
 
     @Override
     public void onDestroy() {
-        // handler.removeCallbacks(sendUpdatesToUI);
         super.onDestroy();
 
-
         pauseTimer();
+
         if (notificationManagerCompat != null)
             notificationManagerCompat.cancel(Constants.NOTIFICATION_ID);
 
@@ -208,8 +212,7 @@ public class LocationService extends Service {
     // 타이머 기능 + 데이터 전송
     public void startTimer() {
         isRecord = true;
-
-        timer = new Timer();
+        Timer timer = new Timer();
         timerTask = new TimerTask() {
             @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
@@ -232,7 +235,6 @@ public class LocationService extends Service {
 
                 // 리스트에 담긴 거리 계산
                 distance = curDistance(RecordMapActivity.getList());
-
             }
         };
         timer.schedule(timerTask, 0, 1000);
@@ -256,9 +258,10 @@ public class LocationService extends Service {
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .addCategory(Intent.CATEGORY_LAUNCHER)
                 .setAction(Intent.ACTION_MAIN)
-                .putExtra("OnNewIntent","resume");;
+                .putExtra("OnNewIntent", "resume");
+        ;
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0, tapIntent, PendingIntent.FLAG_UPDATE_CURRENT |  PendingIntent.FLAG_IMMUTABLE);
+                0, tapIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
 
         builder = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
@@ -271,16 +274,14 @@ public class LocationService extends Service {
 
         notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(Constants.NOTIFICATION_ID, builder.build());
-
     }
 
     // 알림 채널 생성
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_LOW;
-
             NotificationChannel notificationChannel = new NotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_NAME, importance);
-            notificationChannel.setDescription(description);
+            notificationChannel.setDescription(Constants.CHANNEL_DESCRIPTION);
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);
         }

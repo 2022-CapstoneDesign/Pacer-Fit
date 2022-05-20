@@ -1,6 +1,5 @@
 package com.example.project.Map;
 
-import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.project.R;
@@ -64,51 +62,28 @@ public class RecordFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
             public void onClick(View v) {
-                if (startStopBtn.getText().equals("운동 시작")) {
-                    startDialog();
-                    startStopBtn.setText("그만하기");
-                    startStopBtn.setBackgroundResource(R.drawable.btn_style5);
-                    detailBack.setImageResource(R.drawable.exer_dist_background02);
-                    setTextAlpha(1f);
-                    startStopBtn.setEnabled(false); // 클릭 무효화
-                    h.postDelayed(new splashhandler(), 1500);//1.5초 지연
-                } else {
-                    startStopBtn.setText("운동 시작");
-                    detailBack.setImageResource(R.drawable.exer_dist_background01);
-                    startStopBtn.setBackgroundResource(R.drawable.btn_style5_dist_ready);
-                    setTextAlpha(0.3f);
-                    ((RecordMapActivity) getActivity()).RecordSave();
-                    startStopBtn.setEnabled(false); // 클릭 무효화
-                    h.postDelayed(new splashhandler(), 1500);//1.5초 지연
-                }
+//                if (startStopBtn.getText().equals("시작하기")) {
+//                    startStopBtn.setText("그만하기");
+//                    startStopBtn.setBackgroundResource(R.drawable.btn_style5);
+//                    detailBack.setImageResource(R.drawable.exer_dist_background02);
+//                    setTextAlpha(1f);
+//                    startStopBtn.setEnabled(false); // 클릭 무효화
+//                    h.postDelayed(new splashhandler(), 1500);//1.5초 지연
+//                } else {
+//                    startStopBtn.setText("운동 시작");
+//                    detailBack.setImageResource(R.drawable.exer_dist_background01);
+//                    startStopBtn.setBackgroundResource(R.drawable.btn_style5_dist_ready);
+//                    setTextAlpha(0.3f);
+//                    ((RecordMapActivity) getActivity()).RecordSave();
+//                    startStopBtn.setEnabled(false); // 클릭 무효화
+//                    h.postDelayed(new splashhandler(), 1500);//1.5초 지연
+//                }
             }
         });
 
 
         return view;
     }
-
-    private void startDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("경로 추천 확인");
-        builder.setMessage("운동 경로를 추천 받으시겠습니까?");
-        builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.P)
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((RecordMapActivity) getActivity()).StartFab(true);
-            }
-        });
-        builder.setPositiveButton("아니오", new DialogInterface.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.P)
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((RecordMapActivity) getActivity()).StartFab(false);
-            }
-        });
-        builder.show();
-    }
-
 
     // 원 내부에 textview들 투명도 설정
     public void setTextAlpha(float values) {

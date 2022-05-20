@@ -22,16 +22,18 @@ public class CrsInfoBottomFragment extends BottomSheetDialogFragment {
     private String time;
     private String level;
     private String dist;
+    private String tag;
 //    private GPXBottomDialogAdapter adapter;
 //    private RecyclerView recyclerView;
 
-    public CrsInfoBottomFragment(Context context, String name, String summary, String time, String level, String dist) {
+    public CrsInfoBottomFragment(Context context, String name, String summary, String time, String level, String dist, String tag) {
         this.context = context;
         this.name = name;
         this.summary = summary;
         this.time = time;
         this.level = level;
         this.dist = dist;
+        this.tag = tag;
     }
 
     @Override

@@ -44,14 +44,14 @@ public class BottomNavigation extends AppCompatActivity {
         String userName = intent.getStringExtra("userName");
         String userWeight = intent.getStringExtra("userWeight");
         String userStepsRecord = intent.getStringExtra("today_stepsRecord");
-        int userProfileNum = intent.getIntExtra("userProfileNum",0);
-        System.out.println("userKg??????????????"+userWeight);
+        int userProfileNum = intent.getIntExtra("userProfileNum", 0);
+        System.out.println("userKg??????????????" + userWeight);
         mBottomNavigationView.setItemIconTintList(null);
         UserInfo.getInstance().setUserID(userID);
         UserInfo.getInstance().setUserName(userName);
         UserInfo.getInstance().setUserProfileNum(userProfileNum);
         System.out.println("================================" + userName);
-        System.out.println("userStepsRecord======================:"+userStepsRecord);
+        System.out.println("userStepsRecord======================:" + userStepsRecord);
         //case 함수를 통해 클릭 받을 때마다 화면 변경하기
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
