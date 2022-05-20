@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:background="@color/colorBackgroundDefault"
         android:gravity="bottom"
-        android:paddingBottom="60dp"
+        android:paddingBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +49,7 @@
                 android:backgroundTint="@color/colorMAIN"
                 android:clickable="true"
                 android:tint="#F9A602"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:fabSize="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -79,38 +79,55 @@
     <LinearLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="80dp"
         android:background="@color/black"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/reselect_btn"
-            android:layout_width="match_parent"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_weight="1"
+            android:background="@drawable/btn_style5_dist_ready"
+            android:fontFamily="@font/nanumsquareroundeb"
             android:text="코스 재선택"
-
+            android:textColor="@color/white"
+            android:textSize="20sp"
             android:visibility="invisible" />
 
         <Button
             android:id="@+id/stop_dist_btn"
-            android:layout_width="match_parent"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="20dp"
             android:layout_weight="1"
+            android:background="@drawable/btn_style5"
+            android:fontFamily="@font/nanumsquareroundeb"
             android:text="그만하기"
+            android:textColor="@color/white"
+            android:textSize="20sp"
             android:visibility="invisible" />
 
     </LinearLayout>
 
     <Button
         android:id="@+id/start_dist_btn"
-        android:layout_width="match_parent"
+        android:layout_width="180dp"
         android:layout_height="60dp"
-        android:text="시작"
+        android:background="@drawable/btn_style5_dist_start"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:layout_marginBottom="10dp"
+        android:text="운동 시작"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

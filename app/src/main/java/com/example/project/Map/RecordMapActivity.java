@@ -22,8 +22,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -120,13 +118,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // Fragment
     private MapViewFragment mapViewFrag;
     private RecordFragment recordFrag;
-    private CrsInfoBottomFragment crsInfoBottomFragment;
 
     // FloatingActionButton
-    private FloatingActionButton recordStartFab;
-    private FloatingActionButton recordPauseFab;
-    private FloatingActionButton recordResumeFab;
-    private FloatingActionButton recordSaveFab;
     private FloatingActionButton toRecordFab;
     private FloatingActionButton toMapFab;
 
@@ -135,6 +128,11 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private TextView dist_tv;
     private TextView cal_tv;
     private TextView crsName;
+    private TextView crsHashTag;
+    private TextView crsHour;
+    private TextView crsDist;
+    private TextView crsSummary;
+    private TextView crsLevel;
 
     // 거리 변수
     private double distance = 0.0;
@@ -182,8 +180,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 바텀 시트 레이아웃
     private SlidingUpPanelLayout mLayout;
 
-    // 바텀 시트 리스트
-    private ListView listView;
 
     // 마커 listener
     private InfoWindow infoWindow;
@@ -253,7 +249,12 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         // 바텀 시트
         crsName = findViewById(R.id.crs_name);
-        listView = findViewById(R.id.list);
+        crsHashTag = findViewById(R.id.crs_hashtag);
+        crsDist = findViewById(R.id.crs_dist);
+        crsHour = findViewById(R.id.crs_hour);
+        crsSummary = findViewById(R.id.crs_summary);
+        crsLevel = findViewById(R.id.crs_level);
+
         mLayout = findViewById(R.id.sliding_layout);
 
         // onClick
@@ -328,14 +329,14 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             }
         });
-        // 코스 리스트들 생성
-//         pathArrayList = new ArrayList<>();
-//         crsNameList = new ArrayList<>();
-//         crsSummaryList = new ArrayList<>();
-//         crsTimeList = new ArrayList<>();
-//         crsLevelList = new ArrayList<>();
-//         crsDistList = new ArrayList<>();
-//         crsHashTagList = new ArrayList<>();
+//         코스 리스트들 생성
+        pathArrayList = new ArrayList<>();
+        crsNameList = new ArrayList<>();
+        crsSummaryList = new ArrayList<>();
+        crsTimeList = new ArrayList<>();
+        crsLevelList = new ArrayList<>();
+        crsDistList = new ArrayList<>();
+        crsHashTagList = new ArrayList<>();
 
         GetGpxPathData task = new GetGpxPathData();
         task.execute("http://pacerfit.dothome.co.kr/getPathWithArea.php");
@@ -703,7 +704,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                                 bun.putString("gpxpt", gpxpt);
                                 bun.putString("name", crsNameList.get(i));
                                 bun.putString("summary", crsSummaryList.get(i));
-                                bun.putString("time", crsTimeList.get(i));
+                                bun.putString("hour", crsTimeList.get(i));
                                 bun.putString("level", crsLevelList.get(i));
                                 bun.putString("dist", crsDistList.get(i));
                                 bun.putString("tag", crsHashTagList.get(i));
@@ -870,7 +871,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 String[] latLon = gpxpt.split(" ");
                 String name = bun.getString("name");
                 String summary = bun.getString("summary");
-                String time = bun.getString("time");
+                String hour = bun.getString("hour");
                 String level = bun.getString("level");
                 String dist = bun.getString("dist");
                 String tag = bun.getString("tag");
@@ -895,7 +896,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                     polylineOverlay1.setCoords(COORDS);
                     polylineOverlay1.setTag(name);
                     setColorCrs(polylineOverlay1, level);
-                    makeGPXMarker(name, summary, time, level, dist, tag, COORDS.get(0).latitude, COORDS.get(0).longitude, polylineOverlay1);
+                    makeGPXMarker(name, summary, hour, level, dist, tag, COORDS.get(0).latitude, COORDS.get(0).longitude, polylineOverlay1);
                     if (!isClickCrs)
                         polylineOverlay1.setMap(naverMap);
                     else
@@ -908,7 +909,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         }
     };
 
-    public void makeGPXMarker(String name, String summary, String time, String level, String dist, String tag, double lat, double lng, PolylineOverlay polylineOverlay1) {
+    public void makeGPXMarker(String name, String summary, String hour, String level, String dist, String tag, double lat, double lng, PolylineOverlay polylineOverlay1) {
 
         Marker marker = new Marker();
         marker.setPosition(new LatLng(lat, lng));
@@ -943,7 +944,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 // 현재 마커에 정보 창이 열려있지 않을 경우 엶
                 infoWindow.open(marker);
                 clickCrs(name);
-            }else{
+            } else {
                 infoWindow.close();
             }
 
@@ -953,7 +954,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
             // bottomsheet 보이게 하기
             mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-            setBottomListData(name, summary, level, time, dist, tag);
+            setBottomListData(name, summary, level, hour, dist, tag);
 
             return true;
         };
@@ -961,44 +962,24 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         crsMarkers.add(marker);
     }
 
-    public void setBottomListData(String GPXName, String summary, String level, String time, String dist, String tag) {
-        crsName.setText(GPXName);
-        ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-        HashMap<String, String> item = new HashMap<>();
-        item.put("item1", "설명");
-        item.put("item2", summary);
-        list.add(item);
-        item = new HashMap<>();
-        item.put("item1", "해시태그");
-        item.put("item2", tag);
-        list.add(item);
-        item = new HashMap<>();
-        item.put("item1", "난이도");
+    public void setBottomListData(String name, String summary, String level, String hour, String dist, String tag) {
+        crsName.setText(name);
         switch (level) {
             case "1":
-                item.put("item2", "쉬움");
+                crsLevel.setText("난이도 - 쉬움");
                 break;
             case "2":
-                item.put("item2", "보통");
+                crsLevel.setText("난이도 - 보통");
                 break;
             case "3":
-                item.put("item2", "어려움");
+                crsLevel.setText("난이도 - 어려움");
                 break;
+
         }
-        list.add(item);
-        item = new HashMap<>();
-        item.put("item1", "코스 거리");
-        item.put("item2", dist+"km");
-        list.add(item);
-        item = new HashMap<>();
-        item.put("item1", "코스 시간");
-        item.put("item2", time+"분");
-        list.add(item);
-
-        SimpleAdapter adapter = new SimpleAdapter(this, list, R.layout.map_bottom_listview_layout, new String[]{"item1", "item2"}, new int[]{R.id.title, R.id.content}) {
-        };
-
-        listView.setAdapter(adapter);
+        crsSummary.setText(summary);
+        crsHour.setText("#" + Integer.parseInt(hour) / 60 + "시간" + Integer.parseInt(hour) % 60 + "분");
+        crsDist.setText("# " + dist + "KM");
+        crsHashTag.setText(tag);
     }
 
     public void clickCrs(String crsName) {

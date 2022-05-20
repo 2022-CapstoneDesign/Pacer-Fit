@@ -53,8 +53,7 @@
                 android:layout_marginEnd="20dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/exer_dist_background02"
-                app:layout_constraintBottom_toTopOf="@+id/start_stop_KmBtn"
-
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -166,20 +165,6 @@
                 android:textSize="23dp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/dist_cal_text"
                 app:layout_constraintStart_toStartOf="@+id/guideline5" />
-
-            <Button
-                android:id="@+id/start_stop_KmBtn"
-                android:layout_width="200dp"
-                android:layout_height="80dp"
-                android:layout_marginBottom="30dp"
-                android:background="@drawable/btn_style5_dist_ready"
-                android:fontFamily="@font/nanumsquareroundeb"
-                android:text="그만하기"
-                android:textColor="@color/white"
-                android:textSize="22sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
 
             <!--            <View-->
             <!--                android:id="@+id/view3"-->
