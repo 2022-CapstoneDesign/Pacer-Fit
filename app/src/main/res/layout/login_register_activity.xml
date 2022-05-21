@@ -332,7 +332,7 @@
             android:layout_marginTop="50dp"
             android:layout_marginEnd="50dp"
             android:layout_marginBottom="60dp"
-            android:background="@drawable/btn_style"
+            android:background="@drawable/btn_style_with_ripple"
             android:fontFamily="@font/nanumsquareroundeb"
             android:text="@string/join2"
             android:textColor="@color/whitegray_project"

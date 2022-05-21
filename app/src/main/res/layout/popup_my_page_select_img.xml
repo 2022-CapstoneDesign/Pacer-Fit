@@ -7,8 +7,7 @@
     android:background="@android:color/transparent"
     android:backgroundTint="@android:color/transparent"
     android:gravity="top"
-    android:orientation="vertical"
-    tools:context=".Main.MyPagePopupImgActivity">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
