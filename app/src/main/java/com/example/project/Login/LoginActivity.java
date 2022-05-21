@@ -1,6 +1,8 @@
 package com.example.project.Login;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.widget.Button;
@@ -26,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText idTxt, passTxt;
     private Button loginBtn;
     String date_concat;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +82,22 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("pedo_max",pedo_max);
                             intent.putExtra("km_max",km_max);
                             intent.putExtra("userProfileNum",userProfileNum);
+
+                            SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", Activity.MODE_PRIVATE);
+
+                            //Editor를 preferences에 쓰겠다고 연결
+                            SharedPreferences.Editor autoLogin = sharedPreferences.edit();
+                            //putString(KEY,VALUE)
+                            autoLogin.putString("userid",idTxt.getText().toString());
+                            autoLogin.putString("userpwd", passTxt.getText().toString());
+                            autoLogin.putString("userName", userName);
+                            autoLogin.putString("userHeight", userHeight);
+                            autoLogin.putString("userWeight", userWeight);
+                            autoLogin.putString("pedo_max", pedo_max);
+                            autoLogin.putString("km_max", km_max);
+                            autoLogin.putString("userProfileNum", userProfileNum+"");
+                            //항상 commit & apply 를 해주어야 저장이 된다.
+                            autoLogin.commit();
 
                             startActivity(intent);
                             finish();

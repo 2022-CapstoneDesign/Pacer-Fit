@@ -37,6 +37,8 @@ public class IntroActivity extends AppCompatActivity {
             permissionCheck();
         } else {
             Toast.makeText(this, "GPS를 켜주세요", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
 
         loginBtn.setOnClickListener(v -> {

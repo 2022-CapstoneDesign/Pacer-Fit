@@ -98,10 +98,10 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
 
         pedoStep = findViewById(R.id.pedo_step);
         pedoStepText = findViewById(R.id.pedo_step_text);
-        pedoTime = findViewById(R.id.dist_time_text);
+        pedoTime = findViewById(R.id.pedo_time);
         pedoTimeText = findViewById(R.id.pedo_time_text);
         pedoCal = findViewById(R.id.pedo_cal);
-        pedoCalText = findViewById(R.id.dist_cal_text);
+        pedoCalText = findViewById(R.id.pedo_cal_text);
 
         recordStartPedo = findViewById(R.id.stopPedoBtn);
         detailBack = findViewById(R.id.pedo_detail_img);
@@ -313,7 +313,7 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
                             time=0; currentSteps=0; calories=0;
                         }
                         pedoStep = findViewById(R.id.pedo_step);
-                        pedoTime = findViewById(R.id.dist_time_text);
+                        pedoTime = findViewById(R.id.pedo_time_text);
                         pedoCal = findViewById(R.id.pedo_cal);
                         if (pedoTime != null)
                             pedoTime.setText(hour + "H " + min + "M " + sec + "S");

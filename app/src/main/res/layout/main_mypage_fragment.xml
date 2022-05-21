@@ -18,8 +18,10 @@
         android:layout_marginTop="?attr/actionBarSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -83,9 +85,9 @@
                 android:id="@+id/folding_cell"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:animationDuration="500"
                 android:clipChildren="false"
                 android:clipToPadding="false"
+                app:animationDuration="500"
                 app:backSideColor="@color/lightgray_project"
                 app:layout_constraintEnd_toEndOf="@+id/view2"
                 app:layout_constraintStart_toStartOf="@+id/view2"
@@ -249,16 +251,17 @@
                 android:id="@+id/view4"
                 android:layout_width="0dp"
                 android:layout_height="400dp"
-                android:layout_marginTop="20dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/view_style"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/logout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/folding_cell" />
+                app:layout_constraintTop_toBottomOf="@id/folding_cell"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -469,6 +472,24 @@
                 app:layout_constraintEnd_toEndOf="@+id/mypage_timeBtn"
                 app:layout_constraintStart_toStartOf="@+id/mypage_timeBtn"
                 app:layout_constraintTop_toBottomOf="@+id/timeTxt" />
+
+            <Button
+                android:id="@+id/logout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_style5"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="로그아웃"
+                android:textColor="@color/whitegray_project"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view4" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

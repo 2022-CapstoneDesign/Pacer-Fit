@@ -1,8 +1,10 @@
 package com.example.project.Main;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +25,8 @@ import androidx.fragment.app.Fragment;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.project.Login.IntroActivity;
+import com.example.project.Login.LoginActivity;
 import com.example.project.R;
 import com.ramotion.foldingcell.FoldingCell;
 
@@ -84,6 +89,22 @@ public class MyPageFragment extends Fragment {
         userWeight = Float.valueOf(intent.getStringExtra("userWeight"));
 
         profileImg.setImageResource(ProfileDrawable[userProfileNum]);
+
+        // <------- 로그 아웃 처리 ------->
+        Button logout = v.findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), IntroActivity.class);
+                startActivity(intent);
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPreferences", Activity.MODE_PRIVATE);
+                //Editor를 preferences에 쓰겠다고 연결
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.commit();
+                getActivity().finish();
+            }
+        });
 
         // <------ 팝업 다이얼로그 ------>
         dialog = new Dialog(getContext());
