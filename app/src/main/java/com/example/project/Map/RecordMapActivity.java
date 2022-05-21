@@ -775,6 +775,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
 
+                System.out.println(jsonArray.length()+"\n");
+                System.out.println(i);
+
+
                 // 코스 정보 리스트에 저장
                 String gpxPath = item.getString(TAG_PATH);
                 String sigun = item.getString(TAG_SIGUN);
@@ -785,6 +789,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 String dist = item.getString(TAG_DIST);
                 String tag = item.getString(TAG_HASH);
 
+                System.out.println(name);
                 HashMap<String, String> hashMap = new HashMap<>();
 
                 hashMap.put(TAG_PATH, gpxPath);
@@ -824,7 +829,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             br = new BufferedReader(isr);
             String str = null;
             while ((str = br.readLine()) != null) {
-                if (str.contains("trkpt")) {
+                if (str.contains("trkpt") && !str.contains("bounds")) {
                     Pattern pattern = Pattern.compile("[\"](.*?)[\"]");
                     Matcher matcher = pattern.matcher(str);
                     while (matcher.find()) {  // 일치하는 게 있다면
@@ -878,8 +883,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 List<LatLng> COORDS = new ArrayList<>();
                 for (int i = 0; i < latLon.length; i += 2) {
                     try {
-                        if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7)
-                            continue;
+                       // if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7)
+                       //    continue;
 
                         COORDS.add(new LatLng(Double.valueOf(latLon[i]), Double.valueOf(latLon[i + 1])));
                     } catch (NumberFormatException e) {
