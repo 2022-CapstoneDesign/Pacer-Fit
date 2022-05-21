@@ -10,11 +10,6 @@
     android:orientation="vertical"
     tools:context=".Main.MyPagePopupImgActivity">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:src="@drawable/triangle_gray" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,139 +27,322 @@
 
         <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_height="400dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginBottom="10dp"
-            android:columnCount="4"
+            android:columnCount="3"
             android:numColumns="4"
             android:rowCount="4">
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile0_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_default" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile1_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_man" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile2_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_man_beard" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile3_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_man_cap" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile4_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_man_hat" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile5_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_man_hood" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile6_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile6"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_man_horn" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile7_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_man_round" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile8_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile8"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_man_suit" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile9_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_man_sunglass" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile10_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile10"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_woman_glasses" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile11_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile11"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_woman_neck" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile12_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile12"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_woman_old" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:src="@drawable/profile_default" />
+                android:layout_columnWeight="1">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile13_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:src="@drawable/profile_back"
+                    app:civ_border_color="@color/bmi_yellow"
+                    app:civ_border_overlay="false"
+                    app:civ_border_width="0dp"/>
+                <com.example.project.Main.MyCircleImageView
+                    android:id="@+id/profile13"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_woman_scarf" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </GridLayout>
 
         <LinearLayout
