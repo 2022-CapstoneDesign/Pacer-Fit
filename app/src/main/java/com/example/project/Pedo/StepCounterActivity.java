@@ -313,7 +313,7 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
                             time=0; currentSteps=0; calories=0;
                         }
                         pedoStep = findViewById(R.id.pedo_step);
-                        pedoTime = findViewById(R.id.pedo_time_text);
+                        pedoTime = findViewById(R.id.pedo_time);
                         pedoCal = findViewById(R.id.pedo_cal);
                         if (pedoTime != null)
                             pedoTime.setText(hour + "H " + min + "M " + sec + "S");
