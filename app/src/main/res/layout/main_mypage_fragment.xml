@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                app:animationDuration="500"
+                app:animationDuration="800"
                 app:backSideColor="@color/lightgray_project"
                 app:layout_constraintEnd_toEndOf="@+id/view2"
                 app:layout_constraintStart_toStartOf="@+id/view2"
