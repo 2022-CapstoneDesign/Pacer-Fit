@@ -1,13 +1,19 @@
 package com.example.project.Main;
 
+import static com.example.project.Map.LocationService.TAG;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +33,23 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.project.Login.IntroActivity;
+import com.example.project.Map.RecordMapActivity;
 import com.example.project.R;
+import com.example.project.Ranking.UserInfo;
 import com.ramotion.foldingcell.FoldingCell;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -49,6 +67,10 @@ public class MyPageFragment extends Fragment{
     String bestKm;
     int userProfileNum;
     int hour, minutes;
+    private String pathJsonString;
+    private static final String TAG_JSON = "pacerfit";
+    private static final String TAG_PROFILENUM = "userProfileNum";
+    private static final String TAG_USERID = "userID";
 
     FoldingCell foldingCell;
     Float userHeight;
@@ -90,7 +112,8 @@ public class MyPageFragment extends Fragment{
         Intent intent = getActivity().getIntent();
         userID = intent.getStringExtra("userID");
         userName = intent.getStringExtra("userName");
-        userProfileNum = intent.getIntExtra("userProfileNum",0);
+        //userProfileNum = intent.getIntExtra("userProfileNum",0);
+        userProfileNum = UserInfo.getInstance().getUserProfileNum();
         userHeight = Float.valueOf(intent.getStringExtra("userHeight"));
         userWeight = Float.valueOf(intent.getStringExtra("userWeight"));
 
@@ -292,6 +315,9 @@ public class MyPageFragment extends Fragment{
                 else {
                     dialog.dismiss(); // 팝업창 닫힘
                     profileImg.setImageResource(ProfileDrawable[selecting_profile.getIndex()]);
+                    UserInfo.getInstance().setUserProfileNum(selecting_profile.getIndex());
+                    UpdateUserProfileNum task = new UpdateUserProfileNum();
+                    task.execute("http://pacerfit.dothome.co.kr/updateUserProfile.php");
                     deleteSelectingProfileData();
                 }
             }
@@ -456,6 +482,73 @@ public class MyPageFragment extends Fragment{
         selecting_profile = null;
         selected_back = null;
         selecting_back = null;
+    }
+
+    private class UpdateUserProfileNum extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPostExecute(String result) { //doInBackground에서 return한 값을 받음
+            super.onPostExecute(result);
+            //progressDialog.dismiss();
+            Log.d(TAG, "response  - " + result);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String serverURL = params[0];
+
+            try {
+                String userID = "userID=" + UserInfo.getInstance().getUserID();
+                String profileNum = "profileNum=" + UserInfo.getInstance().getUserProfileNum();
+                StringBuffer stParams = new StringBuffer();
+                stParams.append(userID);
+                stParams.append("&");
+                stParams.append(profileNum);
+
+                String strParams = stParams.toString();
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(strParams.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+                //어플에서 데이터 전송
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                } else {
+                    inputStream = httpURLConnection.getErrorStream();
+                }//연결상태 확인
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+        }
     }
 
 }
