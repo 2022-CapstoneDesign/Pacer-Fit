@@ -829,7 +829,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             br = new BufferedReader(isr);
             String str = null;
             while ((str = br.readLine()) != null) {
-                if (str.contains("trkpt") && !str.contains("bounds")) {
+                if (str.contains("trkpt")) {
                     Pattern pattern = Pattern.compile("[\"](.*?)[\"]");
                     Matcher matcher = pattern.matcher(str);
                     while (matcher.find()) {  // 일치하는 게 있다면
@@ -881,7 +881,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 String dist = bun.getString("dist");
                 String tag = bun.getString("tag");
                 List<LatLng> COORDS = new ArrayList<>();
-                for (int i = 0; i < latLon.length; i += 2) {
+                for (int i = 12; i < latLon.length; i += 2) {
                     try {
                        // if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7)
                        //    continue;
