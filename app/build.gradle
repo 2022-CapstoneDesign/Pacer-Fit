@@ -74,5 +74,7 @@ dependencies {
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.1'
     //folding cell
     implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
+    //view animation
+    implementation 'com.daimajia.androidanimations:library:2.4@aar'
 
 }

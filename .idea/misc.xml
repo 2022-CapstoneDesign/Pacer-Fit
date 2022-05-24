@@ -53,6 +53,7 @@
         <entry key="..\:/Users/JW/git/PacerFit/Pacer-Fit/app/src/main/res/mipmap-anydpi-v26/ic_launcher_PacerFit.xml" value="0.2265" />
         <entry key="..\:/Users/JW/git/PacerFit/Pacer-Fit/app/src/main/res/xml/network_security_config.xml" value="0.75" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable-v24/btn_style2.xml" value="0.3275" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable-v24/btn_style2_with_ripple.xml" value="0.2065" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable-v24/btn_style3.xml" value="0.3275" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable-v24/btn_style4.xml" value="0.3275" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/drawable/btn_style.xml" value="0.1695" />
@@ -93,6 +94,7 @@
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/fragment_blank.xml" value="0.34375" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/fragment_detail_pedo_record.xml" value="0.33" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/fragment_dist_ranking.xml" value="0.17603850050658562" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/fragment_my_page_identify.xml" value="0.19895833333333332" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/fragment_one_month_dist.xml" value="0.3532608695652174" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/fragment_one_month_pedo.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/fragment_one_week_dist.xml" value="0.3532608695652174" />
@@ -115,6 +117,7 @@
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_detail_fragment.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_feed_fragment.xml" value="0.2105978260869565" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_home_fragment.xml" value="0.20697463768115942" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_my_page_identify_fragment.xml" value="0.25" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_mypage_fragment.xml" value="0.33" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_ranking_fragment.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/map_crsinfo_bottom_fragment.xml" value="0.21422101449275363" />
@@ -135,6 +138,7 @@
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/record_item_layout.xml" value="0.33" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/toolbar.xml" value="0.2758152173913043" />
         <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/toolbar_mypage.xml" value="0.2115036231884058" />
+        <entry key="..\:/Users/Kimgayeong/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/toolbar_mypage_identify.xml" value="0.19895833333333332" />
         <entry key="..\:/Users/dh980/AndroidProjects/Pacer-Fit/app/src/main/res/drawable/view_style.xml" value="0.23" />
         <entry key="..\:/Users/dh980/AndroidProjects/Pacer-Fit/app/src/main/res/layout/activity_login.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/dh980/AndroidProjects/Pacer-Fit/app/src/main/res/layout/activity_main.xml" value="0.36614583333333334" />
@@ -237,8 +241,6 @@
         <entry key="..\:/Users/zqwz/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_ranking_fragment.xml" value="0.4510474561778538" />
         <entry key="..\:/Users/zqwz/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/main_splash_activity.xml" value="0.4510474561778538" />
         <entry key="..\:/Users/zqwz/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/map_activity.xml" value="0.36639589568191533" />
-        <entry key="..\:/Users/zqwz/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/map_record_activity.xml" value="0.4510474561778538" />
-        <entry key="..\:/Users/zqwz/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/map_record_fragment.xml" value="0.4510474561778538" />
         <entry key="..\:/Users/zqwz/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/map_bottom_listview_layout.xml" value="0.29243266353142366" />
         <entry key="..\:/Users/zqwz/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/map_crsinfo_bottom_fragment.xml" value="0.5" />
         <entry key="..\:/Users/zqwz/AndroidStudioProjects/Pacer-Fit/app/src/main/res/layout/map_detail_bottom_fragment.xml" value="0.3513145965548504" />
