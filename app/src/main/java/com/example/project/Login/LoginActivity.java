@@ -13,12 +13,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.project.Main.BottomNavigation;
 import com.example.project.R;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.time.LocalDate;
 import java.util.regex.Pattern;
@@ -29,10 +33,16 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginBtn;
     String date_concat;
 
+    TextInputLayout idTextInputLayout;
+    TextInputLayout pwTextInputLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
+
+        idTextInputLayout = findViewById(R.id.idTextInputLayout);
+        pwTextInputLayout = findViewById(R.id.pwTextInputLayout);
 
         idTxt = findViewById(R.id.loginIdTxt);
         passTxt = findViewById(R.id.loginPwTxt);
@@ -102,6 +112,14 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         } else { // 로그인에 실패한 경우
+                            YoYo.with(Techniques.Shake)
+                                    .duration(700)
+                                    .repeat(0)
+                                    .playOn(idTextInputLayout); // 좌우로 흔들리는 애니메이션
+                            YoYo.with(Techniques.Shake)
+                                    .duration(700)
+                                    .repeat(0)
+                                    .playOn(pwTextInputLayout); // 좌우로 흔들리는 애니메이션
                             Toast.makeText(getApplicationContext(), "로그인에 실패하였습니다.", Toast.LENGTH_SHORT).show();
                             return;
                         }

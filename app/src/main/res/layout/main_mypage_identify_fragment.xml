@@ -30,13 +30,14 @@
             android:gravity="center">
 
             <ImageView
+                android:id="@+id/profile"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/profile_default"
                 />
 
             <TextView
-                android:id="@+id/IdTxt"
+                android:id="@+id/idTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"
@@ -60,7 +61,7 @@
             android:textColor="@color/white" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/pwTextInputLayout"
+            android:id="@+id/pwLayout"
             style="@style/EditTextStyle"
             android:backgroundTint="@color/green_project"
             android:textColor="@color/green_project"
@@ -73,7 +74,7 @@
             android:layout_marginEnd="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/loginPwTxt"
+                android:id="@+id/pwTxt"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:fontFamily="@font/nanumsquareroundeb"
@@ -87,6 +88,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
+            android:id="@+id/loginBtn"
             android:layout_marginTop="30dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"

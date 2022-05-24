@@ -26,6 +26,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Main.MyPageEditInfo"
+            android:exported="false" />
 
         <receiver
             android:name=".Map.NotificationBroadcast"
