@@ -42,10 +42,10 @@
             android:layout_marginBottom="3dp"
             android:layout_gravity="bottom"
             android:text="변경"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:fontFamily="@font/nanumsquareroundeb"
-            android:textColor="@color/white"
-            android:background="@drawable/btn_style"
+            android:textColor="@color/whitegray_project"
+            android:background="@drawable/btn_style_with_ripple"
             tools:ignore="TouchTargetSizeCheck"/>
     </LinearLayout>
 
@@ -64,47 +64,113 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="3dp"
+                android:src="@drawable/name"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="비밀번호  :  "
+                android:layout_marginEnd="10dp"
+                android:text="닉네임"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:textSize="16sp"
                 android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/pwTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="****"
-                android:fontFamily="@font/nanumsquareroundeb"
-                android:textSize="16sp"
-                android:textColor="@color/white" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="이름  :  "
-                android:fontFamily="@font/nanumsquareroundeb"
-                android:textSize="16sp"
-                android:textColor="@color/white" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/nameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="nameeee"
+                android:text=""
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textSize="16sp"
+                android:textColor="@color/whitegray_project" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-3dp"
+                android:layout_marginBottom="-2dp"
+                android:layout_marginStart="-1dp"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/id"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:text="아이디"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:textSize="16sp"
                 android:textColor="@color/white" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/idTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textSize="16sp"
+                android:textColor="@color/whitegray_project" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="3dp"
+                android:src="@drawable/password"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:text="비밀번호"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textSize="16sp"
+                android:textColor="@color/white" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/pwTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textSize="16sp"
+                android:textColor="@color/whitegray_project" />
 
         </LinearLayout>
     </LinearLayout>
@@ -137,10 +203,10 @@
             android:layout_marginBottom="3dp"
             android:layout_gravity="bottom"
             android:text="변경"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:fontFamily="@font/nanumsquareroundeb"
-            android:textColor="@color/white"
-            android:background="@drawable/btn_style"
+            android:textColor="@color/whitegray_project"
+            android:background="@drawable/btn_style_with_ripple"
             tools:ignore="TouchTargetSizeCheck"/>
     </LinearLayout>
 
@@ -158,100 +224,162 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="3dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:src="@drawable/gender"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="성별  :  "
+                android:layout_marginEnd="10dp"
+                android:text="성별"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:textSize="16sp"
                 android:textColor="@color/white" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/genderTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="남"
+                android:text=""
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:textSize="16sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/whitegray_project" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="3dp"
+                android:src="@drawable/age"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="키  :  "
+                android:layout_marginEnd="10dp"
+                android:text="나이"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:textSize="16sp"
                 android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/heightTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="180cm"
-                android:fontFamily="@font/nanumsquareroundeb"
-                android:textSize="16sp"
-                android:textColor="@color/white" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="몸무게  :  "
-                android:fontFamily="@font/nanumsquareroundeb"
-                android:textSize="16sp"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/weightTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="100kg"
-                android:fontFamily="@font/nanumsquareroundeb"
-                android:textSize="16sp"
-                android:textColor="@color/white" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="나이  :  "
-                android:fontFamily="@font/nanumsquareroundeb"
-                android:textSize="16sp"
-                android:textColor="@color/white" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/ageTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20세"
+                android:text=""
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textSize="16sp"
+                android:textColor="@color/whitegray_project" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="3dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="2dp"
+                android:src="@drawable/height"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:text="키"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:textSize="16sp"
                 android:textColor="@color/white" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/heightTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textSize="16sp"
+                android:textColor="@color/whitegray_project" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginEnd="3dp"
+                android:src="@drawable/weight"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="몸무게"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textSize="16sp"
+                android:textColor="@color/white" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/weightTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textSize="16sp"
+                android:textColor="@color/whitegray_project" />
+
         </LinearLayout>
     </LinearLayout>
+
+   <View
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       android:layout_weight="1" />
 
     <Button
         android:id="@+id/deleteAccountBtn"
@@ -260,6 +388,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/btn_style5_with_ripple"
         android:fontFamily="@font/nanumsquareroundeb"
         android:text="회원 탈퇴"

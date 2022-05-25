@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
 import com.example.project.Ranking.UserInfo;
 import com.google.android.material.textfield.TextInputEditText;
@@ -24,7 +23,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class MyPageIdentifyFragment extends Fragment {
     TextInputLayout pwLayout;
-    TextInputEditText pwTxt;
+    TextInputEditText pwEditTxt;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,12 +52,12 @@ public class MyPageIdentifyFragment extends Fragment {
                 .playOn(ll);
 
         pwLayout = v.findViewById(R.id.pwLayout);
-        pwTxt = v.findViewById(R.id.pwTxt);
+        pwEditTxt = v.findViewById(R.id.pwTxt);
         Button loginBtn = v.findViewById(R.id.loginBtn);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String pw = String.valueOf(pwTxt.getText());
+                String pw = String.valueOf(pwEditTxt.getText());
                 if (pw.equals(intent.getStringExtra("userPass"))) {
                     // 개인정보 수정 액티비티로 이동
                     startActivity(new Intent(getActivity(), MyPageEditInfo.class)); //Fragment -> Activity로 이동

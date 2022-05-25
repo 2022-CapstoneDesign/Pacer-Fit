@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -79,6 +80,8 @@ public class LoginActivity extends AppCompatActivity {
                             String userName = jsonObject.getString("userName");
                             String userHeight = jsonObject.getString("userHeight"); // 키
                             String userWeight = jsonObject.getString("userWeight");
+                            String userGender = jsonObject.getString("userGender"); // 성별
+                            String userAge =jsonObject.getString("userAge"); // 나이
                             String pedo_max = jsonObject.getString("pedo_max");
                             String km_max = jsonObject.getString("km_max");
                             int userProfileNum = jsonObject.getInt("userProfileNum");
@@ -89,6 +92,8 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("userName",userName);
                             intent.putExtra("userHeight", userHeight); // 키
                             intent.putExtra("userWeight", userWeight);
+                            intent.putExtra("userGender", userGender); // 성별
+                            intent.putExtra("userAge", userAge); // 나이
                             intent.putExtra("pedo_max",pedo_max);
                             intent.putExtra("km_max",km_max);
                             intent.putExtra("userProfileNum",userProfileNum);

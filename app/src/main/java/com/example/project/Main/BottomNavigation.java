@@ -42,14 +42,22 @@ public class BottomNavigation extends AppCompatActivity {
         String userID = intent.getStringExtra("userID"); //UserID 가져옴
         String userPass = intent.getStringExtra("userPass"); //UserPass 가져옴
         String userName = intent.getStringExtra("userName");
+        String userGender = intent.getStringExtra("userGender"); // 성별
+        String userHeight = intent.getStringExtra("userHeight"); // 키
         String userWeight = intent.getStringExtra("userWeight");
+        String userAge = intent.getStringExtra("userAge"); // 나이
         String userStepsRecord = intent.getStringExtra("today_stepsRecord");
         int userProfileNum = intent.getIntExtra("userProfileNum", 0);
         System.out.println("userKg??????????????" + userWeight);
         mBottomNavigationView.setItemIconTintList(null);
         UserInfo.getInstance().setUserID(userID);
+        UserInfo.getInstance().setUserPass(userPass);
         UserInfo.getInstance().setUserName(userName);
         UserInfo.getInstance().setUserProfileNum(userProfileNum);
+        UserInfo.getInstance().setUserGender(userGender);
+        UserInfo.getInstance().setUserHeight(userHeight);
+        UserInfo.getInstance().setUserWeight(userWeight);
+        UserInfo.getInstance().setUserAge(userAge);
         System.out.println("================================" + userName);
         System.out.println("userStepsRecord======================:" + userStepsRecord);
         //case 함수를 통해 클릭 받을 때마다 화면 변경하기

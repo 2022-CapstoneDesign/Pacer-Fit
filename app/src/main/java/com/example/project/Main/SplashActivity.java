@@ -57,6 +57,8 @@ public class SplashActivity extends AppCompatActivity {
                                 String userWeight = jsonObject.getString("userWeight");
                                 String pedo_max = jsonObject.getString("pedo_max");
                                 String km_max = jsonObject.getString("km_max");
+                                String userGender = jsonObject.getString("userGender");
+                                String userAge = jsonObject.getString("userAge");
                                 int userProfileNum = jsonObject.getInt("userProfileNum");
                                 Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(SplashActivity.this, BottomNavigation.class);// 메인 액티비티로 전환
@@ -68,6 +70,8 @@ public class SplashActivity extends AppCompatActivity {
                                 intent.putExtra("pedo_max",pedo_max);
                                 intent.putExtra("km_max",km_max);
                                 intent.putExtra("userProfileNum",userProfileNum);
+                                intent.putExtra("userGender", userGender);
+                                intent.putExtra("userAge", userAge);
                                 startActivity(intent);
                                 finish();
                             } else { // 로그인에 실패한 경우
