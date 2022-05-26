@@ -5,11 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -136,11 +136,28 @@ public class MyPageEditInfo extends AppCompatActivity {
     private void showEditPhysicalDialog() {
         dialog2.show();
 
+        RadioGroup ManOrWoman = dialog2.findViewById(R.id.radioGroup);
+
         TextView calculateAgeTxt = dialog2.findViewById(R.id.calculateAgeTxt);
+        calculateAgeTxt.setText(UserInfo.getInstance().getUserAge());
+
+        TextView calculateHeightIntTxt = dialog2.findViewById(R.id.calculateHeightIntTxt);
+        calculateHeightIntTxt.setText(getHeightIntVal());
+
+        TextView calculateHeightPointTxt = dialog2.findViewById(R.id.calculateHeightPointTxt);
+        calculateHeightPointTxt.setText(getHeightPointVal());
+
+        TextView calculateWeightIntTxt = dialog2.findViewById(R.id.calculateWeightIntTxt);
+        calculateWeightIntTxt.setText(getWeightIntVal());
+
+        TextView calculateWeightPointTxt = dialog2.findViewById(R.id.calculateWeightPointTxt);
+        calculateWeightPointTxt.setText(getWeightPointVal());
 
         NumberPicker agePicker = dialog2.findViewById(R.id.agePicker);
         NumberPicker heightPicker = dialog2.findViewById(R.id.heightPicker);
+        NumberPicker heightPointPicker = dialog2.findViewById(R.id.heightPointPicker);
         NumberPicker weightPicker = dialog2.findViewById(R.id.weightPicker);
+        NumberPicker weightPointPicker = dialog2.findViewById(R.id.weightPointPicker);
 
         Button okBtn = dialog2.findViewById(R.id.okBtn);
         Button cancelBtn = dialog2.findViewById(R.id.cancelBtn);
@@ -152,14 +169,15 @@ public class MyPageEditInfo extends AppCompatActivity {
         int userAge = Integer.parseInt(UserInfo.getInstance().getUserAge());
         int userYear = thisYear - userAge + 1;
 
-        agePicker.setMaxValue(2022);
-        agePicker.setMinValue(1900);
+        agePicker.setMinValue(1901);
+        agePicker.setMaxValue(thisYear);
         agePicker.setValue(userYear);
+        agePicker.setWrapSelectorWheel(false);
 
         agePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                String val = String.valueOf(thisYear - newVal + 2);
+                String val = String.valueOf(thisYear - newVal + 1);
                 calculateAgeTxt.setText(val);
             }
         });
@@ -170,12 +188,28 @@ public class MyPageEditInfo extends AppCompatActivity {
 
         heightPicker.setMaxValue(200);
         heightPicker.setMinValue(50);
-        heightPicker.setValue(height);
+        heightPicker.setValue(Integer.parseInt(getHeightIntVal()));
+        heightPicker.setWrapSelectorWheel(false);
 
+        heightPointPicker.setMinValue(0);
+        heightPointPicker.setMaxValue(9);
+        heightPointPicker.setValue(Integer.parseInt(getHeightPointVal()));
+        heightPointPicker.setWrapSelectorWheel(true);
+
+        // 정수자리
         heightPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                String changedHeight = String.valueOf(newVal);
+                String val = String.valueOf(newVal);
+                calculateHeightIntTxt.setText(val);
+            }
+        });
+        // 소수점
+        heightPointPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                String val = String.valueOf(newVal);
+                calculateHeightPointTxt.setText(val);
             }
         });
 
@@ -184,18 +218,52 @@ public class MyPageEditInfo extends AppCompatActivity {
 
         weightPicker.setMinValue(30);
         weightPicker.setMaxValue(200);
-        weightPicker.setValue(weight);
+        weightPicker.setValue(Integer.parseInt(getWeightIntVal()));
+        weightPicker.setWrapSelectorWheel(false);
 
+        weightPointPicker.setMinValue(0);
+        weightPointPicker.setMaxValue(9);
+        weightPointPicker.setValue(Integer.parseInt(getWeightPointVal()));
+        weightPointPicker.setWrapSelectorWheel(true);
+
+        // 정수자리
         weightPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                String changedWeight = String.valueOf(newVal);
+                String val = String.valueOf(newVal);
+                calculateWeightIntTxt.setText(val);
+            }
+        });
+        // 소수점
+        weightPointPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                String val = String.valueOf(newVal);
+                calculateWeightPointTxt.setText(val);
             }
         });
 
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 성별 값 읽어오기
+                String gender;
+                if (ManOrWoman.getCheckedRadioButtonId() == R.id.manBtn) {
+                    gender = "man";
+                }
+                else {
+                    gender = "woman";
+                }
+
+                // 나이 값 읽어오기
+                int age = Integer.parseInt(calculateAgeTxt.getText().toString());
+
+                // 키 값 읽어오기
+                Float height = Float.parseFloat(calculateHeightIntTxt.getText().toString()) + Float.parseFloat(calculateHeightPointTxt.getText().toString()) * 0.1f;
+
+                // 몸무게 값 읽어오기
+                Float weight = Float.parseFloat(calculateWeightIntTxt.getText().toString()) + Float.parseFloat(calculateWeightPointTxt.getText().toString()) * 0.1f;
+
                 dialog2.dismiss();
                 Toast.makeText(getApplication(), "정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
             }
@@ -206,5 +274,30 @@ public class MyPageEditInfo extends AppCompatActivity {
                 dialog2.dismiss();
             }
         });
+    }
+
+    public String getHeightIntVal() {
+        Float height = Float.valueOf(UserInfo.getInstance().getUserHeight());
+        int intVal = (int) (height * 10) / 10;
+
+        return String.valueOf(intVal);
+    }
+    public String getHeightPointVal() {
+        Float height = Float.valueOf(UserInfo.getInstance().getUserHeight());
+        int  point = (int) ((height * 10) % 10);
+
+        return String.valueOf(point);
+    }
+    public String getWeightIntVal() {
+        Float weight = Float.valueOf(UserInfo.getInstance().getUserWeight());
+        int intVal = (int) (weight * 10) / 10;
+
+        return String.valueOf(intVal);
+    }
+    public String getWeightPointVal() {
+        Float weight = Float.valueOf(UserInfo.getInstance().getUserWeight());
+        int  point = (int) ((weight * 10) % 10);
+
+        return String.valueOf(point);
     }
 }
