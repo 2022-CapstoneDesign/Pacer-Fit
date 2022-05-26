@@ -27,9 +27,8 @@
         android:theme="@style/Theme.Project"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".Main.MyPagePopupImgActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
+            android:name=".Main.MyPageEditInfo"
+            android:exported="false" />
 
         <receiver
             android:name=".Map.NotificationBroadcast"

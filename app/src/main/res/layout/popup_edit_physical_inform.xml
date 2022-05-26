@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/view_style"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:fontFamily="@font/nanumsquareroundeb"
+            android:padding="10dp"
+            android:text="신체 정보 수정"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/nanumsquareroundeb"
+            android:padding="5dp"
+            android:text="성별"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/manRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:buttonTint="@color/white"
+                android:checked="true"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="@string/man"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <View
+                android:layout_width="80dp"
+                android:layout_height="match_parent" />
+
+            <RadioButton
+                android:id="@+id/womanRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+
+                android:buttonTint="@color/white"
+                android:checked="false"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="@string/woman"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                tools:ignore="TouchTargetSizeCheck" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/nanumsquareroundeb"
+            android:padding="5dp"
+            android:text="나이"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+            <TextView
+                android:id="@+id/calculateAgeTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text=""
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="세"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <NumberPicker
+            android:id="@+id/agePicker"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:theme="@style/AppTheme.Picker"
+            android:solidColor="#4B4B4C"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/nanumsquareroundeb"
+            android:padding="5dp"
+            android:text="키"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <NumberPicker
+            android:id="@+id/heightPicker"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:theme="@style/AppTheme.Picker"
+            android:solidColor="#4B4B4C"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/nanumsquareroundeb"
+            android:padding="5dp"
+            android:text="몸무게"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <NumberPicker
+            android:id="@+id/weightPicker"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="20dp"
+            android:theme="@style/AppTheme.Picker"
+            android:solidColor="#4B4B4C"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <Button
+                android:id="@+id/okBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_style2"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="확인"
+                android:textColor="@color/whitegray_project"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/cancelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_style2"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="취소"
+                android:textColor="@color/whitegray_project"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
