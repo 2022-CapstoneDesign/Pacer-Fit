@@ -80,7 +80,7 @@ public class LocationService extends Service {
             Location location = locationResult.getLastLocation();
 
             // 타이머가 돌아가지 않거나, 정확도가 accuracy보다 크거나, 포그라운드 상태이면 return
-            if (!isRecord || location.getAccuracy() > accuracy || !isBackground)
+            if (!isRecord || location.getAccuracy() > accuracy || isBackground)
                 return;
 
             // 리스트에 좌표 추가
@@ -181,13 +181,7 @@ public class LocationService extends Service {
                 }
             }
         }
-        return START_STICKY;
-    }
-
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
-        super.onTaskRemoved(rootIntent);
-        stopSelf();
+        return super.onStartCommand(intent,flags,startId);
     }
 
     @Override
@@ -259,7 +253,6 @@ public class LocationService extends Service {
                 .addCategory(Intent.CATEGORY_LAUNCHER)
                 .setAction(Intent.ACTION_MAIN)
                 .putExtra("OnNewIntent", "resume");
-        ;
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, tapIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 

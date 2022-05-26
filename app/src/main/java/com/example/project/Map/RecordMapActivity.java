@@ -13,12 +13,15 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -189,6 +192,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 선택 코스 path
     private PathOverlay selectedCrs;
 
+
     // 서비스 <- 액티비티 위치 리스트 반환
     public static List<LatLng> getList() {
         return latLngList;
@@ -340,6 +344,22 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         GetGpxPathData task = new GetGpxPathData();
         task.execute("http://pacerfit.dothome.co.kr/getPathWithArea.php");
+
+
+    }
+
+    private void onRequestPermissionBattery() {
+        // 백그라운드에서도 서비스가 돌아갈 수 있도록 함
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        String packageName = getPackageName();
+        if (pm.isIgnoringBatteryOptimizations(packageName)) {
+
+        } else {    // 메모리 최적화가 되어 있다면, 풀기 위해 설정 화면 띄움.
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + packageName));
+            startActivity(intent);
+        }
     }
 
 
@@ -472,7 +492,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         if (mService != null)
             mService.isBackground = false;
         isBackground = false;
-
         Log.d(TAG, "onResume " + isBackground);
     }
 
@@ -483,7 +502,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         isBackground = true;
         if (mService != null)
             mService.isBackground = true;
-
         Log.d(TAG, "onPause " + isBackground);
     }
 
@@ -554,11 +572,16 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     // 시작 기능
     public void StartFab() {
+        // 절전 모드 해제
+        onRequestPermissionBattery();
+        // 백그라운드 위치 항상 허용
+        onRequestPermissionBackgroundLocation();
+        // 코스 선택 (코스 없으면 그대로 진행)
         selectCrs();
         isRecord = true;
         // 권한 체크 후 서비스 시작
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(RecordMapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.REQUEST_CODE_LOCATION_PERMISSION);
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(RecordMapActivity.this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, Constants.REQUEST_CODE_LOCATION_PERMISSION);
         } else {
             startLocationService();
         }
@@ -574,6 +597,14 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         // 로그
         Log.d(TAG, "StartFab");
+    }
+
+    private void onRequestPermissionBackgroundLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) { //백그라운드 위치 권한 확인
+        } else {
+            //위치 권한 요청
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 0);
+        }
     }
 
     // 저장 기능
@@ -596,6 +627,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         intent.putExtra("dist", distance);
         intent.putExtra("time", time);
         startActivity(intent);
+        finish();
     }
 
     NaverMap.SnapshotReadyCallback snapshotReadyCallback = new NaverMap.SnapshotReadyCallback() {
@@ -775,7 +807,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
 
-                System.out.println(jsonArray.length()+"\n");
+                System.out.println(jsonArray.length() + "\n");
                 System.out.println(i);
 
 
@@ -883,8 +915,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 List<LatLng> COORDS = new ArrayList<>();
                 for (int i = 12; i < latLon.length; i += 2) {
                     try {
-                       // if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7)
-                       //    continue;
+                        // if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7)
+                        //    continue;
 
                         COORDS.add(new LatLng(Double.valueOf(latLon[i]), Double.valueOf(latLon[i + 1])));
                     } catch (NumberFormatException e) {

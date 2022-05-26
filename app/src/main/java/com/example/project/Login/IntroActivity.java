@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,14 +31,15 @@ public class IntroActivity extends AppCompatActivity {
 
         loginBtn = findViewById(R.id.introLoginBtn);
         joinBtn = findViewById(R.id.introJoinBtn);
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
 
-        if (checkLocationService()) {
-            permissionCheck();
-        } else {
-            Toast.makeText(this, "GPS를 켜주세요", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
+        if(permissionCheck == PackageManager.PERMISSION_DENIED){ //포그라운드 위치 권한 확인
+
+            //위치 권한 요청
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
+
+
 
         loginBtn.setOnClickListener(v -> {
             startActivity(new Intent(IntroActivity.this, LoginActivity.class));

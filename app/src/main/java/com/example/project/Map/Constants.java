@@ -1,10 +1,14 @@
 package com.example.project.Map;
+
 public class Constants {
 
     // service
     static final String ACTION_START_LOCATION_SERVICE = "startLocationService";
     static final String ACTION_STOP_LOCATION_SERVICE = "stopLocationService";
     static final String ACTION_PAUSE_LOCATION_SERVICE = "pauseLocationService";
+
+    static final String ACTION_RESUME_ACTIVITY = "resumeActivity";
+    static final String ACTION_PAUSE_ACTIVITY = "pauseActivity";
 
     // location
     static final int REQUEST_CODE_LOCATION_PERMISSION = 1;

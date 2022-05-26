@@ -46,6 +46,7 @@ public class RecordActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
     }
 }
 
