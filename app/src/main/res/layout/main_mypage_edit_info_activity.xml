@@ -36,6 +36,7 @@
             android:layout_weight="1" />
 
         <Button
+            android:id="@+id/editInfoBtn1"
             android:layout_width="70dp"
             android:layout_height="32dp"
             android:layout_marginEnd="20dp"
@@ -197,6 +198,7 @@
             android:layout_weight="1" />
 
         <Button
+            android:id="@+id/editInfoBtn2"
             android:layout_width="70dp"
             android:layout_height="32dp"
             android:layout_marginEnd="20dp"
@@ -294,6 +296,14 @@
                 android:textSize="16sp"
                 android:textColor="@color/whitegray_project" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="세"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textSize="16sp"
+                android:textColor="@color/whitegray_project" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -329,6 +339,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textSize="16sp"
+                android:textColor="@color/whitegray_project" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cm"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:textSize="16sp"
                 android:textColor="@color/whitegray_project" />
@@ -369,6 +387,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textSize="16sp"
+                android:textColor="@color/whitegray_project" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="kg"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:textSize="16sp"
                 android:textColor="@color/whitegray_project" />
