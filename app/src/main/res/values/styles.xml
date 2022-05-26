@@ -17,7 +17,6 @@
 
     <!-- EditTextStyle 커스텀 -->
     <style name="EditTextStyle" parent="Widget.Design.TextInputLayout">
-
         <!-- unFocus 상태일 때 밑줄 색 -->
         <item name="colorControlNormal">@color/white</item>
         <!-- Focus 상태일 때 밑줄 색 -->
@@ -56,6 +55,13 @@
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <!-- NumberPicker 커스텀 -->
+    <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="fontFamily">@font/nanumsquareroundeb</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
 </resources>

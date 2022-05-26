@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,17 +27,17 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Guideline;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.project.Login.IntroActivity;
-import com.example.project.Map.RecordMapActivity;
 import com.example.project.R;
 import com.example.project.Ranking.UserInfo;
 import com.ramotion.foldingcell.FoldingCell;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,8 +47,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -119,6 +116,23 @@ public class MyPageFragment extends Fragment{
 
         profileImg.setImageResource(ProfileDrawable[userProfileNum]);
 
+        Button mypageEditBtn = v.findViewById(R.id.mypageEditBtn);
+        mypageEditBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 프래그먼트 전환 시에 애니메이션을 적용하고 싶다면 다음과 같이 설정
+                // 1. FragmentTransaction 선언 바로 다음에 setCustomAnimations 설정
+                // 2. 각 메소드를 분리하여 작성(연달아서 X)
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                MyPageIdentifyFragment fragment = new MyPageIdentifyFragment();
+                FragmentTransaction transaction = fm.beginTransaction();
+                //transaction.setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out);
+                transaction.replace(R.id.frame_container, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
         // <------- 로그 아웃 처리 ------->
         Button logout = v.findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener(){
@@ -138,7 +152,7 @@ public class MyPageFragment extends Fragment{
         // <------ 팝업 다이얼로그 ------>
         dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.activity_my_page_popup_img);
+        dialog.setContentView(R.layout.popup_mypage_select_img);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
 
         profileImg.setOnClickListener(new View.OnClickListener() {
