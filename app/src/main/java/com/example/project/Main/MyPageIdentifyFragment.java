@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
 import com.example.project.Ranking.UserInfo;
 import com.google.android.material.textfield.TextInputEditText;
@@ -63,9 +62,10 @@ public class MyPageIdentifyFragment extends Fragment {
                 String pw = String.valueOf(pwEditTxt.getText());
                 if (pw.equals(UserInfo.getInstance().getUserPass())) {
                     // 개인정보 수정 액티비티로 이동
-                    Intent intent = new Intent(getActivity(), MyPageEditInfo.class); //Fragment -> Activity로 이동 (StepCounterActivity.java)
+                    Intent intent = new Intent(getActivity(), MyPageEditInfoActivity.class); //Fragment -> Activity로 이동 (StepCounterActivity.java)
                     intent.putExtra("userID", userID);
                     startActivity(intent);
+                    getActivity().getSupportFragmentManager().popBackStack(); // 액티비티 실행 후 뒤로가면 로그인 창 안 나오게
                 }
                 else { // 비밀번호 오류
                     YoYo.with(Techniques.Shake)

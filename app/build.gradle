@@ -76,5 +76,7 @@ dependencies {
     implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
     //view animation
     implementation 'com.daimajia.androidanimations:library:2.4@aar'
+    //swipe refresh layout
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
 }

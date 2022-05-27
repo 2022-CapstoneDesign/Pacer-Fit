@@ -40,7 +40,7 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/manBtn"
+                android:id="@+id/manRadioBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:buttonTint="@color/white"
@@ -57,7 +57,7 @@
                 android:layout_height="match_parent" />
 
             <RadioButton
-                android:id="@+id/womanBtn"
+                android:id="@+id/womanRadioBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
 

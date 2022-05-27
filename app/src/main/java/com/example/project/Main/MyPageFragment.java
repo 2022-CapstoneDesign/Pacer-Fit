@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -88,12 +89,22 @@ public class MyPageFragment extends Fragment{
     CircleImageView selected_back;
     CircleImageView selecting_back;
 
+    SwipeRefreshLayout swipeRefreshLayout;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    //    FragmentManager fragmentManager = getFragmentManager();
+//        Fragment fragment = fragmentManager.findFragmentByTag("MyPageFragment_TAG");
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//        //getSupportFragmentManager().beginTransaction();
+//        ft.detach(fragment);
+//        ft.attach(fragment);
+//        ft.commit();
+
         View v = inflater.inflate(R.layout.main_mypage_fragment, container, false);
 
-        TextView myID = v.findViewById(R.id.mypageId);
+        TextView userNameTxt = v.findViewById(R.id.mypageUsername);
 
         TextView maxStep = v.findViewById(R.id.maxStep);
         TextView maxKm = v.findViewById(R.id.maxKm);
@@ -114,6 +125,25 @@ public class MyPageFragment extends Fragment{
         userHeight = Float.valueOf(UserInfo.getInstance().getUserHeight());
         userWeight = Float.valueOf(UserInfo.getInstance().getUserWeight());
 
+        swipeRefreshLayout = v.findViewById(R.id.swiperefreshlayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                float height = Float.parseFloat(UserInfo.getInstance().getUserHeight());
+                float weight = Float.parseFloat(UserInfo.getInstance().getUserWeight());
+                String userName = UserInfo.getInstance().getUserName();
+
+                heightTxt.setText(height + "cm");
+                weightTxt.setText(weight + "kg");
+                userNameTxt.setText(userName);
+                double bmi = weight / ((height*0.01)*(height*0.01));
+                bmi = Math.round(bmi*100)/100.0; // 소수점 아래 둘째자리까지 반올림
+                bmiTxt.setText("BMI : " + bmi);
+
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
         profileImg.setImageResource(ProfileDrawable[userProfileNum]);
 
         Button mypageEditBtn = v.findViewById(R.id.mypageEditBtn);
@@ -128,8 +158,14 @@ public class MyPageFragment extends Fragment{
                 FragmentTransaction transaction = fm.beginTransaction();
                 //transaction.setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out);
                 transaction.replace(R.id.frame_container, fragment);
-                transaction.addToBackStack(null);
+                transaction.addToBackStack("MyPageFragment_TAG");
                 transaction.commit();
+
+//                MyPageIdentifyFragment fragment = new MyPageIdentifyFragment();
+//                FragmentTransaction transaction = fragmentManager.beginTransaction();
+//                transaction.replace(R.id.frame_container, fragment);
+//                transaction.addToBackStack("MyPageFragment_TAG");
+//                transaction.commit();
             }
         });
 
@@ -181,7 +217,7 @@ public class MyPageFragment extends Fragment{
                         bestTime_Steps = jsonObject.getString("bestTime(steps)");
                         bestCalorie_Steps = jsonObject.getString("bestCalorie(steps)");
 
-                        myID.setText(userName); // user이름 설정해주기
+                        userNameTxt.setText(userName); // user이름 설정해주기
                         
                         //칼로리
                         if (Float.parseFloat(bestCalorie_Km) > Float.parseFloat(bestCalorie_Steps))
@@ -275,9 +311,12 @@ public class MyPageFragment extends Fragment{
             }
         });
 
-        heightTxt.setText(userHeight + "cm");
-        weightTxt.setText(userWeight + "kg");
-        double bmi = userWeight / ((userHeight*0.01)*(userHeight*0.01));
+        float height = Float.parseFloat(UserInfo.getInstance().getUserHeight());
+        float weight = Float.parseFloat(UserInfo.getInstance().getUserWeight());
+
+        heightTxt.setText(height + "cm");
+        weightTxt.setText(weight + "kg");
+        double bmi = weight / ((height*0.01)*(height*0.01));
         bmi = Math.round(bmi*100)/100.0; // 소수점 아래 둘째자리까지 반올림
         bmiTxt.setText("BMI : " + bmi);
 

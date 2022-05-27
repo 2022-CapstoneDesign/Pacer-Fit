@@ -98,7 +98,7 @@ public class BottomNavigation extends AppCompatActivity {
                         menu.findItem(R.id.bottom_2_rank).setIcon(R.drawable.unselected_rank);
                         menu.findItem(R.id.bottom_3_feed).setIcon(R.drawable.unselected_feed);
                         getSupportFragmentManager().popBackStack();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new MyPageFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, MyPageFragment.class, null, "MyPageFragment_TAG").commit();
                         break;
                 }
                 return true;

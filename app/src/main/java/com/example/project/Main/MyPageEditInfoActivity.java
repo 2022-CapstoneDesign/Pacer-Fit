@@ -1,9 +1,10 @@
 package com.example.project.Main;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -18,9 +19,6 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.project.Login.LoginActivity;
-import com.example.project.Login.RegisterActivity;
-import com.example.project.Login.RegisterRequest;
 import com.example.project.R;
 import com.example.project.Ranking.UserInfo;
 
@@ -30,7 +28,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class MyPageEditInfo extends AppCompatActivity {
+public class MyPageEditInfoActivity extends AppCompatActivity {
 
     TextView nameTxt;
     TextView idTxt;
@@ -47,6 +45,11 @@ public class MyPageEditInfo extends AppCompatActivity {
     Dialog dialog2;
 
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_mypage_edit_info_activity);
@@ -61,13 +64,13 @@ public class MyPageEditInfo extends AppCompatActivity {
 
         setUserData();
 
-        dialog1 = new Dialog(MyPageEditInfo.this);
+        dialog1 = new Dialog(MyPageEditInfoActivity.this);
         dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog1.setContentView(R.layout.popup_edit_account_inform);
         dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
         dialog1.setCanceledOnTouchOutside(false); // 외부 터치 시 꺼지는 현상 막기
 
-        dialog2 = new Dialog(MyPageEditInfo.this);
+        dialog2 = new Dialog(MyPageEditInfoActivity.this);
         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog2.setContentView(R.layout.popup_edit_physical_inform);
         dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
@@ -112,7 +115,7 @@ public class MyPageEditInfo extends AppCompatActivity {
         dialog1.show();
 
         ClearEditText editNameTxt = dialog1.findViewById(R.id.editNameTxt);
-        ClearEditText editIdTxt = dialog1.findViewById(R.id.editIdTxt);
+        TextView editIdTxt = dialog1.findViewById(R.id.editIdTxt);
         ClearEditText editPwTxt = dialog1.findViewById(R.id.editPwTxt);
 
         editNameTxt.setText(nameTxt.getText());
@@ -158,7 +161,7 @@ public class MyPageEditInfo extends AppCompatActivity {
                 // 서버로 Volley를 이용해서 요청을 함.
                 //RegisterRequest.java 이동
                 EditAccountRequest editAccountRequest = new EditAccountRequest(UserInfo.getInstance().getUserID(), changedPw, changedName, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(MyPageEditInfo.this);
+                RequestQueue queue = Volley.newRequestQueue(MyPageEditInfoActivity.this);
                 queue.add(editAccountRequest);
 
             }
@@ -251,26 +254,23 @@ public class MyPageEditInfo extends AppCompatActivity {
                 calculateAgeTxt.setText(val);
                 System.out.println("나이=============="+calculateAgeTxt.getText());
                 cAge[0] = Integer.parseInt(val);
-                UserInfo.getInstance().setUserAge(val);
+                //UserInfo.getInstance().setUserAge(val);
             }
         });
 
         // <---- 키 ---->
-        int height = Integer.parseInt(UserInfo.getInstance().getUserHeight());
+        //int height = Integer.parseInt(UserInfo.getInstance().getUserHeight());
         //int height = Integer.parseInt((String) heightTxt.getText());
 
         heightPicker.setMaxValue(200);
         heightPicker.setMinValue(50);
-        heightPicker.setValue(height);
+        heightPicker.setValue(Integer.parseInt(getHeightIntVal()));
         heightPicker.setWrapSelectorWheel(false);
 
         heightPointPicker.setMinValue(0);
         heightPointPicker.setMaxValue(9);
         heightPointPicker.setValue(Integer.parseInt(getHeightPointVal()));
         heightPointPicker.setWrapSelectorWheel(true);
-
-        float[] ch = new float[1];
-        float[] cw = new float[1];
 
         // 정수자리
         heightPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -290,7 +290,7 @@ public class MyPageEditInfo extends AppCompatActivity {
         });
 
         // <---- 몸무게 ---->
-        int weight = Integer.parseInt(UserInfo.getInstance().getUserWeight());
+        //int weight = Integer.parseInt(UserInfo.getInstance().getUserWeight());
 
         weightPicker.setMinValue(30);
         weightPicker.setMaxValue(200);
@@ -322,6 +322,8 @@ public class MyPageEditInfo extends AppCompatActivity {
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                UserInfo.getInstance().setUserAge(String.valueOf(cAge[0])); // 새로운 나이 설정
+
                 // 키 값 읽어오기
                 Float height = Float.parseFloat(calculateHeightIntTxt.getText().toString()) + Float.parseFloat(calculateHeightPointTxt.getText().toString()) * 0.1f;
                 //int height_i = Integer.parseInt(height.toString());
@@ -390,7 +392,7 @@ public class MyPageEditInfo extends AppCompatActivity {
                         height,
                         weight,
                         responseListener);
-                RequestQueue queue = Volley.newRequestQueue(MyPageEditInfo.this);
+                RequestQueue queue = Volley.newRequestQueue(MyPageEditInfoActivity.this);
                 queue.add(editPhysicalRequest);
             }
         });
