@@ -70,6 +70,10 @@ public class MyPageFragment extends Fragment{
     private static final String TAG_PROFILENUM = "userProfileNum";
     private static final String TAG_USERID = "userID";
 
+    Guideline guideline_bmi;
+    TextView bmiExplain;
+    ImageView bmi_marker;
+
     FoldingCell foldingCell;
     Float userHeight;
     Float userWeight;
@@ -104,6 +108,7 @@ public class MyPageFragment extends Fragment{
 
         View v = inflater.inflate(R.layout.main_mypage_fragment, container, false);
 
+        guideline_bmi = v.findViewById(R.id.guideline_bmi);
         TextView userNameTxt = v.findViewById(R.id.mypageUsername);
 
         TextView maxStep = v.findViewById(R.id.maxStep);
@@ -115,7 +120,8 @@ public class MyPageFragment extends Fragment{
         TextView heightTxt = v.findViewById(R.id.heightTxt);
         TextView weightTxt = v.findViewById(R.id.weightTxt);
         TextView bmiTxt = v.findViewById(R.id.bmiTxt);
-        TextView bmiExplain = v.findViewById(R.id.bmi_explain);
+        bmiExplain = v.findViewById(R.id.bmi_explain);
+        bmi_marker = v.findViewById(R.id.bmi_marker);
 
         Intent intent = getActivity().getIntent();
         userID = intent.getStringExtra("userID");
@@ -139,6 +145,8 @@ public class MyPageFragment extends Fragment{
                 double bmi = weight / ((height*0.01)*(height*0.01));
                 bmi = Math.round(bmi*100)/100.0; // 소수점 아래 둘째자리까지 반올림
                 bmiTxt.setText("BMI : " + bmi);
+
+                settingBmiMarker(bmi);
 
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -320,8 +328,38 @@ public class MyPageFragment extends Fragment{
         bmi = Math.round(bmi*100)/100.0; // 소수점 아래 둘째자리까지 반올림
         bmiTxt.setText("BMI : " + bmi);
 
+        settingBmiMarker(bmi);
+//        float markerVal;
+//        guideline_bmi = v.findViewById(R.id.guideline_bmi);
+//        if (bmi < 20) { // 0 ~ 20
+//            markerVal = (float) (0.0125 * bmi);
+//            bmiExplain.setText("저체중");
+//            bmiExplain.setTextColor(ContextCompat.getColor(getContext(), R.color.bmi_blue));
+//        }
+//        else if (bmi >= 20 && bmi < 24) {
+//            markerVal = (float) (0.0625 * bmi - 1);
+//            bmiExplain.setText("정상 체중");
+//            bmiExplain.setTextColor(ContextCompat.getColor(getContext(), R.color.bmi_green));
+//        }
+//        else if (bmi >= 24 && bmi < 30) {
+//            markerVal = (float) (0.0417 * bmi - 0.5);
+//            bmiExplain.setText("과체중");
+//            bmiExplain.setTextColor(ContextCompat.getColor(getContext(), R.color.bmi_yellow));
+//        }
+//        else { // 30 ~ 100
+//            markerVal = (float) (0.0036 * bmi + 0.64);
+//            bmiExplain.setText("비만");
+//            bmiExplain.setTextColor(ContextCompat.getColor(getContext(), R.color.bmi_red));
+//        }
+//        markerVal = (float) (Math.round(markerVal*100)/100.0); // 소수점 아래 둘째자리까지 반올림
+//        guideline_bmi.setGuidelinePercent(markerVal);
+
+
+        return v;
+    }
+
+    private void settingBmiMarker(double bmi) {
         float markerVal;
-        Guideline guideline_bmi = v.findViewById(R.id.guideline_bmi);
         if (bmi < 20) { // 0 ~ 20
             markerVal = (float) (0.0125 * bmi);
             bmiExplain.setText("저체중");
@@ -345,11 +383,7 @@ public class MyPageFragment extends Fragment{
         markerVal = (float) (Math.round(markerVal*100)/100.0); // 소수점 아래 둘째자리까지 반올림
         guideline_bmi.setGuidelinePercent(markerVal);
 
-        ImageView bmi_marker = v.findViewById(R.id.bmi_marker);
         bmi_marker.bringToFront();
-
-
-        return v;
     }
 
     private void showProfileDialog() {
