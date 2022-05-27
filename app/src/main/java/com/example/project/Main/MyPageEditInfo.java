@@ -200,14 +200,14 @@ public class MyPageEditInfo extends AppCompatActivity {
         RadioGroup Man_or_Woman = dialog2.findViewById(R.id.radioGroup);
         System.out.println("================gender"+UserInfo.getInstance().getUserGender());
         final String[] gender = new String[1];
-        if(UserInfo.getInstance().getUserGender().equals("man"))
-            Man_or_Woman.check(R.id.manRadioBtn);
-        else
-            Man_or_Woman.check(R.id.womanRadioBtn);
 
         if(UserInfo.getInstance().getUserGender().equals("man")) {
+            gender[0] = "man";
+            Man_or_Woman.check(R.id.manRadioBtn);
             genderTxt.setText("남");
         }else{
+            gender[0] = "woman";
+            Man_or_Woman.check(R.id.womanRadioBtn);
             genderTxt.setText("여");
         }
 
@@ -243,14 +243,14 @@ public class MyPageEditInfo extends AppCompatActivity {
         agePicker.setValue(userYear);
         agePicker.setWrapSelectorWheel(false);
 
-        int[] cage = new int[1];
+        int[] cAge = new int[1];
         agePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 String val = String.valueOf(thisYear - newVal + 1);
                 calculateAgeTxt.setText(val);
                 System.out.println("나이=============="+calculateAgeTxt.getText());
-                cage[0] = Integer.parseInt(val);
+                cAge[0] = Integer.parseInt(val);
                 UserInfo.getInstance().setUserAge(val);
             }
         });
@@ -261,13 +261,16 @@ public class MyPageEditInfo extends AppCompatActivity {
 
         heightPicker.setMaxValue(200);
         heightPicker.setMinValue(50);
-        heightPicker.setValue(Integer.parseInt(getHeightIntVal()));
+        heightPicker.setValue(height);
         heightPicker.setWrapSelectorWheel(false);
 
         heightPointPicker.setMinValue(0);
         heightPointPicker.setMaxValue(9);
         heightPointPicker.setValue(Integer.parseInt(getHeightPointVal()));
         heightPointPicker.setWrapSelectorWheel(true);
+
+        float[] ch = new float[1];
+        float[] cw = new float[1];
 
         // 정수자리
         heightPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -321,12 +324,12 @@ public class MyPageEditInfo extends AppCompatActivity {
             public void onClick(View v) {
                 // 키 값 읽어오기
                 Float height = Float.parseFloat(calculateHeightIntTxt.getText().toString()) + Float.parseFloat(calculateHeightPointTxt.getText().toString()) * 0.1f;
-                int height_i = Integer.parseInt(height.toString());
+                //int height_i = Integer.parseInt(height.toString());
                 UserInfo.getInstance().setUserHeight(height.toString()); // 새로운 키 설정
 
                 // 몸무게 값 읽어오기
                 Float weight = Float.parseFloat(calculateWeightIntTxt.getText().toString()) + Float.parseFloat(calculateWeightPointTxt.getText().toString()) * 0.1f;
-                int weight_i = Integer.parseInt(weight.toString());
+                //int weight_i = Integer.parseInt(weight.toString());
                 UserInfo.getInstance().setUserWeight(weight.toString()); // 새로운 몸무게 설정
 
 
@@ -383,9 +386,9 @@ public class MyPageEditInfo extends AppCompatActivity {
                 //RegisterRequest.java 이동
                 EditPhysicalRequest editPhysicalRequest = new EditPhysicalRequest(UserInfo.getInstance().getUserID(),
                         gender[0],
-                        cage[0],
-                        height_i,
-                        weight_i,
+                        cAge[0],
+                        height,
+                        weight,
                         responseListener);
                 RequestQueue queue = Volley.newRequestQueue(MyPageEditInfo.this);
                 queue.add(editPhysicalRequest);

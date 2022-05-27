@@ -13,7 +13,7 @@ public class EditPhysicalRequest extends StringRequest {
     final static private String URL = "http://pacerfit.dothome.co.kr/EditPhysical.php";
     private Map<String, String> map;
 
-    public EditPhysicalRequest(String userID, String userGender, int userAge, int userHeight, int userWeight, Response.Listener<String> listener) {
+    public EditPhysicalRequest(String userID, String userGender, int userAge, float userHeight, float userWeight, Response.Listener<String> listener) {
         super(Method.POST, URL, listener, null);
 
         map = new HashMap<>();
