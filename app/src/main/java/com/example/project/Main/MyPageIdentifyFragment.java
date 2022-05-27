@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
 import com.example.project.Ranking.UserInfo;
 import com.google.android.material.textfield.TextInputEditText;
@@ -24,6 +25,7 @@ import com.google.android.material.textfield.TextInputLayout;
 public class MyPageIdentifyFragment extends Fragment {
     TextInputLayout pwLayout;
     TextInputEditText pwEditTxt;
+    String userID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,6 +34,7 @@ public class MyPageIdentifyFragment extends Fragment {
         View v = inflater.inflate(R.layout.main_mypage_identify_fragment, container, false);
 
         Intent intent = getActivity().getIntent();
+        userID = intent.getStringExtra("userID");
         int[] ProfileDrawable = {
                 R.drawable.profile_default, R.drawable.profile_man, R.drawable.profile_man_beard, R.drawable.profile_man_cap,
                 R.drawable.profile_man_hat, R.drawable.profile_man_hood, R.drawable.profile_man_horn, R.drawable.profile_man_round,
@@ -58,9 +61,11 @@ public class MyPageIdentifyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String pw = String.valueOf(pwEditTxt.getText());
-                if (pw.equals(intent.getStringExtra("userPass"))) {
+                if (pw.equals(UserInfo.getInstance().getUserPass())) {
                     // 개인정보 수정 액티비티로 이동
-                    startActivity(new Intent(getActivity(), MyPageEditInfo.class)); //Fragment -> Activity로 이동
+                    Intent intent = new Intent(getActivity(), MyPageEditInfo.class); //Fragment -> Activity로 이동 (StepCounterActivity.java)
+                    intent.putExtra("userID", userID);
+                    startActivity(intent);
                 }
                 else { // 비밀번호 오류
                     YoYo.with(Techniques.Shake)
