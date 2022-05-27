@@ -108,11 +108,11 @@ public class MyPageFragment extends Fragment{
 
         Intent intent = getActivity().getIntent();
         userID = intent.getStringExtra("userID");
-        userName = intent.getStringExtra("userName");
+        userName = UserInfo.getInstance().getUserName();
         //userProfileNum = intent.getIntExtra("userProfileNum",0);
         userProfileNum = UserInfo.getInstance().getUserProfileNum();
-        userHeight = Float.valueOf(intent.getStringExtra("userHeight"));
-        userWeight = Float.valueOf(intent.getStringExtra("userWeight"));
+        userHeight = Float.valueOf(UserInfo.getInstance().getUserHeight());
+        userWeight = Float.valueOf(UserInfo.getInstance().getUserWeight());
 
         profileImg.setImageResource(ProfileDrawable[userProfileNum]);
 

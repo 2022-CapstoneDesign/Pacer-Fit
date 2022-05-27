@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -295,6 +296,7 @@ public class HomeFragment extends Fragment {
         queue.add(mainPedoRecentRecordRequest);
         moreBarChartBtn = v.findViewById(R.id.moreBarChartBtn);
         moreBarChartBtn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 Response.Listener<String> responseListener = response -> {
@@ -342,6 +344,7 @@ public class HomeFragment extends Fragment {
                 PedoBarRecordRequest pedoBarRecordRequest = new PedoBarRecordRequest(userID, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
                 queue.add(pedoBarRecordRequest);
+                moreBarChartBtn.setEnabled(false);
             }
         });
         moreLineChartBtn = v.findViewById(R.id.moreLineChartBtn);
@@ -393,6 +396,7 @@ public class HomeFragment extends Fragment {
                 KmLineRecordRequest kmLineRecordRequest = new KmLineRecordRequest(userID, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
                 queue.add(kmLineRecordRequest);
+                moreLineChartBtn.setEnabled(false);
             }
         });
 
