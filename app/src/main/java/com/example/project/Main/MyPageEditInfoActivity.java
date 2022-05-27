@@ -178,8 +178,6 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
     private void showEditPhysicalDialog() {
         dialog2.show();
 
-        RadioGroup ManOrWoman = dialog2.findViewById(R.id.radioGroup);
-
         TextView calculateAgeTxt = dialog2.findViewById(R.id.calculateAgeTxt);
         calculateAgeTxt.setText(UserInfo.getInstance().getUserAge());
 

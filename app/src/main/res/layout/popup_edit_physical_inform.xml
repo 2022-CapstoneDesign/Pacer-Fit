@@ -21,16 +21,33 @@
             android:textColor="@color/white"
             android:textSize="17sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <LinearLayout
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/nanumsquareroundeb"
-            android:padding="5dp"
-            android:text="성별"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:src="@drawable/gender"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:padding="5dp"
+                android:text="성별"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+
 
         <RadioGroup
             android:id="@+id/radioGroup"
@@ -71,16 +88,31 @@
                 tools:ignore="TouchTargetSizeCheck" />
         </RadioGroup>
 
+    <LinearLayout
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="3dp"
+            android:src="@drawable/age"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
             android:fontFamily="@font/nanumsquareroundeb"
             android:padding="5dp"
             android:text="나이"
             android:textColor="@color/white"
             android:textSize="16sp" />
+    </LinearLayout>
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -114,24 +146,55 @@
 
         </LinearLayout>
 
-        <NumberPicker
-            android:id="@+id/agePicker"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginEnd="50dp"
-            android:theme="@style/AppTheme.Picker" />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <NumberPicker
+                android:id="@+id/agePicker"
+                android:layout_width="80dp"
+                android:layout_height="90dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:theme="@style/AppTheme.Picker" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="년생"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="3dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="2dp"
+            android:src="@drawable/height"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
             android:fontFamily="@font/nanumsquareroundeb"
             android:padding="5dp"
             android:text="키"
             android:textColor="@color/white"
             android:textSize="16sp" />
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -194,12 +257,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="horizontal">
+
             <NumberPicker
                 android:id="@+id/heightPicker"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="90dp"
-                android:layout_weight="1"
                 android:layout_marginStart="50dp"
                 android:layout_marginEnd="0dp"
                 android:theme="@style/AppTheme.Picker" />
@@ -210,32 +274,45 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="25dp"
-                android:text="."
-                android:textSize="20dp"
                 android:fontFamily="@font/nanumsquareroundeb"
+                android:gravity="bottom"
+                android:text="."
                 android:textColor="@color/white"
-                android:gravity="bottom"/>
+                android:textSize="20dp" />
+
             <NumberPicker
                 android:id="@+id/heightPointPicker"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="90dp"
-                android:layout_weight="1"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="50dp"
                 android:theme="@style/AppTheme.Picker" />
         </LinearLayout>
 
+    <LinearLayout
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginEnd="3dp"
+            android:src="@drawable/weight"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
             android:fontFamily="@font/nanumsquareroundeb"
             android:padding="5dp"
             android:text="몸무게"
             android:textColor="@color/white"
             android:textSize="16sp" />
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -299,13 +376,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <NumberPicker
                 android:id="@+id/weightPicker"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="90dp"
-                android:layout_weight="1"
                 android:layout_marginStart="50dp"
                 android:layout_marginEnd="0dp"
                 android:theme="@style/AppTheme.Picker" />
@@ -324,9 +401,8 @@
 
             <NumberPicker
                 android:id="@+id/weightPointPicker"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="90dp"
-                android:layout_weight="1"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="50dp"
                 android:theme="@style/AppTheme.Picker" />

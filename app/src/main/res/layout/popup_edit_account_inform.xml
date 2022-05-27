@@ -21,17 +21,33 @@
             android:textColor="@color/white"
             android:textSize="17sp" />
 
+    <LinearLayout
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-3dp"
+            android:layout_marginBottom="-2dp"
+            android:layout_marginStart="-1dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/id"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
             android:fontFamily="@font/nanumsquareroundeb"
             android:padding="5dp"
             android:text="아이디"
             android:textColor="@color/white"
             android:textSize="16sp" />
+    </LinearLayout>
+
 
         <TextView
             android:id="@+id/editIdTxt"
@@ -49,16 +65,30 @@
             android:textSize="14sp"
             tools:ignore="TouchTargetSizeCheck" />
 
+    <LinearLayout
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="3dp"
+            android:src="@drawable/name"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
             android:fontFamily="@font/nanumsquareroundeb"
             android:padding="5dp"
             android:text="닉네임"
             android:textColor="@color/white"
             android:textSize="16sp" />
+    </LinearLayout>
+
+
 
         <com.example.project.Main.ClearEditText
             android:id="@+id/editNameTxt"
@@ -76,18 +106,33 @@
             android:singleLine="true"
             tools:ignore="TouchTargetSizeCheck" />
 
+    <LinearLayout
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="3dp"
+            android:src="@drawable/password"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
             android:fontFamily="@font/nanumsquareroundeb"
             android:padding="5dp"
             android:text="비밀번호"
             android:textColor="@color/white"
             android:textSize="16sp" />
+
+    </LinearLayout>
 
         <com.example.project.Main.ClearEditText
             android:id="@+id/editPwTxt"
