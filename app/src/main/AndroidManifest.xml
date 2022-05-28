@@ -28,6 +28,9 @@
         android:theme="@style/Theme.Project"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Login.SurveyActivity"
+            android:exported="false" />
+        <activity
             android:name=".Main.MyPageEditInfoActivity"
             android:exported="false" />
 
