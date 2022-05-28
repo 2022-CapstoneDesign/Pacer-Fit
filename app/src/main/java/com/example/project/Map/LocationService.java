@@ -60,13 +60,17 @@ public class LocationService extends Service {
     // 거리
     private double distance = 0.0;
 
+    // 카메라 업데이트
+    private int updateCameraTimer = 0;
+    private int period = 5;
+
     // 타이머 변수
     private int total_sec = 0;
     private int time = -1;
     private TimerTask timerTask;
 
     // 거리 정확도
-    private double accuracy = 8.5;
+    private double accuracy = 11.0;
 
     // bindService 구현
     private IBinder mIBinder = new MyBinder();
@@ -80,7 +84,7 @@ public class LocationService extends Service {
             Location location = locationResult.getLastLocation();
 
             // 타이머가 돌아가지 않거나, 정확도가 accuracy보다 크거나, 포그라운드 상태이면 return
-            if (!isRecord || location.getAccuracy() > accuracy || !isBackground)
+            if (!isRecord || location.getAccuracy() > accuracy || isBackground)
                 return;
 
             // 리스트에 좌표 추가
@@ -128,8 +132,9 @@ public class LocationService extends Service {
             createNotificationChannel();
             displayNotification();
             LocationRequest locationRequest = LocationRequest.create();
-            locationRequest.setInterval(4000);
-            locationRequest.setFastestInterval(2000);
+            locationRequest.setInterval(5000L);
+            locationRequest.setFastestInterval(2000L);
+            locationRequest.setMaxWaitTime(5000L);
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -181,13 +186,7 @@ public class LocationService extends Service {
                 }
             }
         }
-        return START_STICKY;
-    }
-
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
-        super.onTaskRemoved(rootIntent);
-        stopSelf();
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -218,6 +217,7 @@ public class LocationService extends Service {
             @Override
             public void run() {
                 time++;
+                updateCameraTimer++;
                 total_sec = time;
                 int sec = time % 60;
                 int min = time / 60 % 60;
@@ -227,6 +227,13 @@ public class LocationService extends Service {
                 intent.setAction("etc");
                 intent.putExtra("timer", total_sec);
                 intent.putExtra("distance", distance);
+                if(updateCameraTimer % period ==0){
+                    intent.putExtra("update",1);
+                }else{
+                    intent.putExtra("update",0);
+                }
+
+
                 sendBroadcast(intent);
 
                 // notification 업데이트
@@ -235,6 +242,8 @@ public class LocationService extends Service {
 
                 // 리스트에 담긴 거리 계산
                 distance = curDistance(RecordMapActivity.getList());
+
+
             }
         };
         timer.schedule(timerTask, 0, 1000);
@@ -259,7 +268,6 @@ public class LocationService extends Service {
                 .addCategory(Intent.CATEGORY_LAUNCHER)
                 .setAction(Intent.ACTION_MAIN)
                 .putExtra("OnNewIntent", "resume");
-        ;
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, tapIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 

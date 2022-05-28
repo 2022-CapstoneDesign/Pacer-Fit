@@ -13,12 +13,15 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -60,11 +63,13 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -92,15 +97,15 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 맵 위치
     private FusedLocationSource locationSource;
 
-    // 폴리라인
-    private PolylineOverlay curUserPolyline;
     // 유저 위치 리스트
-    public static List<LatLng> latLngList;
+    public static List<LatLng> userLocationList;
+    // 폴리라인
+    public PolylineOverlay userPolyline;
 
-    // 시작지점 체크
-    private boolean startPoint = false;
     // 백그라운드 체크
     private boolean isBackground = false;
+    // 시작지점 체크
+    private boolean startPoint = false;
     // 거리 측정 체크
     private boolean isRecord = false;
 
@@ -108,6 +113,9 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private boolean isSelectCrs = false;
     // 코스 클릭 체크
     private boolean isClickCrs = false;
+    // 코스 맵에 표시할지 체크
+    private boolean isDisplayCrs = false;
+
 
     // 서비스 처음 시작 체크
     private boolean isFirstStart = false;
@@ -143,6 +151,12 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 시간 변수
     private int time = -1;
 
+    //
+    private long ratingStartTime = 0L;
+    private long ratingEndTime = 0L;
+    private ArrayList<String> ratingCrsList;
+
+
     // Service bind
     private LocationService mService;
 
@@ -152,24 +166,24 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private double MET = 0.0;
 
     // 서비스 <-> 액티비티 통신
-    private MyBroadcast br;
     private IntentFilter filter;
+    private MyBroadcast br;
 
     // weather
-    private GpsTrackerService gpsTracker;
-    private String address = ""; // x,y는 격자x,y좌표
-    private String location = "";
-    private String pathJsonString;
     private ArrayList<HashMap<String, String>> pathArrayList;
+    private GpsTrackerService gpsTracker;
+    private String pathJsonString;
+    private String location = "";
+    private String address = ""; // x,y는 격자x,y좌표
 
     // 코스 정보 리스트
+    private ArrayList<PolylineOverlay> crsPolylineOverlays;
     private ArrayList<String> crsNameList;
     private ArrayList<String> crsSummaryList;
     private ArrayList<String> crsTimeList;
     private ArrayList<String> crsLevelList;
     private ArrayList<String> crsDistList;
     private ArrayList<String> crsHashTagList;
-    private ArrayList<PolylineOverlay> crsPolylineOverlays;
     private ArrayList<Marker> crsMarkers;
 
     // 측정 관련 버튼
@@ -189,14 +203,15 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 선택 코스 path
     private PathOverlay selectedCrs;
 
+
     // 서비스 <- 액티비티 위치 리스트 반환
     public static List<LatLng> getList() {
-        return latLngList;
+        return userLocationList;
     }
 
     // 서비스 -> 액티비티 위치 리스트 추가
     public static void addList(LatLng latLng) {
-        latLngList.add(new LatLng(latLng.latitude, latLng.longitude));
+        userLocationList.add(new LatLng(latLng.latitude, latLng.longitude));
     }
 
     // 서비스와 binder 연결
@@ -277,10 +292,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 hide(recordFrag).commit();
 
         // 유저의 위치, 폴리라인 리스트 생성 및 설정
-        latLngList = new ArrayList<>();
-        curUserPolyline = new PolylineOverlay();
-        curUserPolyline.setWidth(10);
-        curUserPolyline.setColor(ContextCompat.getColor(this, R.color.purple_project));
+        userLocationList = new ArrayList<>();
+        userPolyline = new PolylineOverlay();
+        userPolyline.setWidth(10);
+        userPolyline.setColor(ContextCompat.getColor(this, R.color.purple_project));
 
         // 코스들 폴리라인, 마커 리스트 생성
         crsPolylineOverlays = new ArrayList<>();
@@ -295,6 +310,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         crsLevelList = new ArrayList<>();
         crsDistList = new ArrayList<>();
         crsHashTagList = new ArrayList<>();
+
+        ratingCrsList = new ArrayList<>();
 
         // 유저 몸무게 받아오기 (db에서 받아오기)
         userKg = 50.0;
@@ -340,6 +357,22 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         GetGpxPathData task = new GetGpxPathData();
         task.execute("http://pacerfit.dothome.co.kr/getPathWithArea.php");
+
+
+    }
+
+    private void onRequestPermissionBattery() {
+        // 백그라운드에서도 서비스가 돌아갈 수 있도록 함
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        String packageName = getPackageName();
+        if (pm.isIgnoringBatteryOptimizations(packageName)) {
+
+        } else {    // 메모리 최적화가 되어 있다면, 풀기 위해 설정 화면 띄움.
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + packageName));
+            startActivity(intent);
+        }
     }
 
 
@@ -356,6 +389,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             // 트래킹 중지
             naverMap.setLocationTrackingMode(LocationTrackingMode.NoFollow);
         }
+
 
         // 위치
         naverMap.setLocationSource(locationSource);
@@ -386,7 +420,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         // 위치 변경 리스너
         naverMap.addOnLocationChangeListener(location -> {
             // 액티비티가 포그라운드 상태이고 운동이 시작된 상태이면
-            if (isRecord && !isBackground && location.getAccuracy() < 8.5) {
+            if (isRecord && !isBackground && location.getAccuracy() < 11.0) {
                 // 속도가 있으면 평균 속도 구하기
                 if (location.hasSpeed())
                     avgSpeed = location.getSpeed() * 3600 / 1000;
@@ -405,13 +439,22 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 }
 
                 // 폴리라인 맵에 갱신
-                if (latLngList.size() > 2) {
-                    curUserPolyline.setCoords(latLngList);
-                    curUserPolyline.setMap(naverMap);
+                if (userLocationList.size() > 2) {
+                    userPolyline.setCoords(userLocationList);
+                    userPolyline.setMap(naverMap);
                 }
             }
         });
         Log.d(TAG, "onMapReady");
+    }
+
+    public void updateCamera() {
+
+        if (userLocationList.size() < 2) {
+            return;
+        }
+        CameraUpdate cameraUpdate = CameraUpdate.fitBounds(userPolyline.getBounds(), 300, 300, 300, 300).animate(CameraAnimation.Easing);
+        naverMap.moveCamera(cameraUpdate);
     }
 
     // 권한 요청
@@ -437,15 +480,18 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 if (intent.getAction() != null) {
                     if (intent.getAction().equals("etc")) {
                         // 출발 지점 표시
-                        if (!startPoint && !latLngList.isEmpty()) {
+                        if (!startPoint && !userLocationList.isEmpty()) {
                             startPoint = true;
-                            makeMarker("출발지점", latLngList.get(0).latitude, latLngList.get(0).longitude);
+                            makeMarker("출발지점", userLocationList.get(0).latitude, userLocationList.get(0).longitude);
                         }
 
                         dist_tv = findViewById(R.id.dist_km);
                         time_tv = findViewById(R.id.dist_time);
                         cal_tv = findViewById(R.id.dist_cal);
 
+                        if (intent.getIntExtra("update", 0) == 1) {
+                            updateCamera();
+                        }
                         time = intent.getIntExtra("timer", 0);
                         distance = intent.getDoubleExtra("distance", 0.0);
                         calories += getCalories(MET);
@@ -472,7 +518,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         if (mService != null)
             mService.isBackground = false;
         isBackground = false;
-
         Log.d(TAG, "onResume " + isBackground);
     }
 
@@ -483,7 +528,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         isBackground = true;
         if (mService != null)
             mService.isBackground = true;
-
         Log.d(TAG, "onPause " + isBackground);
     }
 
@@ -535,8 +579,25 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void reselectCrs() {
+        recordToMap();
         isSelectCrs = false;
         isRecord = false;
+        isDisplayCrs = false;
+
+
+        if (selectedCrsName != null) {
+            ratingEndTime = System.currentTimeMillis();
+        } else {
+            ratingEndTime = 0L;
+        }
+
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(ratingEndTime - ratingStartTime);
+
+        if (seconds >= 1) {
+            ratingCrsList.add(selectedCrsName);
+        }
+
+
         selectedCrsName = null;
         if (selectedCrs != null)
             selectedCrs.setMap(null);
@@ -547,6 +608,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         reselectBtn.setVisibility(View.INVISIBLE);
         dismissCrs();
 
+
         Intent intent = new Intent(getApplicationContext(), LocationService.class);
         intent.setAction(Constants.ACTION_PAUSE_LOCATION_SERVICE);
         startService(intent);
@@ -554,11 +616,17 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     // 시작 기능
     public void StartFab() {
+        // 절전 모드 해제
+        onRequestPermissionBattery();
+        // 백그라운드 위치 항상 허용
+        onRequestPermissionBackgroundLocation();
+        // 코스 선택 (코스 없으면 그대로 진행)
         selectCrs();
         isRecord = true;
+        isDisplayCrs = true;
         // 권한 체크 후 서비스 시작
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(RecordMapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.REQUEST_CODE_LOCATION_PERMISSION);
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(RecordMapActivity.this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, Constants.REQUEST_CODE_LOCATION_PERMISSION);
         } else {
             startLocationService();
         }
@@ -572,17 +640,45 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         // 맵 <-> 기록
         MapToRecord();
 
+        if (selectedCrsName != null) {
+            ratingStartTime = System.currentTimeMillis();
+        } else {
+            ratingStartTime = 0L;
+        }
+        Log.d("start", String.valueOf(ratingStartTime));
+
         // 로그
         Log.d(TAG, "StartFab");
     }
 
+    private void onRequestPermissionBackgroundLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) { //백그라운드 위치 권한 확인
+        } else {
+            //위치 권한 요청
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 0);
+        }
+    }
+
     // 저장 기능
     public void RecordSave() {
+        if (selectedCrsName != null) {
+            ratingEndTime = System.currentTimeMillis();
+        } else {
+            ratingEndTime = 0L;
+        }
+
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(ratingEndTime - ratingStartTime);
+
+        if (seconds >= 1) {
+            ratingCrsList.add(selectedCrsName);
+        }
+
+
         // 도착 마크 생성
-        if (latLngList.size() > 1 && startPoint)
-            makeMarker("도착 지점", latLngList.get(latLngList.size() - 1).latitude, latLngList.get(latLngList.size() - 1).longitude);
-        else if (startPoint && latLngList.size() == 1)
-            makeMarker("도착 지점", latLngList.get(0).latitude, latLngList.get(0).longitude);
+        if (userLocationList.size() > 1 && startPoint)
+            makeMarker("도착 지점", userLocationList.get(userLocationList.size() - 1).latitude, userLocationList.get(userLocationList.size() - 1).longitude);
+        else if (startPoint && userLocationList.size() == 1)
+            makeMarker("도착 지점", userLocationList.get(0).latitude, userLocationList.get(0).longitude);
 
         // 서비스 종료
         if (mService != null)
@@ -593,9 +689,12 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         Toast.makeText(this.getApplicationContext(), "서비스 종료", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, RecordActivity.class);
         intent.putExtra("cal", calories);
-        intent.putExtra("dist", distance);
+        intent.putExtra("distance", distance);
         intent.putExtra("time", time);
+        intent.putExtra("userLocationList", (Serializable) userLocationList);
+        intent.putExtra("ratingCrsList", (Serializable) ratingCrsList);
         startActivity(intent);
+        finish();
     }
 
     NaverMap.SnapshotReadyCallback snapshotReadyCallback = new NaverMap.SnapshotReadyCallback() {
@@ -698,20 +797,19 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 new Thread() {
                     public void run() {
                         for (int i = 0; i < pathArrayList.size(); i++) {
-                            if (!isSelectCrs) {
-                                String gpxpt = getData(i);
-                                Bundle bun = new Bundle();
-                                bun.putString("gpxpt", gpxpt);
-                                bun.putString("name", crsNameList.get(i));
-                                bun.putString("summary", crsSummaryList.get(i));
-                                bun.putString("hour", crsTimeList.get(i));
-                                bun.putString("level", crsLevelList.get(i));
-                                bun.putString("dist", crsDistList.get(i));
-                                bun.putString("tag", crsHashTagList.get(i));
-                                Message msg = handler.obtainMessage();
-                                msg.setData(bun);
-                                handler.sendMessage(msg);
-                            }
+                            String gpxpt = getData(i);
+                            Bundle bun = new Bundle();
+                            bun.putString("gpxpt", gpxpt);
+                            bun.putString("name", crsNameList.get(i));
+                            bun.putString("summary", crsSummaryList.get(i));
+                            bun.putString("hour", crsTimeList.get(i));
+                            bun.putString("level", crsLevelList.get(i));
+                            bun.putString("dist", crsDistList.get(i));
+                            bun.putString("tag", crsHashTagList.get(i));
+                            Message msg = handler.obtainMessage();
+                            msg.setData(bun);
+                            handler.sendMessage(msg);
+
                         }
                     }
                 }.start();
@@ -727,8 +825,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
-                httpURLConnection.setReadTimeout(5000);
-                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setReadTimeout(3000);
+                httpURLConnection.setConnectTimeout(3000);
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.connect();
 
@@ -775,7 +873,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
 
-                System.out.println(jsonArray.length()+"\n");
+                System.out.println(jsonArray.length() + "\n");
                 System.out.println(i);
 
 
@@ -870,47 +968,46 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            if (!isSelectCrs) {
-                Bundle bun = msg.getData();
-                String gpxpt = bun.getString("gpxpt");
-                String[] latLon = gpxpt.split(" ");
-                String name = bun.getString("name");
-                String summary = bun.getString("summary");
-                String hour = bun.getString("hour");
-                String level = bun.getString("level");
-                String dist = bun.getString("dist");
-                String tag = bun.getString("tag");
-                List<LatLng> COORDS = new ArrayList<>();
-                for (int i = 12; i < latLon.length; i += 2) {
-                    try {
-                       // if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7)
-                       //    continue;
+            Bundle bun = msg.getData();
+            String gpxpt = bun.getString("gpxpt");
+            String[] latLon = gpxpt.split(" ");
+            String name = bun.getString("name");
+            String summary = bun.getString("summary");
+            String hour = bun.getString("hour");
+            String level = bun.getString("level");
+            String dist = bun.getString("dist");
+            String tag = bun.getString("tag");
+            List<LatLng> COORDS = new ArrayList<>();
+            for (int i = 12; i < latLon.length; i += 2) {
+                try {
+                    // if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7)
+                    //    continue;
 
-                        COORDS.add(new LatLng(Double.valueOf(latLon[i]), Double.valueOf(latLon[i + 1])));
-                    } catch (NumberFormatException e) {
-                        // 문자열을 숫자로 인식할때 예외처리
-                        // java.lang.NumberFormatException: For input string: "http://www.topografix.com/GPX/1/1" 에러
-                    } catch (Exception e) {
-                        //다른 에러 예외처리
-                    }
-                }
-
-                if (COORDS.size() > 2) {
-                    PolylineOverlay polylineOverlay1 = new PolylineOverlay();
-                    polylineOverlay1.setWidth(10);
-                    polylineOverlay1.setCoords(COORDS);
-                    polylineOverlay1.setTag(name);
-                    setColorCrs(polylineOverlay1, level);
-                    makeGPXMarker(name, summary, hour, level, dist, tag, COORDS.get(0).latitude, COORDS.get(0).longitude, polylineOverlay1);
-                    if (!isClickCrs)
-                        polylineOverlay1.setMap(naverMap);
-                    else
-                        polylineOverlay1.setMap(null);
-
-                    crsPolylineOverlays.add(polylineOverlay1);
-                    Log.d("crsPoly", Integer.toString(crsPolylineOverlays.size()));
+                    COORDS.add(new LatLng(Double.valueOf(latLon[i]), Double.valueOf(latLon[i + 1])));
+                } catch (NumberFormatException e) {
+                    // 문자열을 숫자로 인식할때 예외처리
+                    // java.lang.NumberFormatException: For input string: "http://www.topografix.com/GPX/1/1" 에러
+                } catch (Exception e) {
+                    //다른 에러 예외처리
                 }
             }
+
+            if (COORDS.size() > 2) {
+                PolylineOverlay polylineOverlay1 = new PolylineOverlay();
+                polylineOverlay1.setWidth(10);
+                polylineOverlay1.setCoords(COORDS);
+                polylineOverlay1.setTag(name);
+                setColorCrs(polylineOverlay1, level);
+                makeGPXMarker(name, summary, hour, level, dist, tag, COORDS.get(0).latitude, COORDS.get(0).longitude, polylineOverlay1);
+                if (!isDisplayCrs)
+                    polylineOverlay1.setMap(naverMap);
+                else
+                    polylineOverlay1.setMap(null);
+
+                crsPolylineOverlays.add(polylineOverlay1);
+                Log.d("crsPoly", Integer.toString(crsPolylineOverlays.size()));
+            }
+
         }
     };
 
@@ -922,7 +1019,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         marker.setWidth(100);
         marker.setHeight(100);
-        if (!isClickCrs)
+        if (!isDisplayCrs)
             marker.setMap(naverMap);
         else
             marker.setMap(null);
@@ -972,12 +1069,21 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         switch (level) {
             case "1":
                 crsLevel.setText("난이도 - 쉬움");
+                crsLevel.setTextColor(Color.BLUE);
+                crsHour.setTextColor(Color.BLUE);
+                crsDist.setTextColor(Color.BLUE);
                 break;
             case "2":
                 crsLevel.setText("난이도 - 보통");
+                crsLevel.setTextColor(Color.GREEN);
+                crsHour.setTextColor(Color.GREEN);
+                crsDist.setTextColor(Color.GREEN);
                 break;
             case "3":
                 crsLevel.setText("난이도 - 어려움");
+                crsLevel.setTextColor(Color.RED);
+                crsHour.setTextColor(Color.RED);
+                crsDist.setTextColor(Color.RED);
                 break;
 
         }
@@ -989,6 +1095,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     public void clickCrs(String crsName) {
         isClickCrs = true;
+        isDisplayCrs = true;
 
         // 클릭 코스 제외 폴리라인, 마커 맵에서 제거
         for (PolylineOverlay polylineOverlay : crsPolylineOverlays) {
@@ -1020,6 +1127,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     // 맵을 클릭하거나, 바텀 시트 사라지면 코스 폴리라인, 마커 맵에 재등록
     public void dismissCrs() {
+        isDisplayCrs = false;
         int index = 0;
         for (PolylineOverlay polylineOverlay : crsPolylineOverlays) {
             String level = crsLevelList.get(index);
@@ -1035,8 +1143,9 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 코스 선택시 폴리라인 -> 폴리패스로 변경 나머지 폴리라인, 마커 제거
     public void selectCrs() {
         isSelectCrs = true;
+        isDisplayCrs = true;
         for (PolylineOverlay polylineOverlay : crsPolylineOverlays) {
-            if (polylineOverlay.getTag().equals(selectedCrsName) && selectedCrsName != null) {
+            if (polylineOverlay.getTag().equals(selectedCrsName)) {
                 selectedCrs = new PathOverlay(polylineOverlay.getCoords());
                 selectedCrs.setTag(selectedCrsName);
                 selectedCrs.setWidth(20);
