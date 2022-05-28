@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_project"
+    tools:context=".Login.SurveyActivity"
+    android:orientation="vertical">
+
+    <ImageView
+        android:src="@drawable/walk_over"
+        android:layout_marginTop="70dp"
+        android:layout_marginStart="20dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="선호하는 운동 스타일을\n알려주세요."
+        android:textColor="@color/white"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:textSize="25sp"
+        android:paddingTop="20dp"
+        android:paddingStart="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="Pacer Fit이 취향에 맞는\n코스를 추천해드릴게요"
+        android:textSize="17sp"
+        android:textColor="@color/whitegray_project"
+        android:fontFamily="@font/nanumsquareroundeb"
+        />
+
+</LinearLayout>
