@@ -66,7 +66,7 @@ public class LocationService extends Service {
     private TimerTask timerTask;
 
     // 거리 정확도
-    private double accuracy = 8.5;
+    private double accuracy = 11.0;
 
     // bindService 구현
     private IBinder mIBinder = new MyBinder();
@@ -128,8 +128,9 @@ public class LocationService extends Service {
             createNotificationChannel();
             displayNotification();
             LocationRequest locationRequest = LocationRequest.create();
-            locationRequest.setInterval(4000);
-            locationRequest.setFastestInterval(2000);
+            locationRequest.setInterval(5000L);
+            locationRequest.setFastestInterval(2000L);
+            locationRequest.setMaxWaitTime(5000L);
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -181,7 +182,7 @@ public class LocationService extends Service {
                 }
             }
         }
-        return super.onStartCommand(intent,flags,startId);
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override

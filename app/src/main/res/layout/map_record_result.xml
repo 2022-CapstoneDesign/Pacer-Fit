@@ -3,64 +3,226 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/lightgray_project"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/lightgray_project">
+
+    <com.naver.maps.map.MapView
+        android:id="@+id/record_mapview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/linear_record"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.55"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linear_record"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:paddingTop="30dp"
+        android:paddingTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/record_mapview">
+
 
         <TextView
-            android:id="@+id/result_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/jalnan"
             android:gravity="center"
-            android:fontFamily="@font/nanumsquareroundeb"
-            android:textSize="30sp"
-            android:textColor="@color/white"
-            android:text="00:00:00" />
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+
+            android:text="운동결과"
+            android:textColor="@color/green_project"
+            android:textSize="30sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/round_border"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/result_dist"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:fontFamily="@font/nanumsquareroundeb"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:gravity="right"
-                android:text="0.0km" />
-            <TextView
-                android:id="@+id/text111"
-                android:layout_width="15dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nanumsquareroundeb"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:gravity="right"
-                android:text=" | " />
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp">
+
+                </View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/jalnan"
+                    android:gravity="center"
+                    android:text="운동 시간"
+                    android:textColor="@color/white"
+                    android:textSize="15sp">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/result_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/jalnan"
+                    android:gravity="center"
+                    android:text="00:00:00"
+                    android:textColor="@color/white"
+                    android:textSize="25sp">
+
+                </TextView>
 
 
-            <TextView
-                android:id="@+id/result_cal"
-                android:layout_width="wrap_content"
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="2dp"
+                    android:layout_marginStart="20dp"
+                    android:background="@color/colorGrey">
+
+                </View>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp">
+
+                </View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/jalnan"
+                    android:gravity="center"
+                    android:text="운동 거리"
+                    android:textColor="@color/white"
+                    android:textSize="15sp">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/result_dist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/jalnan"
+                    android:gravity="center"
+                    android:text="0.0km"
+                    android:textColor="@color/white"
+                    android:textSize="25sp">
+
+                </TextView>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="2dp"
+                    android:layout_marginStart="20dp"
+                    android:background="@color/colorGrey">
+
+                </View>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanumsquareroundeb"
-                android:textSize="20sp"
-                android:textColor="@color/white"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:gravity="left"
-                android:text="-- cal" />
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp">
+
+                </View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/jalnan"
+                    android:gravity="center"
+                    android:text="운동 칼로리"
+                    android:textColor="@color/white"
+                    android:textSize="15sp">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/result_cal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/jalnan"
+                    android:gravity="center"
+                    android:text="0.0kcal"
+                    android:textColor="@color/white"
+                    android:textSize="25sp">
+
+                </TextView>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="2dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@color/colorGrey">
+
+                </View>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp">
+
+                </View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/jalnan"
+                    android:gravity="center"
+                    android:text="평균 속도"
+                    android:textColor="@color/white"
+                    android:textSize="15sp">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/result_avg_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/jalnan"
+                    android:gravity="center"
+                    android:text="0.0km/h"
+                    android:textColor="@color/white"
+                    android:textSize="25sp">
+
+                </TextView>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="2dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@color/colorGrey">
+
+                </View>
+            </LinearLayout>
+
 
         </LinearLayout>
 
