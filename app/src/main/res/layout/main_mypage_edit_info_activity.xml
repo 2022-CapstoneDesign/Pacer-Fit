@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main.MyPageEditInfo"
+    tools:context=".Main.MyPageEditInfoActivity"
     android:background="@color/gray_project"
     android:orientation="vertical">
     <include
@@ -54,6 +54,7 @@
     <LinearLayout
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/view_style"
@@ -61,42 +62,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="3dp"
-                android:src="@drawable/name"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:text="닉네임"
-                android:fontFamily="@font/nanumsquareroundeb"
-                android:textSize="16sp"
-                android:textColor="@color/white" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/nameTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:fontFamily="@font/nanumsquareroundeb"
-                android:textSize="16sp"
-                android:textColor="@color/whitegray_project" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -126,6 +92,42 @@
 
             <TextView
                 android:id="@+id/idTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textSize="16sp"
+                android:textColor="@color/whitegray_project" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="3dp"
+                android:src="@drawable/name"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:text="닉네임"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textSize="16sp"
+                android:textColor="@color/white" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/nameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""

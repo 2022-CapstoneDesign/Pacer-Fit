@@ -15,6 +15,7 @@ import com.example.project.R;
 
 public class fitnessActivity extends Activity {
     private String view_title;
+    RealNewsData data = new RealNewsData();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +111,26 @@ public class fitnessActivity extends Activity {
             myWebView.loadUrl("https://blesslifestore.co/youtube/?q=YToyOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjtzOjQ6InBhZ2UiO2k6MTt9&bmode=view&idx=7083171&t=board");
         else if(view_title.equals("스쿼트 100회 챌린지"))
             myWebView.loadUrl("https://blesslifestore.co/youtube/?q=YToyOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjtzOjQ6InBhZ2UiO2k6MTE7fQ%3D%3D&bmode=view&idx=3171989&t=board");
+        else if(view_title.equals(data.getTitle(0)+""))
+            myWebView.loadUrl(data.getLink(0)+"");
+        else if(view_title.equals(data.getTitle(1)+""))
+            myWebView.loadUrl(data.getLink(1)+"");
+        else if(view_title.equals(data.getTitle(2)+""))
+            myWebView.loadUrl(data.getLink(2)+"");
+        else if(view_title.equals(data.getTitle(3)+""))
+            myWebView.loadUrl(data.getLink(3)+"");
+        else if(view_title.equals(data.getTitle(4)+""))
+            myWebView.loadUrl(data.getLink(4)+"");
+        else if(view_title.equals(data.getTitle(5)+""))
+            myWebView.loadUrl(data.getLink(5)+"");
+        else if(view_title.equals(data.getTitle(6)+""))
+            myWebView.loadUrl(data.getLink(6)+"");
+        else if(view_title.equals(data.getTitle(7)+""))
+            myWebView.loadUrl(data.getLink(7)+"");
+        else if(view_title.equals(data.getTitle(8)+""))
+            myWebView.loadUrl(data.getLink(8)+"");
+        else if(view_title.equals(data.getTitle(9)+""))
+            myWebView.loadUrl(data.getLink(9)+"");
         else
             myWebView.loadUrl("https://www.naver.com");
         myWebView.getSettings().setPluginState(WebSettings.PluginState.ON);

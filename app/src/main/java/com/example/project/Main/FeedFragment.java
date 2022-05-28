@@ -1,9 +1,15 @@
 package com.example.project.Main;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,55 +18,64 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.example.project.R;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.LineData;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class FeedFragment extends Fragment{
 //    Button detailfrag;
 
     RecyclerView newsRecyclerView;
+    RecyclerView realnewsRecyclerView;
     RecyclerView fitnessRecyclerView;
     LinearLayoutManager newsLayoutManager;
     LinearLayoutManager fitnessLayoutManager;
+    LinearLayoutManager realnewsLayoutManager;
     List<FeedRecyclerModel> newsList;
     List<FeedRecyclerModel> fitnessList;
+    List<RealNewsFeedRecyclerModel> realnewsList;
     FeedRecyclerAdapter adapter;
-
+    RealNewsFeedRecyclerAdapter adapter2;
+    StringBuffer response;
+    Handler handler = new Handler(Looper.getMainLooper());
+    String[] title = new String[11];
+    String[] link = new String[11];
+    RealNewsData newsData = new RealNewsData();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.main_feed_fragment,container,false);
-//        detailfrag = v.findViewById(R.id.DetailFrag);
-//        detailfrag.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                FragmentManager fm = getActivity().getSupportFragmentManager();
-//                fm.beginTransaction()
-//                        .replace(R.id.frame_container, new DetailFragment())
-//                        .addToBackStack(null).commit();
-//            }
-//        });
-
-//        List<YouTubeContent> contents = new ArrayList<>();
-//        // 로꼬(Loco) - Party Band + OPPA
-//        contents.add(new YouTubeContent("ieZ_qkyhLwU"));
-
         newsRecyclerView = v.findViewById(R.id.news_recycler_view);
         fitnessRecyclerView = v.findViewById(R.id.fitness_recycler_view);
-
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        recyclerView.setAdapter(new YouTubeAdapter(contents));
+        realnewsRecyclerView = v.findViewById(R.id.real_time_news_recycler_view);
+        SearchNews("news", "면역건강운동");
 
         initNewsData();
         initNewsRecyclerView();
 
         initFitnessData();
         initFitnessRecyclerView();
+
+
 
 //        YouTubePlayerView youTubePlayerView = new YouTubePlayerView(getContext());
 //        layout.addView(youTubePlayerView);
@@ -74,6 +89,92 @@ public class FeedFragment extends Fragment{
         return v;
     }
 
+    private void SearchNews(final String _category, final String searchWord) {
+        new Thread() {
+            @Override
+            public void run() {
+                String clientId = "pQoRGrYcpVcsgzupVeuV";//애플리케이션 클라이언트 아이디값";
+                String clientSecret = "E_60TMvvs0";//애플리케이션 클라이언트 시크릿값";
+                try {
+                    String text = URLEncoder.encode(searchWord, "UTF-8");
+//                        String apiURL = "https://openapi.naver.com/v1/search/" + _category + "?query=" + text +"&display=20"; // json 결과
+                    String apiURL = "https://openapi.naver.com/v1/search/"+ _category +".json?query="+text+"&display=10&start=1&sort=date";    // json 결과
+                    //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // xml 결과
+                    URL url = new URL(apiURL);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    con.setRequestMethod("GET");
+                    con.setRequestProperty("X-Naver-Client-Id", clientId);
+                    con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
+                    int responseCode = con.getResponseCode();
+                    BufferedReader br;
+                    if (responseCode == 200) { // 정상 호출
+                        br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+                    } else {  // 에러 발생
+                        br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                    }
+
+                    int i=0;int ii=0;
+                    String inputLine;
+                    response = new StringBuffer();
+                    StringBuffer response2 = new StringBuffer();
+                    while ((inputLine = br.readLine()) != null) {
+                        response.append(inputLine);
+                        response.append("\n");
+                        if(inputLine.contains("title")){
+//                            Pattern pattern = Pattern.compile("[\"](.*?)[\"]");
+//                            Matcher matcher = pattern.matcher(inputLine);
+//                            while (matcher.find()) {  // 일치하는 게 있다면
+//                                title[i++] = matcher.group(1);
+//                                if (matcher.group(1) == null)
+//                                    break;
+//                            }
+                            title[i++] = inputLine.substring(12,inputLine.length()-2).replace("<b>", "").replace("<\\/b>", "").replace("&quot;","\"");
+
+                        }
+                        if(inputLine.contains("\"link\"")){
+                            link[ii++] = inputLine.substring(11,inputLine.length()-2);
+                        }
+                    }
+                    br.close();
+                    String naverHtml = response.toString();
+
+                    Bundle bun = new Bundle();
+                    bun.putString("NAVER_HTML", naverHtml);
+                    Message msg = handler.obtainMessage();
+                    msg.setData(bun);
+                    handler.sendMessage(msg);
+
+//                        testText.setText(response.toString());
+                    System.out.println(response.toString());
+                    for(int j=0; j<10; j++){
+//                        System.out.println("title and link================="+title[j]+link[j]);
+                        newsData.setRealTimeNews(j,title[j],link[j]);
+                    }
+
+                    ArrayList<String> data = new ArrayList<>();
+                    for(int d=0; d<10; d++){
+                        data.add(title[d]);
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            initRealNewsData();
+                            initRealNewsRecyclerView();
+                        }
+                    });
+//                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,data);
+//                    ListView listview = (ListView) v.findViewById(R.id.listview);
+//                    listview.setAdapter(adapter);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }.start();
+
+    }
     private void initNewsData() { // 뉴스 데이터 설정
         newsList = new ArrayList<>();
         newsList.add(new FeedRecyclerModel(R.drawable.feed_news1, "시간을 쪼개 쓰는 하루 3분 나노 운동"));
@@ -97,6 +198,22 @@ public class FeedFragment extends Fragment{
         newsRecyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+    }
+
+    private void initRealNewsRecyclerView() {
+        realnewsLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        realnewsLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        realnewsRecyclerView.setLayoutManager(realnewsLayoutManager);
+        adapter2 = new RealNewsFeedRecyclerAdapter(getContext(), realnewsList, R.layout.main_feed_real_news_item);
+        realnewsRecyclerView.setAdapter(adapter2);
+        adapter2.notifyDataSetChanged();
+
+    }
+
+    private void initRealNewsData() { // 뉴스 데이터 설정
+        realnewsList = new ArrayList<>();
+        for(int i=0; i<10; i++)
+            realnewsList.add(new RealNewsFeedRecyclerModel(newsData.newstitle[i]+""));
     }
 
     private void initFitnessData() { // 피트니스 데이터 설정

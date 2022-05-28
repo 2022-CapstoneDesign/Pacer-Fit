@@ -62,6 +62,7 @@
         <item name="fontFamily">@font/nanumsquareroundeb</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textSize">22sp</item>
+        <item name="colorControlNormal">@android:color/transparent</item>
     </style>
 
 </resources>
