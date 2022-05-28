@@ -27,7 +27,7 @@
         android:theme="@style/Theme.Project"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".Main.MyPageEditInfo"
+            android:name=".Main.MyPageEditInfoActivity"
             android:exported="false" />
 
         <receiver

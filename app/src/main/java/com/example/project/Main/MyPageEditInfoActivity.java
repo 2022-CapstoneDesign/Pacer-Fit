@@ -1,12 +1,12 @@
 package com.example.project.Main;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -19,9 +19,6 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.project.Login.LoginActivity;
-import com.example.project.Login.RegisterActivity;
-import com.example.project.Login.RegisterRequest;
 import com.example.project.R;
 import com.example.project.Ranking.UserInfo;
 
@@ -31,7 +28,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class MyPageEditInfo extends AppCompatActivity {
+public class MyPageEditInfoActivity extends AppCompatActivity {
 
     TextView nameTxt;
     TextView idTxt;
@@ -48,6 +45,11 @@ public class MyPageEditInfo extends AppCompatActivity {
     Dialog dialog2;
 
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_mypage_edit_info_activity);
@@ -62,13 +64,13 @@ public class MyPageEditInfo extends AppCompatActivity {
 
         setUserData();
 
-        dialog1 = new Dialog(MyPageEditInfo.this);
+        dialog1 = new Dialog(MyPageEditInfoActivity.this);
         dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog1.setContentView(R.layout.popup_edit_account_inform);
         dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
         dialog1.setCanceledOnTouchOutside(false); // 외부 터치 시 꺼지는 현상 막기
 
-        dialog2 = new Dialog(MyPageEditInfo.this);
+        dialog2 = new Dialog(MyPageEditInfoActivity.this);
         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog2.setContentView(R.layout.popup_edit_physical_inform);
         dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
@@ -113,14 +115,11 @@ public class MyPageEditInfo extends AppCompatActivity {
         dialog1.show();
 
         ClearEditText editNameTxt = dialog1.findViewById(R.id.editNameTxt);
-        ClearEditText editIdTxt = dialog1.findViewById(R.id.editIdTxt);
+        TextView editIdTxt = dialog1.findViewById(R.id.editIdTxt);
         ClearEditText editPwTxt = dialog1.findViewById(R.id.editPwTxt);
 
         editNameTxt.setText(nameTxt.getText());
         editIdTxt.setText(idTxt.getText());
-        //입력을 막아놈
-        editIdTxt.setClickable(false);
-        editIdTxt.setFocusable(false);
         editPwTxt.setText(pwTxt.getText());
 
         Button okBtn = dialog1.findViewById(R.id.okBtn);
@@ -162,7 +161,7 @@ public class MyPageEditInfo extends AppCompatActivity {
                 // 서버로 Volley를 이용해서 요청을 함.
                 //RegisterRequest.java 이동
                 EditAccountRequest editAccountRequest = new EditAccountRequest(UserInfo.getInstance().getUserID(), changedPw, changedName, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(MyPageEditInfo.this);
+                RequestQueue queue = Volley.newRequestQueue(MyPageEditInfoActivity.this);
                 queue.add(editAccountRequest);
 
             }
@@ -180,10 +179,25 @@ public class MyPageEditInfo extends AppCompatActivity {
         dialog2.show();
 
         TextView calculateAgeTxt = dialog2.findViewById(R.id.calculateAgeTxt);
+        calculateAgeTxt.setText(UserInfo.getInstance().getUserAge());
+
+        TextView calculateHeightIntTxt = dialog2.findViewById(R.id.calculateHeightIntTxt);
+        calculateHeightIntTxt.setText(getHeightIntVal());
+
+        TextView calculateHeightPointTxt = dialog2.findViewById(R.id.calculateHeightPointTxt);
+        calculateHeightPointTxt.setText(getHeightPointVal());
+
+        TextView calculateWeightIntTxt = dialog2.findViewById(R.id.calculateWeightIntTxt);
+        calculateWeightIntTxt.setText(getWeightIntVal());
+
+        TextView calculateWeightPointTxt = dialog2.findViewById(R.id.calculateWeightPointTxt);
+        calculateWeightPointTxt.setText(getWeightPointVal());
 
         NumberPicker agePicker = dialog2.findViewById(R.id.agePicker);
         NumberPicker heightPicker = dialog2.findViewById(R.id.heightPicker);
+        NumberPicker heightPointPicker = dialog2.findViewById(R.id.heightPointPicker);
         NumberPicker weightPicker = dialog2.findViewById(R.id.weightPicker);
+        NumberPicker weightPointPicker = dialog2.findViewById(R.id.weightPointPicker);
         RadioGroup Man_or_Woman = dialog2.findViewById(R.id.radioGroup);
         System.out.println("================gender"+UserInfo.getInstance().getUserGender());
         final String[] gender = new String[1];
@@ -225,59 +239,100 @@ public class MyPageEditInfo extends AppCompatActivity {
         int userAge = Integer.parseInt(UserInfo.getInstance().getUserAge());
         int userYear = thisYear - userAge + 1;
 
-        agePicker.setMaxValue(2022);
-        agePicker.setMinValue(1900);
+        agePicker.setMinValue(1901);
+        agePicker.setMaxValue(thisYear);
         agePicker.setValue(userYear);
+        agePicker.setWrapSelectorWheel(false);
 
         int[] cAge = new int[1];
         agePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                String val = String.valueOf(thisYear - newVal + 2);
+                String val = String.valueOf(thisYear - newVal + 1);
                 calculateAgeTxt.setText(val);
                 System.out.println("나이=============="+calculateAgeTxt.getText());
                 cAge[0] = Integer.parseInt(val);
-                UserInfo.getInstance().setUserAge(val);
+                //UserInfo.getInstance().setUserAge(val);
             }
         });
 
         // <---- 키 ---->
-        int height = Integer.parseInt(UserInfo.getInstance().getUserHeight());
+        //int height = Integer.parseInt(UserInfo.getInstance().getUserHeight());
         //int height = Integer.parseInt((String) heightTxt.getText());
 
         heightPicker.setMaxValue(200);
         heightPicker.setMinValue(50);
-        heightPicker.setValue(height);
-        float[] ch = new float[1];
-        float[] cw = new float[1];
+        heightPicker.setValue(Integer.parseInt(getHeightIntVal()));
+        heightPicker.setWrapSelectorWheel(false);
+
+        heightPointPicker.setMinValue(0);
+        heightPointPicker.setMaxValue(9);
+        heightPointPicker.setValue(Integer.parseInt(getHeightPointVal()));
+        heightPointPicker.setWrapSelectorWheel(true);
+
+        // 정수자리
         heightPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                String changedHeight = String.valueOf(newVal-1);
-                ch[0] = Float.parseFloat(changedHeight);
-                UserInfo.getInstance().setUserHeight(changedHeight);
+                String val = String.valueOf(newVal);
+                calculateHeightIntTxt.setText(val);
+            }
+        });
+        // 소수점
+        heightPointPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                String val = String.valueOf(newVal);
+                calculateHeightPointTxt.setText(val);
             }
         });
 
         // <---- 몸무게 ---->
-        int weight = Integer.parseInt(UserInfo.getInstance().getUserWeight());
+        //int weight = Integer.parseInt(UserInfo.getInstance().getUserWeight());
 
         weightPicker.setMinValue(30);
         weightPicker.setMaxValue(200);
-        weightPicker.setValue(weight);
+        weightPicker.setValue(Integer.parseInt(getWeightIntVal()));
+        weightPicker.setWrapSelectorWheel(false);
 
+        weightPointPicker.setMinValue(0);
+        weightPointPicker.setMaxValue(9);
+        weightPointPicker.setValue(Integer.parseInt(getWeightPointVal()));
+        weightPointPicker.setWrapSelectorWheel(true);
+
+        // 정수자리
         weightPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                String changedWeight = String.valueOf(newVal-1);
-                cw[0] = Float.parseFloat(changedWeight);
-                UserInfo.getInstance().setUserWeight(changedWeight);
+                String val = String.valueOf(newVal);
+                calculateWeightIntTxt.setText(val);
+            }
+        });
+        // 소수점
+        weightPointPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                String val = String.valueOf(newVal);
+                calculateWeightPointTxt.setText(val);
             }
         });
 
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                UserInfo.getInstance().setUserAge(String.valueOf(cAge[0])); // 새로운 나이 설정
+
+                // 키 값 읽어오기
+                Float height = Float.parseFloat(calculateHeightIntTxt.getText().toString()) + Float.parseFloat(calculateHeightPointTxt.getText().toString()) * 0.1f;
+                //int height_i = Integer.parseInt(height.toString());
+                UserInfo.getInstance().setUserHeight(height.toString()); // 새로운 키 설정
+
+                // 몸무게 값 읽어오기
+                Float weight = Float.parseFloat(calculateWeightIntTxt.getText().toString()) + Float.parseFloat(calculateWeightPointTxt.getText().toString()) * 0.1f;
+                //int weight_i = Integer.parseInt(weight.toString());
+                UserInfo.getInstance().setUserWeight(weight.toString()); // 새로운 몸무게 설정
+
+
                 // ****** 여기서 사용자가 입력한 값으로 변경 처리 ******
                 Response.Listener<String> responseListener = response -> {
                     try {
@@ -286,6 +341,7 @@ public class MyPageEditInfo extends AppCompatActivity {
                         boolean success = jsonObject.getBoolean("success");
                         if (success) { // 회원등록에 성공한 경우
                             RadioButton a = dialog2.findViewById(R.id.manRadioBtn);
+                            // 새로운 성별 설정
                             if(a.isChecked()){
                                 UserInfo.getInstance().setUserGender("man");
                                 genderTxt.setText("남");
@@ -294,7 +350,6 @@ public class MyPageEditInfo extends AppCompatActivity {
                                 UserInfo.getInstance().setUserGender("woman");
                                 genderTxt.setText("여");
                             }
-
 //                            if(UserInfo.getInstance().getUserGender().equals("man"))
 //                                genderTxt.setText("남");
 //                            else
@@ -332,18 +387,44 @@ public class MyPageEditInfo extends AppCompatActivity {
                 EditPhysicalRequest editPhysicalRequest = new EditPhysicalRequest(UserInfo.getInstance().getUserID(),
                         gender[0],
                         cAge[0],
-                        ch[0],
-                        cw[0],
+                        height,
+                        weight,
                         responseListener);
-                RequestQueue queue = Volley.newRequestQueue(MyPageEditInfo.this);
+                RequestQueue queue = Volley.newRequestQueue(MyPageEditInfoActivity.this);
                 queue.add(editPhysicalRequest);
             }
         });
+
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog2.dismiss();
             }
         });
+    }
+
+    public String getHeightIntVal() {
+        Float height = Float.valueOf(UserInfo.getInstance().getUserHeight());
+        int intVal = (int) (height * 10) / 10;
+
+        return String.valueOf(intVal);
+    }
+    public String getHeightPointVal() {
+        Float height = Float.valueOf(UserInfo.getInstance().getUserHeight());
+        int  point = (int) ((height * 10) % 10);
+
+        return String.valueOf(point);
+    }
+    public String getWeightIntVal() {
+        Float weight = Float.valueOf(UserInfo.getInstance().getUserWeight());
+        int intVal = (int) (weight * 10) / 10;
+
+        return String.valueOf(intVal);
+    }
+    public String getWeightPointVal() {
+        Float weight = Float.valueOf(UserInfo.getInstance().getUserWeight());
+        int  point = (int) ((weight * 10) % 10);
+
+        return String.valueOf(point);
     }
 }
