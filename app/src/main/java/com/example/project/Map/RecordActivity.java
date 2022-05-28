@@ -12,8 +12,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.project.R;
+import com.example.project.Weather.GpsTrackerService;
 import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.CameraUpdate;
+import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
@@ -21,6 +24,7 @@ import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.overlay.PathOverlay;
+import com.naver.maps.map.util.FusedLocationSource;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,6 +43,9 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
     double dist;
     double speed;
     int time;
+
+    // 맵 위치
+    private FusedLocationSource locationSource;
 
     List<LatLng> recordPath;
     ArrayList<String> crsNameList;
@@ -70,11 +77,13 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         avgSpeed_tv.setText(Constants.formattingSpeed(dist / (double) time));
 
 
+        // 위치 변수 생성
+        locationSource = new FusedLocationSource(this, Constants.LOCATION_PERMISSION_REQUEST_CODE);
+
         mapView = findViewById(R.id.record_mapview);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
-        System.out.println(crsNameList.size());
 
         for (int i = crsNameList.size() - 1; i >= 0; i--) {
             RatingDialog dlg = new RatingDialog(this, crsNameList.get(i));
@@ -89,6 +98,11 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         UiSettings uiSettings = naverMap.getUiSettings();
         uiSettings.setZoomControlEnabled(false);
 
+
+
+
+
+
         if (recordPath.size() > 2) {
             PathOverlay pathOverlay = new PathOverlay(recordPath);
             pathOverlay.setColor(Color.RED);
@@ -99,6 +113,27 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
             CameraUpdate cameraUpdate = CameraUpdate.fitBounds(pathOverlay.getBounds(), 100, 100, 100, 100);
             naverMap.moveCamera(cameraUpdate);
+        }else{
+            // 현재 좌표로 변경
+            double curLat;
+            double curLng;
+            GpsTrackerService gps = new GpsTrackerService(getApplicationContext());
+            curLat = gps.getLatitude();
+            curLng = gps.getLongitude();
+
+
+            //위치 및 각도 조정
+            CameraPosition cameraPosition = new CameraPosition(
+                    new LatLng(curLat, curLng),         // 위치 지정
+                    15,                           // 줌 레벨
+                    20,                             // 기울임 각도
+                    0                            // 방향
+            );
+            naverMap.setCameraPosition(cameraPosition);
+            // 위치
+            naverMap.setLocationSource(locationSource);
+            // 초기 위치 표시
+            naverMap.setLocationTrackingMode(LocationTrackingMode.NoFollow);
         }
 
     }
