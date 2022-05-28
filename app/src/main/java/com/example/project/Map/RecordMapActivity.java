@@ -100,7 +100,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 유저 위치 리스트
     public static List<LatLng> userLocationList;
     // 폴리라인
-    private PolylineOverlay userPolyline;
+    public PolylineOverlay userPolyline;
 
     // 백그라운드 체크
     private boolean isBackground = false;
@@ -448,6 +448,15 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         Log.d(TAG, "onMapReady");
     }
 
+    public void updateCamera() {
+
+        if (userLocationList.size() < 2) {
+            return;
+        }
+        CameraUpdate cameraUpdate = CameraUpdate.fitBounds(userPolyline.getBounds(), 300, 300, 300, 300).animate(CameraAnimation.Easing);
+        naverMap.moveCamera(cameraUpdate);
+    }
+
     // 권한 요청
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -480,6 +489,9 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                         time_tv = findViewById(R.id.dist_time);
                         cal_tv = findViewById(R.id.dist_cal);
 
+                        if (intent.getIntExtra("update", 0) == 1) {
+                            updateCamera();
+                        }
                         time = intent.getIntExtra("timer", 0);
                         distance = intent.getDoubleExtra("distance", 0.0);
                         calories += getCalories(MET);

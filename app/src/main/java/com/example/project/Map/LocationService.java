@@ -60,6 +60,10 @@ public class LocationService extends Service {
     // 거리
     private double distance = 0.0;
 
+    // 카메라 업데이트
+    private int updateCameraTimer = 0;
+    private int period = 5;
+
     // 타이머 변수
     private int total_sec = 0;
     private int time = -1;
@@ -213,6 +217,7 @@ public class LocationService extends Service {
             @Override
             public void run() {
                 time++;
+                updateCameraTimer++;
                 total_sec = time;
                 int sec = time % 60;
                 int min = time / 60 % 60;
@@ -222,6 +227,13 @@ public class LocationService extends Service {
                 intent.setAction("etc");
                 intent.putExtra("timer", total_sec);
                 intent.putExtra("distance", distance);
+                if(updateCameraTimer % period ==0){
+                    intent.putExtra("update",1);
+                }else{
+                    intent.putExtra("update",0);
+                }
+
+
                 sendBroadcast(intent);
 
                 // notification 업데이트
@@ -230,6 +242,8 @@ public class LocationService extends Service {
 
                 // 리스트에 담긴 거리 계산
                 distance = curDistance(RecordMapActivity.getList());
+
+
             }
         };
         timer.schedule(timerTask, 0, 1000);
