@@ -7,6 +7,9 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,15 +18,27 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.example.project.R;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.LineData;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class FeedFragment extends Fragment{
@@ -52,7 +67,7 @@ public class FeedFragment extends Fragment{
         newsRecyclerView = v.findViewById(R.id.news_recycler_view);
         fitnessRecyclerView = v.findViewById(R.id.fitness_recycler_view);
         realnewsRecyclerView = v.findViewById(R.id.real_time_news_recycler_view);
-        SearchNews("news", "면역건강");
+        SearchNews("news", "면역");
 
         initNewsData();
         initNewsRecyclerView();
