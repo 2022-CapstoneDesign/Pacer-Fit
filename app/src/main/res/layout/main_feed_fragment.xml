@@ -34,6 +34,25 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="WebViewLayout">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="실시간 뉴스"
+                android:textSize="20dp"
+                android:padding = "15dp"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:textColor="@color/white"
+                />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/real_time_news_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:padding="10dp"
+                android:background="@drawable/feed_round_style" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -43,6 +62,7 @@
                 android:padding = "15dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:textColor="@color/white"
+                android:layout_marginTop="20dp"
                 />
 
 

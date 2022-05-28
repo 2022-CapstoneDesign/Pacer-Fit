@@ -7,6 +7,8 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,32 +31,42 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class FeedFragment extends Fragment{
 //    Button detailfrag;
 
     RecyclerView newsRecyclerView;
+    RecyclerView realnewsRecyclerView;
     RecyclerView fitnessRecyclerView;
     LinearLayoutManager newsLayoutManager;
     LinearLayoutManager fitnessLayoutManager;
+    LinearLayoutManager realnewsLayoutManager;
     List<FeedRecyclerModel> newsList;
     List<FeedRecyclerModel> fitnessList;
+    List<RealNewsFeedRecyclerModel> realnewsList;
     FeedRecyclerAdapter adapter;
+    RealNewsFeedRecyclerAdapter adapter2;
     StringBuffer response;
     Handler handler = new Handler(Looper.getMainLooper());
-
+    String[] title = new String[11];
+    String[] link = new String[11];
+    RealNewsData newsData = new RealNewsData();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.main_feed_fragment,container,false);
         newsRecyclerView = v.findViewById(R.id.news_recycler_view);
         fitnessRecyclerView = v.findViewById(R.id.fitness_recycler_view);
+        realnewsRecyclerView = v.findViewById(R.id.real_time_news_recycler_view);
         SearchNews("news", "면역건강운동");
 
         initNewsData();
@@ -62,6 +74,8 @@ public class FeedFragment extends Fragment{
 
         initFitnessData();
         initFitnessRecyclerView();
+
+
 
 //        YouTubePlayerView youTubePlayerView = new YouTubePlayerView(getContext());
 //        layout.addView(youTubePlayerView);
@@ -72,7 +86,6 @@ public class FeedFragment extends Fragment{
 //        // 웹뷰의 설정 수정하기
 //
 //        myWebView.setWebViewClient(new WebViewClient());
-
         return v;
     }
 
@@ -99,14 +112,30 @@ public class FeedFragment extends Fragment{
                     } else {  // 에러 발생
                         br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
                     }
+
+                    int i=0;int ii=0;
                     String inputLine;
                     response = new StringBuffer();
+                    StringBuffer response2 = new StringBuffer();
                     while ((inputLine = br.readLine()) != null) {
                         response.append(inputLine);
                         response.append("\n");
+                        if(inputLine.contains("title")){
+//                            Pattern pattern = Pattern.compile("[\"](.*?)[\"]");
+//                            Matcher matcher = pattern.matcher(inputLine);
+//                            while (matcher.find()) {  // 일치하는 게 있다면
+//                                title[i++] = matcher.group(1);
+//                                if (matcher.group(1) == null)
+//                                    break;
+//                            }
+                            title[i++] = inputLine.substring(12,inputLine.length()-2).replace("<b>", "").replace("<\\/b>", "").replace("&quot;","\"");
+
+                        }
+                        if(inputLine.contains("\"link\"")){
+                            link[ii++] = inputLine.substring(11,inputLine.length()-2);
+                        }
                     }
                     br.close();
-
                     String naverHtml = response.toString();
 
                     Bundle bun = new Bundle();
@@ -117,11 +146,32 @@ public class FeedFragment extends Fragment{
 
 //                        testText.setText(response.toString());
                     System.out.println(response.toString());
+                    for(int j=0; j<10; j++){
+//                        System.out.println("title and link================="+title[j]+link[j]);
+                        newsData.setRealTimeNews(j,title[j],link[j]);
+                    }
+
+                    ArrayList<String> data = new ArrayList<>();
+                    for(int d=0; d<10; d++){
+                        data.add(title[d]);
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            initRealNewsData();
+                            initRealNewsRecyclerView();
+                        }
+                    });
+//                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,data);
+//                    ListView listview = (ListView) v.findViewById(R.id.listview);
+//                    listview.setAdapter(adapter);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
             }
+
         }.start();
 
     }
@@ -148,6 +198,22 @@ public class FeedFragment extends Fragment{
         newsRecyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+    }
+
+    private void initRealNewsRecyclerView() {
+        realnewsLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        realnewsLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        realnewsRecyclerView.setLayoutManager(realnewsLayoutManager);
+        adapter2 = new RealNewsFeedRecyclerAdapter(getContext(), realnewsList, R.layout.main_feed_real_news_item);
+        realnewsRecyclerView.setAdapter(adapter2);
+        adapter2.notifyDataSetChanged();
+
+    }
+
+    private void initRealNewsData() { // 뉴스 데이터 설정
+        realnewsList = new ArrayList<>();
+        for(int i=0; i<10; i++)
+            realnewsList.add(new RealNewsFeedRecyclerModel(newsData.newstitle[i]+""));
     }
 
     private void initFitnessData() { // 피트니스 데이터 설정
