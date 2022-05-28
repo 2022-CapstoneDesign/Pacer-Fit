@@ -295,7 +295,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         userLocationList = new ArrayList<>();
         userPolyline = new PolylineOverlay();
         userPolyline.setWidth(10);
-        userPolyline.setColor(ContextCompat.getColor(this, R.color.purple_project));
+        userPolyline.setColor(Color.RED);
 
         // 코스들 폴리라인, 마커 리스트 생성
         crsPolylineOverlays = new ArrayList<>();
@@ -453,7 +453,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         if (userLocationList.size() < 2) {
             return;
         }
-        CameraUpdate cameraUpdate = CameraUpdate.fitBounds(userPolyline.getBounds(), 300, 300, 300, 300).animate(CameraAnimation.Easing);
+        CameraUpdate cameraUpdate = CameraUpdate.fitBounds(userPolyline.getBounds(), 300, 300, 300, 100).animate(CameraAnimation.Easing);
         naverMap.moveCamera(cameraUpdate);
     }
 
@@ -1069,9 +1069,9 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         switch (level) {
             case "1":
                 crsLevel.setText("난이도 - 쉬움");
-                crsLevel.setTextColor(Color.BLUE);
-                crsHour.setTextColor(Color.BLUE);
-                crsDist.setTextColor(Color.BLUE);
+                crsLevel.setTextColor(ContextCompat.getColor(this, R.color.skyblue_project));
+                crsHour.setTextColor(ContextCompat.getColor(this, R.color.skyblue_project));
+                crsDist.setTextColor(ContextCompat.getColor(this, R.color.skyblue_project));
                 break;
             case "2":
                 crsLevel.setText("난이도 - 보통");
@@ -1149,7 +1149,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 selectedCrs = new PathOverlay(polylineOverlay.getCoords());
                 selectedCrs.setTag(selectedCrsName);
                 selectedCrs.setWidth(20);
-                selectedCrs.setColor(Color.RED);
+                selectedCrs.setColor(ContextCompat.getColor(this, R.color.purple_project));
                 selectedCrs.setMap(naverMap);
                 CameraUpdate cameraUpdate = CameraUpdate.fitBounds(polylineOverlay.getBounds(), 100, 100, 100, 100).animate(CameraAnimation.Easing);
                 naverMap.moveCamera(cameraUpdate);
