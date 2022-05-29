@@ -112,7 +112,7 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
             currentSteps = Integer.parseInt(today_userPedoRecord);
             pedoStep.setText(String.valueOf(currentSteps));
             //calories = Double.parseDouble(today_userPedoCalorieRecord);
-            calories = (currentSteps*((0.00007*Integer.parseInt(userKg))+0.04));
+            calories = (currentSteps*((0.00007*Float.parseFloat(userKg))+0.04));
             pedoCal.setText(String.format("%.2f",calories) + "kcal");
             //DB값 시간설정
             time = Integer.parseInt(today_userPedoTimeRecord);
@@ -266,7 +266,7 @@ public class StepCounterActivity extends AppCompatActivity implements SensorEven
                     Log.d("만보기", String.valueOf(currentSteps));
                     pedoStep.setText(String.valueOf(currentSteps));
                     //1kg당 1보 계산식 (5.0km/h기준)
-                    calories = (currentSteps*((0.00007*Integer.parseInt(userKg))+0.04));
+                    calories = (currentSteps*((0.00007*Float.parseFloat(userKg))+0.04));
                 }
             }
         }
