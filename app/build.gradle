@@ -1,7 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'org.springframework.boot' version '2.5.2'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 android {
@@ -81,12 +79,5 @@ dependencies {
     //ratingbar
     implementation 'com.github.ome450901:SimpleRatingBar:1.5.1'
 
-    compileOnly 'org.projectlombok:lombok:1.18.12'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
-
-    // application
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
 }
