@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.Button;
@@ -51,7 +52,24 @@ public class IntroActivity extends AppCompatActivity {
             finish();
         });
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        exitProgram();
+    }
+    private void exitProgram() {
+        // 태스크를 백그라운드로 이동
+        moveTaskToBack(true);
 
+        if (Build.VERSION.SDK_INT >= 21) {
+            // 액티비티 종료 + 태스크 리스트에서 지우기
+            finishAndRemoveTask();
+        } else {
+            // 액티비티 종료
+            finish();
+        }
+        System.exit(0);
+    }
     // GPS 허용 여부 권환 확인
 
     private void permissionCheck() {

@@ -403,7 +403,19 @@
 
         </LinearLayout>
     </LinearLayout>
-
+    <Button
+        android:id="@+id/gotoHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/btn_style5_dist_ready"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:text="수정 완료"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
    <View
        android:layout_width="match_parent"
        android:layout_height="0dp"
@@ -417,10 +429,10 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="30dp"
-        android:background="@drawable/btn_style5_with_ripple"
+        android:background="@drawable/btn_style4_pedo_ready"
         android:fontFamily="@font/nanumsquareroundeb"
         android:text="회원 탈퇴"
-        android:textColor="@color/whitegray_project"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
 </LinearLayout>
