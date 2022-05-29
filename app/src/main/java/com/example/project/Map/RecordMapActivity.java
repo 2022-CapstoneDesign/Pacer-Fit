@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -111,17 +110,12 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     // 코스 선택 체크
     private boolean isSelectCrs = false;
-    // 코스 클릭 체크
-    private boolean isClickCrs = false;
     // 코스 맵에 표시할지 체크
     private boolean isDisplayCrs = false;
 
 
     // 서비스 처음 시작 체크
     private boolean isFirstStart = false;
-
-    private boolean firstMap = false;
-    private boolean isRecommend;
 
     // Fragment
     private MapViewFragment mapViewFrag;
@@ -150,6 +144,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private double avgSpeed = 0.0;
     // 시간 변수
     private int time = -1;
+    private int exeTime = -1;
 
     //
     private long ratingStartTime = 0L;
@@ -194,7 +189,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 바텀 시트 레이아웃
     private SlidingUpPanelLayout mLayout;
 
-
     // 마커 listener
     private InfoWindow infoWindow;
 
@@ -202,7 +196,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private String selectedCrsName = null;
     // 선택 코스 path
     private PathOverlay selectedCrs;
-
 
     // 서비스 <- 액티비티 위치 리스트 반환
     public static List<LatLng> getList() {
@@ -398,7 +391,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         naverMap.setLocationTrackingMode(LocationTrackingMode.NoFollow);
         // 지도를 클릭하면 정보 창을 닫기
         naverMap.setOnMapClickListener((coord, point) -> {
-            isClickCrs = false;
             selectedCrsName = null;
             if (!isSelectCrs) {
                 mLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
@@ -424,19 +416,14 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 // 속도가 있으면 평균 속도 구하기
                 if (location.hasSpeed())
                     avgSpeed = location.getSpeed() * 3600 / 1000;
+
+                if (avgSpeed < 0.5) {
+                    exeTime--;
+                }
                 Toast.makeText(getApplicationContext(), "정확도: " + location.getAccuracy() + "속도: " + avgSpeed, Toast.LENGTH_SHORT).show();
 
                 // 리스트 추가
                 addList(new LatLng(location.getLatitude(), location.getLongitude()));
-
-                // 칼로리 계산 변수
-                if (avgSpeed >= 3.5) {
-                    MET = 3.8;
-                } else if (avgSpeed <= 3.5 && avgSpeed >= 1.0) {
-                    MET = 3.0;
-                } else {
-                    MET = 0.0;
-                }
 
                 // 폴리라인 맵에 갱신
                 if (userLocationList.size() > 2) {
@@ -445,11 +432,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 }
             }
         });
-        Log.d(TAG, "onMapReady");
     }
 
-    public void updateCamera() {
-
+    // 현재 폴리라인이 보이도록 카메라 조정
+    private void updateCamera() {
         if (userLocationList.size() < 2) {
             return;
         }
@@ -479,6 +465,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             if (intent != null) {
                 if (intent.getAction() != null) {
                     if (intent.getAction().equals("etc")) {
+                        exeTime++;
                         // 출발 지점 표시
                         if (!startPoint && !userLocationList.isEmpty()) {
                             startPoint = true;
@@ -494,21 +481,23 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                         }
                         time = intent.getIntExtra("timer", 0);
                         distance = intent.getDoubleExtra("distance", 0.0);
-                        calories += getCalories(MET);
-                        int sec = time % 60;
-                        int min = time / 60 % 60;
-                        int hour = time / 3600;
+                        calories = getCalories();
                         if (time_tv != null)
-                            time_tv.setText(hour + "H " + min + "M " + sec + "S");
+                            time_tv.setText(RecordUtility.formattedRecordTime(time));
                         if (dist_tv != null)
-                            dist_tv.setText(Double.toString(Math.round(distance * 100) / 100.0));
+                            dist_tv.setText(RecordUtility.formattedRecordDist(distance));
                         if (cal_tv != null)
-                            cal_tv.setText(Math.round(calories * 100) / 100.0 + "kcal");
+                            cal_tv.setText(RecordUtility.formattedRecordCal(calories));
                         Log.d("BroadCast", "Received BroadCast " + time + " " + distance);
                     }
                 }
             }
         }
+    }
+
+    // 칼로리 계산
+    private double getCalories() {
+        return userKg * 2 * ((double) exeTime / 60) / 1000;
     }
 
     @Override
@@ -660,7 +649,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     }
 
     // 저장 기능
-    public void RecordSave() {
+    private void RecordSave() {
         if (selectedCrsName != null) {
             ratingEndTime = System.currentTimeMillis();
         } else {
@@ -669,16 +658,9 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         long seconds = TimeUnit.MILLISECONDS.toSeconds(ratingEndTime - ratingStartTime);
 
-        if (seconds >= 1) {
+        if (seconds >= Constants.CHECK_RATING_CRS_TIME) {
             ratingCrsList.add(selectedCrsName);
         }
-
-
-        // 도착 마크 생성
-        if (userLocationList.size() > 1 && startPoint)
-            makeMarker("도착 지점", userLocationList.get(userLocationList.size() - 1).latitude, userLocationList.get(userLocationList.size() - 1).longitude);
-        else if (startPoint && userLocationList.size() == 1)
-            makeMarker("도착 지점", userLocationList.get(0).latitude, userLocationList.get(0).longitude);
 
         // 서비스 종료
         if (mService != null)
@@ -686,7 +668,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         stopLocationService();
 
-        Toast.makeText(this.getApplicationContext(), "서비스 종료", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, RecordActivity.class);
         intent.putExtra("cal", calories);
         intent.putExtra("distance", distance);
@@ -696,13 +677,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         startActivity(intent);
         finish();
     }
-
-    NaverMap.SnapshotReadyCallback snapshotReadyCallback = new NaverMap.SnapshotReadyCallback() {
-        @Override
-        public void onSnapshotReady(@NonNull Bitmap bitmap) {
-            System.out.println(bitmap);
-        }
-    };
 
     // 기록 -> 맵
     private void recordToMap() {
@@ -731,7 +705,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         }
         return false;
     }
-
 
     // 서비스 시작
     private void startLocationService() {
@@ -762,7 +735,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     }
 
     // 현재 위치에 마커를 생성하는 함수
-    public void makeMarker(String tag, double lat, double lng) {
+    private void makeMarker(String tag, double lat, double lng) {
         Marker marker = new Marker();
         marker.setPosition(new LatLng(lat, lng));
         marker.setIcon(OverlayImage.fromResource(R.drawable.marker_icon));
@@ -773,12 +746,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         Log.d(TAG, "makeMarker " + tag + " " + lat + ", " + lng);
     }
 
-    // 칼로리 계산
-    private double getCalories(double met) {
-        double cal;
-        cal = met * 3.5 * userKg / 60 * 5 / 1000;
-        return cal;
-    }
 
     private class GetGpxPathData extends AsyncTask<String, Void, String> {
         ProgressDialog progressDialog;
@@ -1088,13 +1055,12 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         }
         crsSummary.setText(summary);
-        crsHour.setText("#" + Integer.parseInt(hour) / 60 + "시간" + Integer.parseInt(hour) % 60 + "분");
-        crsDist.setText("# " + dist + "KM");
+        crsHour.setText(RecordUtility.formattedCrsHour(hour));
+        crsDist.setText(RecordUtility.formattedCrsDist(dist));
         crsHashTag.setText(tag);
     }
 
     public void clickCrs(String crsName) {
-        isClickCrs = true;
         isDisplayCrs = true;
 
         // 클릭 코스 제외 폴리라인, 마커 맵에서 제거
@@ -1154,7 +1120,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 CameraUpdate cameraUpdate = CameraUpdate.fitBounds(polylineOverlay.getBounds(), 100, 100, 100, 100).animate(CameraAnimation.Easing);
                 naverMap.moveCamera(cameraUpdate);
             }
-
             polylineOverlay.setMap(null);
         }
         for (Marker marker : crsMarkers) {
@@ -1184,6 +1149,4 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         return areaChanged;
     }
-
-
 }
