@@ -1,11 +1,16 @@
 package com.example.project.Main;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -19,6 +24,9 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.project.Login.IntroActivity;
+import com.example.project.Login.LoginActivity;
+import com.example.project.Pedo.DetailRecordFragment;
 import com.example.project.R;
 import com.example.project.Ranking.UserInfo;
 
@@ -40,9 +48,11 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
 
     Button editInfoBtn1;
     Button editInfoBtn2;
-
+    Button deleteBtn;
+    Button gotoHome;
     Dialog dialog1;
     Dialog dialog2;
+    Dialog dialog3;
 
     @Override
     protected void onPause() {
@@ -76,9 +86,23 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
         dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
         dialog2.setCanceledOnTouchOutside(false); // 외부 터치 시 꺼지는 현상 막기
 
+        dialog3 = new Dialog(MyPageEditInfoActivity.this);
+        dialog3.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog3.setContentView(R.layout.popup_delete_my_account);
+        dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
+        dialog3.setCanceledOnTouchOutside(false); // 외부 터치 시 꺼지는 현상 막기
 
         editInfoBtn1 = findViewById(R.id.editInfoBtn1);
         editInfoBtn2 = findViewById(R.id.editInfoBtn2);
+        deleteBtn = findViewById(R.id.deleteAccountBtn);
+        gotoHome = findViewById(R.id.gotoHome);
+
+        gotoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         editInfoBtn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,8 +118,13 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
             }
         });
 
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDeleteDialog();
+            }
+        });
     }
-
 
     private void setUserData() {
         String gender = UserInfo.getInstance().getUserGender();
@@ -110,7 +139,70 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
         weightTxt.setText(UserInfo.getInstance().getUserWeight());
         ageTxt.setText(UserInfo.getInstance().getUserAge());
     }
+    private void showDeleteDialog(){
+        dialog3.show();
+        Button okBtn = dialog3.findViewById(R.id.okBtn);
+        Button cancelBtn = dialog3.findViewById(R.id.cancelBtn);
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Response.Listener<String> responseListener = response -> {
+                    try {
+                        System.out.println(response);
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean success = jsonObject.getBoolean("success");
+                        if (success) { // 회원탈퇴에 성공한 경우
+                            clearBackStack();
+                            dialog3.dismiss();
+                            Intent intent = new Intent(MyPageEditInfoActivity.this, IntroActivity.class);// 메인 액티비티로 전환
+                            startActivity(intent);
+                            SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", Activity.MODE_PRIVATE);
+                            //Editor를 preferences에 쓰겠다고 연결
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.clear();
+                            editor.commit();
+                            finish();
+                            Toast.makeText(getApplicationContext(), "탈퇴 완료", Toast.LENGTH_SHORT).show();
+                        } else { // 회원탈퇴에 실패한 경우
+                            Toast.makeText(getApplicationContext(), "탈퇴 실패", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                };
+                DeleteAccountRequest deleteAccountRequest = new DeleteAccountRequest(UserInfo.getInstance().getUserID()+"", responseListener);
+                RequestQueue queue = Volley.newRequestQueue(MyPageEditInfoActivity.this);
+                queue.add(deleteAccountRequest);
+            }
+        });
 
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog3.dismiss();
+            }
+        });
+    }
+    private void clearBackStack() {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        while (fragmentManager.getBackStackEntryCount() != 0) {
+            fragmentManager.popBackStackImmediate();
+        }
+    }
+    private void exitProgram() {
+        // 태스크를 백그라운드로 이동
+         moveTaskToBack(true);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            // 액티비티 종료 + 태스크 리스트에서 지우기
+            finishAndRemoveTask();
+        } else {
+            // 액티비티 종료
+            finish();
+        }
+        System.exit(0);
+    }
     private void showEditAccountDialog() {
         dialog1.show();
 

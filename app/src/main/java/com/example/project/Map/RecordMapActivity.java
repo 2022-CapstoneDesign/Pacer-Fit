@@ -35,7 +35,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+import com.example.project.Pedo.PedoRecordSaveRequest;
+import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
+import com.example.project.Ranking.UserInfo;
 import com.example.project.Weather.GpsTrackerService;
 import com.example.project.Weather.Weather;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -511,6 +517,29 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    public void SaveMyRecordDB(){
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    System.out.println("========================" + response);
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+                    if (success) { // 만보기 값 저장완료
+                        System.out.println("성공");
+                    } else { // 실패한경우 강제종료
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        KmRecordSaveRequest kmRecordSaveRequest = new KmRecordSaveRequest(UserInfo.getInstance().getUserID()+"", dist_tv.getText().toString()+"", time+"", String.format("%.2f",calories)+"", responseListener);
+        RequestQueue queue = Volley.newRequestQueue(RecordMapActivity.this);
+        queue.add(kmRecordSaveRequest);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -534,7 +563,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         // 서비스 중지
         stopLocationService();
         Toast.makeText(this.getApplicationContext(), "서비스 종료", Toast.LENGTH_SHORT).show();
@@ -571,6 +599,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 StartFab();
                 break;
             case R.id.stop_dist_btn:
+                SaveMyRecordDB(); //그만하기 누를시 db저장
                 RecordSave();
                 break;
             default:
