@@ -10,6 +10,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -153,7 +154,14 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                             dialog3.dismiss();
                             Intent intent = new Intent(MyPageEditInfoActivity.this, LoginActivity.class);// 메인 액티비티로 전환
                             startActivity(intent);
+                            SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", Activity.MODE_PRIVATE);
+                            //Editor를 preferences에 쓰겠다고 연결
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.clear();
+                            editor.commit();
                             finish();
+                            Toast.makeText(getApplicationContext(), "탈퇴 완료", Toast.LENGTH_SHORT).show();
+                            exitProgram();
                         } else { // 회원탈퇴에 실패한 경우
                             Toast.makeText(getApplicationContext(), "탈퇴 실패", Toast.LENGTH_SHORT).show();
                             return;
@@ -174,6 +182,20 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                 dialog3.dismiss();
             }
         });
+    }
+
+    private void exitProgram() {
+        // 태스크를 백그라운드로 이동
+         moveTaskToBack(true);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            // 액티비티 종료 + 태스크 리스트에서 지우기
+            finishAndRemoveTask();
+        } else {
+            // 액티비티 종료
+            finish();
+        }
+        System.exit(0);
     }
     private void showEditAccountDialog() {
         dialog1.show();
