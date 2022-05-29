@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.project.Login.IntroActivity;
 import com.example.project.Login.LoginActivity;
 import com.example.project.Pedo.DetailRecordFragment;
 import com.example.project.R;
@@ -151,8 +152,9 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(response);
                         boolean success = jsonObject.getBoolean("success");
                         if (success) { // 회원탈퇴에 성공한 경우
+                            clearBackStack();
                             dialog3.dismiss();
-                            Intent intent = new Intent(MyPageEditInfoActivity.this, LoginActivity.class);// 메인 액티비티로 전환
+                            Intent intent = new Intent(MyPageEditInfoActivity.this, IntroActivity.class);// 메인 액티비티로 전환
                             startActivity(intent);
                             SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", Activity.MODE_PRIVATE);
                             //Editor를 preferences에 쓰겠다고 연결
@@ -161,7 +163,6 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                             editor.commit();
                             finish();
                             Toast.makeText(getApplicationContext(), "탈퇴 완료", Toast.LENGTH_SHORT).show();
-                            exitProgram();
                         } else { // 회원탈퇴에 실패한 경우
                             Toast.makeText(getApplicationContext(), "탈퇴 실패", Toast.LENGTH_SHORT).show();
                             return;
@@ -183,7 +184,12 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
             }
         });
     }
-
+    private void clearBackStack() {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        while (fragmentManager.getBackStackEntryCount() != 0) {
+            fragmentManager.popBackStackImmediate();
+        }
+    }
     private void exitProgram() {
         // 태스크를 백그라운드로 이동
          moveTaskToBack(true);
