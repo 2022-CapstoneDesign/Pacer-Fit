@@ -65,4 +65,12 @@
         <item name="colorControlNormal">@android:color/transparent</item>
     </style>
 
+    <!-- NumberPicker 커스텀 -->
+    <style name="AppTheme.Picker2" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="fontFamily">@font/nanumsquareroundeb</item>
+        <item name="android:textColorPrimary">#ECECEC</item>
+        <item name="android:textSize">22sp</item>
+        <item name="colorControlNormal">@android:color/transparent</item>
+    </style>
+
 </resources>
