@@ -3,6 +3,7 @@ package com.example.project.Login;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,7 +69,7 @@ public class SurveyActivity extends AppCompatActivity {
                 else {
                     Log.d("testingTAG", "어려움 선택");
                 }
-                //startActivity(new Intent(SurveyActivity.this, LoginActivity.class)); // 로그인 액티비티로 전환
+                startActivity(new Intent(SurveyActivity.this, LoginActivity.class)); // 로그인 액티비티로 전환
             }
         });
 
