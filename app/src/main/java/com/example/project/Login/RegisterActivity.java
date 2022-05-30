@@ -196,7 +196,7 @@ public class RegisterActivity extends AppCompatActivity {
                     boolean success = jsonObject.getBoolean("success");
                     if (success) { // 회원등록에 성공한 경우
                         Toast.makeText(getApplicationContext(), "회원가입 성공", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class)); // 로그인 액티비티로 전환
+                        startActivity(new Intent(RegisterActivity.this, SurveyActivity.class)); // 설문조사 액티비티로 전환
                         finish();
                     } else { // 회원등록에 실패한 경우
                         String answer = jsonObject.getString("answer");
