@@ -64,6 +64,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -95,6 +96,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private static final String TAG_LEVEL = "crsLevel";
     private static final String TAG_DIST = "crsDstnc";
     private static final String TAG_HASH = "tag";
+    private static final String TAG_CRSIDX = "crsIdx";
 
     // 네이버 맵, 맵 관련 변수
     private MapView mapView;
@@ -179,6 +181,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<HashMap<String, String>> pathArrayList;
     private GpsTrackerService gpsTracker;
     private String pathJsonString;
+    private String CFcrsIdx;
     private String location = "";
     private String address = ""; // x,y는 격자x,y좌표
 
@@ -190,6 +193,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<String> crsLevelList;
     private ArrayList<String> crsDistList;
     private ArrayList<String> crsHashTagList;
+    private ArrayList<String> crsIdxList;
     private ArrayList<Marker> crsMarkers;
 
     // 측정 관련 버튼
@@ -316,6 +320,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         crsLevelList = new ArrayList<>();
         crsDistList = new ArrayList<>();
         crsHashTagList = new ArrayList<>();
+        crsIdxList = new ArrayList<>();
 
         ratingCrsList = new ArrayList<>();
 
@@ -363,6 +368,11 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         GetGpxPathData task = new GetGpxPathData();
         task.execute("http://pacerfit.dothome.co.kr/getPathWithArea.php");
+
+
+        GetCFData task1 = new GetCFData();
+        task1.execute("http://pacerfit.dothome.co.kr/slope_one_ex.php");
+
 
 
     }
@@ -835,6 +845,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                             bun.putString("level", crsLevelList.get(i));
                             bun.putString("dist", crsDistList.get(i));
                             bun.putString("tag", crsHashTagList.get(i));
+                            bun.putString("crsIdx", crsIdxList.get(i));
                             Message msg = handler.obtainMessage();
                             msg.setData(bun);
                             handler.sendMessage(msg);
@@ -915,6 +926,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 String level = item.getString(TAG_LEVEL);
                 String dist = item.getString(TAG_DIST);
                 String tag = item.getString(TAG_HASH);
+                String crsIdx = item.getString(TAG_CRSIDX);
 
                 System.out.println(name);
                 HashMap<String, String> hashMap = new HashMap<>();
@@ -929,6 +941,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 crsLevelList.add(level);
                 crsDistList.add(dist);
                 crsHashTagList.add(tag);
+                crsIdxList.add(crsIdx);
 
             }
         } catch (JSONException e) {
@@ -1006,6 +1019,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             String level = bun.getString("level");
             String dist = bun.getString("dist");
             String tag = bun.getString("tag");
+            String crsIdx = bun.getString("crsIdx");
             List<LatLng> COORDS = new ArrayList<>();
             for (int i = 12; i < latLon.length; i += 2) {
                 try {
@@ -1213,6 +1227,80 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         return areaChanged;
     }
+
+
+    private class GetCFData extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPostExecute(String result) { //doInBackground에서 return한 값을 받음
+            super.onPostExecute(result);
+            //progressDialog.dismiss();
+            Log.d(TAG, "response  - " + result);
+            if (result == null) {
+                Log.d(TAG, errorString);
+            } else {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    CFcrsIdx = jsonObject.getString("crsIdx");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String serverURL = params[0];
+
+            try {
+                String selectLocation = "userID=" + UserInfo.getInstance().getUserID();
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(3000);
+                httpURLConnection.setConnectTimeout(3000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(selectLocation.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+                //어플에서 데이터 전송
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                } else {
+                    inputStream = httpURLConnection.getErrorStream();
+                }//연결상태 확인
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+        }
+    }
+
+
 
 
 }
