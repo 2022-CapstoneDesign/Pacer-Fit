@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -38,8 +37,6 @@ import androidx.core.content.ContextCompat;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.project.Pedo.PedoRecordSaveRequest;
-import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
 import com.example.project.Ranking.UserInfo;
 import com.example.project.Weather.GpsTrackerService;
@@ -107,6 +104,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     public static List<LatLng> userLocationList;
     // 폴리라인
     public PolylineOverlay userPolyline;
+    public static ArrayList<Double> userSpeedList;
 
     // 백그라운드 체크
     private boolean isBackground = false;
@@ -300,6 +298,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         // 코스들 폴리라인, 마커 리스트 생성
         crsPolylineOverlays = new ArrayList<>();
         crsMarkers = new ArrayList<>();
+        userSpeedList = new ArrayList<>();
         infoWindow = new InfoWindow();
 
         // 코스 리스트들 생성
@@ -313,9 +312,9 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         ratingCrsList = new ArrayList<>();
 
-        // 유저 몸무게 받아오기 (db에서 받아오기)
-        userKg = 50.0;
 
+        userKg = Double.parseDouble(getIntent().getStringExtra("userWeight"));
+        Log.d("weight", String.valueOf(userKg));
         Weather weatherMethod = new Weather();
         gpsTracker = new GpsTrackerService(this);
         double latitude = gpsTracker.getLatitude();
@@ -427,7 +426,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 if (avgSpeed < 0.5) {
                     exeTime--;
                 }
-                Toast.makeText(getApplicationContext(), "정확도: " + location.getAccuracy() + "속도: " + avgSpeed, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "정확도: " + location.getAccuracy() + "속도: " + Math.round(avgSpeed * 100) / 100 + "개수: " + userSpeedList.size(), Toast.LENGTH_SHORT).show();
 
                 // 리스트 추가
                 addList(new LatLng(location.getLatitude(), location.getLongitude()));
@@ -503,7 +502,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void SaveMyRecordDB(){
+    public void SaveMyRecordDB() {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -521,14 +520,14 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 }
             }
         };
-        KmRecordSaveRequest kmRecordSaveRequest = new KmRecordSaveRequest(UserInfo.getInstance().getUserID()+"", dist_tv.getText().toString()+"", time+"", String.format("%.2f",calories)+"", responseListener);
+        KmRecordSaveRequest kmRecordSaveRequest = new KmRecordSaveRequest(UserInfo.getInstance().getUserID() + "", dist_tv.getText().toString() + "", time + "", String.format("%.2f", calories) + "", responseListener);
         RequestQueue queue = Volley.newRequestQueue(RecordMapActivity.this);
         queue.add(kmRecordSaveRequest);
     }
 
     // 칼로리 계산
     private double getCalories() {
-        return userKg * 2 * ((double) exeTime / 60) / 1000;
+        return userKg * 2 * ((double) exeTime / 60) / 10;
     }
 
     @Override
@@ -538,7 +537,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         if (mService != null)
             mService.isBackground = false;
         isBackground = false;
-        Log.d(TAG, "onResume " + isBackground);
     }
 
     @Override
@@ -548,7 +546,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         isBackground = true;
         if (mService != null)
             mService.isBackground = true;
-        Log.d(TAG, "onPause " + isBackground);
     }
 
     @Override
