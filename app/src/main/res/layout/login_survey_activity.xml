@@ -8,31 +8,313 @@
     tools:context=".Login.SurveyActivity"
     android:orientation="vertical">
 
-    <ImageView
-        android:src="@drawable/walk_over"
-        android:layout_marginTop="70dp"
-        android:layout_marginStart="20dp"
-        android:layout_width="70dp"
-        android:layout_height="70dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="선호하는 운동 스타일을\n알려주세요."
-        android:textColor="@color/white"
-        android:fontFamily="@font/nanumsquareroundeb"
-        android:textSize="25sp"
-        android:paddingTop="20dp"
-        android:paddingStart="20dp" />
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:text="Pacer Fit이 취향에 맞는\n코스를 추천해드릴게요"
-        android:textSize="17sp"
-        android:textColor="@color/whitegray_project"
-        android:fontFamily="@font/nanumsquareroundeb"
-        />
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="70dp"
+            android:src="@drawable/walk_over" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:lineSpacingExtra="3dp"
+                android:paddingStart="20dp"
+                android:paddingTop="20dp"
+                android:text="선호하는 운동 스타일을\n알려주세요."
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:lineSpacingExtra="3dp"
+                android:padding="20dp"
+                android:text="Pacer Fit이 취향에 맞는\n코스를 추천해 드릴게요"
+                android:textColor="@color/whitegray_project"
+                android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="23dp"
+            android:text="당신이 좋아하는 코스는?"
+            android:textSize="17dp"
+            android:fontFamily="@font/nanumsquareroundeb"
+            android:textColor="@color/white"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/check0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/selector_hashtag"
+                    android:button="@null"
+                    android:paddingStart="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="8dp"
+                    android:text="#공원"
+                    android:textColor="#ECECEC"
+                    android:textSize="18sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <CheckBox
+                    android:id="@+id/check1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/selector_hashtag"
+                    android:button="@null"
+                    android:paddingStart="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="8dp"
+                    android:text="#산"
+                    android:textColor="#ECECEC"
+                    android:textSize="18sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <CheckBox
+                    android:id="@+id/check2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/selector_hashtag"
+                    android:button="@null"
+                    android:paddingStart="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="8dp"
+                    android:text="#숲"
+                    android:textColor="#ECECEC"
+                    android:textSize="18sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <CheckBox
+                    android:id="@+id/check3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/selector_hashtag"
+                    android:button="@null"
+                    android:paddingStart="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="8dp"
+                    android:text="#바다"
+                    android:textColor="#ECECEC"
+                    android:textSize="18sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/check4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/selector_hashtag"
+                    android:button="@null"
+                    android:paddingStart="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="8dp"
+                    android:text="#해변"
+                    android:textColor="#ECECEC"
+                    android:textSize="18sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <CheckBox
+                    android:id="@+id/check5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/selector_hashtag"
+                    android:button="@null"
+                    android:paddingStart="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="8dp"
+                    android:text="#트레킹"
+                    android:textColor="#ECECEC"
+                    android:textSize="18sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <CheckBox
+                    android:id="@+id/check6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/selector_hashtag"
+                    android:button="@null"
+                    android:paddingStart="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="8dp"
+                    android:text="#자연"
+                    android:textColor="#ECECEC"
+                    android:textSize="18sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <CheckBox
+                    android:id="@+id/check7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/selector_hashtag"
+                    android:button="@null"
+                    android:paddingStart="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="8dp"
+                    android:text="#명소"
+                    android:textColor="#ECECEC"
+                    android:textSize="18sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/check8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/selector_hashtag"
+                    android:button="@null"
+                    android:paddingStart="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="8dp"
+                    android:text="#동네"
+                    android:textColor="#ECECEC"
+                    android:textSize="18sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <CheckBox
+                    android:id="@+id/check9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/selector_hashtag"
+                    android:button="@null"
+                    android:paddingStart="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="8dp"
+                    android:text="#풍경"
+                    android:textColor="#ECECEC"
+                    android:textSize="18sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <CheckBox
+                    android:id="@+id/check10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/selector_hashtag"
+                    android:button="@null"
+                    android:paddingStart="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="8dp"
+                    android:text="#역사"
+                    android:textColor="#ECECEC"
+                    android:textSize="18sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="23dp"
+            android:text="당신이 좋아하는 난이도는?"
+            android:textSize="17dp"
+            android:fontFamily="@font/nanumsquareroundeb"
+            android:textColor="@color/white"/>
+
+        <NumberPicker
+            android:id="@+id/difficultyPicker"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:orientation="horizontal"
+            android:theme="@style/AppTheme.Picker2"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/okBtn"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/btn_style_with_ripple"
+            android:fontFamily="@font/nanumsquareroundeb"
+            android:text="확인"
+            android:textColor="@color/whitegray_project"
+            android:textSize="16sp" />
+
+
+
+    </LinearLayout>
+
+    </ScrollView>
+
 
 </LinearLayout>
