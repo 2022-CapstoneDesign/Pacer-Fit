@@ -70,6 +70,7 @@ public class SurveyActivity extends AppCompatActivity {
                     Log.d("testingTAG", "어려움 선택");
                 }
                 startActivity(new Intent(SurveyActivity.this, LoginActivity.class)); // 로그인 액티비티로 전환
+                finish();
             }
         });
 

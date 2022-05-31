@@ -34,17 +34,32 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="WebViewLayout">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/include7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="WebViewLayout">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="실시간 뉴스"
-                android:textSize="20dp"
+                android:text="뉴스"
+                android:textSize="25dp"
                 android:padding = "15dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:textColor="@color/white"
                 />
 
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanumsquareroundeb"
+                android:text="#건강 #생활"
+                android:textColor="@color/whitegray_project"
+                android:textSize="18dp" />
+        </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/real_time_news_recycler_view"
                 android:layout_width="match_parent"
@@ -57,8 +72,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="뉴스"
-                android:textSize="20dp"
+                android:text="건강 콘텐츠"
+                android:textSize="25dp"
                 android:padding = "15dp"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:textColor="@color/white"
@@ -81,7 +96,7 @@
                 android:text="피트니스"
                 android:fontFamily="@font/nanumsquareroundeb"
                 android:textColor="@color/white"
-                android:textSize="20dp"
+                android:textSize="25dp"
                 android:padding="15dp"
                 android:layout_marginTop="20dp"
                 />
