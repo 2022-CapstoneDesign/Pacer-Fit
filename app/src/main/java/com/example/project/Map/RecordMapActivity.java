@@ -642,7 +642,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 levelCourse.createMarker(false);
                 levelCourse.getPathOverlay().setColor(Color.YELLOW);
                 levelCourse.getPathOverlay().setPassedColor(Color.BLACK);
-                levelCourse.getMarker().setCaptionText("난이도");
+                levelCourse.getMarker().setCaptionText("난이도 추천");
                 levelCourse.getMarker().setIcon(OverlayImage.fromResource(R.drawable.recommend_mark_img));
                 recommendList.add(levelCourse);
             }
@@ -652,7 +652,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 hashCourse.createMarker(false);
                 hashCourse.getPathOverlay().setColor(Color.YELLOW);
                 hashCourse.getPathOverlay().setPassedColor(Color.BLACK);
-                hashCourse.getMarker().setCaptionText("해시");
+                hashCourse.getMarker().setCaptionText("해시태그 추천");
                 hashCourse.getMarker().setIcon(OverlayImage.fromResource(R.drawable.recommend_mark_img));
                 recommendList.add(hashCourse);
             }
