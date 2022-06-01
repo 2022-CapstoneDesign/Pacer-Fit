@@ -128,7 +128,7 @@ public class FeedFragment extends Fragment{
 //                                if (matcher.group(1) == null)
 //                                    break;
 //                            }
-                            title[i++] = inputLine.substring(12,inputLine.length()-2).replace("<b>", "").replace("<\\/b>", "").replace("&quot;","\"");
+                            title[i++] = inputLine.substring(12,inputLine.length()-2).replace("<b>", "").replace("<\\/b>", "").replace("&quot;","\"").replace("&lt;","<").replace("&gt;",">").replace("\\/","/").replace("&amp;","&");
 
                         }
                         if(inputLine.contains("\"link\"")){
