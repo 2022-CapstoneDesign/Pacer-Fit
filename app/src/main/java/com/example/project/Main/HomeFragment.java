@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -102,8 +103,10 @@ public class HomeFragment extends Fragment {
         weatherInfo.setSelected(true);
         weatherInfo_Image = v.findViewById(R.id.weather_image);
         temperature = v.findViewById(R.id.temperature);
-        Button Km_button = v.findViewById(R.id.Km_button);
+        //Button Km_button = v.findViewById(R.id.Km_button);
+        LinearLayout Km_button = v.findViewById(R.id.km_layout_btn);
         //null포인터 오류로 빼놈
+
         green = ContextCompat.getColor(getContext(), R.color.green_project);
         gray = ContextCompat.getColor(getContext(), R.color.gray_project);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -141,7 +144,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        Button pedo_button = v.findViewById(R.id.pedo_button);
+        //Button pedo_button = v.findViewById(R.id.pedo_button);
+        LinearLayout pedo_button = v.findViewById(R.id.pedo_layout_btn);
         pedo_button.setOnClickListener(map -> {
             // DB추가
             Response.Listener<String> responseListener = new Response.Listener<String>() {
