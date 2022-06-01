@@ -10,36 +10,40 @@
         android:id="@+id/include5"
         layout="@layout/toolbar_ranking" />
 
-    <Button
-        android:id="@+id/ranking_dist_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="30dp"
-        android:background="@drawable/btn_style"
-        android:fontFamily="@font/nanumsquareroundeb"
-        android:text="거리(km)"
-        android:textAllCaps="false"
-        android:textColor="@color/whitegray_project"
-        app:layout_constraintBaseline_toBaselineOf="@+id/ranking_pedo_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ranking_pedo_btn" />
-
-    <Button
-        android:id="@+id/ranking_pedo_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+    <LinearLayout
         android:layout_marginTop="80dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/btn_style3"
-        android:fontFamily="@font/nanumsquareroundeb"
-        android:text="만보기"
-        android:textAllCaps="false"
-        android:textColor="@color/whitegray_project"
-        app:layout_constraintEnd_toStartOf="@+id/ranking_dist_btn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/ranking_dist_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_style_ranking_green"
+            android:fontFamily="@font/nanumsquareroundeb"
+            android:text="하이킹"
+            android:textAllCaps="false"
+            android:textColor="@color/gray_project" />
+
+        <Button
+            android:id="@+id/ranking_pedo_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_style_ranking_off"
+            android:fontFamily="@font/nanumsquareroundeb"
+            android:text="만보기"
+            android:textAllCaps="false"
+            android:textColor="@color/gray_project" />
+
+    </LinearLayout>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/ranking_fragment_container"

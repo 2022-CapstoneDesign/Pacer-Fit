@@ -30,7 +30,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:fontFamily="@font/nanumsquareroundeb"
-            android:text="211,721명"
             android:textColor="@color/white"
             android:textSize="14dp" />
     </LinearLayout>
