@@ -197,6 +197,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<String> crsHashTagList;
     private ArrayList<String> crsIdxList;
 
+    String slope_crs;
+    String level_crs;
+    String hash_crs;
+
     // 측정 관련 버튼
     private Button startBtn;
     private Button reselectBtn;

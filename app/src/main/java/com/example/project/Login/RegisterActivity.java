@@ -16,6 +16,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.project.R;
+import com.example.project.Ranking.UserInfo;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
@@ -195,6 +196,7 @@ public class RegisterActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
                     boolean success = jsonObject.getBoolean("success");
                     if (success) { // 회원등록에 성공한 경우
+                        UserInfo.getInstance().setUserID(userID);
                         Toast.makeText(getApplicationContext(), "회원가입 성공", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(RegisterActivity.this, SurveyActivity.class)); // 설문조사 액티비티로 전환
                         finish();

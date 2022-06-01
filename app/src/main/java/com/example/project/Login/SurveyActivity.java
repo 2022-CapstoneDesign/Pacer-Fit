@@ -1,9 +1,13 @@
 package com.example.project.Login;
 
+import static com.example.project.Map.LocationService.TAG;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +16,16 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.NumberPicker;
 
+import com.example.project.Main.MyPageFragment;
 import com.example.project.R;
+import com.example.project.Ranking.UserInfo;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class SurveyActivity extends AppCompatActivity {
 
@@ -69,7 +82,8 @@ public class SurveyActivity extends AppCompatActivity {
                 else {
                     Log.d("testingTAG", "어려움 선택");
                 }
-                startActivity(new Intent(SurveyActivity.this, LoginActivity.class)); // 로그인 액티비티로 전환
+                uploadServeyData task = new uploadServeyData();
+                task.execute("http://pacerfit.dothome.co.kr/uploadServeyData.php");
             }
         });
 
@@ -187,6 +201,110 @@ public class SurveyActivity extends AppCompatActivity {
             if (hashTags[i].getSelected() == 1) {
                 //Log.d("testingTAG", hashTags[i].getTitle());
                 Log.d("testingTAG", hashTags[i].getIndex() + "");
+            }
+        }
+    }
+
+
+    private class uploadServeyData extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPostExecute(String result) { //doInBackground에서 return한 값을 받음
+            super.onPostExecute(result);
+            //progressDialog.dismiss();
+            Log.d(TAG, "response  - " + result);
+            startActivity(new Intent(SurveyActivity.this, LoginActivity.class)); // 로그인 액티비티로 전환
+            finish();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String serverURL = params[0];
+
+            try {
+                String userID = "userID=" + UserInfo.getInstance().getUserID();
+                String level_like = "selectedDiffculty=" + selectedDifficulty;
+                String park= "park=" + hashTags[0].getSelected();
+                String mountain= "mountain=" + hashTags[1].getSelected();
+                String forest= "forest=" + hashTags[2].getSelected();
+                String sea= "sea=" + hashTags[3].getSelected();
+                String beach= "beach=" + hashTags[4].getSelected();
+                String trekking= "trekking=" + hashTags[5].getSelected();
+                String nature= "nature=" + hashTags[6].getSelected();
+                String sights= "sights=" + hashTags[7].getSelected();
+                String town= "town=" + hashTags[8].getSelected();
+                String scenery= "scenery=" + hashTags[9].getSelected();
+                String history= "history=" + hashTags[10].getSelected();
+
+                StringBuffer stParams = new StringBuffer();
+                stParams.append(userID);
+                stParams.append("&");
+                stParams.append(level_like);
+                stParams.append("&");
+                stParams.append(park);
+                stParams.append("&");
+                stParams.append(mountain);
+                stParams.append("&");
+                stParams.append(forest);
+                stParams.append("&");
+                stParams.append(sea);
+                stParams.append("&");
+                stParams.append(beach);
+                stParams.append("&");
+                stParams.append(trekking);
+                stParams.append("&");
+                stParams.append(nature);
+                stParams.append("&");
+                stParams.append(sights);
+                stParams.append("&");
+                stParams.append(town);
+                stParams.append("&");
+                stParams.append(scenery);
+                stParams.append("&");
+                stParams.append(history);
+
+                String strParams = stParams.toString();
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(strParams.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+                //어플에서 데이터 전송
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                } else {
+                    inputStream = httpURLConnection.getErrorStream();
+                }//연결상태 확인
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
             }
         }
     }
