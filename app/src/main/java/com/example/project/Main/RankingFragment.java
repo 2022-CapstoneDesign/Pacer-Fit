@@ -27,6 +27,7 @@ public class RankingFragment extends Fragment {
         distBtn = v.findViewById(R.id.ranking_dist_btn);
         pedoBtn = v.findViewById(R.id.ranking_pedo_btn);
 
+        getChildFragmentManager().beginTransaction().replace(R.id.ranking_fragment_container, new DistFragment()).commit();
 
         distBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -10,7 +10,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +62,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
 
 public class HomeFragment extends Fragment {
     private TextView weatherInfo;
@@ -140,6 +138,8 @@ public class HomeFragment extends Fragment {
             public void onClick(View map) {
                 Intent intent = new Intent(getActivity(), RecordMapActivity.class); //Fragment -> Activity로 이동 (Map_add.java)
                 //Intent intent = new Intent(getActivity(), Map_add.class);
+                intent.putExtra("userWeight",userWeight);
+                Log.d("weight", String.valueOf(userWeight));
                 startActivity(intent);
             }
         });

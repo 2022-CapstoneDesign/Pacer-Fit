@@ -71,10 +71,10 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         avgSpeed_tv = findViewById(R.id.result_avg_speed);
 
 
-        time_tv.setText(Constants.formattingTime(time));
-        dist_tv.setText(Constants.formattingDist(dist));
-        cal_tv.setText(Constants.formattingCal(cal));
-        avgSpeed_tv.setText(Constants.formattingSpeed(dist / (double) time));
+        time_tv.setText(RecordUtility.formattedResultTime(time));
+        dist_tv.setText(RecordUtility.formattedResultDist(dist));
+        cal_tv.setText(RecordUtility.formattedResultCal(cal));
+        avgSpeed_tv.setText(RecordUtility.formattedResultSpeed(dist /( (double) time/3600)));
 
 
         // 위치 변수 생성
@@ -97,11 +97,6 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         this.naverMap = naverMap;
         UiSettings uiSettings = naverMap.getUiSettings();
         uiSettings.setZoomControlEnabled(false);
-
-
-
-
-
 
         if (recordPath.size() > 2) {
             PathOverlay pathOverlay = new PathOverlay(recordPath);
