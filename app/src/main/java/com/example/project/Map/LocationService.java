@@ -132,9 +132,9 @@ public class LocationService extends Service {
             createNotificationChannel();
             displayNotification();
             LocationRequest locationRequest = LocationRequest.create();
-            locationRequest.setInterval(5000L);
-            locationRequest.setFastestInterval(2000L);
-            locationRequest.setMaxWaitTime(5000L);
+            locationRequest.setInterval(Constants.FUSED_LOCATION_INTERVAL);
+            locationRequest.setFastestInterval(Constants.FUSED_LOCATION_FASTEST);
+            locationRequest.setMaxWaitTime(Constants.FUSED_LOCATION_MAX_WAIT);
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

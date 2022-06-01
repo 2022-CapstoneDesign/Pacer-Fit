@@ -69,6 +69,24 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/locationpin_white" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/dist_help_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="fitCenter"
+                android:background="#00000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:backgroundTint="@color/colorMAIN"
+                app:fabCustomSize="50dp"
+                android:clickable="true"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="70dp"
+                app:srcCompat="@drawable/tooltip_icon">
+
+            </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include layout="@layout/map_crsinfo_bottom_fragment">
@@ -131,6 +149,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+    </Button>
 
+    <Button
+        android:id="@+id/recommend_btn"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:background="@drawable/btn_style5_dist_start"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="코스 추천"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
     </Button>
 </androidx.constraintlayout.widget.ConstraintLayout>
