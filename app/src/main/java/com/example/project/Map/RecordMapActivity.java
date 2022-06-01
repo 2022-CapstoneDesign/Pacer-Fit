@@ -97,6 +97,9 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private static final String TAG_DIST = "crsDstnc";
     private static final String TAG_HASH = "tag";
     private static final String TAG_CRSIDX = "crsIdx";
+    private static final String TAG_SLOPE = "slope_crs";
+    private static final String TAG_LEVELCRS = "level_crs";
+    private static final String TAG_HASHCRS = "hash_crs";
 
     // 네이버 맵, 맵 관련 변수
     private MapView mapView;
@@ -181,7 +184,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<HashMap<String, String>> pathArrayList;
     private GpsTrackerService gpsTracker;
     private String pathJsonString;
-    private String CFcrsIdx;
+    private String pathJsonString2;
     private String location = "";
     private String address = ""; // x,y는 격자x,y좌표
 
@@ -195,6 +198,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<String> crsHashTagList;
     private ArrayList<String> crsIdxList;
     private ArrayList<Marker> crsMarkers;
+
+    String slope_crs;
+    String level_crs;
+    String hash_crs;
 
     // 측정 관련 버튼
     private Button startBtn;
@@ -1241,13 +1248,9 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             if (result == null) {
                 Log.d(TAG, errorString);
             } else {
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(result);
-                    CFcrsIdx = jsonObject.getString("crsIdx");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                pathJsonString2 = result;
+                showResult2();
+
             }
         }
 
@@ -1256,7 +1259,15 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             String serverURL = params[0];
 
             try {
-                String selectLocation = "userID=" + UserInfo.getInstance().getUserID();
+                String userID = "userID=" + UserInfo.getInstance().getUserID();
+                String selectLocation = "location=" + location;
+
+                StringBuffer stParams = new StringBuffer();
+                stParams.append(userID);
+                stParams.append("&");
+                stParams.append(selectLocation);
+
+                String strParams = stParams.toString();
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
@@ -1266,7 +1277,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 httpURLConnection.connect();
 
                 OutputStream outputStream = httpURLConnection.getOutputStream();
-                outputStream.write(selectLocation.getBytes("UTF-8"));
+                outputStream.write(strParams.getBytes("UTF-8"));
                 outputStream.flush();
                 outputStream.close();
                 //어플에서 데이터 전송
@@ -1297,6 +1308,31 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 errorString = e.toString();
                 return null;
             }
+        }
+    }
+
+    private void showResult2() {
+        try {
+            JSONObject jsonObject = new JSONObject(pathJsonString2);
+            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                System.out.println(jsonArray.length() + "\n");
+                System.out.println(i);
+
+
+                // 코스 정보 리스트에 저장
+                slope_crs = item.getString(TAG_SLOPE); //슬로프원 알고리즘 추천코스(별점)
+                level_crs = item.getString(TAG_LEVELCRS); //난이도를 이용한 추천코스
+                hash_crs = item.getString(TAG_HASHCRS); //해시태그를 이용한 추천코스
+
+                System.out.println(slope_crs+"========"+level_crs+"========="+hash_crs+"==============");
+
+            }
+        } catch (JSONException e) {
+            Log.d(TAG, "showResult : ", e);
         }
     }
 
