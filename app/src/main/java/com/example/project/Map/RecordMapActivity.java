@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -24,9 +23,10 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,8 +38,6 @@ import androidx.core.content.ContextCompat;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.project.Pedo.PedoRecordSaveRequest;
-import com.example.project.Pedo.StepCounterActivity;
 import com.example.project.R;
 import com.example.project.Ranking.UserInfo;
 import com.example.project.Weather.GpsTrackerService;
@@ -57,14 +55,12 @@ import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.overlay.PathOverlay;
-import com.naver.maps.map.overlay.PolylineOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -84,6 +80,7 @@ import java.util.regex.Pattern;
 @RequiresApi(api = Build.VERSION_CODES.P)
 public class RecordMapActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback, MapViewFragment.OnConnectListener {
 
+
     // TAG
     private static final String TAG = "RecordMapActivity";
     private static final String recordTag = "RecordTAG";
@@ -97,6 +94,9 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private static final String TAG_DIST = "crsDstnc";
     private static final String TAG_HASH = "tag";
     private static final String TAG_CRSIDX = "crsIdx";
+    private static final String TAG_SLOPE = "slope_crs";
+    private static final String TAG_LEVELCRS = "level_crs";
+    private static final String TAG_HASHCRS = "hash_crs";
 
     // 네이버 맵, 맵 관련 변수
     private MapView mapView;
@@ -108,7 +108,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     // 유저 위치 리스트
     public static List<LatLng> userLocationList;
     // 폴리라인
-    public PolylineOverlay userPolyline;
+    public PathOverlay userPolyline;
     public static ArrayList<Double> userSpeedList;
 
     // 백그라운드 체크
@@ -122,8 +122,14 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private boolean isSelectCrs = false;
     // 코스 맵에 표시할지 체크
     private boolean isDisplayCrs = false;
+    private boolean isRecommend = false;
 
-
+    String slope_crs;
+    String level_crs;
+    String hash_crs;
+    CourseData slopeCourse;
+    CourseData levelCourse;
+    CourseData hashCourse;
     // 서비스 처음 시작 체크
     private boolean isFirstStart = false;
 
@@ -167,8 +173,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     // 몸무게
     private double userKg;
-    // 칼로리 계산 변수 (산소)
-    private double MET = 0.0;
 
     // 서비스 <-> 액티비티 통신
     private IntentFilter filter;
@@ -178,12 +182,13 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<HashMap<String, String>> pathArrayList;
     private GpsTrackerService gpsTracker;
     private String pathJsonString;
-    private String CFcrsIdx;
+    private String pathJsonString2;
     private String location = "";
     private String address = ""; // x,y는 격자x,y좌표
 
     // 코스 정보 리스트
-    private ArrayList<PolylineOverlay> crsPolylineOverlays;
+    private ArrayList<CourseData> courseDataList;
+    private ArrayList<CourseData> recommendList;
     private ArrayList<String> crsNameList;
     private ArrayList<String> crsSummaryList;
     private ArrayList<String> crsTimeList;
@@ -191,12 +196,13 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<String> crsDistList;
     private ArrayList<String> crsHashTagList;
     private ArrayList<String> crsIdxList;
-    private ArrayList<Marker> crsMarkers;
 
     // 측정 관련 버튼
     private Button startBtn;
     private Button reselectBtn;
     private Button stopBtn;
+    private Button recommendBtn;
+    private ImageButton helpBtn;
 
     // 바텀 시트 레이아웃
     private SlidingUpPanelLayout mLayout;
@@ -266,6 +272,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         startBtn = findViewById(R.id.start_dist_btn);
         stopBtn = findViewById(R.id.stop_dist_btn);
         reselectBtn = findViewById(R.id.reselect_btn);
+        recommendBtn = findViewById(R.id.recommend_btn);
+        helpBtn = findViewById(R.id.dist_help_btn);
 
         // 바텀 시트
         crsName = findViewById(R.id.crs_name);
@@ -283,6 +291,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         startBtn.setOnClickListener(this);
         stopBtn.setOnClickListener(this);
         reselectBtn.setOnClickListener(this);
+        recommendBtn.setOnClickListener(this);
+        helpBtn.setOnClickListener(this);
 
         // 서비스 <-> 액티비티간의 통신 등록
         br = new MyBroadcast();
@@ -298,13 +308,11 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         // 유저의 위치, 폴리라인 리스트 생성 및 설정
         userLocationList = new ArrayList<>();
-        userPolyline = new PolylineOverlay();
+        userPolyline = new PathOverlay();
         userPolyline.setWidth(10);
         userPolyline.setColor(Color.RED);
 
         // 코스들 폴리라인, 마커 리스트 생성
-        crsPolylineOverlays = new ArrayList<>();
-        crsMarkers = new ArrayList<>();
         userSpeedList = new ArrayList<>();
         infoWindow = new InfoWindow();
 
@@ -319,10 +327,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         crsIdxList = new ArrayList<>();
 
         ratingCrsList = new ArrayList<>();
+        courseDataList = new ArrayList<>();
 
 
         userKg = Double.parseDouble(getIntent().getStringExtra("userWeight"));
-        Log.d("weight", String.valueOf(userKg));
         Weather weatherMethod = new Weather();
         gpsTracker = new GpsTrackerService(this);
         double latitude = gpsTracker.getLatitude();
@@ -362,10 +370,15 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         crsDistList = new ArrayList<>();
         crsHashTagList = new ArrayList<>();
 
+        // 절전 모드 해제
+        onRequestPermissionBattery();
+        // 백그라운드 위치 항상 허용
+        onRequestPermissionBackgroundLocation();
         GetGpxPathData task = new GetGpxPathData();
         task.execute("http://pacerfit.dothome.co.kr/getPathWithArea.php");
 
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         GetCFData task1 = new GetCFData();
         task1.execute("http://pacerfit.dothome.co.kr/slope_one_ex.php");
 
@@ -439,7 +452,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 if (avgSpeed < 0.5) {
                     exeTime--;
                 }
-                Toast.makeText(getApplicationContext(), "정확도: " + location.getAccuracy() + "속도: " + Math.round(avgSpeed * 100) / 100 + "개수: " + userSpeedList.size(), Toast.LENGTH_SHORT).show();
 
                 // 리스트 추가
                 addList(new LatLng(location.getLatitude(), location.getLongitude()));
@@ -454,14 +466,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         Log.d(TAG, "onMapReady");
     }
 
-    // 현재 폴리라인이 보이도록 카메라 조정
-    private void updateCamera() {
-        if (userLocationList.size() < 2) {
-            return;
-        }
-        CameraUpdate cameraUpdate = CameraUpdate.fitBounds(userPolyline.getBounds(), 300, 300, 300, 100).animate(CameraAnimation.Easing);
-        naverMap.moveCamera(cameraUpdate);
-    }
 
     // 권한 요청
     @Override
@@ -496,9 +500,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                         time_tv = findViewById(R.id.dist_time);
                         cal_tv = findViewById(R.id.dist_cal);
 
-                        if (intent.getIntExtra("update", 0) == 1) {
-                            updateCamera();
-                        }
                         time = intent.getIntExtra("timer", 0);
                         distance = intent.getDoubleExtra("distance", 0.0);
                         calories = getCalories();
@@ -566,7 +567,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         super.onDestroy();
         // 서비스 중지
         stopLocationService();
-        Toast.makeText(this.getApplicationContext(), "서비스 종료", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -603,9 +603,64 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 SaveMyRecordDB(); //그만하기 누를시 db저장
                 RecordSave();
                 break;
+            case R.id.recommend_btn:
+                crsRecommend();
+                break;
+
+            case R.id.dist_help_btn:
+                help();
             default:
                 break;
         }
+    }
+
+    private void help() {
+        DetailBottomFragment helpFragment = new DetailBottomFragment(getApplicationContext());
+        helpFragment.show(getSupportFragmentManager(), helpFragment.getTag());
+
+    }
+
+    private void crsRecommend() {
+        isRecommend = true;
+        recommendList = new ArrayList<>();
+        recordToMap();
+        for (CourseData cd : courseDataList) {
+            Log.d("course", cd.getId() + " " + slope_crs + " " + level_crs + " " + hash_crs);
+            if (cd.getId().equals(slope_crs)) {
+                slopeCourse = new CourseData(cd.getName(), cd.getSummary(), cd.getHour(), cd.getLevel(), cd.getDist(), cd.getHashTag(), cd.getId(), cd.getCoords());
+                slopeCourse.createPathOverlay(false);
+                slopeCourse.createMarker(false);
+                slopeCourse.getPathOverlay().setColor(Color.YELLOW);
+                slopeCourse.getPathOverlay().setPassedColor(Color.BLACK);
+                slopeCourse.getMarker().setCaptionText("별점");
+                slopeCourse.getMarker().setIcon(OverlayImage.fromResource(R.drawable.recommend_mark_img));
+                recommendList.add(slopeCourse);
+            }
+            if (cd.getId().equals(level_crs)) {
+                levelCourse = new CourseData(cd.getName(), cd.getSummary(), cd.getHour(), cd.getLevel(), cd.getDist(), cd.getHashTag(), cd.getId(), cd.getCoords());
+                levelCourse.createPathOverlay(false);
+                levelCourse.createMarker(false);
+                levelCourse.getPathOverlay().setColor(Color.YELLOW);
+                levelCourse.getPathOverlay().setPassedColor(Color.BLACK);
+                levelCourse.getMarker().setCaptionText("난이도");
+                levelCourse.getMarker().setIcon(OverlayImage.fromResource(R.drawable.recommend_mark_img));
+                recommendList.add(levelCourse);
+            }
+            if (cd.getId().equals(hash_crs)) {
+                hashCourse = new CourseData(cd.getName(), cd.getSummary(), cd.getHour(), cd.getLevel(), cd.getDist(), cd.getHashTag(), cd.getId(), cd.getCoords());
+                hashCourse.createPathOverlay(false);
+                hashCourse.createMarker(false);
+                hashCourse.getPathOverlay().setColor(Color.YELLOW);
+                hashCourse.getPathOverlay().setPassedColor(Color.BLACK);
+                hashCourse.getMarker().setCaptionText("해시");
+                hashCourse.getMarker().setIcon(OverlayImage.fromResource(R.drawable.recommend_mark_img));
+                recommendList.add(hashCourse);
+            }
+            cd.dismissMarker();
+            cd.dismissPath();
+
+        }
+        recommendBtn.setVisibility(View.INVISIBLE);
     }
 
     private void reselectCrs() {
@@ -613,6 +668,13 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         isSelectCrs = false;
         isRecord = false;
         isDisplayCrs = false;
+        isRecommend = false;
+
+        for (CourseData courseData : recommendList) {
+            if (courseData != null) {
+                courseData.dismissMarker();
+            }
+        }
 
 
         if (selectedCrsName != null) {
@@ -623,8 +685,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         long seconds = TimeUnit.MILLISECONDS.toSeconds(ratingEndTime - ratingStartTime);
 
-        if (seconds >= 1) {
-            ratingCrsList.add(selectedCrsName);
+        if (seconds >= Constants.CHECK_RATING_CRS_TIME) {
+            if (!ratingCrsList.contains(selectedCrsName)) {
+                ratingCrsList.add(selectedCrsName);
+            }
         }
 
 
@@ -636,6 +700,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         startBtn.setVisibility(View.VISIBLE);
         stopBtn.setVisibility(View.INVISIBLE);
         reselectBtn.setVisibility(View.INVISIBLE);
+        recommendBtn.setVisibility(View.VISIBLE);
         dismissCrs();
 
 
@@ -646,10 +711,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     // 시작 기능
     public void StartFab() {
-        // 절전 모드 해제
-        onRequestPermissionBattery();
-        // 백그라운드 위치 항상 허용
-        onRequestPermissionBackgroundLocation();
         // 코스 선택 (코스 없으면 그대로 진행)
         selectCrs();
         isRecord = true;
@@ -665,6 +726,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         startBtn.setVisibility(View.INVISIBLE);
         stopBtn.setVisibility(View.VISIBLE);
         reselectBtn.setVisibility(View.VISIBLE);
+        recommendBtn.setVisibility(View.INVISIBLE);
 
         mLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
         // 맵 <-> 기록
@@ -700,7 +762,9 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         long seconds = TimeUnit.MILLISECONDS.toSeconds(ratingEndTime - ratingStartTime);
 
         if (seconds >= Constants.CHECK_RATING_CRS_TIME) {
-            ratingCrsList.add(selectedCrsName);
+            if (!ratingCrsList.contains(selectedCrsName)) {
+                ratingCrsList.add(selectedCrsName);
+            }
         }
 
         // 서비스 종료
@@ -755,7 +819,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         if (isFirstStart) {
             bindService(new Intent(RecordMapActivity.this, LocationService.class), sconn, BIND_AUTO_CREATE);
-            Toast.makeText(this, "Location service started", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -769,9 +832,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 unbindService(sconn);
             if (br != null)
                 unregisterReceiver(br);
-            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Location service not exec", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -828,7 +888,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         @Override
         protected String doInBackground(String... params) {
             String serverURL = params[0];
-
             try {
                 String selectLocation = "location=" + location;
                 URL url = new URL(serverURL);
@@ -878,7 +937,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         try {
             JSONObject jsonObject = new JSONObject(pathJsonString);
             JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
 
@@ -896,8 +954,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 String dist = item.getString(TAG_DIST);
                 String tag = item.getString(TAG_HASH);
                 String crsIdx = item.getString(TAG_CRSIDX);
-
-                System.out.println(name);
                 HashMap<String, String> hashMap = new HashMap<>();
 
                 hashMap.put(TAG_PATH, gpxPath);
@@ -988,14 +1044,12 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             String level = bun.getString("level");
             String dist = bun.getString("dist");
             String tag = bun.getString("tag");
-            String crsIdx = bun.getString("crsIdx");
-            List<LatLng> COORDS = new ArrayList<>();
+            String id = bun.getString("crsIdx");
+            ArrayList<LatLng> coords = new ArrayList<>();
             for (int i = 12; i < latLon.length; i += 2) {
                 try {
-                    // if (latLon[i].substring(latLon[i].indexOf(".")).length() == 7)
-                    //    continue;
 
-                    COORDS.add(new LatLng(Double.valueOf(latLon[i]), Double.valueOf(latLon[i + 1])));
+                    coords.add(new LatLng(Double.valueOf(latLon[i]), Double.valueOf(latLon[i + 1])));
                 } catch (NumberFormatException e) {
                     // 문자열을 숫자로 인식할때 예외처리
                     // java.lang.NumberFormatException: For input string: "http://www.topografix.com/GPX/1/1" 에러
@@ -1004,77 +1058,20 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 }
             }
 
-            if (COORDS.size() > 2) {
-                PolylineOverlay polylineOverlay1 = new PolylineOverlay();
-                polylineOverlay1.setWidth(10);
-                polylineOverlay1.setCoords(COORDS);
-                polylineOverlay1.setTag(name);
-                setColorCrs(polylineOverlay1, level);
-                makeGPXMarker(name, summary, hour, level, dist, tag, COORDS.get(0).latitude, COORDS.get(0).longitude, polylineOverlay1);
-                if (!isDisplayCrs)
-                    polylineOverlay1.setMap(naverMap);
-                else
-                    polylineOverlay1.setMap(null);
-
-                crsPolylineOverlays.add(polylineOverlay1);
-                Log.d("crsPoly", Integer.toString(crsPolylineOverlays.size()));
+            if (coords.size() > 2) {
+                CourseData courseData = new CourseData(name, summary, hour, level, dist, tag, id, coords);
+                if (!isDisplayCrs) {
+                    courseData.createPathOverlay(false);
+                    courseData.createMarker(false);
+                } else {
+                    courseData.createPathOverlay(true);
+                    courseData.createMarker(true);
+                }
+                courseDataList.add(courseData);
             }
 
         }
     };
-
-    public void makeGPXMarker(String name, String summary, String hour, String level, String dist, String tag, double lat, double lng, PolylineOverlay polylineOverlay1) {
-
-        Marker marker = new Marker();
-        marker.setPosition(new LatLng(lat, lng));
-        marker.setCaptionText(name);
-
-        marker.setWidth(100);
-        marker.setHeight(100);
-        if (!isDisplayCrs)
-            marker.setMap(naverMap);
-        else
-            marker.setMap(null);
-        marker.setTag(name);
-
-        switch (level) {
-            case "1":
-                marker.setIcon(OverlayImage.fromResource(R.drawable.lv_1_mark_img));
-                break;
-            case "2":
-                marker.setIcon(OverlayImage.fromResource(R.drawable.lv_2_mark_img));
-                break;
-            case "3":
-                marker.setIcon(OverlayImage.fromResource(R.drawable.lv_3_mark_img));
-                break;
-        }
-        Overlay.OnClickListener listener = overlay -> {
-            Toast.makeText(getApplicationContext(), "마커 " + overlay.getTag() + " 클릭됨",
-                    Toast.LENGTH_SHORT).show();
-
-            // 선택 코스 이름 변경
-            selectedCrsName = name;
-            if (marker.getInfoWindow() == null) {
-                // 현재 마커에 정보 창이 열려있지 않을 경우 엶
-                infoWindow.open(marker);
-                clickCrs(name);
-            } else {
-                infoWindow.close();
-            }
-
-            // 카메라를 gpx 경로로 이동
-            CameraUpdate cameraUpdate = CameraUpdate.fitBounds(polylineOverlay1.getBounds(), 100, 100, 100, 100).animate(CameraAnimation.Easing);
-            naverMap.moveCamera(cameraUpdate);
-
-            // bottomsheet 보이게 하기
-            mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-            setBottomListData(name, summary, level, hour, dist, tag);
-
-            return true;
-        };
-        marker.setOnClickListener(listener);
-        crsMarkers.add(marker);
-    }
 
     public void setBottomListData(String name, String summary, String level, String hour, String dist, String tag) {
         crsName.setText(name);
@@ -1097,7 +1094,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 crsHour.setTextColor(Color.RED);
                 crsDist.setTextColor(Color.RED);
                 break;
-
         }
         crsSummary.setText(summary);
         crsHour.setText(RecordUtility.formattedCrsHour(hour));
@@ -1107,69 +1103,73 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     public void clickCrs(String crsName) {
         isDisplayCrs = true;
-
         // 클릭 코스 제외 폴리라인, 마커 맵에서 제거
-        for (PolylineOverlay polylineOverlay : crsPolylineOverlays) {
-            if (polylineOverlay.getTag().equals(crsName)) {
-                polylineOverlay.setColor(polylineOverlay.getColor());
-            } else {
-                polylineOverlay.setMap(null);
+        if (!isRecommend) {
+            for (CourseData cd : courseDataList) {
+                if (cd.getName().equals(crsName)) {
+                    cd.getPathOverlay().setColor(cd.getPathOverlay().getColor());
+                } else {
+                    cd.dismissPath();
+                }
+                cd.dismissMarker();
             }
-        }
-        for (Marker marker : crsMarkers) {
-            marker.setMap(null);
-        }
-    }
-
-    // 코스 난이도에 따른 색 변경
-    public void setColorCrs(PolylineOverlay polylineOverlay, String level) {
-        switch (level) {
-            case "1":
-                polylineOverlay.setColor(Color.BLUE);
-                break;
-            case "2":
-                polylineOverlay.setColor(Color.GREEN);
-                break;
-            case "3":
-                polylineOverlay.setColor(Color.RED);
-                break;
+        } else {
+            for (CourseData courseData : recommendList) {
+                if (courseData != null) {
+                    if (courseData.getName().equals(crsName)) {
+                    } else
+                        courseData.dismissPath();
+                    courseData.dismissMarker();
+                }
+            }
         }
     }
 
     // 맵을 클릭하거나, 바텀 시트 사라지면 코스 폴리라인, 마커 맵에 재등록
     public void dismissCrs() {
         isDisplayCrs = false;
-        int index = 0;
-        for (PolylineOverlay polylineOverlay : crsPolylineOverlays) {
-            String level = crsLevelList.get(index);
-            polylineOverlay.setMap(naverMap);
-            setColorCrs(polylineOverlay, level);
-            index++;
+        if (!isRecommend) {
+            for (CourseData cd : courseDataList) {
+                cd.attachPath();
+                cd.setCourseColor(cd.getLevel());
+                cd.attachMarker();
+            }
+        } else {
+            for (CourseData courseData : recommendList) {
+                if (courseData != null) {
+                    courseData.attachPath();
+                    courseData.attachMarker();
+                }
+            }
         }
-        for (Marker marker : crsMarkers) {
-            marker.setMap(naverMap);
-        }
+        CameraUpdate cameraUpdate = CameraUpdate.zoomTo(13).animate(CameraAnimation.Easing);
+        naverMap.moveCamera(cameraUpdate);
     }
 
     // 코스 선택시 폴리라인 -> 폴리패스로 변경 나머지 폴리라인, 마커 제거
     public void selectCrs() {
         isSelectCrs = true;
         isDisplayCrs = true;
-        for (PolylineOverlay polylineOverlay : crsPolylineOverlays) {
-            if (polylineOverlay.getTag().equals(selectedCrsName)) {
-                selectedCrs = new PathOverlay(polylineOverlay.getCoords());
+        for (CourseData cd : courseDataList) {
+            if (cd.getName().equals(selectedCrsName)) {
+                selectedCrs = new PathOverlay(cd.getPathOverlay().getCoords());
                 selectedCrs.setTag(selectedCrsName);
                 selectedCrs.setWidth(20);
                 selectedCrs.setColor(ContextCompat.getColor(this, R.color.purple_project));
                 selectedCrs.setMap(naverMap);
-                CameraUpdate cameraUpdate = CameraUpdate.fitBounds(polylineOverlay.getBounds(), 100, 100, 100, 100).animate(CameraAnimation.Easing);
+                CameraUpdate cameraUpdate = CameraUpdate.fitBounds(cd.getPathOverlay().getBounds(), 100, 100, 100, 200).animate(CameraAnimation.Easing);
                 naverMap.moveCamera(cameraUpdate);
             }
-            polylineOverlay.setMap(null);
+            cd.dismissPath();
+            cd.dismissMarker();
         }
-        for (Marker marker : crsMarkers) {
-            marker.setMap(null);
+        for (CourseData courseData : recommendList) {
+            if (courseData != null) {
+                courseData.dismissMarker();
+                courseData.dismissPath();
+            }
         }
+
     }
 
     public String AreaChange(String area) {
@@ -1208,13 +1208,10 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             if (result == null) {
                 Log.d(TAG, errorString);
             } else {
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(result);
-                    CFcrsIdx = jsonObject.getString("crsIdx");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                pathJsonString2 = result;
+                showResult2();
+
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         }
 
@@ -1223,7 +1220,15 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             String serverURL = params[0];
 
             try {
-                String selectLocation = "userID=" + UserInfo.getInstance().getUserID();
+                String userID = "userID=" + UserInfo.getInstance().getUserID();
+                String selectLocation = "location=" + location;
+
+                StringBuffer stParams = new StringBuffer();
+                stParams.append(userID);
+                stParams.append("&");
+                stParams.append(selectLocation);
+
+                String strParams = stParams.toString();
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
@@ -1233,7 +1238,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 httpURLConnection.connect();
 
                 OutputStream outputStream = httpURLConnection.getOutputStream();
-                outputStream.write(selectLocation.getBytes("UTF-8"));
+                outputStream.write(strParams.getBytes("UTF-8"));
                 outputStream.flush();
                 outputStream.close();
                 //어플에서 데이터 전송
@@ -1267,7 +1272,181 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    private void showResult2() {
+        try {
+            JSONObject jsonObject = new JSONObject(pathJsonString2);
+            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                System.out.println(jsonArray.length() + "\n");
+                System.out.println(i);
 
 
+                // 코스 정보 리스트에 저장
+                slope_crs = item.getString(TAG_SLOPE); //슬로프원 알고리즘 추천코스(별점)
+                level_crs = item.getString(TAG_LEVELCRS); //난이도를 이용한 추천코스
+                hash_crs = item.getString(TAG_HASHCRS); //해시태그를 이용한 추천코스
 
+                System.out.println(slope_crs + "========" + level_crs + "=========" + hash_crs + "==============");
+
+            }
+        } catch (JSONException e) {
+            Log.d(TAG, "showResult : ", e);
+        }
+    }
+
+    class CourseData {
+        private String name;
+        private String summary;
+        private String hour;
+        private String level;
+        private String dist;
+        private String hashTag;
+        private String id;
+        private ArrayList<LatLng> coords;
+        private PathOverlay pathOverlay;
+        private Marker marker;
+
+
+        public CourseData(String name, String summary, String hour, String level, String dist, String hashTag, String id, ArrayList<LatLng> coords) {
+            this.name = name;
+            this.summary = summary;
+            this.hour = hour;
+            this.level = level;
+            this.dist = dist;
+            this.hashTag = hashTag;
+            this.coords = coords;
+            this.id = id;
+        }
+
+        public void createPathOverlay(boolean flag) {
+            pathOverlay = new PathOverlay();
+            pathOverlay.setWidth(10);
+            pathOverlay.setCoords(coords);
+            pathOverlay.setTag(name);
+            setCourseColor(level);
+            if (!flag)
+                attachPath();
+            else
+                dismissPath();
+        }
+
+        public void createMarker(boolean flag) {
+            marker = new Marker();
+            marker.setPosition(new LatLng(coords.get(0).latitude, coords.get(0).longitude));
+            marker.setCaptionText(name);
+            marker.setWidth(100);
+            marker.setHeight(100);
+            switch (level) {
+                case "1":
+                    marker.setIcon(OverlayImage.fromResource(R.drawable.lv_1_mark_img));
+                    break;
+                case "2":
+                    marker.setIcon(OverlayImage.fromResource(R.drawable.lv_2_mark_img));
+                    break;
+                case "3":
+                    marker.setIcon(OverlayImage.fromResource(R.drawable.lv_3_mark_img));
+                    break;
+            }
+            Overlay.OnClickListener listener = overlay -> {
+                // 선택 코스 이름 변경
+                selectedCrsName = name;
+                if (marker.getInfoWindow() == null) {
+                    // 현재 마커에 정보 창이 열려있지 않을 경우 엶
+                    infoWindow.open(marker);
+                    clickCrs(name);
+                } else {
+                    infoWindow.close();
+                }
+
+                // 카메라를 gpx 경로로 이동
+                CameraUpdate cameraUpdate = CameraUpdate.fitBounds(pathOverlay.getBounds(), 100, 100, 100, 200).animate(CameraAnimation.Easing);
+                naverMap.moveCamera(cameraUpdate);
+
+                // bottomsheet 보이게 하기
+                mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                setBottomListData(name, summary, level, hour, dist, hashTag);
+
+                return true;
+            };
+            marker.setOnClickListener(listener);
+            if (!flag)
+                attachMarker();
+            else
+                dismissMarker();
+        }
+
+        public void dismissPath() {
+            pathOverlay.setMap(null);
+        }
+
+        public void attachPath() {
+            pathOverlay.setMap(naverMap);
+        }
+
+        public void dismissMarker() {
+            marker.setMap(null);
+        }
+
+        public void attachMarker() {
+            marker.setMap(naverMap);
+        }
+
+        // 코스 난이도에 따른 색 변경
+        public void setCourseColor(String level) {
+            switch (level) {
+                case "1":
+                    pathOverlay.setColor(Color.BLUE);
+                    break;
+                case "2":
+                    pathOverlay.setColor(Color.GREEN);
+                    break;
+                case "3":
+                    pathOverlay.setColor(Color.RED);
+                    break;
+            }
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getSummary() {
+            return summary;
+        }
+
+        public String getHour() {
+            return hour;
+        }
+
+        public String getLevel() {
+            return level;
+        }
+
+        public String getDist() {
+            return dist;
+        }
+
+        public String getHashTag() {
+            return hashTag;
+        }
+
+        public ArrayList<LatLng> getCoords() {
+            return coords;
+        }
+
+        public PathOverlay getPathOverlay() {
+            return pathOverlay;
+        }
+
+        public Marker getMarker() {
+            return marker;
+        }
+
+        public String getId() {
+            return id;
+        }
+    }
 }
