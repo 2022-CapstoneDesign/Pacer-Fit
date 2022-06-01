@@ -9,6 +9,18 @@ public class UserInfo {
     private String userWeight;
     private String userAge;
     private int userProfileNum;
+    private String[] userHashTags;
+
+
+
+
+
+
+
+
+
+
+    private int userLevelLike;
 
     public String getUserID()
     {
@@ -31,6 +43,12 @@ public class UserInfo {
         return userAge;
     }
     public int getUserProfileNum() {return userProfileNum; }
+    public String[] getUserHashTags() {
+        return userHashTags;
+    }
+    public int getUserLevelLike() {
+        return userLevelLike;
+    }
 
     public void setUserID(String userID)
     {
@@ -54,6 +72,12 @@ public class UserInfo {
     }
     public void setUserAge(String userAge) {
         this.userAge = userAge;
+    }
+    public void setUserHashTags(String[] userHashTags) {
+        this.userHashTags = userHashTags;
+    }
+    public void setUserLevelLike(int userLevelLike) {
+        this.userLevelLike = userLevelLike;
     }
     private static UserInfo instance = null;
 

@@ -1,9 +1,7 @@
 package com.example.project.Main;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -12,10 +10,10 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -25,9 +23,8 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.project.Login.HashtagInfo;
 import com.example.project.Login.IntroActivity;
-import com.example.project.Login.LoginActivity;
-import com.example.project.Pedo.DetailRecordFragment;
 import com.example.project.R;
 import com.example.project.Ranking.UserInfo;
 
@@ -46,14 +43,45 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
     TextView heightTxt;
     TextView weightTxt;
     TextView ageTxt;
+    TextView levelTxt;
 
     Button editInfoBtn1;
     Button editInfoBtn2;
+    Button editInfoBtn3;
     Button deleteBtn;
     Button gotoHome;
-    Dialog dialog1;
-    Dialog dialog2;
-    Dialog dialog3;
+    Dialog dialog_account; // 계정 정보 수정 다이얼로그
+    Dialog dialog_physical; // 신체 정보 수정 다이얼로그
+    Dialog dialog_delete; // 탈퇴 다이얼로그
+    Dialog dialog_prefer; // 선호 정보 수정 다이얼로그
+
+    CheckBox checkBox0;
+    CheckBox checkBox1;
+    CheckBox checkBox2;
+    CheckBox checkBox3;
+    CheckBox checkBox4;
+    CheckBox checkBox5;
+    CheckBox checkBox6;
+    CheckBox checkBox7;
+    CheckBox checkBox8;
+    CheckBox checkBox9;
+    CheckBox checkBox10;
+
+    HashtagInfo hashTags[] = {
+            new HashtagInfo("공원", 0, 0),
+            new HashtagInfo("산", 0, 1),
+            new HashtagInfo("숲", 0, 2),
+            new HashtagInfo("바다", 0, 3),
+            new HashtagInfo("해변", 0, 4),
+            new HashtagInfo("트레킹", 0, 5),
+            new HashtagInfo("자연", 0, 6),
+            new HashtagInfo("명소", 0, 7),
+            new HashtagInfo("동네", 0, 8),
+            new HashtagInfo("풍경", 0,9),
+            new HashtagInfo("역사", 0, 10)
+    };
+
+    private final String[] pickerVals = new String[] {"쉬움", "보통", "어려움"};
 
     @Override
     protected void onPause() {
@@ -72,29 +100,50 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
         heightTxt = findViewById(R.id.heightTxt);
         weightTxt = findViewById(R.id.weightTxt);
         ageTxt = findViewById(R.id.ageTxt);
+        levelTxt = findViewById(R.id.levelTxt);
+
+        checkBox0 = findViewById(R.id.check0);
+        checkBox1 = findViewById(R.id.check1);
+        checkBox2 = findViewById(R.id.check2);
+        checkBox3 = findViewById(R.id.check3);
+        checkBox4 = findViewById(R.id.check4);
+        checkBox5 = findViewById(R.id.check5);
+        checkBox6 = findViewById(R.id.check6);
+        checkBox7 = findViewById(R.id.check7);
+        checkBox8 = findViewById(R.id.check8);
+        checkBox9 = findViewById(R.id.check9);
+        checkBox10 = findViewById(R.id.check10);
 
         setUserData();
+        setHashtagChecked(); // 유저가 회원가입시 선택했던 해시태그들만 불 들어오게 하는... 메소드
 
-        dialog1 = new Dialog(MyPageEditInfoActivity.this);
-        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog1.setContentView(R.layout.popup_edit_account_inform);
-        dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
-        dialog1.setCanceledOnTouchOutside(false); // 외부 터치 시 꺼지는 현상 막기
+        dialog_account = new Dialog(MyPageEditInfoActivity.this);
+        dialog_account.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog_account.setContentView(R.layout.popup_edit_account_inform);
+        dialog_account.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
+        dialog_account.setCanceledOnTouchOutside(false); // 외부 터치 시 꺼지는 현상 막기
 
-        dialog2 = new Dialog(MyPageEditInfoActivity.this);
-        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog2.setContentView(R.layout.popup_edit_physical_inform);
-        dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
-        dialog2.setCanceledOnTouchOutside(false); // 외부 터치 시 꺼지는 현상 막기
+        dialog_physical = new Dialog(MyPageEditInfoActivity.this);
+        dialog_physical.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog_physical.setContentView(R.layout.popup_edit_physical_inform);
+        dialog_physical.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
+        dialog_physical.setCanceledOnTouchOutside(false); // 외부 터치 시 꺼지는 현상 막기
 
-        dialog3 = new Dialog(MyPageEditInfoActivity.this);
-        dialog3.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog3.setContentView(R.layout.popup_delete_my_account);
-        dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
-        dialog3.setCanceledOnTouchOutside(false); // 외부 터치 시 꺼지는 현상 막기
+        dialog_delete = new Dialog(MyPageEditInfoActivity.this);
+        dialog_delete.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog_delete.setContentView(R.layout.popup_delete_my_account);
+        dialog_delete.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
+        dialog_delete.setCanceledOnTouchOutside(false); // 외부 터치 시 꺼지는 현상 막기
+
+        dialog_prefer = new Dialog(MyPageEditInfoActivity.this);
+        dialog_prefer.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog_prefer.setContentView(R.layout.popup_edit_prefer_inform);
+        dialog_prefer.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // 뒤에 하얀 배경 안 나오게
+        dialog_prefer.setCanceledOnTouchOutside(false); // 외부 터치 시 꺼지는 현상 막기
 
         editInfoBtn1 = findViewById(R.id.editInfoBtn1);
         editInfoBtn2 = findViewById(R.id.editInfoBtn2);
+        editInfoBtn3 = findViewById(R.id.editInfoBtn3);
         deleteBtn = findViewById(R.id.deleteAccountBtn);
         gotoHome = findViewById(R.id.gotoHome);
 
@@ -125,6 +174,21 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                 showDeleteDialog();
             }
         });
+
+        editInfoBtn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditPreferDialog();
+            }
+        });
+    }
+
+    private void setHashtagChecked() {
+        // 사용자가 회원가입 시 선택했던 해시태그만 선택된 모양으로 보여줌(터치는 불가능)
+        checkBox0.setChecked(true);
+        checkBox2.setChecked(true);
+        checkBox4.setChecked(true);
+        checkBox6.setChecked(true);
     }
 
     private void setUserData() {
@@ -139,11 +203,12 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
         heightTxt.setText(UserInfo.getInstance().getUserHeight());
         weightTxt.setText(UserInfo.getInstance().getUserWeight());
         ageTxt.setText(UserInfo.getInstance().getUserAge());
+        levelTxt.setText("유저의선호난이도");
     }
     private void showDeleteDialog(){
-        dialog3.show();
-        Button okBtn = dialog3.findViewById(R.id.okBtn);
-        Button cancelBtn = dialog3.findViewById(R.id.cancelBtn);
+        dialog_delete.show();
+        Button okBtn = dialog_delete.findViewById(R.id.okBtn);
+        Button cancelBtn = dialog_delete.findViewById(R.id.cancelBtn);
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,7 +219,7 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                         boolean success = jsonObject.getBoolean("success");
                         if (success) { // 회원탈퇴에 성공한 경우
                             clearBackStack();
-                            dialog3.dismiss();
+                            dialog_delete.dismiss();
                             Intent intent = new Intent(MyPageEditInfoActivity.this, IntroActivity.class);// 메인 액티비티로 전환
                             startActivity(intent);
                             SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", Activity.MODE_PRIVATE);
@@ -181,7 +246,7 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog3.dismiss();
+                dialog_delete.dismiss();
             }
         });
     }
@@ -204,19 +269,144 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
         }
         System.exit(0);
     }
-    private void showEditAccountDialog() {
-        dialog1.show();
 
-        ClearEditText editNameTxt = dialog1.findViewById(R.id.editNameTxt);
-        TextView editIdTxt = dialog1.findViewById(R.id.editIdTxt);
-        ClearEditText editPwTxt = dialog1.findViewById(R.id.editPwTxt);
+    private void showEditPreferDialog() {
+        dialog_prefer.show();
+
+        final int[] selectedDifficulty = new int[1];
+
+        CheckBox check0 = dialog_prefer.findViewById(R.id.check0);
+        CheckBox check1 = dialog_prefer.findViewById(R.id.check1);
+        CheckBox check2 = dialog_prefer.findViewById(R.id.check2);
+        CheckBox check3 = dialog_prefer.findViewById(R.id.check3);
+        CheckBox check4 = dialog_prefer.findViewById(R.id.check4);
+        CheckBox check5 = dialog_prefer.findViewById(R.id.check5);
+        CheckBox check6 = dialog_prefer.findViewById(R.id.check6);
+        CheckBox check7 = dialog_prefer.findViewById(R.id.check7);
+        CheckBox check8 = dialog_prefer.findViewById(R.id.check8);
+        CheckBox check9 = dialog_prefer.findViewById(R.id.check9);
+        CheckBox check10 = dialog_prefer.findViewById(R.id.check10);
+        NumberPicker difficultyPicker = dialog_prefer.findViewById(R.id.difficultyPicker);
+        Button okBtn = dialog_prefer.findViewById(R.id.okBtn);
+        Button cancelBtn = dialog_prefer.findViewById(R.id.cancelBtn);
+
+        check0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingSelectedInfo(check0, 0);
+            }
+        });
+        check1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingSelectedInfo(check1, 1);
+            }
+        });
+        check2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingSelectedInfo(check2, 2);
+            }
+        });
+        check3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingSelectedInfo(check3, 3);
+            }
+        });
+        check4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingSelectedInfo(check4, 4);
+            }
+        });
+        check5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingSelectedInfo(check5, 5);
+            }
+        });
+        check6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingSelectedInfo(check6, 6);
+            }
+        });
+        check7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingSelectedInfo(check7, 7);
+            }
+        });
+        check8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingSelectedInfo(check8, 8);
+            }
+        });
+        check9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingSelectedInfo(check9, 9);
+            }
+        });
+        check10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingSelectedInfo(check10, 10);
+            }
+        });
+
+        difficultyPicker.setDisplayedValues(pickerVals);
+        difficultyPicker.setMinValue(0);
+        difficultyPicker.setMaxValue(2);
+
+        difficultyPicker.setValue(0);
+        selectedDifficulty[0] = 0; // 설문조사 때 유저가 선택했던 값으로 설정해야함
+
+        difficultyPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                selectedDifficulty[0] = newVal;
+            }
+        });
+
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_prefer.dismiss();
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_prefer.dismiss();
+            }
+        });
+    }
+
+    private void settingSelectedInfo(CheckBox checkBox, int index) {
+        if (checkBox.isChecked()) {
+            hashTags[index].setSelected(1);
+        }
+        else {
+            hashTags[index].setSelected(0);
+        }
+    }
+
+    private void showEditAccountDialog() {
+        dialog_account.show();
+
+        ClearEditText editNameTxt = dialog_account.findViewById(R.id.editNameTxt);
+        TextView editIdTxt = dialog_account.findViewById(R.id.editIdTxt);
+        ClearEditText editPwTxt = dialog_account.findViewById(R.id.editPwTxt);
 
         editNameTxt.setText(nameTxt.getText());
         editIdTxt.setText(idTxt.getText());
         editPwTxt.setText(pwTxt.getText());
 
-        Button okBtn = dialog1.findViewById(R.id.okBtn);
-        Button cancelBtn = dialog1.findViewById(R.id.cancelBtn);
+        Button okBtn = dialog_account.findViewById(R.id.okBtn);
+        Button cancelBtn = dialog_account.findViewById(R.id.cancelBtn);
 
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,7 +425,7 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                             pwTxt.setText(changedPw);
                             UserInfo.getInstance().setUserName(changedName);
                             UserInfo.getInstance().setUserPass(changedPw);
-                            dialog1.dismiss();
+                            dialog_account.dismiss();
                             Toast.makeText(getApplication(), "정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
                         } else { // 회원등록에 실패한 경우
                             String answer = jsonObject.getString("answer");
@@ -263,35 +453,35 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog1.dismiss();
+                dialog_account.dismiss();
             }
         });
     }
 
     private void showEditPhysicalDialog() {
-        dialog2.show();
+        dialog_physical.show();
 
-        TextView calculateAgeTxt = dialog2.findViewById(R.id.calculateAgeTxt);
+        TextView calculateAgeTxt = dialog_physical.findViewById(R.id.calculateAgeTxt);
         calculateAgeTxt.setText(UserInfo.getInstance().getUserAge());
 
-        TextView calculateHeightIntTxt = dialog2.findViewById(R.id.calculateHeightIntTxt);
+        TextView calculateHeightIntTxt = dialog_physical.findViewById(R.id.calculateHeightIntTxt);
         calculateHeightIntTxt.setText(getHeightIntVal());
 
-        TextView calculateHeightPointTxt = dialog2.findViewById(R.id.calculateHeightPointTxt);
+        TextView calculateHeightPointTxt = dialog_physical.findViewById(R.id.calculateHeightPointTxt);
         calculateHeightPointTxt.setText(getHeightPointVal());
 
-        TextView calculateWeightIntTxt = dialog2.findViewById(R.id.calculateWeightIntTxt);
+        TextView calculateWeightIntTxt = dialog_physical.findViewById(R.id.calculateWeightIntTxt);
         calculateWeightIntTxt.setText(getWeightIntVal());
 
-        TextView calculateWeightPointTxt = dialog2.findViewById(R.id.calculateWeightPointTxt);
+        TextView calculateWeightPointTxt = dialog_physical.findViewById(R.id.calculateWeightPointTxt);
         calculateWeightPointTxt.setText(getWeightPointVal());
 
-        NumberPicker agePicker = dialog2.findViewById(R.id.agePicker);
-        NumberPicker heightPicker = dialog2.findViewById(R.id.heightPicker);
-        NumberPicker heightPointPicker = dialog2.findViewById(R.id.heightPointPicker);
-        NumberPicker weightPicker = dialog2.findViewById(R.id.weightPicker);
-        NumberPicker weightPointPicker = dialog2.findViewById(R.id.weightPointPicker);
-        RadioGroup Man_or_Woman = dialog2.findViewById(R.id.radioGroup);
+        NumberPicker agePicker = dialog_physical.findViewById(R.id.agePicker);
+        NumberPicker heightPicker = dialog_physical.findViewById(R.id.heightPicker);
+        NumberPicker heightPointPicker = dialog_physical.findViewById(R.id.heightPointPicker);
+        NumberPicker weightPicker = dialog_physical.findViewById(R.id.weightPicker);
+        NumberPicker weightPointPicker = dialog_physical.findViewById(R.id.weightPointPicker);
+        RadioGroup Man_or_Woman = dialog_physical.findViewById(R.id.radioGroup);
         System.out.println("================gender"+UserInfo.getInstance().getUserGender());
         final String[] gender = new String[1];
 
@@ -322,8 +512,8 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                 }
             }
         });
-        Button okBtn = dialog2.findViewById(R.id.okBtn);
-        Button cancelBtn = dialog2.findViewById(R.id.cancelBtn);
+        Button okBtn = dialog_physical.findViewById(R.id.okBtn);
+        Button cancelBtn = dialog_physical.findViewById(R.id.cancelBtn);
 
         // <---- 나이 ---->
         Calendar cal = Calendar.getInstance();
@@ -434,7 +624,7 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(response);
                         boolean success = jsonObject.getBoolean("success");
                         if (success) { // 회원등록에 성공한 경우
-                            RadioButton a = dialog2.findViewById(R.id.manRadioBtn);
+                            RadioButton a = dialog_physical.findViewById(R.id.manRadioBtn);
                             // 새로운 성별 설정
                             if(a.isChecked()){
                                 UserInfo.getInstance().setUserGender("man");
@@ -454,7 +644,7 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                             weightTxt.setText(UserInfo.getInstance().getUserWeight());
                             ageTxt.setText(UserInfo.getInstance().getUserAge());
 
-                            dialog2.dismiss();
+                            dialog_physical.dismiss();
                             Toast.makeText(getApplication(), "정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
                         } else {
                             String answer = jsonObject.getString("answer");
@@ -492,7 +682,7 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog2.dismiss();
+                dialog_physical.dismiss();
             }
         });
     }

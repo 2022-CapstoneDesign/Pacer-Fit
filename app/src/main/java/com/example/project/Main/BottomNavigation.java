@@ -47,7 +47,15 @@ public class BottomNavigation extends AppCompatActivity {
         String userWeight = intent.getStringExtra("userWeight");
         String userAge = intent.getStringExtra("userAge"); // 나이
         String userStepsRecord = intent.getStringExtra("today_stepsRecord");
+        String userHashtag = intent.getStringExtra("userHashtag"); // #
+        int userLevelLike = Integer.parseInt(intent.getStringExtra("userLevelLike")); // 선호 난이도
         int userProfileNum = intent.getIntExtra("userProfileNum", 0);
+
+        // 쉼표 단위로 끊어서 배열에 저장
+        String[] hashTags = userHashtag.split(",");
+        for (String s : hashTags)
+            Log.d("testingHash", s);
+
         System.out.println("userKg??????????????" + userWeight);
         mBottomNavigationView.setItemIconTintList(null);
         UserInfo.getInstance().setUserID(userID);
@@ -58,6 +66,8 @@ public class BottomNavigation extends AppCompatActivity {
         UserInfo.getInstance().setUserHeight(userHeight);
         UserInfo.getInstance().setUserWeight(userWeight);
         UserInfo.getInstance().setUserAge(userAge);
+        UserInfo.getInstance().setUserHashTags(hashTags);
+        UserInfo.getInstance().setUserLevelLike(userLevelLike);
         System.out.println("================================" + userName);
         System.out.println("userStepsRecord======================:" + userStepsRecord);
         //case 함수를 통해 클릭 받을 때마다 화면 변경하기

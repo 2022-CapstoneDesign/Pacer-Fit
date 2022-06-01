@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -60,6 +61,13 @@ public class SplashActivity extends AppCompatActivity {
                                 String userGender = jsonObject.getString("userGender");
                                 String userAge = jsonObject.getString("userAge");
                                 int userProfileNum = jsonObject.getInt("userProfileNum");
+
+                                String userHashtag = jsonObject.getString("myHashtag"); // #
+                                String level_like = jsonObject.getString("level_like");
+
+                                Log.d("testingHash", userHashtag);
+                                Log.d("testingHash", level_like);
+
                                 Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(SplashActivity.this, BottomNavigation.class);// 메인 액티비티로 전환
                                 intent.putExtra("userID", userID);
@@ -72,6 +80,8 @@ public class SplashActivity extends AppCompatActivity {
                                 intent.putExtra("userProfileNum",userProfileNum);
                                 intent.putExtra("userGender", userGender);
                                 intent.putExtra("userAge", userAge);
+                                intent.putExtra("userHashtag", userHashtag); // #
+                                intent.putExtra("userLevelLike", level_like); // 선호 난이도
                                 startActivity(intent);
                                 finish();
                             } else { // 로그인에 실패한 경우
