@@ -286,9 +286,9 @@
                     android:id="@+id/mypage_walkBtn"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="60dp"
                     android:layout_marginTop="60dp"
-                    app:layout_constraintStart_toStartOf="@+id/view4"
+                    app:layout_constraintEnd_toEndOf="@+id/view4"
                     app:layout_constraintTop_toTopOf="@+id/view4"
                     app:srcCompat="@drawable/walk_over" />
 
@@ -311,7 +311,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/nanumsquareroundeb"
-                    android:text="걸음"
+                    android:text="만보기"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="@+id/mypage_walkBtn"
@@ -337,8 +337,8 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginTop="60dp"
-                    android:layout_marginEnd="60dp"
-                    app:layout_constraintEnd_toEndOf="@+id/view4"
+                    android:layout_marginStart="60dp"
+                    app:layout_constraintStart_toStartOf="@+id/view4"
                     app:layout_constraintTop_toTopOf="@+id/view4"
                     app:srcCompat="@drawable/km_over" />
 
@@ -361,7 +361,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/nanumsquareroundeb"
-                    android:text="거리"
+                    android:text="하이킹"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="@+id/mypage_kmBtn"
