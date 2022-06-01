@@ -53,8 +53,61 @@ public class BottomNavigation extends AppCompatActivity {
 
         // 쉼표 단위로 끊어서 배열에 저장
         String[] hashTags = userHashtag.split(",");
-        for (String s : hashTags)
-            Log.d("testingHash", s);
+        if (hashTags[0].equals(" ")) { // 공원
+            UserInfo.getInstance().setTag_park(0);
+        } else {
+            UserInfo.getInstance().setTag_park(1);
+        }
+        if (hashTags[1].equals(" ")) { // 산
+            UserInfo.getInstance().setTag_mountain(0);
+        } else {
+            UserInfo.getInstance().setTag_mountain(1);
+        }
+        if (hashTags[2].equals(" ")) { // 숲
+            UserInfo.getInstance().setTag_forest(0);
+        } else {
+            UserInfo.getInstance().setTag_forest(1);
+        }
+        if (hashTags[3].equals(" ")) { // 바다
+            UserInfo.getInstance().setTag_sea(0);
+        } else {
+            UserInfo.getInstance().setTag_sea(1);
+        }
+        if (hashTags[4].equals(" ")) { // 해변
+            UserInfo.getInstance().setTag_beach(0);
+        } else {
+            UserInfo.getInstance().setTag_beach(1);
+        }
+        if (hashTags[5].equals(" ")) { // 트레킹
+            UserInfo.getInstance().setTag_trekking(0);
+        } else {
+            UserInfo.getInstance().setTag_trekking(1);
+        }
+        if (hashTags[6].equals(" ")) { // 자연
+            UserInfo.getInstance().setTag_nature(0);
+        } else {
+            UserInfo.getInstance().setTag_nature(1);
+        }
+        if (hashTags[7].equals(" ")) { // 명소
+            UserInfo.getInstance().setTag_sights(0);
+        } else {
+            UserInfo.getInstance().setTag_sights(1);
+        }
+        if (hashTags[8].equals(" ")) { // 동네
+            UserInfo.getInstance().setTag_town(0);
+        } else {
+            UserInfo.getInstance().setTag_town(1);
+        }
+        if (hashTags[9].equals(" ")) { // 풍경
+            UserInfo.getInstance().setTag_scenery(0);
+        } else {
+            UserInfo.getInstance().setTag_scenery(1);
+        }
+        if (hashTags[10].equals(" ")) { // 역사
+            UserInfo.getInstance().setTag_history(0);
+        } else {
+            UserInfo.getInstance().setTag_history(1);
+        }
 
         System.out.println("userKg??????????????" + userWeight);
         mBottomNavigationView.setItemIconTintList(null);

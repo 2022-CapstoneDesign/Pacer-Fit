@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -32,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MyPageEditInfoActivity extends AppCompatActivity {
@@ -68,18 +70,19 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
     CheckBox checkBox10;
 
     HashtagInfo hashTags[] = {
-            new HashtagInfo("공원", 0, 0),
-            new HashtagInfo("산", 0, 1),
-            new HashtagInfo("숲", 0, 2),
-            new HashtagInfo("바다", 0, 3),
-            new HashtagInfo("해변", 0, 4),
-            new HashtagInfo("트레킹", 0, 5),
-            new HashtagInfo("자연", 0, 6),
-            new HashtagInfo("명소", 0, 7),
-            new HashtagInfo("동네", 0, 8),
-            new HashtagInfo("풍경", 0,9),
-            new HashtagInfo("역사", 0, 10)
+            new HashtagInfo("공원", UserInfo.getInstance().getTag_park(), 0),
+            new HashtagInfo("산", UserInfo.getInstance().getTag_mountain(), 1),
+            new HashtagInfo("숲", UserInfo.getInstance().getTag_forest(), 2),
+            new HashtagInfo("바다", UserInfo.getInstance().getTag_sea(), 3),
+            new HashtagInfo("해변", UserInfo.getInstance().getTag_beach(), 4),
+            new HashtagInfo("트레킹", UserInfo.getInstance().getTag_trekking(), 5),
+            new HashtagInfo("자연", UserInfo.getInstance().getTag_nature(), 6),
+            new HashtagInfo("명소", UserInfo.getInstance().getTag_sights(), 7),
+            new HashtagInfo("동네", UserInfo.getInstance().getTag_town(), 8),
+            new HashtagInfo("풍경", UserInfo.getInstance().getTag_scenery(),9),
+            new HashtagInfo("역사", UserInfo.getInstance().getTag_history(), 10)
     };
+
 
     private final String[] pickerVals = new String[] {"쉬움", "보통", "어려움"};
 
@@ -185,10 +188,70 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
 
     private void setHashtagChecked() {
         // 사용자가 회원가입 시 선택했던 해시태그만 선택된 모양으로 보여줌(터치는 불가능)
-        checkBox0.setChecked(true);
-        checkBox2.setChecked(true);
-        checkBox4.setChecked(true);
-        checkBox6.setChecked(true);
+        if (hashTags[0].getSelected() == 1) {
+            checkBox0.setChecked(true);
+        } else {
+            checkBox0.setChecked(false);
+        }
+        if (hashTags[1].getSelected() == 1) {
+            checkBox1.setChecked(true);
+        }
+        else {
+            checkBox1.setChecked(false);
+        }
+        if (hashTags[2].getSelected() == 1) {
+            checkBox2.setChecked(true);
+        }
+        else {
+            checkBox2.setChecked(false);
+        }
+        if (hashTags[3].getSelected() == 1) {
+            checkBox3.setChecked(true);
+        }
+        else {
+            checkBox3.setChecked(false);
+        }
+        if (hashTags[4].getSelected() == 1) {
+            checkBox4.setChecked(true);
+        }
+        else {
+            checkBox4.setChecked(false);
+        }
+        if (hashTags[5].getSelected() == 1) {
+            checkBox5.setChecked(true);
+        }
+        else {
+            checkBox5.setChecked(false);
+        }
+        if (hashTags[6].getSelected() == 1) {
+            checkBox6.setChecked(true);
+        }
+        else {
+            checkBox6.setChecked(false);
+        }
+        if (hashTags[7].getSelected() == 1) {
+            checkBox7.setChecked(true);
+        }
+        else {
+            checkBox7.setChecked(false);
+        }
+        if (hashTags[8].getSelected() == 1) {
+            checkBox8.setChecked(true);
+        }
+        else {
+            checkBox8.setChecked(false);
+        }
+        if (hashTags[9].getSelected() == 1) {
+            checkBox9.setChecked(true);
+        }
+        else {
+            checkBox9.setChecked(false);
+        }
+        if (hashTags[10].getSelected() == 1) {
+            checkBox10.setChecked(true);
+        }else {
+            checkBox10.setChecked(false);
+        }
     }
 
     private void setUserData() {
@@ -203,7 +266,16 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
         heightTxt.setText(UserInfo.getInstance().getUserHeight());
         weightTxt.setText(UserInfo.getInstance().getUserWeight());
         ageTxt.setText(UserInfo.getInstance().getUserAge());
-        levelTxt.setText("유저의선호난이도");
+
+        if (UserInfo.getInstance().getUserLevelLike() == 0) {
+            levelTxt.setText("쉬움");
+        }
+        else if (UserInfo.getInstance().getUserLevelLike() == 1) {
+            levelTxt.setText("보통");
+        }
+        else {
+            levelTxt.setText("어려움");
+        }
     }
     private void showDeleteDialog(){
         dialog_delete.show();
@@ -228,7 +300,7 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                             editor.clear();
                             editor.commit();
                             finish();
-                            Toast.makeText(getApplicationContext(), "탈퇴 완료", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "탈퇴 처리되었습니다.", Toast.LENGTH_SHORT).show();
                         } else { // 회원탈퇴에 실패한 경우
                             Toast.makeText(getApplicationContext(), "탈퇴 실패", Toast.LENGTH_SHORT).show();
                             return;
@@ -286,6 +358,41 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
         CheckBox check8 = dialog_prefer.findViewById(R.id.check8);
         CheckBox check9 = dialog_prefer.findViewById(R.id.check9);
         CheckBox check10 = dialog_prefer.findViewById(R.id.check10);
+
+        if (hashTags[0].getSelected() == 1) {
+            check0.setChecked(true);
+        }
+        if (hashTags[1].getSelected() == 1) {
+            check1.setChecked(true);
+        }
+        if (hashTags[2].getSelected() == 1) {
+            check2.setChecked(true);
+        }
+        if (hashTags[3].getSelected() == 1) {
+            check3.setChecked(true);
+        }
+        if (hashTags[4].getSelected() == 1) {
+            check4.setChecked(true);
+        }
+        if (hashTags[5].getSelected() == 1) {
+            check5.setChecked(true);
+        }
+        if (hashTags[6].getSelected() == 1) {
+            check6.setChecked(true);
+        }
+        if (hashTags[7].getSelected() == 1) {
+            check7.setChecked(true);
+        }
+        if (hashTags[8].getSelected() == 1) {
+            check8.setChecked(true);
+        }
+        if (hashTags[9].getSelected() == 1) {
+            check9.setChecked(true);
+        }
+        if (hashTags[10].getSelected() == 1) {
+            check10.setChecked(true);
+        }
+
         NumberPicker difficultyPicker = dialog_prefer.findViewById(R.id.difficultyPicker);
         Button okBtn = dialog_prefer.findViewById(R.id.okBtn);
         Button cancelBtn = dialog_prefer.findViewById(R.id.cancelBtn);
@@ -361,8 +468,8 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
         difficultyPicker.setMinValue(0);
         difficultyPicker.setMaxValue(2);
 
-        difficultyPicker.setValue(0);
-        selectedDifficulty[0] = 0; // 설문조사 때 유저가 선택했던 값으로 설정해야함
+        difficultyPicker.setValue(UserInfo.getInstance().getUserLevelLike()); // 설문조사 때 유저가 선택했던 값으로 설정해야함
+        selectedDifficulty[0] = UserInfo.getInstance().getUserLevelLike();
 
         difficultyPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -374,7 +481,26 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 해시태그 선택 유무 정보((int) 0 or 1) -> hasgTags[0~10].getSelected
+                // 새로 선택한 코스 난이도((int) 0, 1, 2) -> selectedDifficulty[0]
+
+                UserInfo.getInstance().setUserLevelLike(selectedDifficulty[0]);
+                UserInfo.getInstance().setTag_park(hashTags[0].getSelected());
+                UserInfo.getInstance().setTag_mountain(hashTags[1].getSelected());
+                UserInfo.getInstance().setTag_forest(hashTags[2].getSelected());
+                UserInfo.getInstance().setTag_sea(hashTags[3].getSelected());
+                UserInfo.getInstance().setTag_beach(hashTags[4].getSelected());
+                UserInfo.getInstance().setTag_trekking(hashTags[5].getSelected());
+                UserInfo.getInstance().setTag_nature(hashTags[6].getSelected());
+                UserInfo.getInstance().setTag_sights(hashTags[7].getSelected());
+                UserInfo.getInstance().setTag_town(hashTags[8].getSelected());
+                UserInfo.getInstance().setTag_scenery(hashTags[9].getSelected());
+                UserInfo.getInstance().setTag_history(hashTags[10].getSelected());
+
                 dialog_prefer.dismiss();
+                Toast.makeText(getApplication(), "정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                setHashtagChecked();
+                setUserData();
             }
         });
         cancelBtn.setOnClickListener(new View.OnClickListener() {

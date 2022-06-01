@@ -10,17 +10,21 @@ public class UserInfo {
     private String userAge;
     private int userProfileNum;
     private String[] userHashTags;
-
-
-
-
-
-
-
-
-
-
     private int userLevelLike;
+
+
+
+    private int tag_park;
+    private int tag_mountain;
+    private int tag_forest;
+    private int tag_sea;
+    private int tag_beach;
+    private int tag_trekking;
+    private int tag_nature;
+    private int tag_sights;
+    private int tag_town;
+    private int tag_scenery;
+    private int tag_history;
 
     public String getUserID()
     {
@@ -48,6 +52,40 @@ public class UserInfo {
     }
     public int getUserLevelLike() {
         return userLevelLike;
+    }
+
+    public int getTag_park() {
+        return tag_park;
+    }
+    public int getTag_mountain() {
+        return tag_mountain;
+    }
+    public int getTag_forest() {
+        return tag_forest;
+    }
+    public int getTag_sea() {
+        return tag_sea;
+    }
+    public int getTag_beach() {
+        return tag_beach;
+    }
+    public int getTag_trekking() {
+        return tag_trekking;
+    }
+    public int getTag_nature() {
+        return tag_nature;
+    }
+    public int getTag_sights() {
+        return tag_sights;
+    }
+    public int getTag_town() {
+        return tag_town;
+    }
+    public int getTag_scenery() {
+        return tag_scenery;
+    }
+    public int getTag_history() {
+        return tag_history;
     }
 
     public void setUserID(String userID)
@@ -79,6 +117,41 @@ public class UserInfo {
     public void setUserLevelLike(int userLevelLike) {
         this.userLevelLike = userLevelLike;
     }
+
+    public void setTag_park(int tag_park) {
+        this.tag_park = tag_park;
+    }
+    public void setTag_mountain(int tag_mountain) {
+        this.tag_mountain = tag_mountain;
+    }
+    public void setTag_forest(int tag_forest) {
+        this.tag_forest = tag_forest;
+    }
+    public void setTag_sea(int tag_sea) {
+        this.tag_sea = tag_sea;
+    }
+    public void setTag_beach(int tag_beach) {
+        this.tag_beach = tag_beach;
+    }
+    public void setTag_trekking(int tag_trekking) {
+        this.tag_trekking = tag_trekking;
+    }
+    public void setTag_nature(int tag_nature) {
+        this.tag_nature = tag_nature;
+    }
+    public void setTag_sights(int tag_sights) {
+        this.tag_sights = tag_sights;
+    }
+    public void setTag_town(int tag_town) {
+        this.tag_town = tag_town;
+    }
+    public void setTag_scenery(int tag_scenery) {
+        this.tag_scenery = tag_scenery;
+    }
+    public void setTag_history(int tag_history) {
+        this.tag_history = tag_history;
+    }
+
     private static UserInfo instance = null;
 
     public static synchronized UserInfo getInstance(){
