@@ -253,236 +253,246 @@
 
                 </com.ramotion.foldingcell.FoldingCell>
 
-                <View
-                    android:id="@+id/view4"
-                    android:layout_width="0dp"
-                    android:layout_height="400dp"
+
+
+                <LinearLayout
+                    android:id="@+id/ll"
+                    android:layout_marginTop="15dp"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:background="@drawable/view_style"
-                    app:layout_constraintBottom_toTopOf="@+id/logout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/folding_cell"
-                    app:layout_constraintVertical_bias="1.0" />
+                    app:layout_constraintTop_toBottomOf="@id/folding_cell">
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/nanumsquareroundeb"
-                    android:text="최고기록"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="@+id/view4"
-                    app:layout_constraintTop_toTopOf="@+id/view4" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/nanumsquareroundeb"
+                        android:text="최고기록"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
 
-                <ImageView
-                    android:id="@+id/mypage_walkBtn"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginEnd="60dp"
-                    android:layout_marginTop="60dp"
-                    app:layout_constraintEnd_toEndOf="@+id/view4"
-                    app:layout_constraintTop_toTopOf="@+id/view4"
-                    app:srcCompat="@drawable/walk_over" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal">
 
-                <TextView
-                    android:id="@+id/maxStep"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/nanumsquareroundeb"
-                    android:text=""
-                    android:textColor="@color/white"
-                    android:textSize="23sp"
-                    app:layout_constraintEnd_toEndOf="@+id/mypage_walkBtn"
-                    app:layout_constraintStart_toStartOf="@+id/mypage_walkBtn"
-                    app:layout_constraintTop_toBottomOf="@+id/mypage_walkBtn" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal">
 
-                <TextView
-                    android:id="@+id/stepTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/nanumsquareroundeb"
-                    android:text="만보기"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="@+id/mypage_walkBtn"
-                    app:layout_constraintHorizontal_bias="0.516"
-                    app:layout_constraintStart_toStartOf="@+id/mypage_walkBtn"
-                    app:layout_constraintTop_toBottomOf="@+id/maxStep" />
+                            <ImageView
+                                android:id="@+id/mypage_kmBtn"
+                                android:adjustViewBounds="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="90dp"
+                                android:layout_marginTop="10dp"
+                                app:srcCompat="@drawable/btn_hiking" />
 
-                <TextView
-                    android:id="@+id/maxStepTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/nanumsquareroundeb"
-                    android:text="최대 걸음"
-                    android:textColor="@color/whitegray_project"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="@+id/stepTxt"
-                    app:layout_constraintStart_toStartOf="@+id/stepTxt"
-                    app:layout_constraintTop_toBottomOf="@+id/stepTxt" />
+                            <TextView
+                                android:id="@+id/maxKm"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/nanumsquareroundeb"
+                                android:text=""
+                                android:textColor="@color/white"
+                                android:textSize="23sp" />
 
-                <ImageView
-                    android:id="@+id/mypage_kmBtn"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="60dp"
-                    android:layout_marginStart="60dp"
-                    app:layout_constraintStart_toStartOf="@+id/view4"
-                    app:layout_constraintTop_toTopOf="@+id/view4"
-                    app:srcCompat="@drawable/km_over" />
+                            <TextView
+                                android:id="@+id/kmTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/nanumsquareroundeb"
+                                android:text="하이킹"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/maxKm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/nanumsquareroundeb"
-                    android:text=""
-                    android:textColor="@color/white"
-                    android:textSize="23sp"
-                    app:layout_constraintEnd_toEndOf="@+id/mypage_kmBtn"
-                    app:layout_constraintStart_toStartOf="@+id/mypage_kmBtn"
-                    app:layout_constraintTop_toBottomOf="@+id/mypage_kmBtn" />
+                            <TextView
+                                android:id="@+id/maxKmTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/nanumsquareroundeb"
+                                android:text="최대 거리"
+                                android:textColor="@color/whitegray_project"
+                                android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/kmTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/nanumsquareroundeb"
-                    android:text="하이킹"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="@+id/mypage_kmBtn"
-                    app:layout_constraintStart_toStartOf="@+id/mypage_kmBtn"
-                    app:layout_constraintTop_toBottomOf="@+id/maxKm" />
+                        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/maxKmTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/nanumsquareroundeb"
-                    android:text="최대 거리"
-                    android:textColor="@color/whitegray_project"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="@+id/mypage_kmBtn"
-                    app:layout_constraintStart_toStartOf="@+id/mypage_kmBtn"
-                    app:layout_constraintTop_toBottomOf="@+id/kmTxt" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal">
 
-                <ImageView
-                    android:id="@+id/mypage_kcalBtn"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="60dp"
-                    android:layout_marginBottom="115dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/view4"
-                    app:layout_constraintStart_toStartOf="@+id/view4"
-                    app:srcCompat="@drawable/kcal_over" />
+                            <ImageView
+                                android:id="@+id/mypage_walkBtn"
+                                android:adjustViewBounds="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="90dp"
+                                android:layout_marginTop="10dp"
+                                app:srcCompat="@drawable/btn_pedo" />
 
-                <TextView
-                    android:id="@+id/maxKcal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/nanumsquareroundeb"
-                    android:text=""
-                    android:textColor="@color/white"
-                    android:textSize="23sp"
-                    app:layout_constraintEnd_toEndOf="@+id/mypage_kcalBtn"
-                    app:layout_constraintStart_toStartOf="@+id/mypage_kcalBtn"
-                    app:layout_constraintTop_toBottomOf="@+id/mypage_kcalBtn" />
+                            <TextView
+                                android:id="@+id/maxStep"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/nanumsquareroundeb"
+                                android:text=""
+                                android:textColor="@color/white"
+                                android:textSize="23sp" />
 
-                <TextView
-                    android:id="@+id/kcalTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/nanumsquareroundeb"
-                    android:text="칼로리 소모량"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="@+id/mypage_kcalBtn"
-                    app:layout_constraintStart_toStartOf="@+id/mypage_kcalBtn"
-                    app:layout_constraintTop_toBottomOf="@+id/maxKcal" />
+                            <TextView
+                                android:id="@+id/stepTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/nanumsquareroundeb"
+                                android:text="만보기"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/maxKcalTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/nanumsquareroundeb"
-                    android:text="최대 칼로리"
-                    android:textColor="@color/whitegray_project"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="@+id/mypage_kcalBtn"
-                    app:layout_constraintStart_toStartOf="@+id/mypage_kcalBtn"
-                    app:layout_constraintTop_toBottomOf="@+id/kcalTxt" />
+                            <TextView
+                                android:id="@+id/maxStepTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/nanumsquareroundeb"
+                                android:text="최대 걸음"
+                                android:textColor="@color/whitegray_project"
+                                android:textSize="14sp" />
 
-                <ImageView
-                    android:id="@+id/mypage_timeBtn"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginEnd="60dp"
-                    android:layout_marginBottom="115dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/view4"
-                    app:layout_constraintEnd_toEndOf="@+id/view4"
-                    app:srcCompat="@drawable/time_over" />
+                        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/maxTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/nanumsquareroundeb"
-                    android:text=""
-                    android:textColor="@color/white"
-                    android:textSize="23sp"
-                    app:layout_constraintEnd_toEndOf="@+id/mypage_timeBtn"
-                    app:layout_constraintStart_toStartOf="@+id/mypage_timeBtn"
-                    app:layout_constraintTop_toBottomOf="@+id/mypage_timeBtn" />
+                    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/timeTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/nanumsquareroundeb"
-                    android:text="운동시간"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="@+id/mypage_timeBtn"
-                    app:layout_constraintStart_toStartOf="@+id/mypage_timeBtn"
-                    app:layout_constraintTop_toBottomOf="@+id/maxTime" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="40dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal">
 
-                <TextView
-                    android:id="@+id/maxTimeTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/nanumsquareroundeb"
-                    android:text="최대 시간"
-                    android:textColor="@color/whitegray_project"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="@+id/mypage_timeBtn"
-                    app:layout_constraintStart_toStartOf="@+id/mypage_timeBtn"
-                    app:layout_constraintTop_toBottomOf="@+id/timeTxt" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal">
+
+                            <ImageView
+                                android:id="@+id/mypage_kcalBtn"
+                                android:adjustViewBounds="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="90dp"
+                                android:layout_marginTop="10dp"
+                                app:srcCompat="@drawable/btn_calorie" />
+
+                            <TextView
+                                android:id="@+id/maxKcal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/nanumsquareroundeb"
+                                android:text=""
+                                android:textColor="@color/white"
+                                android:textSize="23sp" />
+
+                            <TextView
+                                android:id="@+id/kcalTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/nanumsquareroundeb"
+                                android:text="칼로리 소모량"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/maxKcalTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/nanumsquareroundeb"
+                                android:text="최대 칼로리"
+                                android:textColor="@color/whitegray_project"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal">
+
+                            <ImageView
+                                android:id="@+id/mypage_timeBtn"
+                                android:adjustViewBounds="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="90dp"
+                                android:layout_marginTop="10dp"
+                                app:srcCompat="@drawable/btn_time" />
+
+                            <TextView
+                                android:id="@+id/maxTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/nanumsquareroundeb"
+                                android:text=""
+                                android:textColor="@color/white"
+                                android:textSize="23sp" />
+
+                            <TextView
+                                android:id="@+id/timeTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/nanumsquareroundeb"
+                                android:text="운동시간"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/maxTimeTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/nanumsquareroundeb"
+                                android:text="최대 시간"
+                                android:textColor="@color/whitegray_project"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+
 
                 <Button
                     android:id="@+id/logout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="20dp"
@@ -495,7 +505,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view4" />
+                    app:layout_constraintTop_toBottomOf="@+id/ll" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

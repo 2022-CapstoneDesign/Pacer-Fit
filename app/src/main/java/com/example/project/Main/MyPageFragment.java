@@ -250,7 +250,7 @@ public class MyPageFragment extends Fragment{
                             TextView steptxt = v.findViewById(R.id.stepTxt);
                             steptxt.setTextColor(Color.GRAY);
                             ImageView stepBtn = v.findViewById(R.id.mypage_walkBtn);
-                            stepBtn.setImageResource(R.drawable.walk);
+                            stepBtn.setImageResource(R.drawable.btn_pedo_off);
                         }
                         else
                             maxStep.setText(bestSteps); // DB에서 불러온 값으로 바꾸기
@@ -266,7 +266,7 @@ public class MyPageFragment extends Fragment{
                             kmtxt.setTextColor(Color.GRAY);
                             //Image
                             ImageView kmBtn = v.findViewById(R.id.mypage_kmBtn);
-                            kmBtn.setImageResource(R.drawable.km);
+                            kmBtn.setImageResource(R.drawable.btn_hiking_off);
                         }
                         else
                             maxKm.setText(bestKm + "km"); // DB에서 불러온 값으로 바꾸기
@@ -278,7 +278,7 @@ public class MyPageFragment extends Fragment{
                             TextView caltxt = v.findViewById(R.id.kcalTxt);
                             caltxt.setTextColor(Color.GRAY);
                             ImageView calBtn = v.findViewById(R.id.mypage_kcalBtn);
-                            calBtn.setImageResource(R.drawable.kcal);
+                            calBtn.setImageResource(R.drawable.btn_calorie_off);
                         }
                         else
                             maxKcal.setText(bestCalorie + "kcal"); // DB에서 불러온 값으로 바꾸기
@@ -290,7 +290,7 @@ public class MyPageFragment extends Fragment{
                             TextView timetxt = v.findViewById(R.id.timeTxt);
                             timetxt.setTextColor(Color.GRAY);
                             ImageView timeBtn = v.findViewById(R.id.mypage_timeBtn);
-                            timeBtn.setImageResource(R.drawable.time);
+                            timeBtn.setImageResource(R.drawable.btn_time_off);
                         }
                         else {
                             if(hour!=0)

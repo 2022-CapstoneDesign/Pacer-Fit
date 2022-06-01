@@ -167,10 +167,10 @@
 
                         <ImageView
                             android:layout_marginTop="0dp"
-                            android:padding="12dp"
+                            android:padding="5dp"
                             android:layout_width="110dp"
                             android:layout_height="90dp"
-                            android:src="@drawable/km_over" />
+                            android:src="@drawable/btn_hiking" />
 
                         <TextView
                             android:layout_marginTop="5dp"
@@ -208,10 +208,10 @@
 
                         <ImageView
                             android:layout_marginTop="0dp"
-                            android:padding="15dp"
+                            android:padding="5dp"
                             android:layout_width="110dp"
                             android:layout_height="90dp"
-                            android:src="@drawable/walk_over" />
+                            android:src="@drawable/btn_pedo" />
 
                         <TextView
                             android:layout_marginTop="5dp"
