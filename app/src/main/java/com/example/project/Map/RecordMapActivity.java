@@ -369,6 +369,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         crsLevelList = new ArrayList<>();
         crsDistList = new ArrayList<>();
         crsHashTagList = new ArrayList<>();
+        recommendList = new ArrayList<>();
 
         // 절전 모드 해제
         onRequestPermissionBattery();
@@ -381,7 +382,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         GetCFData task1 = new GetCFData();
         task1.execute("http://pacerfit.dothome.co.kr/slope_one_ex.php");
-
 
 
     }
@@ -622,7 +622,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
     private void crsRecommend() {
         isRecommend = true;
-        recommendList = new ArrayList<>();
         recordToMap();
         for (CourseData cd : courseDataList) {
             Log.d("course", cd.getId() + " " + slope_crs + " " + level_crs + " " + hash_crs);
@@ -849,13 +848,22 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
 
     private class GetGpxPathData extends AsyncTask<String, Void, String> {
-        ProgressDialog progressDialog;
+        ProgressDialog progressDialog = new ProgressDialog(RecordMapActivity.this);
         String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMessage("로딩중");
+            progressDialog.show();
+
+
+            super.onPreExecute();
+        }
 
         @Override
         protected void onPostExecute(String result) { //doInBackground에서 return한 값을 받음
             super.onPostExecute(result);
-            //progressDialog.dismiss();
             Log.d(TAG, "response  - " + result);
             if (result == null) {
                 Log.d(TAG, errorString);
@@ -883,6 +891,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                     }
                 }.start();
             }
+            progressDialog.dismiss();
         }
 
         @Override
@@ -1163,13 +1172,14 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             cd.dismissPath();
             cd.dismissMarker();
         }
-        for (CourseData courseData : recommendList) {
-            if (courseData != null) {
-                courseData.dismissMarker();
-                courseData.dismissPath();
+        if (!recommendList.isEmpty()) {
+            for (CourseData courseData : recommendList) {
+                if (courseData != null) {
+                    courseData.dismissMarker();
+                    courseData.dismissPath();
+                }
             }
         }
-
     }
 
     public String AreaChange(String area) {
