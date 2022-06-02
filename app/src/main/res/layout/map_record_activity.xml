@@ -166,4 +166,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
     </Button>
+    <Button
+        android:id="@+id/view_all_path"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:background="@drawable/btn_style5_yellow"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="모두 보기"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+    </Button>
 </androidx.constraintlayout.widget.ConstraintLayout>

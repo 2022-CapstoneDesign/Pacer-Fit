@@ -202,6 +202,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
     private Button reselectBtn;
     private Button stopBtn;
     private Button recommendBtn;
+    private Button viewAllPathBtn;
     private ImageButton helpBtn;
 
     // 바텀 시트 레이아웃
@@ -274,6 +275,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         reselectBtn = findViewById(R.id.reselect_btn);
         recommendBtn = findViewById(R.id.recommend_btn);
         helpBtn = findViewById(R.id.dist_help_btn);
+        viewAllPathBtn = findViewById(R.id.view_all_path);
 
         // 바텀 시트
         crsName = findViewById(R.id.crs_name);
@@ -293,6 +295,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         reselectBtn.setOnClickListener(this);
         recommendBtn.setOnClickListener(this);
         helpBtn.setOnClickListener(this);
+        viewAllPathBtn.setOnClickListener(this);
 
         // 서비스 <-> 액티비티간의 통신 등록
         br = new MyBroadcast();
@@ -311,7 +314,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         userPolyline = new PathOverlay();
         userPolyline.setWidth(10);
         userPolyline.setColor(Color.RED);
-
+        userPolyline.setHideCollidedSymbols(true);
         // 코스들 폴리라인, 마커 리스트 생성
         userSpeedList = new ArrayList<>();
         infoWindow = new InfoWindow();
@@ -375,11 +378,13 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         onRequestPermissionBattery();
         // 백그라운드 위치 항상 허용
         onRequestPermissionBackgroundLocation();
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
         GetGpxPathData task = new GetGpxPathData();
         task.execute("http://pacerfit.dothome.co.kr/getPathWithArea.php");
 
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         GetCFData task1 = new GetCFData();
         task1.execute("http://pacerfit.dothome.co.kr/slope_one_ex.php");
 
@@ -609,9 +614,28 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.dist_help_btn:
                 help();
+            case R.id.view_all_path:
+                viewAllPath();
+
             default:
                 break;
         }
+    }
+
+    private void viewAllPath() {
+        isRecommend = false;
+        for(CourseData cd : courseDataList){
+            cd.attachMarker();
+            cd.attachPath();
+        }
+
+        for(CourseData cd : recommendList){
+            cd.dismissPath();
+            cd.dismissMarker();
+        }
+
+        viewAllPathBtn.setVisibility(View.INVISIBLE);
+        recommendBtn.setVisibility(View.VISIBLE);
     }
 
     private void help() {
@@ -660,6 +684,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         }
         recommendBtn.setVisibility(View.INVISIBLE);
+        viewAllPathBtn.setVisibility(View.VISIBLE);
     }
 
     private void reselectCrs() {
@@ -675,7 +700,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             }
         }
 
-
         if (selectedCrsName != null) {
             ratingEndTime = System.currentTimeMillis();
         } else {
@@ -689,7 +713,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 ratingCrsList.add(selectedCrsName);
             }
         }
-
 
         selectedCrsName = null;
         if (selectedCrs != null)
@@ -726,6 +749,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         stopBtn.setVisibility(View.VISIBLE);
         reselectBtn.setVisibility(View.VISIBLE);
         recommendBtn.setVisibility(View.INVISIBLE);
+        viewAllPathBtn.setVisibility(View.INVISIBLE);
 
         mLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
         // 맵 <-> 기록
@@ -846,242 +870,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         Log.d(TAG, "makeMarker " + tag + " " + lat + ", " + lng);
     }
 
-
-    private class GetGpxPathData extends AsyncTask<String, Void, String> {
-        ProgressDialog progressDialog = new ProgressDialog(RecordMapActivity.this);
-        String errorString = null;
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setMessage("로딩중");
-            progressDialog.show();
-
-
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String result) { //doInBackground에서 return한 값을 받음
-            super.onPostExecute(result);
-            Log.d(TAG, "response  - " + result);
-            if (result == null) {
-                Log.d(TAG, errorString);
-            } else {
-                pathJsonString = result;
-                showResult();
-                new Thread() {
-                    public void run() {
-                        for (int i = 0; i < pathArrayList.size(); i++) {
-                            String gpxpt = getData(i);
-                            Bundle bun = new Bundle();
-                            bun.putString("gpxpt", gpxpt);
-                            bun.putString("name", crsNameList.get(i));
-                            bun.putString("summary", crsSummaryList.get(i));
-                            bun.putString("hour", crsTimeList.get(i));
-                            bun.putString("level", crsLevelList.get(i));
-                            bun.putString("dist", crsDistList.get(i));
-                            bun.putString("tag", crsHashTagList.get(i));
-                            bun.putString("crsIdx", crsIdxList.get(i));
-                            Message msg = handler.obtainMessage();
-                            msg.setData(bun);
-                            handler.sendMessage(msg);
-
-                        }
-                    }
-                }.start();
-            }
-            progressDialog.dismiss();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            String serverURL = params[0];
-            try {
-                String selectLocation = "location=" + location;
-                URL url = new URL(serverURL);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-
-                httpURLConnection.setReadTimeout(3000);
-                httpURLConnection.setConnectTimeout(3000);
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.connect();
-
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                outputStream.write(selectLocation.getBytes("UTF-8"));
-                outputStream.flush();
-                outputStream.close();
-                //어플에서 데이터 전송
-
-                int responseStatusCode = httpURLConnection.getResponseCode();
-                Log.d(TAG, "response code - " + responseStatusCode);
-
-                InputStream inputStream;
-                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
-                    inputStream = httpURLConnection.getInputStream();
-                } else {
-                    inputStream = httpURLConnection.getErrorStream();
-                }//연결상태 확인
-
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-                StringBuilder sb = new StringBuilder();
-                String line;
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    sb.append(line);
-                }
-                bufferedReader.close();
-                return sb.toString().trim();
-            } catch (Exception e) {
-                Log.d(TAG, "InsertData: Error ", e);
-                errorString = e.toString();
-                return null;
-            }
-        }
-    }
-
-    private void showResult() {
-        try {
-            JSONObject jsonObject = new JSONObject(pathJsonString);
-            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject item = jsonArray.getJSONObject(i);
-
-                System.out.println(jsonArray.length() + "\n");
-                System.out.println(i);
-
-
-                // 코스 정보 리스트에 저장
-                String gpxPath = item.getString(TAG_PATH);
-                String sigun = item.getString(TAG_SIGUN);
-                String name = item.getString(TAG_NAME);
-                String summary = item.getString(TAG_SUMMRAY);
-                String time = item.getString(TAG_TIME);
-                String level = item.getString(TAG_LEVEL);
-                String dist = item.getString(TAG_DIST);
-                String tag = item.getString(TAG_HASH);
-                String crsIdx = item.getString(TAG_CRSIDX);
-                HashMap<String, String> hashMap = new HashMap<>();
-
-                hashMap.put(TAG_PATH, gpxPath);
-                hashMap.put(TAG_SIGUN, sigun);
-
-                pathArrayList.add(hashMap);
-                crsNameList.add(name);
-                crsSummaryList.add(summary);
-                crsTimeList.add(time);
-                crsLevelList.add(level);
-                crsDistList.add(dist);
-                crsHashTagList.add(tag);
-                crsIdxList.add(crsIdx);
-
-            }
-        } catch (JSONException e) {
-            Log.d(TAG, "showResult : ", e);
-        }
-    }
-
-
-    private String getData(int index) {
-        String gpxpt = "";
-        URL url = null;
-        HttpURLConnection http = null;
-        InputStreamReader isr = null;
-        BufferedReader br = null;
-
-        HashMap<String, String> hashMap3 = pathArrayList.get(index);
-        Log.d("getData", hashMap3.get(TAG_PATH));
-
-        try {
-            url = new URL(hashMap3.get(TAG_PATH));
-            http = (HttpURLConnection) url.openConnection();
-            http.setConnectTimeout(3 * 1000);
-            http.setReadTimeout(3 * 1000);
-            isr = new InputStreamReader(http.getInputStream());
-            br = new BufferedReader(isr);
-            String str = null;
-            while ((str = br.readLine()) != null) {
-                if (str.contains("trkpt")) {
-                    Pattern pattern = Pattern.compile("[\"](.*?)[\"]");
-                    Matcher matcher = pattern.matcher(str);
-                    while (matcher.find()) {  // 일치하는 게 있다면
-                        gpxpt += matcher.group(1) + " ";
-                        if (matcher.group(1) == null)
-                            break;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Log.e("Exception", e.toString());
-        } finally {
-            if (http != null) {
-                try {
-                    http.disconnect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            if (isr != null) {
-                try {
-                    isr.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return gpxpt;
-    }
-
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            Bundle bun = msg.getData();
-            String gpxpt = bun.getString("gpxpt");
-            String[] latLon = gpxpt.split(" ");
-            String name = bun.getString("name");
-            String summary = bun.getString("summary");
-            String hour = bun.getString("hour");
-            String level = bun.getString("level");
-            String dist = bun.getString("dist");
-            String tag = bun.getString("tag");
-            String id = bun.getString("crsIdx");
-            ArrayList<LatLng> coords = new ArrayList<>();
-            for (int i = 12; i < latLon.length; i += 2) {
-                try {
-
-                    coords.add(new LatLng(Double.valueOf(latLon[i]), Double.valueOf(latLon[i + 1])));
-                } catch (NumberFormatException e) {
-                    // 문자열을 숫자로 인식할때 예외처리
-                    // java.lang.NumberFormatException: For input string: "http://www.topografix.com/GPX/1/1" 에러
-                } catch (Exception e) {
-                    //다른 에러 예외처리
-                }
-            }
-
-            if (coords.size() > 2) {
-                CourseData courseData = new CourseData(name, summary, hour, level, dist, tag, id, coords);
-                if (!isDisplayCrs) {
-                    courseData.createPathOverlay(false);
-                    courseData.createMarker(false);
-                } else {
-                    courseData.createPathOverlay(true);
-                    courseData.createMarker(true);
-                }
-                courseDataList.add(courseData);
-            }
-
-        }
-    };
-
     public void setBottomListData(String name, String summary, String level, String hour, String dist, String tag) {
         crsName.setText(name);
         switch (level) {
@@ -1182,6 +970,407 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+
+    class CourseData {
+        private String name;
+        private String summary;
+        private String hour;
+        private String level;
+        private String dist;
+        private String hashTag;
+        private String id;
+        private ArrayList<LatLng> coords;
+        private PathOverlay pathOverlay;
+        private Marker marker;
+
+
+        public CourseData(String name, String summary, String hour, String level, String dist, String hashTag, String id, ArrayList<LatLng> coords) {
+            this.name = name;
+            this.summary = summary;
+            this.hour = hour;
+            this.level = level;
+            this.dist = dist;
+            this.hashTag = hashTag;
+            this.coords = coords;
+            this.id = id;
+        }
+
+        public void createPathOverlay(boolean flag) {
+            pathOverlay = new PathOverlay();
+            pathOverlay.setWidth(10);
+            pathOverlay.setCoords(coords);
+            pathOverlay.setTag(name);
+            setCourseColor(level);
+            if (!flag)
+                attachPath();
+            else
+                dismissPath();
+            pathOverlay.setHideCollidedSymbols(false);
+        }
+
+        public void createMarker(boolean flag) {
+            marker = new Marker();
+            marker.setPosition(new LatLng(coords.get(0).latitude, coords.get(0).longitude));
+            marker.setCaptionText(name);
+            marker.setWidth(100);
+            marker.setHeight(100);
+            switch (level) {
+                case "1":
+                    marker.setIcon(OverlayImage.fromResource(R.drawable.lv_1_mark_img));
+                    break;
+                case "2":
+                    marker.setIcon(OverlayImage.fromResource(R.drawable.lv_2_mark_img));
+                    break;
+                case "3":
+                    marker.setIcon(OverlayImage.fromResource(R.drawable.lv_3_mark_img));
+                    break;
+            }
+            Overlay.OnClickListener listener = overlay -> {
+                // 선택 코스 이름 변경
+                selectedCrsName = name;
+                if (marker.getInfoWindow() == null) {
+                    // 현재 마커에 정보 창이 열려있지 않을 경우 엶
+                    infoWindow.open(marker);
+                    clickCrs(name);
+                } else {
+                    infoWindow.close();
+                }
+
+                // 카메라를 gpx 경로로 이동
+                CameraUpdate cameraUpdate = CameraUpdate.fitBounds(pathOverlay.getBounds(), 100, 100, 100, 200).animate(CameraAnimation.Easing);
+                naverMap.moveCamera(cameraUpdate);
+
+                // bottomsheet 보이게 하기
+                mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                setBottomListData(name, summary, level, hour, dist, hashTag);
+
+                return true;
+            };
+            marker.setOnClickListener(listener);
+            if (!flag)
+                attachMarker();
+            else
+                dismissMarker();
+        }
+
+        public void dismissPath() {
+            pathOverlay.setMap(null);
+        }
+
+        public void attachPath() {
+            pathOverlay.setMap(naverMap);
+            pathOverlay.setHideCollidedSymbols(false);
+        }
+
+        public void dismissMarker() {
+            marker.setMap(null);
+        }
+
+        public void attachMarker() {
+            marker.setMap(naverMap);
+        }
+
+        // 코스 난이도에 따른 색 변경
+        public void setCourseColor(String level) {
+            switch (level) {
+                case "1":
+                    pathOverlay.setColor(Color.BLUE);
+                    break;
+                case "2":
+                    pathOverlay.setColor(Color.GREEN);
+                    break;
+                case "3":
+                    pathOverlay.setColor(Color.RED);
+                    break;
+            }
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getSummary() {
+            return summary;
+        }
+
+        public String getHour() {
+            return hour;
+        }
+
+        public String getLevel() {
+            return level;
+        }
+
+        public String getDist() {
+            return dist;
+        }
+
+        public String getHashTag() {
+            return hashTag;
+        }
+
+        public ArrayList<LatLng> getCoords() {
+            return coords;
+        }
+
+        public PathOverlay getPathOverlay() {
+            return pathOverlay;
+        }
+
+        public Marker getMarker() {
+            return marker;
+        }
+
+        public String getId() {
+            return id;
+        }
+    }
+
+    private class GetGpxPathData extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog = new ProgressDialog(RecordMapActivity.this);
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMessage("로딩중");
+            progressDialog.show();
+
+
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String result) { //doInBackground에서 return한 값을 받음
+            super.onPostExecute(result);
+            Log.d(TAG, "response  - " + result);
+            if (result == null) {
+                Log.d(TAG, errorString);
+            } else {
+                pathJsonString = result;
+                showResult();
+                new Thread() {
+                    public void run() {
+                        for (int i = 0; i < pathArrayList.size(); i++) {
+
+                            String gpxpt = getData(i);
+                            Bundle bun = new Bundle();
+                            bun.putString("gpxpt", gpxpt);
+                            bun.putString("name", crsNameList.get(i));
+                            bun.putString("summary", crsSummaryList.get(i));
+                            bun.putString("hour", crsTimeList.get(i));
+                            bun.putString("level", crsLevelList.get(i));
+                            bun.putString("dist", crsDistList.get(i));
+                            bun.putString("tag", crsHashTagList.get(i));
+                            bun.putString("crsIdx", crsIdxList.get(i));
+                            if (i == pathArrayList.size() - 1) {
+                                bun.putBoolean("end",true);
+                            }
+                            Message msg = handler.obtainMessage();
+                            msg.setData(bun);
+                            handler.sendMessage(msg);
+
+                        }
+                    }
+                }.start();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String serverURL = params[0];
+            try {
+                String selectLocation = "location=" + location;
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(3000);
+                httpURLConnection.setConnectTimeout(3000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(selectLocation.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+                //어플에서 데이터 전송
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                } else {
+                    inputStream = httpURLConnection.getErrorStream();
+                }//연결상태 확인
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+        }
+
+
+        private void showResult() {
+            try {
+                JSONObject jsonObject = new JSONObject(pathJsonString);
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject item = jsonArray.getJSONObject(i);
+
+                    System.out.println(jsonArray.length() + "\n");
+                    System.out.println(i);
+
+
+                    // 코스 정보 리스트에 저장
+                    String gpxPath = item.getString(TAG_PATH);
+                    String sigun = item.getString(TAG_SIGUN);
+                    String name = item.getString(TAG_NAME);
+                    String summary = item.getString(TAG_SUMMRAY);
+                    String time = item.getString(TAG_TIME);
+                    String level = item.getString(TAG_LEVEL);
+                    String dist = item.getString(TAG_DIST);
+                    String tag = item.getString(TAG_HASH);
+                    String crsIdx = item.getString(TAG_CRSIDX);
+                    HashMap<String, String> hashMap = new HashMap<>();
+
+                    hashMap.put(TAG_PATH, gpxPath);
+                    hashMap.put(TAG_SIGUN, sigun);
+
+                    pathArrayList.add(hashMap);
+                    crsNameList.add(name);
+                    crsSummaryList.add(summary);
+                    crsTimeList.add(time);
+                    crsLevelList.add(level);
+                    crsDistList.add(dist);
+                    crsHashTagList.add(tag);
+                    crsIdxList.add(crsIdx);
+
+                }
+            } catch (JSONException e) {
+                Log.d(TAG, "showResult : ", e);
+            }
+        }
+
+
+        private String getData(int index) {
+            String gpxpt = "";
+            URL url = null;
+            HttpURLConnection http = null;
+            InputStreamReader isr = null;
+            BufferedReader br = null;
+
+            HashMap<String, String> hashMap3 = pathArrayList.get(index);
+            Log.d("getData", hashMap3.get(TAG_PATH));
+
+            try {
+                url = new URL(hashMap3.get(TAG_PATH));
+                http = (HttpURLConnection) url.openConnection();
+                http.setConnectTimeout(3 * 1000);
+                http.setReadTimeout(3 * 1000);
+                isr = new InputStreamReader(http.getInputStream());
+                br = new BufferedReader(isr);
+                String str = null;
+                while ((str = br.readLine()) != null) {
+                    if (str.contains("trkpt")) {
+                        Pattern pattern = Pattern.compile("[\"](.*?)[\"]");
+                        Matcher matcher = pattern.matcher(str);
+                        while (matcher.find()) {  // 일치하는 게 있다면
+                            gpxpt += matcher.group(1) + " ";
+                            if (matcher.group(1) == null)
+                                break;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("Exception", e.toString());
+            } finally {
+                if (http != null) {
+                    try {
+                        http.disconnect();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (isr != null) {
+                    try {
+                        isr.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return gpxpt;
+        }
+
+        @SuppressLint("HandlerLeak")
+        Handler handler = new Handler() {
+            public void handleMessage(Message msg) {
+                Bundle bun = msg.getData();
+                String gpxpt = bun.getString("gpxpt");
+                String[] latLon = gpxpt.split(" ");
+                String name = bun.getString("name");
+                String summary = bun.getString("summary");
+                String hour = bun.getString("hour");
+                String level = bun.getString("level");
+                String dist = bun.getString("dist");
+                String tag = bun.getString("tag");
+                String id = bun.getString("crsIdx");
+                boolean end = bun.getBoolean("end");
+                ArrayList<LatLng> coords = new ArrayList<>();
+                for (int i = 12; i < latLon.length; i += 2) {
+                    try {
+
+                        coords.add(new LatLng(Double.parseDouble(latLon[i]), Double.parseDouble(latLon[i + 1])));
+                    } catch (NumberFormatException e) {
+                        // 문자열을 숫자로 인식할때 예외처리
+                        // java.lang.NumberFormatException: For input string: "http://www.topografix.com/GPX/1/1" 에러
+                    } catch (Exception e) {
+                        //다른 에러 예외처리
+                    }
+                }
+
+                if (coords.size() > 2) {
+                    CourseData courseData = new CourseData(name, summary, hour, level, dist, tag, id, coords);
+                    if (!isDisplayCrs) {
+                        courseData.createPathOverlay(false);
+                        courseData.createMarker(false);
+                    } else {
+                        courseData.createPathOverlay(true);
+                        courseData.createMarker(true);
+                    }
+                    courseDataList.add(courseData);
+                }
+
+                if(end){
+                    progressDialog.dismiss();
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+
+            }
+        };
+    }
+
     public String AreaChange(String area) {
         String areaChanged = null;
         if (area.contains("서울")) areaChanged = "서울";
@@ -1220,8 +1409,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             } else {
                 pathJsonString2 = result;
                 showResult2();
-
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         }
 
@@ -1304,159 +1491,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             }
         } catch (JSONException e) {
             Log.d(TAG, "showResult : ", e);
-        }
-    }
-
-    class CourseData {
-        private String name;
-        private String summary;
-        private String hour;
-        private String level;
-        private String dist;
-        private String hashTag;
-        private String id;
-        private ArrayList<LatLng> coords;
-        private PathOverlay pathOverlay;
-        private Marker marker;
-
-
-        public CourseData(String name, String summary, String hour, String level, String dist, String hashTag, String id, ArrayList<LatLng> coords) {
-            this.name = name;
-            this.summary = summary;
-            this.hour = hour;
-            this.level = level;
-            this.dist = dist;
-            this.hashTag = hashTag;
-            this.coords = coords;
-            this.id = id;
-        }
-
-        public void createPathOverlay(boolean flag) {
-            pathOverlay = new PathOverlay();
-            pathOverlay.setWidth(10);
-            pathOverlay.setCoords(coords);
-            pathOverlay.setTag(name);
-            setCourseColor(level);
-            if (!flag)
-                attachPath();
-            else
-                dismissPath();
-        }
-
-        public void createMarker(boolean flag) {
-            marker = new Marker();
-            marker.setPosition(new LatLng(coords.get(0).latitude, coords.get(0).longitude));
-            marker.setCaptionText(name);
-            marker.setWidth(100);
-            marker.setHeight(100);
-            switch (level) {
-                case "1":
-                    marker.setIcon(OverlayImage.fromResource(R.drawable.lv_1_mark_img));
-                    break;
-                case "2":
-                    marker.setIcon(OverlayImage.fromResource(R.drawable.lv_2_mark_img));
-                    break;
-                case "3":
-                    marker.setIcon(OverlayImage.fromResource(R.drawable.lv_3_mark_img));
-                    break;
-            }
-            Overlay.OnClickListener listener = overlay -> {
-                // 선택 코스 이름 변경
-                selectedCrsName = name;
-                if (marker.getInfoWindow() == null) {
-                    // 현재 마커에 정보 창이 열려있지 않을 경우 엶
-                    infoWindow.open(marker);
-                    clickCrs(name);
-                } else {
-                    infoWindow.close();
-                }
-
-                // 카메라를 gpx 경로로 이동
-                CameraUpdate cameraUpdate = CameraUpdate.fitBounds(pathOverlay.getBounds(), 100, 100, 100, 200).animate(CameraAnimation.Easing);
-                naverMap.moveCamera(cameraUpdate);
-
-                // bottomsheet 보이게 하기
-                mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                setBottomListData(name, summary, level, hour, dist, hashTag);
-
-                return true;
-            };
-            marker.setOnClickListener(listener);
-            if (!flag)
-                attachMarker();
-            else
-                dismissMarker();
-        }
-
-        public void dismissPath() {
-            pathOverlay.setMap(null);
-        }
-
-        public void attachPath() {
-            pathOverlay.setMap(naverMap);
-        }
-
-        public void dismissMarker() {
-            marker.setMap(null);
-        }
-
-        public void attachMarker() {
-            marker.setMap(naverMap);
-        }
-
-        // 코스 난이도에 따른 색 변경
-        public void setCourseColor(String level) {
-            switch (level) {
-                case "1":
-                    pathOverlay.setColor(Color.BLUE);
-                    break;
-                case "2":
-                    pathOverlay.setColor(Color.GREEN);
-                    break;
-                case "3":
-                    pathOverlay.setColor(Color.RED);
-                    break;
-            }
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getSummary() {
-            return summary;
-        }
-
-        public String getHour() {
-            return hour;
-        }
-
-        public String getLevel() {
-            return level;
-        }
-
-        public String getDist() {
-            return dist;
-        }
-
-        public String getHashTag() {
-            return hashTag;
-        }
-
-        public ArrayList<LatLng> getCoords() {
-            return coords;
-        }
-
-        public PathOverlay getPathOverlay() {
-            return pathOverlay;
-        }
-
-        public Marker getMarker() {
-            return marker;
-        }
-
-        public String getId() {
-            return id;
         }
     }
 }
