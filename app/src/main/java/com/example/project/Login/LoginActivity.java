@@ -85,6 +85,13 @@ public class LoginActivity extends AppCompatActivity {
                             String pedo_max = jsonObject.getString("pedo_max");
                             String km_max = jsonObject.getString("km_max");
                             int userProfileNum = jsonObject.getInt("userProfileNum");
+
+                            String userHashtag = jsonObject.getString("myHashtag"); // #
+                            String level_like = jsonObject.getString("level_like");
+
+                            Log.d("testingHash", userHashtag);
+                            Log.d("testingHash", level_like);
+
                             Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, BottomNavigation.class);// 메인 액티비티로 전환
                             intent.putExtra("userID", userID);
@@ -97,6 +104,8 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("pedo_max",pedo_max);
                             intent.putExtra("km_max",km_max);
                             intent.putExtra("userProfileNum",userProfileNum);
+                            intent.putExtra("userHashtag", userHashtag); // #
+                            intent.putExtra("userLevelLike", level_like); // 선호 난이도
 
                             SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", Activity.MODE_PRIVATE);
 

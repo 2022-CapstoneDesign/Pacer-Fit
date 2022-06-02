@@ -6,6 +6,11 @@ public class HashtagInfo {
     private int selected;
     private int index;
 
+    public HashtagInfo(int selected, int index) {
+        this.selected = selected;
+        this.index = index;
+    }
+
     public HashtagInfo(String title,int selected, int index) {
         this.title = title;
         this.selected = selected;

@@ -32,8 +32,8 @@ public class RankingFragment extends Fragment {
         distBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                distBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style3));
-                pedoBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style));
+                distBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style_ranking_green));
+                pedoBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style_ranking_off));
 
                 // fragment 위에 그린 fragment를 교체하기 위해서 childFragment를 사용
                 getChildFragmentManager().beginTransaction().replace(R.id.ranking_fragment_container, new DistFragment()).commit();
@@ -44,8 +44,8 @@ public class RankingFragment extends Fragment {
         pedoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                distBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style));
-                pedoBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style3));
+                distBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style_ranking_off));
+                pedoBtn.setBackground(getContext().getResources().getDrawable(R.drawable.btn_style_ranking_red));
 
 
                 // fragment 위에 그린 fragment를 교체하기 위해서 childFragment를 사용

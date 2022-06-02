@@ -93,7 +93,7 @@ public class PedoFragment extends Fragment {
 
                 }
                 DecimalFormat myFormatter = new DecimalFormat("###,###");
-                member.setText(myFormatter.format(members));
+                member.setText(myFormatter.format(members) + "명");
             } catch (JSONException e) {
                 Log.d(TAG, "showResult : ", e);
             }

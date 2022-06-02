@@ -48,17 +48,17 @@ public class SurveyActivity extends AppCompatActivity {
     CheckBox check10;
 
     HashtagInfo hashTags[] = {
-            new HashtagInfo("공원", 0, 0),
-            new HashtagInfo("산", 0, 1),
-            new HashtagInfo("숲", 0, 2),
-            new HashtagInfo("바다", 0, 3),
-            new HashtagInfo("해변", 0, 4),
-            new HashtagInfo("트레킹", 0, 5),
-            new HashtagInfo("자연", 0, 6),
-            new HashtagInfo("명소", 0, 7),
-            new HashtagInfo("동네", 0, 8),
-            new HashtagInfo("풍경", 0,9),
-            new HashtagInfo("역사", 0, 10)
+            new HashtagInfo(0, 0),
+            new HashtagInfo(0, 1),
+            new HashtagInfo(0, 2),
+            new HashtagInfo( 0, 3),
+            new HashtagInfo( 0, 4),
+            new HashtagInfo( 0, 5),
+            new HashtagInfo( 0, 6),
+            new HashtagInfo( 0, 7),
+            new HashtagInfo( 0, 8),
+            new HashtagInfo( 0,9),
+            new HashtagInfo( 0, 10)
     };
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
