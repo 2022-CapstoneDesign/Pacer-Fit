@@ -504,11 +504,9 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                         boolean success = jsonObject.getBoolean("success");
                         if (success) { // 회원탈퇴에 성공한 경우
                             dialog_prefer.dismiss();
-                            Toast.makeText(getApplication(), "정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
                             setHashtagChecked();
                             setUserData();
                         } else { // 회원탈퇴에 실패한 경우
-                            Toast.makeText(getApplicationContext(), "수정 실패", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     } catch (JSONException e) {
@@ -581,7 +579,6 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                             UserInfo.getInstance().setUserName(changedName);
                             UserInfo.getInstance().setUserPass(changedPw);
                             dialog_account.dismiss();
-                            Toast.makeText(getApplication(), "정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
                         } else { // 회원등록에 실패한 경우
                             String answer = jsonObject.getString("answer");
                             if(answer.equals("name")){ //이름 중복
@@ -800,7 +797,6 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                             ageTxt.setText(UserInfo.getInstance().getUserAge());
 
                             dialog_physical.dismiss();
-                            Toast.makeText(getApplication(), "정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
                         } else {
                             String answer = jsonObject.getString("answer");
                             if(answer.equals("age")){

@@ -166,11 +166,11 @@
                         android:background="@drawable/view_style_with_ripple">
 
                         <ImageView
-                            android:layout_marginTop="0dp"
-                            android:padding="5dp"
                             android:layout_width="110dp"
                             android:layout_height="90dp"
-                            android:src="@drawable/btn_hiking" />
+                            android:layout_marginTop="0dp"
+                            android:padding="10dp"
+                            android:src="@drawable/walk_over" />
 
                         <TextView
                             android:layout_marginTop="5dp"
@@ -207,11 +207,11 @@
                         android:background="@drawable/view_style_with_ripple">
 
                         <ImageView
-                            android:layout_marginTop="0dp"
-                            android:padding="5dp"
                             android:layout_width="110dp"
                             android:layout_height="90dp"
-                            android:src="@drawable/btn_pedo" />
+                            android:layout_marginTop="0dp"
+                            android:padding="10dp"
+                            android:src="@drawable/pedo_on" />
 
                         <TextView
                             android:layout_marginTop="5dp"

@@ -291,21 +291,23 @@
 
                             <ImageView
                                 android:id="@+id/mypage_kmBtn"
-                                android:adjustViewBounds="true"
-                                android:layout_width="wrap_content"
+                                android:layout_width="100dp"
                                 android:layout_height="90dp"
                                 android:layout_marginTop="10dp"
-                                app:srcCompat="@drawable/btn_hiking" />
+                                android:adjustViewBounds="true"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/walk_over" />
 
                             <TextView
                                 android:id="@+id/maxKm"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/nanumsquareroundeb"
+                                android:gravity="center"
                                 android:text=""
                                 android:textColor="@color/white"
-                                android:textSize="23sp" />
+                                android:textSize="20sp" />
 
                             <TextView
                                 android:id="@+id/kmTxt"
@@ -338,21 +340,23 @@
 
                             <ImageView
                                 android:id="@+id/mypage_walkBtn"
-                                android:adjustViewBounds="true"
-                                android:layout_width="wrap_content"
+                                android:layout_width="100dp"
                                 android:layout_height="90dp"
                                 android:layout_marginTop="10dp"
-                                app:srcCompat="@drawable/btn_pedo" />
+                                android:adjustViewBounds="true"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/pedo_on" />
 
                             <TextView
                                 android:id="@+id/maxStep"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/nanumsquareroundeb"
+                                android:gravity="center"
                                 android:text=""
                                 android:textColor="@color/white"
-                                android:textSize="23sp" />
+                                android:textSize="20sp" />
 
                             <TextView
                                 android:id="@+id/stepTxt"
@@ -395,21 +399,23 @@
 
                             <ImageView
                                 android:id="@+id/mypage_kcalBtn"
-                                android:adjustViewBounds="true"
-                                android:layout_width="wrap_content"
+                                android:layout_width="100dp"
                                 android:layout_height="90dp"
                                 android:layout_marginTop="10dp"
-                                app:srcCompat="@drawable/btn_calorie" />
+                                android:adjustViewBounds="true"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/kcal_over" />
 
                             <TextView
                                 android:id="@+id/maxKcal"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/nanumsquareroundeb"
+                                android:gravity="center"
                                 android:text=""
                                 android:textColor="@color/white"
-                                android:textSize="23sp" />
+                                android:textSize="20sp" />
 
                             <TextView
                                 android:id="@+id/kcalTxt"
@@ -442,21 +448,23 @@
 
                             <ImageView
                                 android:id="@+id/mypage_timeBtn"
-                                android:adjustViewBounds="true"
-                                android:layout_width="wrap_content"
+                                android:layout_width="100dp"
                                 android:layout_height="90dp"
                                 android:layout_marginTop="10dp"
-                                app:srcCompat="@drawable/btn_time" />
+                                android:adjustViewBounds="true"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/time_over" />
 
                             <TextView
                                 android:id="@+id/maxTime"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/nanumsquareroundeb"
+                                android:gravity="center"
                                 android:text=""
                                 android:textColor="@color/white"
-                                android:textSize="23sp" />
+                                android:textSize="20sp" />
 
                             <TextView
                                 android:id="@+id/timeTxt"
