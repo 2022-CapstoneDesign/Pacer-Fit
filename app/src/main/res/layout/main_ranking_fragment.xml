@@ -28,7 +28,7 @@
             android:fontFamily="@font/nanumsquareroundeb"
             android:text="하이킹"
             android:textAllCaps="false"
-            android:textColor="@color/gray_project" />
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/ranking_pedo_btn"
@@ -41,7 +41,7 @@
             android:fontFamily="@font/nanumsquareroundeb"
             android:text="만보기"
             android:textAllCaps="false"
-            android:textColor="@color/gray_project" />
+            android:textColor="@color/white" />
 
     </LinearLayout>
 
