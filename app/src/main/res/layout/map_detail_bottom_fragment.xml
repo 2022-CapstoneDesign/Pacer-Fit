@@ -7,7 +7,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="440dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,5 +52,35 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+        <View
+            android:id="@+id/view12"
+            android:layout_width="350dp"
+            android:layout_height="3dp"
+            android:layout_marginTop="15sp"
+            android:background="@color/colorGrey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView9"></View>
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/nanumsquareroundeb"
+            android:lineSpacingExtra="10dp"
+            android:text=" 별점 추천은 사용자가 평가한 코스의\n 별점 데이터를 기반으로 최적의 코스를 추천합니다.\n\n
+난이도 추천과 해시태그 추천은 사용자의 \n 코스 선호도 데이터를 기반으로 최적의 코스를 추천합니다."
+
+            android:textColor="@color/whitegray_project"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view12" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
