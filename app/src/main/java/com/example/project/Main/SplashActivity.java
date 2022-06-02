@@ -68,7 +68,6 @@ public class SplashActivity extends AppCompatActivity {
                                 Log.d("testingHash", userHashtag);
                                 Log.d("testingHash", level_like);
 
-                                Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(SplashActivity.this, BottomNavigation.class);// 메인 액티비티로 전환
                                 intent.putExtra("userID", userID);
                                 intent.putExtra("userPass", userPass);

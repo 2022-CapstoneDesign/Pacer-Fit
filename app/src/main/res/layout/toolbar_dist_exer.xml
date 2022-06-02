@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:fontFamily="@font/nanumsquareroundeb"
-            android:text="운동하기 - 거리"
+            android:text="운동하기 - 하이킹"
             android:textColor="@color/green_project"
             android:textSize="20sp" />
 

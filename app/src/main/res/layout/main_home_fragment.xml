@@ -325,7 +325,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:fontFamily="@font/nanumsquareroundeb"
-                android:text="기록 - 거리"
+                android:text="기록 - 하이킹"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@+id/linechartView"
