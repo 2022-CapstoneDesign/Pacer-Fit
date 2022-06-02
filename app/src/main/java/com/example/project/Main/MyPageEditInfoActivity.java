@@ -506,6 +506,7 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                             dialog_prefer.dismiss();
                             setHashtagChecked();
                             setUserData();
+                            Toast.makeText(getApplicationContext(), "선호도 수정 완료", Toast.LENGTH_SHORT).show();
                         } else { // 회원탈퇴에 실패한 경우
                             return;
                         }
@@ -514,7 +515,7 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                     }
                 };
                 HashTagRequest hashTagRequest = new HashTagRequest(UserInfo.getInstance().getUserID()+""
-                        , selectedDifficulty[0]+1,
+                        , selectedDifficulty[0],
                 hashTags[0].getSelected(),
                 hashTags[1].getSelected(),
                 hashTags[2].getSelected(),
@@ -579,6 +580,7 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                             UserInfo.getInstance().setUserName(changedName);
                             UserInfo.getInstance().setUserPass(changedPw);
                             dialog_account.dismiss();
+                            Toast.makeText(getApplicationContext(), "개인정보 수정 완료", Toast.LENGTH_SHORT).show();
                         } else { // 회원등록에 실패한 경우
                             String answer = jsonObject.getString("answer");
                             if(answer.equals("name")){ //이름 중복
@@ -795,7 +797,7 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                             heightTxt.setText(UserInfo.getInstance().getUserHeight());
                             weightTxt.setText(UserInfo.getInstance().getUserWeight());
                             ageTxt.setText(UserInfo.getInstance().getUserAge());
-
+                            Toast.makeText(getApplicationContext(), "신체정보 수정 완료", Toast.LENGTH_SHORT).show();
                             dialog_physical.dismiss();
                         } else {
                             String answer = jsonObject.getString("answer");
