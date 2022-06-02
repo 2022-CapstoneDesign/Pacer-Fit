@@ -313,8 +313,9 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         userLocationList = new ArrayList<>();
         userPolyline = new PathOverlay();
         userPolyline.setWidth(10);
-        userPolyline.setColor(Color.RED);
+        userPolyline.setColor(ContextCompat.getColor(getApplicationContext(),R.color.orange_project));
         userPolyline.setHideCollidedSymbols(true);
+        userPolyline.setGlobalZIndex(1);
         // 코스들 폴리라인, 마커 리스트 생성
         userSpeedList = new ArrayList<>();
         infoWindow = new InfoWindow();
@@ -648,14 +649,13 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
         isRecommend = true;
         recordToMap();
         for (CourseData cd : courseDataList) {
-            Log.d("course", cd.getId() + " " + slope_crs + " " + level_crs + " " + hash_crs);
             if (cd.getId().equals(slope_crs)) {
                 slopeCourse = new CourseData(cd.getName(), cd.getSummary(), cd.getHour(), cd.getLevel(), cd.getDist(), cd.getHashTag(), cd.getId(), cd.getCoords());
                 slopeCourse.createPathOverlay(false);
                 slopeCourse.createMarker(false);
                 slopeCourse.getPathOverlay().setColor(Color.YELLOW);
                 slopeCourse.getPathOverlay().setPassedColor(Color.BLACK);
-                slopeCourse.getMarker().setCaptionText("별점");
+                slopeCourse.getMarker().setCaptionText("별점 추천");
                 slopeCourse.getMarker().setIcon(OverlayImage.fromResource(R.drawable.recommend_mark_img));
                 recommendList.add(slopeCourse);
             }
@@ -667,6 +667,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 levelCourse.getPathOverlay().setPassedColor(Color.BLACK);
                 levelCourse.getMarker().setCaptionText("난이도 추천");
                 levelCourse.getMarker().setIcon(OverlayImage.fromResource(R.drawable.recommend_mark_img));
+
                 recommendList.add(levelCourse);
             }
             if (cd.getId().equals(hash_crs)) {
@@ -682,6 +683,15 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             cd.dismissMarker();
             cd.dismissPath();
 
+        }
+        if(slope_crs.equals(level_crs)){
+            levelCourse.getMarker().setCaptionText("");
+        }
+        if(slope_crs.equals(hash_crs)){
+            hashCourse.getMarker().setCaptionText("");
+        }
+        if(level_crs.equals(hash_crs)){
+            hashCourse.getMarker().setCaptionText("");
         }
         recommendBtn.setVisibility(View.INVISIBLE);
         viewAllPathBtn.setVisibility(View.VISIBLE);
@@ -1005,7 +1015,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 attachPath();
             else
                 dismissPath();
-            pathOverlay.setHideCollidedSymbols(false);
         }
 
         public void createMarker(boolean flag) {
@@ -1059,7 +1068,6 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
 
         public void attachPath() {
             pathOverlay.setMap(naverMap);
-            pathOverlay.setHideCollidedSymbols(false);
         }
 
         public void dismissMarker() {
