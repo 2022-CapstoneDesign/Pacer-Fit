@@ -497,10 +497,39 @@ public class MyPageEditInfoActivity extends AppCompatActivity {
                 UserInfo.getInstance().setTag_scenery(hashTags[9].getSelected());
                 UserInfo.getInstance().setTag_history(hashTags[10].getSelected());
 
-                dialog_prefer.dismiss();
-                Toast.makeText(getApplication(), "정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                setHashtagChecked();
-                setUserData();
+                Response.Listener<String> responseListener = response -> {
+                    try {
+                        System.out.println(response);
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean success = jsonObject.getBoolean("success");
+                        if (success) { // 회원탈퇴에 성공한 경우
+                            dialog_prefer.dismiss();
+                            Toast.makeText(getApplication(), "정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                            setHashtagChecked();
+                            setUserData();
+                        } else { // 회원탈퇴에 실패한 경우
+                            Toast.makeText(getApplicationContext(), "수정 실패", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                };
+                HashTagRequest hashTagRequest = new HashTagRequest(UserInfo.getInstance().getUserID()+""
+                        , selectedDifficulty[0]+1,
+                hashTags[0].getSelected(),
+                hashTags[1].getSelected(),
+                hashTags[2].getSelected(),
+                hashTags[3].getSelected(),
+                hashTags[4].getSelected(),
+                hashTags[5].getSelected(),
+                hashTags[6].getSelected(),
+                hashTags[7].getSelected(),
+                hashTags[8].getSelected(),
+                hashTags[9].getSelected(),
+                hashTags[10].getSelected(), responseListener);
+                RequestQueue queue = Volley.newRequestQueue(MyPageEditInfoActivity.this);
+                queue.add(hashTagRequest);
             }
         });
         cancelBtn.setOnClickListener(new View.OnClickListener() {
