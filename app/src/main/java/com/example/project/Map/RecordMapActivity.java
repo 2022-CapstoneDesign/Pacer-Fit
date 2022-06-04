@@ -1160,7 +1160,7 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 new Thread() {
                     public void run() {
                         for (int i = 0; i < pathArrayList.size(); i++) {
-
+                            Log.d("pathArrayList", String.valueOf(pathArrayList.size()));
                             String gpxpt = getData(i);
                             Bundle bun = new Bundle();
                             bun.putString("gpxpt", gpxpt);
@@ -1192,8 +1192,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
-                httpURLConnection.setReadTimeout(3000);
-                httpURLConnection.setConnectTimeout(3000);
+                httpURLConnection.setReadTimeout(10000);
+                httpURLConnection.setConnectTimeout(10000);
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.connect();
 
@@ -1287,8 +1287,8 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
             try {
                 url = new URL(hashMap3.get(TAG_PATH));
                 http = (HttpURLConnection) url.openConnection();
-                http.setConnectTimeout(3 * 1000);
-                http.setReadTimeout(3 * 1000);
+                http.setConnectTimeout(10 * 1000);
+                http.setReadTimeout(10 * 1000);
                 isr = new InputStreamReader(http.getInputStream());
                 br = new BufferedReader(isr);
                 String str = null;
@@ -1358,12 +1358,15 @@ public class RecordMapActivity extends AppCompatActivity implements View.OnClick
                     }
                 }
 
+                Log.d("coords",name + " " + coords.size());
                 if (coords.size() > 2) {
                     CourseData courseData = new CourseData(name, summary, hour, level, dist, tag, id, coords);
-                    if (!isDisplayCrs) {
+                    if (!isDisplayCrs) {Log.d("course",name + "false");
+
                         courseData.createPathOverlay(false);
                         courseData.createMarker(false);
-                    } else {
+                    } else {Log.d("course",name + "true");
+
                         courseData.createPathOverlay(true);
                         courseData.createMarker(true);
                     }
