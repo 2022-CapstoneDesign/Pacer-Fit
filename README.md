@@ -67,3 +67,9 @@
 - 사용자의 BMI를 통한 건강체크 및 운동 관련 정보를 제공하여 더 나은 운동 방법을 보여줍니다.
 - 운동 기록을 저장해주고 보여줌으로써 사용자에게 성취감을 줄 수 있습니다.
 - 랭킹 시스템을 통해 사용자에게 운동 동기부여를 줍니다.
+
+[서버]
+-------------------
+<strong>#PacerFit_Server</strong>
+<br>
+https://github.com/2022-CapstoneDesign/Pacer-Fit_Server
