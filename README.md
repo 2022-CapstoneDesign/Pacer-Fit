@@ -23,6 +23,11 @@
 |:------------------------------:|:-----------------------------:|:----------------------------------:|:---------------------------------------------------:|
 |![ranking](https://user-images.githubusercontent.com/96832560/171675276-95f6d19b-577f-4277-8fc2-e2045e105fbe.gif)|![feed-min](https://user-images.githubusercontent.com/96832560/171675684-5f60e402-0faf-484e-b68a-2271d152924e.gif)|![mypage](https://user-images.githubusercontent.com/96832560/171675410-9dc1eaa9-d89d-4759-990b-d42b7a83d6a7.gif)|![mypage2](https://user-images.githubusercontent.com/96832560/171675465-cc4ff5c5-86c7-40e9-b6db-4f19a196995f.gif)|
 
+PacerFit 하이킹 기능 시연 영상
+https://www.youtube.com/watch?v=0qglVMnFzCs
+
+PacerFit 전체 시연 영상
+https://www.youtube.com/watch?v=HtvIbeV9D1k
 
 [기능]
 ------
